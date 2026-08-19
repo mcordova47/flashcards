@@ -1,5 +1,8 @@
 # Mil Palabras
 
+> [!NOTE]
+> This is vibe coded as hell
+
 Spaced-repetition flashcards for the 1000 most common Spanish words.
 
 **[palabras.mcord.dev](https://palabras.mcord.dev)**
