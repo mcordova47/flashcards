@@ -2,7 +2,18 @@
   command = "npm run build"
   publish = "public"
 
+[build.environment]
+  NODE_VERSION = "24"
+
+# Single-page app: everything resolves to the one entry point.
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# The bundle is content-hashed by nothing, so keep it revalidating; the deck
+# changes only when the sheet does.
+[[headers]]
+  for = "/index.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
