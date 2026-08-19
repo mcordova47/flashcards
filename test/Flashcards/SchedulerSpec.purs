@@ -70,10 +70,19 @@ spec = do
       Scheduler.buildSession deck progress now 3 `shouldEqual` (Rank <$> [ 1, 2, 3 ])
 
   describe "applyGrade" do
-    it "promotes a new word to box 1, due tomorrow" do
+    it "fast-tracks a word you knew on sight, skipping the short intervals" do
       let cp = Scheduler.applyGrade GotIt now Nothing
-      cp.box `shouldEqual` 1
-      dueInDays cp `shouldEqual` 1.0
+      cp.box `shouldEqual` Scheduler.firstSightingBox
+      dueInDays cp `shouldEqual` 7.0
+
+    it "promotes one box at a time once a word has been struggled with" do
+      -- Missing it first means the next success is ordinary progress, not a
+      -- sign you already knew the word.
+      let missed = Scheduler.applyGrade Again now Nothing
+      missed.box `shouldEqual` 0
+      let recovered = Scheduler.applyGrade GotIt now (Just missed)
+      recovered.box `shouldEqual` 1
+      dueInDays recovered `shouldEqual` 1.0
 
     it "caps promotion at the last box" do
       let cp = Scheduler.applyGrade GotIt now $ boxedAt Scheduler.maxBox

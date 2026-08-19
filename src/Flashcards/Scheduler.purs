@@ -4,6 +4,7 @@
 module Flashcards.Scheduler
   ( applyGrade
   , buildSession
+  , firstSightingBox
   , intervalFor
   , maxBox
   , requeue
@@ -16,7 +17,7 @@ import Prelude
 
 import Data.Array as Array
 import Data.DateTime.Instant (Instant, instant, unInstant)
-import Data.Maybe (Maybe, fromMaybe, isNothing)
+import Data.Maybe (Maybe(..), fromMaybe, isNothing)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Types.Card (Card, Rank)
@@ -35,6 +36,20 @@ requeueGap = 5
 
 maxBox :: Int
 maxBox = 5
+
+-- | Where a word lands when you get it right the very first time you see it.
+-- |
+-- | The deck is frequency-ordered, so its opening stretch is `yo`, `no`, `sí`,
+-- | `y`, `que` — words any learner already knows cold. Marching those up
+-- | through five boxes would spend the first weeks re-testing things that were
+-- | never once got wrong, which is exactly when you are deciding whether the
+-- | app earns its place. Answering correctly on first sight is strong evidence
+-- | you knew it already, so skip the two short intervals.
+-- |
+-- | The risk is a lucky guess buying itself a week off, and it is bounded:
+-- | missing the word later drops it straight back to box 0.
+firstSightingBox :: Int
+firstSightingBox = 3
 
 -- | Box 0 is due immediately, so a missed card reappears in the same session.
 intervalFor :: Int -> Milliseconds
@@ -66,16 +81,19 @@ buildSession deck progress now size =
     newCards = Array.filter (isNothing <<< _.state) annotated
 
 -- | `Again` drops a card to box 0, due now, so it comes round again before the
--- | session ends. `GotIt` promotes it one box and pushes the next review out.
+-- | session ends. `GotIt` promotes it one box and pushes the next review out —
+-- | except on a word's first ever sighting, which fast-tracks to
+-- | `firstSightingBox`.
 applyGrade :: Grade -> Instant -> Maybe CardProgress -> CardProgress
 applyGrade grade now previous =
   { box, due: addInterval now $ intervalFor box, seen: prev.seen + 1, lapses }
   where
     prev = fromMaybe { box: 0, due: now, seen: 0, lapses: 0 } previous
 
-    box = case grade of
-      Again -> 0
-      GotIt -> min maxBox $ prev.box + 1
+    box = case grade, previous of
+      Again, _ -> 0
+      GotIt, Nothing -> firstSightingBox
+      GotIt, Just seen' -> min maxBox $ seen'.box + 1
 
     -- Forgetting a word you had never learned is not a lapse.
     lapses = case grade of

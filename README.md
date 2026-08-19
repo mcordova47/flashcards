@@ -106,6 +106,17 @@ A session is 20 cards: everything due, then new words **in frequency order**.
 The deck is never shuffled — its order *is* the curriculum, so the next new word
 is always the most common one you don't yet know.
 
+Getting a word right the **first time you ever see it** skips straight to box 3.
+A frequency-ordered deck opens with `yo`, `no`, `sí`, `que` — words you already
+know cold — and marching those up through five boxes would spend your first
+weeks re-testing things you never once got wrong. Answering correctly on first
+sight is strong evidence you knew it already. A lucky guess costs a week, and
+missing it later drops it straight back to box 0.
+
+Tapping the speaker on a flipped card pronounces it, via the browser's own
+`speechSynthesis` — no audio files, no API key, and on Apple platforms the
+voices are on-device, so it works offline too. `s` on a keyboard does the same.
+
 ## Layout
 
 ```
@@ -129,11 +140,11 @@ indefinitely.
 ## Roadmap
 
 - **Now** — ES→EN, self-graded, Leitner, `localStorage`, installable and
-  offline, file backup with merge, deployed.
-- **Next** — cross-device sync: a Netlify Function over Netlify Blobs, keyed by
-  an unguessable pairing secret, reusing `Progress.merge`. No accounts.
-- **Later** — audio via `SpeechSynthesis`, EN→ES with every valid answer shown
-  on the reveal, a progress screen, more languages, FSRS scheduling.
+  offline, file backup with merge, pronunciation, deployed.
+- **Next** — cross-device sync, if the file flow proves annoying (see #2).
+- **Later** — example sentences generated at build time under a
+  high-frequency-vocabulary constraint, EN→ES with every valid answer shown on
+  the reveal, a progress screen, more languages, FSRS scheduling.
 
 ## Notes
 

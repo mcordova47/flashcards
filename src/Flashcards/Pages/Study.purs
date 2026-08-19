@@ -32,6 +32,7 @@ import Elmish.HTML.Styled as H
 import Flashcards.Backup as Backup
 import Flashcards.Data.Deck.Spanish as Deck
 import Flashcards.Scheduler as Scheduler
+import Flashcards.Speech as Speech
 import Flashcards.Storage as Storage
 import Flashcards.Types.Card (Card, Rank, rankToInt)
 import Flashcards.Types.Grade (Grade(..))
@@ -62,10 +63,11 @@ type State =
   , screen :: Screen
   , panel :: Boolean
   , notice :: Maybe String
+  , canSpeak :: Boolean
   }
 
 data Message
-  = Loaded Progress Instant
+  = Loaded { progress :: Progress, now :: Instant, canSpeak :: Boolean }
   | Flip
   | Answer Grade
   | Answered Grade Instant
@@ -76,21 +78,23 @@ data Message
   | Import
   | Imported String
   | DismissNotice
+  | SpeakCurrent
 
 init :: Transition Message State
 init = do
   fork do
     progress <- liftEffect $ Storage.load Deck.fingerprint
+    canSpeak <- liftEffect Speech.supported
     now <- liftEffect Now.now
-    pure $ Loaded progress now
+    pure $ Loaded { progress, now, canSpeak }
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
-  pure { progress: Progress.empty, screen: Loading, panel: false, notice: Nothing }
+  pure { progress: Progress.empty, screen: Loading, panel: false, notice: Nothing, canSpeak: false }
 
 update :: State -> Message -> Transition Message State
 update state = case _ of
-  Loaded progress now ->
-    pure state { progress = progress, screen = startSession progress now }
+  Loaded { progress, now, canSpeak } ->
+    pure state { progress = progress, canSpeak = canSpeak, screen = startSession progress now }
 
   Flip -> case state.screen of
     Studying session | not session.flipped ->
@@ -180,6 +184,14 @@ update state = case _ of
   DismissNotice ->
     pure state { notice = Nothing }
 
+  -- Only once the answer is showing: hearing it beforehand would give it away.
+  SpeakCurrent -> case state.screen of
+    Studying session | session.flipped -> do
+      for_ (currentCard session) \card -> forkVoid $ liftEffect $ Speech.speak card.spanish
+      pure state
+    _ ->
+      pure state
+
 noticing :: State -> String -> Transition Message State
 noticing state message = do
   fork do
@@ -202,7 +214,7 @@ view state dispatch =
   H.fragment
   [ case state.screen of
       Loading -> H.div "app" H.empty
-      Studying session -> studyingView session dispatch
+      Studying session -> studyingView state.canSpeak session dispatch
       Complete summary -> completeView state.progress summary dispatch
   , if state.panel then panelView state.progress dispatch else H.empty
   , case state.notice of
@@ -220,20 +232,32 @@ topBar session dispatch =
   , H.button_ "panel-toggle" { onClick: dispatch <| TogglePanel, title: "Progress" } "•••"
   ]
 
-studyingView :: Session -> Dispatch Message -> ReactElement
-studyingView session dispatch =
+currentCard :: Session -> Maybe Card
+currentCard session =
+  Array.index session.queue session.position >>= flip Map.lookup cardsByRank
+
+studyingView :: Boolean -> Session -> Dispatch Message -> ReactElement
+studyingView canSpeak session dispatch =
   H.div "app"
   [ topBar (Just session) dispatch
   , H.div_ "card" { onClick: dispatch <| Flip } face
   , H.div "controls" controls
   ]
   where
-    face = case Array.index session.queue session.position >>= flip Map.lookup cardsByRank of
+    face = case currentCard session of
       Nothing ->
         H.empty
       Just card ->
         H.fragment
-        [ H.div (if session.flipped then "prompt small" else "prompt") card.spanish
+        [ H.div "prompt-row"
+          [ H.div (if session.flipped then "prompt small" else "prompt") card.spanish
+          , if session.flipped && canSpeak then
+              -- Clicks bubble to the card, but flipping an already-flipped card
+              -- is a no-op, so there is nothing to stop.
+              H.button_ "speak" { onClick: dispatch <| SpeakCurrent, title: "Hear it" } H.empty
+            else
+              H.empty
+          ]
         , if session.flipped then H.div "answer" card.english else H.empty
         , H.div "rank" $ "#" <> show (rankToInt card.rank)
         ]
@@ -298,6 +322,7 @@ keyMessage = case _ of
   "ArrowLeft" -> Just $ Answer Again
   "2" -> Just $ Answer GotIt
   "ArrowRight" -> Just $ Answer GotIt
+  "s" -> Just SpeakCurrent
   _ -> Nothing
 
 onKeyDown :: (String -> Effect Unit) -> Effect Unit
