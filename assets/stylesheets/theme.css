@@ -317,3 +317,33 @@ body {
   -webkit-mask: var(--speaker) center / contain no-repeat;
   mask: var(--speaker) center / contain no-repeat;
 }
+
+.accents {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.25rem;
+  border-radius: 12px;
+  background: var(--ghost);
+}
+
+.accent {
+  appearance: none;
+  flex: 1;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.9375rem;
+  padding: 0.6rem 0.5rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.accent.chosen {
+  background: var(--bg);
+  color: var(--fg);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
+}

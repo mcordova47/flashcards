@@ -20,7 +20,7 @@ import Data.Foldable (for_)
 import Data.Int as Int
 import Data.Map (Map)
 import Data.Map as Map
-import Data.Maybe (Maybe(..))
+import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Tuple.Nested ((/\))
 import Effect (Effect)
 import Effect.Aff (Milliseconds(..), delay)
@@ -29,6 +29,7 @@ import Effect.Now as Now
 import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Styled as H
+import Flashcards.Accent as Accent
 import Flashcards.Backup as Backup
 import Flashcards.Data.Deck.Spanish as Deck
 import Flashcards.Scheduler as Scheduler
@@ -64,10 +65,18 @@ type State =
   , panel :: Boolean
   , notice :: Maybe String
   , canSpeak :: Boolean
+  , accents :: Array String
+  , accent :: Maybe String
+  , savedAccent :: Maybe String
   }
 
 data Message
-  = Loaded { progress :: Progress, now :: Instant, canSpeak :: Boolean }
+  = Loaded
+      { progress :: Progress
+      , now :: Instant
+      , canSpeak :: Boolean
+      , savedAccent :: Maybe String
+      }
   | Flip
   | Answer Grade
   | Answered Grade Instant
@@ -79,22 +88,50 @@ data Message
   | Imported String
   | DismissNotice
   | SpeakCurrent
+  | ChooseAccent String
+  | AccentsAvailable (Array String)
 
 init :: Transition Message State
 init = do
   fork do
     progress <- liftEffect $ Storage.load Deck.fingerprint
     canSpeak <- liftEffect Speech.supported
+    savedAccent <- liftEffect Storage.loadAccent
     now <- liftEffect Now.now
-    pure $ Loaded { progress, now, canSpeak }
+    pure $ Loaded { progress, now, canSpeak, savedAccent }
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
-  pure { progress: Progress.empty, screen: Loading, panel: false, notice: Nothing, canSpeak: false }
+  forks \{ dispatch } ->
+    liftEffect $ Speech.onAccents $ dispatch <<< AccentsAvailable
+  pure
+    { progress: Progress.empty
+    , screen: Loading
+    , panel: false
+    , notice: Nothing
+    , canSpeak: false
+    , accents: []
+    , accent: Nothing
+    , savedAccent: Nothing
+    }
 
 update :: State -> Message -> Transition Message State
 update state = case _ of
-  Loaded { progress, now, canSpeak } ->
-    pure state { progress = progress, canSpeak = canSpeak, screen = startSession progress now }
+  -- `Loaded` and `AccentsAvailable` race, so both resolve the preference from
+  -- whatever the other has already put in state.
+  Loaded { progress, now, canSpeak, savedAccent } ->
+    pure state
+      { progress = progress
+      , canSpeak = canSpeak
+      , savedAccent = savedAccent
+      , accent = Accent.resolve savedAccent state.accents
+      , screen = startSession progress now
+      }
+
+  AccentsAvailable accents ->
+    pure state
+      { accents = accents
+      , accent = Accent.resolve state.savedAccent accents
+      }
 
   Flip -> case state.screen of
     Studying session | not session.flipped ->
@@ -184,13 +221,26 @@ update state = case _ of
   DismissNotice ->
     pure state { notice = Nothing }
 
+  ChooseAccent accent -> do
+    forkVoid $ liftEffect $ Storage.saveAccent accent
+    -- `gracias` is the word that actually demonstrates the difference:
+    -- "grah-thee-as" in Spain, "grah-see-as" in Mexico.
+    forkVoid $ liftEffect $ Speech.speak accent "gracias"
+    pure state { accent = Just accent, savedAccent = Just accent }
+
   -- Only once the answer is showing: hearing it beforehand would give it away.
   SpeakCurrent -> case state.screen of
     Studying session | session.flipped -> do
-      for_ (currentCard session) \card -> forkVoid $ liftEffect $ Speech.speak card.spanish
+      for_ (currentCard session) \card ->
+        forkVoid $ liftEffect $ Speech.speak (accentOf state) card.spanish
       pure state
     _ ->
       pure state
+
+-- | Falls back to a bare language hint: even with no Spanish voice installed,
+-- | most engines still pronounce Spanish when told to.
+accentOf :: State -> String
+accentOf state = fromMaybe "es-ES" state.accent
 
 noticing :: State -> String -> Transition Message State
 noticing state message = do
@@ -216,7 +266,7 @@ view state dispatch =
       Loading -> H.div "app" H.empty
       Studying session -> studyingView state.canSpeak session dispatch
       Complete summary -> completeView state.progress summary dispatch
-  , if state.panel then panelView state.progress dispatch else H.empty
+  , if state.panel then panelView state dispatch else H.empty
   , case state.notice of
       Nothing -> H.empty
       Just message -> H.div "notice" message
@@ -302,17 +352,29 @@ completeView progress summary dispatch =
 
     cta = if caughtUp then "Check again" else "Study " <> show Scheduler.sessionSize <> " more"
 
-panelView :: Progress -> Dispatch Message -> ReactElement
-panelView progress dispatch =
+panelView :: State -> Dispatch Message -> ReactElement
+panelView state dispatch =
   H.fragment
   [ H.div_ "backdrop" { onClick: dispatch <| TogglePanel } H.empty
   , H.div "panel"
-    [ H.button_ "panel-item" { onClick: dispatch <| Export } "Save progress to a file"
+    [ accentPicker
+    , H.button_ "panel-item" { onClick: dispatch <| Export } "Save progress to a file"
     , H.button_ "panel-item" { onClick: dispatch <| Import } "Load progress from a file"
     , H.p "panel-note" $
-        show (Progress.seenCount progress) <> " of " <> show (Array.length Deck.deck) <> " words seen"
+        show (Progress.seenCount state.progress) <> " of "
+          <> show (Array.length Deck.deck) <> " words seen"
     ]
   ]
+  where
+    -- Nothing to choose between when the device speaks only one Spanish.
+    accentPicker
+      | Array.length state.accents < 2 = H.empty
+      | otherwise =
+          H.div "accents" $ state.accents <#> \accent ->
+            H.button_
+              ("accent" <> if Just accent == state.accent then " chosen" else "")
+              { key: accent, onClick: dispatch <| ChooseAccent accent }
+              (Accent.label accent)
 
 keyMessage :: String -> Maybe Message
 keyMessage = case _ of

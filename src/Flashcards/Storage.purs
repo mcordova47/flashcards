@@ -2,9 +2,12 @@
 -- | future-versioned data starts you over rather than crashing — losing a
 -- | streak beats a white screen.
 module Flashcards.Storage
-  ( key
+  ( accentKey
+  , key
   , load
+  , loadAccent
   , save
+  , saveAccent
   )
   where
 
@@ -27,6 +30,13 @@ import Web.Storage.Storage as Storage
 -- | is a new key rather than a migration.
 key :: String
 key = "flashcards.es.v1"
+
+-- | Deliberately its own key rather than a field in the progress blob. Which
+-- | voices exist is a property of the device, not of the learner, so this must
+-- | never travel in a backup file or a future sync — your phone and your
+-- | laptop can reasonably disagree about it.
+accentKey :: String
+accentKey = "flashcards.es.accent"
 
 -- | Takes the current deck fingerprint so it can tell you when your saved
 -- | progress predates a deck change. It loads anyway: this is your own history
@@ -54,3 +64,13 @@ save :: String -> Progress -> Effect Unit
 save deck progress = do
   storage <- localStorage =<< window
   Storage.setItem key (stringify $ Progress.toJson deck progress) storage
+
+loadAccent :: Effect (Maybe String)
+loadAccent = do
+  storage <- localStorage =<< window
+  Storage.getItem accentKey storage
+
+saveAccent :: String -> Effect Unit
+saveAccent accent = do
+  storage <- localStorage =<< window
+  Storage.setItem accentKey accent storage

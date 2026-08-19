@@ -117,6 +117,17 @@ Tapping the speaker on a flipped card pronounces it, via the browser's own
 `speechSynthesis` — no audio files, no API key, and on Apple platforms the
 voices are on-device, so it works offline too. `s` on a keyboard does the same.
 
+The accent defaults to **Mexican**, since Latin American Spanish is what a
+learner in the US is overwhelmingly more likely to meet, and Castilian's
+*ceceo* is a real difference to train into your ear. The `•••` panel offers
+whichever Spanish locales the device actually has — read from the engine at
+runtime, never hardcoded, and hidden entirely when there is only one. Choosing
+one previews it with `gracias`, the word where the difference is audible.
+
+That preference lives under its own `localStorage` key, deliberately outside
+the progress blob: which voices exist is a property of the device, not of the
+learner, so it must not travel in a backup file.
+
 ## Layout
 
 ```

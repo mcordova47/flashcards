@@ -6,6 +6,7 @@ module Test.Main
 import Prelude
 
 import Effect (Effect)
+import Test.Flashcards.AccentSpec as AccentSpec
 import Test.Flashcards.ProgressSpec as ProgressSpec
 import Test.Flashcards.SchedulerSpec as SchedulerSpec
 import Test.Spec.Runner.Node (runSpecAndExitProcess)
@@ -15,3 +16,4 @@ main :: Effect Unit
 main = runSpecAndExitProcess [ consoleReporter ] do
   SchedulerSpec.spec
   ProgressSpec.spec
+  AccentSpec.spec
