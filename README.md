@@ -48,6 +48,28 @@ applyGrade   :: Grade -> Instant -> Maybe CardProgress -> CardProgress
 touches `localStorage`. Corrupt or future-versioned data starts you over rather
 than crashing — losing a streak beats a white screen.
 
+## Backup and transfer
+
+The `•••` control opens a panel to save your progress to a file and load it
+back. The file is byte-for-byte what lives in `localStorage` — one codec, one
+validation path, no second format to drift.
+
+Loading a file **merges** rather than replaces. `Progress.merge` compares the
+two histories card by card: `seen` only ever increases on a given device, so
+between two records for the same card the one with more sightings has strictly
+more history behind it and wins. No timestamps to reconcile, no lost sessions.
+The same function is what a sync layer will need later.
+
+Every file carries the deck's content fingerprint. Progress is keyed by rank,
+so a renumbered deck is a different deck as far as saved progress is concerned
+— importing across that boundary is refused outright, because it would remap
+your history onto the wrong words with no visible symptom. Loading your own
+`localStorage` only warns: refusing to open your own history would be worse
+than the drift.
+
+Saving into a synced folder (iCloud Drive, Google Drive) makes this a workable
+manual device transfer — the OS does the networking.
+
 ## Offline
 
 `sw.js` is network-first with the cache as fallback. At 76 KB the cache buys
@@ -104,11 +126,11 @@ indefinitely.
 ## Roadmap
 
 - **Now** — ES→EN, self-graded, Leitner, `localStorage`, installable and
-  offline, deployed.
-- **Next** — audio via the browser's `SpeechSynthesis`, JSON export/import,
-  EN→ES with every valid answer shown on the reveal, progress screen.
-- **Later** — cross-device sync (opaque user key, one blob per key, last write
-  wins), more languages, FSRS scheduling.
+  offline, file backup with merge, deployed.
+- **Next** — cross-device sync: a Netlify Function over Netlify Blobs, keyed by
+  an unguessable pairing secret, reusing `Progress.merge`. No accounts.
+- **Later** — audio via `SpeechSynthesis`, EN→ES with every valid answer shown
+  on the reveal, a progress screen, more languages, FSRS scheduling.
 
 ## Notes
 

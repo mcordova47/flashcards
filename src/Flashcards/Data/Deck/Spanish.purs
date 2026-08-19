@@ -3,10 +3,16 @@
 -- | Source: data/es-1000.csv (1000 words, ordered by frequency).
 module Flashcards.Data.Deck.Spanish
   ( deck
+  , fingerprint
   )
   where
 
 import Flashcards.Types.Card (Card, Rank(..))
+
+-- | Content hash of this deck. Progress is keyed by rank, so a deck whose rows
+-- | were renumbered is a different deck as far as saved progress is concerned.
+fingerprint :: String
+fingerprint = "c023e748cdde"
 
 -- | The 1000 most common Spanish words, most frequent first. The index into
 -- | this deck is meaningful: it is the curriculum order.

@@ -1,7 +1,9 @@
--- | The whole app. One screen: a card, a flip, two grades, a summary.
+-- | The whole app. One screen: a card, a flip, two grades, a summary — plus a
+-- | quiet panel for getting your progress on and off the device.
 module Flashcards.Pages.Study
   ( Message
   , Screen
+  , Session
   , State
   , init
   , update
@@ -13,6 +15,7 @@ import Prelude
 
 import Data.Array as Array
 import Data.DateTime.Instant (Instant)
+import Data.Either (Either(..))
 import Data.Foldable (for_)
 import Data.Int as Int
 import Data.Map (Map)
@@ -20,11 +23,13 @@ import Data.Map as Map
 import Data.Maybe (Maybe(..))
 import Data.Tuple.Nested ((/\))
 import Effect (Effect)
+import Effect.Aff (Milliseconds(..), delay)
 import Effect.Class (liftEffect)
 import Effect.Now as Now
 import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Styled as H
+import Flashcards.Backup as Backup
 import Flashcards.Data.Deck.Spanish as Deck
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Storage as Storage
@@ -55,6 +60,8 @@ data Screen
 type State =
   { progress :: Progress
   , screen :: Screen
+  , panel :: Boolean
+  , notice :: Maybe String
   }
 
 data Message
@@ -64,21 +71,26 @@ data Message
   | Answered Grade Instant
   | StartAnother
   | StartedAnother Instant
+  | TogglePanel
+  | Export
+  | Import
+  | Imported String
+  | DismissNotice
 
 init :: Transition Message State
 init = do
   fork do
-    progress <- liftEffect Storage.load
+    progress <- liftEffect $ Storage.load Deck.fingerprint
     now <- liftEffect Now.now
     pure $ Loaded progress now
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
-  pure { progress: Progress.empty, screen: Loading }
+  pure { progress: Progress.empty, screen: Loading, panel: false, notice: Nothing }
 
 update :: State -> Message -> Transition Message State
 update state = case _ of
   Loaded progress now ->
-    pure { progress, screen: startSession progress now }
+    pure state { progress = progress, screen = startSession progress now }
 
   Flip -> case state.screen of
     Studying session | not session.flipped ->
@@ -119,10 +131,10 @@ update state = case _ of
             , again = session.again + countOf Again
             }
 
-        forkVoid $ liftEffect $ Storage.save progress
-        pure
-          { progress
-          , screen:
+        forkVoid $ liftEffect $ Storage.save Deck.fingerprint progress
+        pure state
+          { progress = progress
+          , screen =
               if advanced.position >= Array.length advanced.queue then
                 Complete
                   { answered: advanced.position
@@ -142,6 +154,39 @@ update state = case _ of
   StartedAnother now ->
     pure state { screen = startSession state.progress now }
 
+  TogglePanel ->
+    pure state { panel = not state.panel }
+
+  Export -> do
+    forkVoid $ liftEffect $ Backup.download Backup.filename $
+      Backup.serialize Deck.fingerprint state.progress
+    noticing state { panel = false } $ "Saved " <> Backup.filename
+
+  Import -> do
+    forks \{ dispatch } -> liftEffect $ Backup.pickFile $ dispatch <<< Imported
+    pure state { panel = false }
+
+  Imported raw -> case Backup.parse Deck.fingerprint raw of
+    Left message ->
+      noticing state message
+    Right incoming -> do
+      let progress = Progress.merge state.progress incoming
+      forkVoid $ liftEffect $ Storage.save Deck.fingerprint progress
+      -- The queue was built from the old history, so start over from the new.
+      fork $ liftEffect $ StartedAnother <$> Now.now
+      noticing state { progress = progress } $
+        "Loaded backup · " <> show (Progress.seenCount progress) <> " words seen"
+
+  DismissNotice ->
+    pure state { notice = Nothing }
+
+noticing :: State -> String -> Transition Message State
+noticing state message = do
+  fork do
+    delay $ Milliseconds 3500.0
+    pure DismissNotice
+  pure state { notice = Just message }
+
 startSession :: Progress -> Instant -> Screen
 startSession progress now =
   case Scheduler.buildSession Deck.deck progress now Scheduler.sessionSize of
@@ -153,16 +198,32 @@ cardsByRank :: Map Rank Card
 cardsByRank = Map.fromFoldable $ Deck.deck <#> \card -> card.rank /\ card
 
 view :: State -> Dispatch Message -> ReactElement
-view state dispatch = case state.screen of
-  Loading -> H.div "app" H.empty
-  Studying session -> studyingView session dispatch
-  Complete summary -> completeView state.progress summary dispatch
+view state dispatch =
+  H.fragment
+  [ case state.screen of
+      Loading -> H.div "app" H.empty
+      Studying session -> studyingView session dispatch
+      Complete summary -> completeView state.progress summary dispatch
+  , if state.panel then panelView state.progress dispatch else H.empty
+  , case state.notice of
+      Nothing -> H.empty
+      Just message -> H.div "notice" message
+  ]
+
+topBar :: Maybe Session -> Dispatch Message -> ReactElement
+topBar session dispatch =
+  H.div "topbar"
+  [ H.div "pips" case session of
+      Nothing -> []
+      Just s -> s.queue # Array.mapWithIndex \i _ ->
+        H.div_ ("pip" <> if i < s.position then " done" else "") { key: show i } H.empty
+  , H.button_ "panel-toggle" { onClick: dispatch <| TogglePanel, title: "Progress" } "•••"
+  ]
 
 studyingView :: Session -> Dispatch Message -> ReactElement
 studyingView session dispatch =
   H.div "app"
-  [ H.div "pips" $ session.queue # Array.mapWithIndex \i _ ->
-      H.div_ ("pip" <> if i < session.position then " done" else "") { key: show i } H.empty
+  [ topBar (Just session) dispatch
   , H.div_ "card" { onClick: dispatch <| Flip } face
   , H.div "controls" controls
   ]
@@ -187,14 +248,18 @@ studyingView session dispatch =
 
 completeView :: Progress -> Summary -> Dispatch Message -> ReactElement
 completeView progress summary dispatch =
-  H.div "app done"
-  [ H.h1 "done-title" title
-  , H.p "done-stats" stats
-  , H.div "deck-progress"
-    [ H.div "bar" $ H.div_ "fill" { style: H.css { width: show percent <> "%" } } H.empty
-    , H.p "deck-count" $ show seen <> " of " <> show total <> " words seen"
+  H.div "app"
+  [ topBar Nothing dispatch
+  , H.div "done-body"
+    [ H.h1 "done-title" title
+    , H.p "done-stats" stats
+    , H.div "deck-progress"
+      [ H.div "bar" $ H.div_ "fill" { style: H.css { width: show percent <> "%" } } H.empty
+      , H.p "deck-count" $ show seen <> " of " <> show total <> " words seen"
+      ]
     ]
-  , H.button_ "grade got-it wide" { onClick: dispatch <| StartAnother } cta
+  , H.div "controls"
+    [ H.button_ "grade got-it" { onClick: dispatch <| StartAnother } cta ]
   ]
   where
     seen = Progress.seenCount progress
@@ -212,6 +277,18 @@ completeView progress summary dispatch =
             <> show summary.again <> " again"
 
     cta = if caughtUp then "Check again" else "Study " <> show Scheduler.sessionSize <> " more"
+
+panelView :: Progress -> Dispatch Message -> ReactElement
+panelView progress dispatch =
+  H.fragment
+  [ H.div_ "backdrop" { onClick: dispatch <| TogglePanel } H.empty
+  , H.div "panel"
+    [ H.button_ "panel-item" { onClick: dispatch <| Export } "Save progress to a file"
+    , H.button_ "panel-item" { onClick: dispatch <| Import } "Load progress from a file"
+    , H.p "panel-note" $
+        show (Progress.seenCount progress) <> " of " <> show (Array.length Deck.deck) <> " words seen"
+    ]
+  ]
 
 keyMessage :: String -> Maybe Message
 keyMessage = case _ of

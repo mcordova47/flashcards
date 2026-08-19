@@ -1,6 +1,7 @@
 package:
   name: flashcards
   dependencies:
+    - aff
     - argonaut
     - arrays
     - console

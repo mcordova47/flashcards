@@ -49,10 +49,36 @@ body {
   padding: max(0.75rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
 }
 
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .pips {
   display: flex;
+  flex: 1;
   gap: 3px;
   height: 3px;
+}
+
+.panel-toggle {
+  appearance: none;
+  border: 0;
+  background: none;
+  color: var(--faint);
+  font: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  padding: 0.4rem 0.2rem 0.4rem 0.5rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.panel-toggle:hover {
+  color: var(--muted);
 }
 
 .pip {
@@ -144,18 +170,13 @@ body {
   color: var(--accent-fg);
 }
 
-.wide {
-  flex: initial;
-  width: 100%;
-}
-
 .hint {
   margin: 0 auto;
   color: var(--faint);
   font-size: 0.875rem;
 }
 
-.app.done {
+.done-body {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -198,4 +219,66 @@ body {
   margin: 0.6rem 0 0;
   color: var(--faint);
   font-size: 0.875rem;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.panel {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  max-width: 34rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  border-radius: 18px 18px 0 0;
+  background: var(--bg);
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.22);
+}
+
+.panel-item {
+  appearance: none;
+  border: 0;
+  border-radius: 12px;
+  background: var(--ghost);
+  color: var(--ghost-fg);
+  font: inherit;
+  font-size: 1rem;
+  text-align: left;
+  padding: 0.95rem 1rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.panel-note {
+  margin: 0.25rem 0 0;
+  color: var(--faint);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.notice {
+  position: fixed;
+  left: 50%;
+  top: calc(3.25rem + env(safe-area-inset-top));
+  transform: translateX(-50%);
+  z-index: 3;
+  pointer-events: none;
+  max-width: 90vw;
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 0.875rem;
+  text-align: center;
 }

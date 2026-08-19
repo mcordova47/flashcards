@@ -28,8 +28,12 @@ import Web.Storage.Storage as Storage
 key :: String
 key = "flashcards.es.v1"
 
-load :: Effect Progress
-load = do
+-- | Takes the current deck fingerprint so it can tell you when your saved
+-- | progress predates a deck change. It loads anyway: this is your own history
+-- | on your own device, and refusing it would be worse than the drift. Import
+-- | applies the stricter rule — see `Flashcards.Backup`.
+load :: String -> Effect Progress
+load deck = do
   storage <- localStorage =<< window
   Storage.getItem key storage >>= case _ of
     Nothing -> pure Progress.empty
@@ -37,13 +41,16 @@ load = do
       Left err -> recover $ "saved progress is not valid JSON: " <> err
       Right json -> case Progress.fromJson json of
         Left err -> recover $ "saved progress could not be read: " <> printJsonDecodeError err
-        Right progress -> pure progress
+        Right saved -> do
+          when (saved.deck /= Nothing && saved.deck /= Just deck) $
+            Console.warn "saved progress was written against a different deck; ranks may have shifted"
+          pure saved.progress
   where
     recover message = do
       Console.warn $ message <> " — starting fresh"
       pure Progress.empty
 
-save :: Progress -> Effect Unit
-save progress = do
+save :: String -> Progress -> Effect Unit
+save deck progress = do
   storage <- localStorage =<< window
-  Storage.setItem key (stringify $ Progress.toJson progress) storage
+  Storage.setItem key (stringify $ Progress.toJson deck progress) storage
