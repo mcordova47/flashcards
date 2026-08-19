@@ -124,9 +124,19 @@ whichever Spanish locales the device actually has — read from the engine at
 runtime, never hardcoded, and hidden entirely when there is only one. Choosing
 one previews it with `gracias`, the word where the difference is audible.
 
-That preference lives under its own `localStorage` key, deliberately outside
-the progress blob: which voices exist is a property of the device, not of the
-learner, so it must not travel in a backup file.
+Underneath sits a **Voice** row that cycles through that accent's voices,
+previewing each. It exists because a listed voice can have nothing behind it:
+macOS advertises Mónica and Paulina whether or not their assets are
+downloaded, and silently substitutes an English voice when they are not. No
+API reveals this — the utterance is assigned the voice you asked for and comes
+out in the wrong language. The automatic pick prefers a plainly-named voice
+over the novelty ones, which is a guess that can land on exactly such a dud, so
+the ear gets the final say where the code cannot.
+
+Both preferences live under their own `localStorage` keys, deliberately outside
+the progress blob: which voices exist, and which of them actually work, are
+properties of the device rather than of the learner, so they must not travel in
+a backup file.
 
 ## Layout
 

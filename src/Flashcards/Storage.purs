@@ -6,8 +6,11 @@ module Flashcards.Storage
   , key
   , load
   , loadAccent
+  , loadVoice
   , save
   , saveAccent
+  , saveVoice
+  , voiceKey
   )
   where
 
@@ -37,6 +40,11 @@ key = "flashcards.es.v1"
 -- | laptop can reasonably disagree about it.
 accentKey :: String
 accentKey = "flashcards.es.accent"
+
+-- | Same reasoning as `accentKey`, and more so: a voice name that exists on
+-- | one machine may be missing — or listed but broken — on another.
+voiceKey :: String
+voiceKey = "flashcards.es.voice"
 
 -- | Takes the current deck fingerprint so it can tell you when your saved
 -- | progress predates a deck change. It loads anyway: this is your own history
@@ -74,3 +82,13 @@ saveAccent :: String -> Effect Unit
 saveAccent accent = do
   storage <- localStorage =<< window
   Storage.setItem accentKey accent storage
+
+loadVoice :: Effect (Maybe String)
+loadVoice = do
+  storage <- localStorage =<< window
+  Storage.getItem voiceKey storage
+
+saveVoice :: String -> Effect Unit
+saveVoice voice = do
+  storage <- localStorage =<< window
+  Storage.setItem voiceKey voice storage

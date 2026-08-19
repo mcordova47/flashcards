@@ -6,16 +6,14 @@ const spanishVoices = () => {
   if (!synth) return []
   return synth
     .getVoices()
-    .map(v => ({ voice: v, name: v.name, lang: v.lang.replace("_", "-"), isDefault: v.default }))
-    .filter(v => v.lang.toLowerCase().startsWith("es"))
+    .map(v => ({ voice: v, name: v.name, locale: v.lang.replace("_", "-") }))
+    .filter(v => v.locale.toLowerCase().startsWith("es"))
 }
 
-const accents = () => [...new Set(spanishVoices().map(v => v.lang))].sort()
-
-export const onAccents_ = handler => {
+export const onVoices_ = handler => {
   const emit = () => {
-    const found = accents()
-    if (found.length) handler(found)
+    const found = spanishVoices()
+    if (found.length) handler(found.map(v => ({ name: v.name, locale: v.locale })))
   }
   // Engines populate getVoices() asynchronously; during startup it is reliably
   // empty, so emitting once is not enough.
@@ -25,24 +23,16 @@ export const onAccents_ = handler => {
   }
 }
 
-// Prefer the engine's own default, then a plain name: on Apple platforms every
-// novelty voice carries a "(Spanish (Region))" suffix that the real voices —
-// Mónica, Paulina — do not, so this picks the useful one out of the nine each
-// locale offers.
-const rank = list =>
-  list.find(v => v.isDefault) || list.find(v => !v.name.includes("(")) || list[0] || null
-
-// Exact locale first, then any Spanish voice at all. Handing the engine no
-// voice lets it fall back to its own default, which on a US machine is an
-// English voice reading Spanish text — the worst possible outcome and worse
-// than the wrong flavour of Spanish.
-const bestVoiceFor = locale => {
+const findVoice = (name, locale) => {
   const spanish = spanishVoices()
-  const found = rank(spanish.filter(v => v.lang === locale)) || rank(spanish)
+  const exact = spanish.find(v => v.name === name && v.locale === locale)
+  const inLocale = spanish.filter(v => v.locale === locale)[0]
+  const any = spanish[0]
+  const found = exact || inLocale || any
   return found ? found.voice : null
 }
 
-export const speak_ = (locale, text) => {
+export const speak_ = (name, locale, text) => {
   const synth = window.speechSynthesis
   if (!synth) return
 
@@ -50,14 +40,11 @@ export const speak_ = (locale, text) => {
   const go = () => {
     if (already) return
     already = true
-    utter(synth, locale, text)
+    utter(synth, name, locale, text)
   }
 
-  // A cold engine reports no voices at all, and speaking then would fall
-  // through to whatever default is loaded — an English one on a US machine.
-  // That is the most likely cause of an *intermittent* wrong voice: tap early
-  // and you get English, tap later and you get Spanish. Wait for the engine to
-  // announce its list, but not forever.
+  // A cold engine reports no voices at all, and speaking then falls through to
+  // whatever default is loaded — an English one on a US machine.
   if (spanishVoices().length) {
     go()
   } else {
@@ -66,25 +53,23 @@ export const speak_ = (locale, text) => {
   }
 }
 
-const utter = (synth, locale, text) => {
+const utter = (synth, name, locale, text) => {
   const utterance = new SpeechSynthesisUtterance(text)
   // A shade under natural pace: these are single words being learned, not prose.
   utterance.rate = 0.9
 
-  const voice = bestVoiceFor(locale)
+  const voice = findVoice(name, locale)
   if (voice) {
     utterance.voice = voice
-    // Match lang to the voice actually chosen. Engines that re-resolve from
-    // lang will otherwise discard the voice when the two disagree — which is
-    // how you end up with an English voice reading Spanish.
+    // Match lang to the voice actually chosen, or engines that re-resolve from
+    // lang will discard it.
     utterance.lang = voice.lang
   } else {
     utterance.lang = locale
   }
 
-  // Chrome is known to mis-voice or silently drop an utterance queued in the
-  // same tick as a cancel(). Only cancel when there is something to cancel,
-  // and let the queue settle before speaking.
+  // Chrome is known to mis-voice or drop an utterance queued in the same tick
+  // as a cancel(), so only cancel when something is in flight.
   if (synth.speaking || synth.pending) {
     synth.cancel()
     setTimeout(() => synth.speak(utterance), 80)
@@ -92,4 +77,3 @@ const utter = (synth, locale, text) => {
     synth.speak(utterance)
   }
 }
-

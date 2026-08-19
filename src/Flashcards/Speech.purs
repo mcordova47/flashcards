@@ -2,7 +2,7 @@
 -- | no API key, no audio files to ship. On Apple platforms the voices live on
 -- | the device, so it keeps working offline like everything else here.
 module Flashcards.Speech
-  ( onAccents
+  ( onVoices
   , speak
   , supported
   )
@@ -11,25 +11,27 @@ module Flashcards.Speech
 import Prelude
 
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEffectFn2)
+import Effect.Uncurried (EffectFn1, EffectFn3, mkEffectFn1, runEffectFn1, runEffectFn3)
+import Flashcards.Accent (Voice)
 
 -- | Whether the engine exists at all. Checked once at startup so the control
 -- | can be left out entirely rather than offered and doing nothing.
 foreign import supported :: Effect Boolean
 
--- | The Spanish locales this device can actually speak, sorted. Read at
--- | runtime because the answer differs per machine — a Mac has es-ES and
--- | es-MX, an Android phone might have es-US, a bare Linux box neither.
+-- | Every Spanish voice this device reports, in engine order.
 -- |
 -- | A callback rather than a plain read: engines populate their voice list
--- | asynchronously, and the list is reliably empty during startup. This fires
--- | once now if anything is known, and again when the engine catches up.
-onAccents :: (Array String -> Effect Unit) -> Effect Unit
-onAccents handler = runEffectFn1 onAccents_ $ mkEffectFn1 handler
+-- | asynchronously and it is reliably empty during startup. Fires once now if
+-- | anything is known, and again when the engine catches up.
+onVoices :: (Array Voice -> Effect Unit) -> Effect Unit
+onVoices handler = runEffectFn1 onVoices_ $ mkEffectFn1 handler
 
-foreign import onAccents_ :: EffectFn1 (EffectFn1 (Array String) Unit) Unit
+-- | Speak `text` with the named voice. Falls back within the locale, then to
+-- | any Spanish voice — never to no voice at all, which would hand the engine
+-- | its own default: on a US machine, English reading Spanish.
+speak :: String -> String -> String -> Effect Unit
+speak = runEffectFn3 speak_
 
-speak :: String -> String -> Effect Unit
-speak = runEffectFn2 speak_
+foreign import onVoices_ :: EffectFn1 (EffectFn1 (Array Voice) Unit) Unit
 
-foreign import speak_ :: EffectFn2 String String Unit
+foreign import speak_ :: EffectFn3 String String String Unit

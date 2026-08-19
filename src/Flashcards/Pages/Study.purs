@@ -65,9 +65,11 @@ type State =
   , panel :: Boolean
   , notice :: Maybe String
   , canSpeak :: Boolean
-  , accents :: Array String
+  , voices :: Array Accent.Voice
   , accent :: Maybe String
+  , voice :: Maybe String
   , savedAccent :: Maybe String
+  , savedVoice :: Maybe String
   }
 
 data Message
@@ -76,6 +78,7 @@ data Message
       , now :: Instant
       , canSpeak :: Boolean
       , savedAccent :: Maybe String
+      , savedVoice :: Maybe String
       }
   | Flip
   | Answer Grade
@@ -89,7 +92,8 @@ data Message
   | DismissNotice
   | SpeakCurrent
   | ChooseAccent String
-  | AccentsAvailable (Array String)
+  | VoicesAvailable (Array Accent.Voice)
+  | CycleVoice
 
 init :: Transition Message State
 init = do
@@ -97,41 +101,49 @@ init = do
     progress <- liftEffect $ Storage.load Deck.fingerprint
     canSpeak <- liftEffect Speech.supported
     savedAccent <- liftEffect Storage.loadAccent
+    savedVoice <- liftEffect Storage.loadVoice
     now <- liftEffect Now.now
-    pure $ Loaded { progress, now, canSpeak, savedAccent }
+    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice }
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
   forks \{ dispatch } ->
-    liftEffect $ Speech.onAccents $ dispatch <<< AccentsAvailable
+    liftEffect $ Speech.onVoices $ dispatch <<< VoicesAvailable
   pure
     { progress: Progress.empty
     , screen: Loading
     , panel: false
     , notice: Nothing
     , canSpeak: false
-    , accents: []
+    , voices: []
     , accent: Nothing
+    , voice: Nothing
     , savedAccent: Nothing
+    , savedVoice: Nothing
     }
 
 update :: State -> Message -> Transition Message State
 update state = case _ of
-  -- `Loaded` and `AccentsAvailable` race, so both resolve the preference from
+  -- `Loaded` and `VoicesAvailable` race, so both resolve preferences from
   -- whatever the other has already put in state.
-  Loaded { progress, now, canSpeak, savedAccent } ->
-    pure state
+  Loaded { progress, now, canSpeak, savedAccent, savedVoice } ->
+    pure $ settle savedAccent savedVoice state.voices state
       { progress = progress
       , canSpeak = canSpeak
       , savedAccent = savedAccent
-      , accent = Accent.resolve savedAccent state.accents
+      , savedVoice = savedVoice
       , screen = startSession progress now
       }
 
-  AccentsAvailable accents ->
-    pure state
-      { accents = accents
-      , accent = Accent.resolve state.savedAccent accents
-      }
+  VoicesAvailable voices ->
+    pure $ settle state.savedAccent state.savedVoice voices state { voices = voices }
+
+  CycleVoice -> case Accent.nextIn (accentOf state) state.voice state.voices of
+    Nothing ->
+      pure state
+    Just voice -> do
+      forkVoid $ liftEffect $ Storage.saveVoice voice
+      forkVoid $ liftEffect $ Speech.speak voice (accentOf state) "gracias"
+      pure state { voice = Just voice, savedVoice = Just voice }
 
   Flip -> case state.screen of
     Studying session | not session.flipped ->
@@ -222,17 +234,19 @@ update state = case _ of
     pure state { notice = Nothing }
 
   ChooseAccent accent -> do
+    let voice = Accent.autoVoice accent state.voices
     forkVoid $ liftEffect $ Storage.saveAccent accent
+    for_ voice \v -> forkVoid $ liftEffect $ Storage.saveVoice v
     -- `gracias` is the word that actually demonstrates the difference:
     -- "grah-thee-as" in Spain, "grah-see-as" in Mexico.
-    forkVoid $ liftEffect $ Speech.speak accent "gracias"
-    pure state { accent = Just accent, savedAccent = Just accent }
+    forkVoid $ liftEffect $ Speech.speak (fromMaybe "" voice) accent "gracias"
+    pure state { accent = Just accent, savedAccent = Just accent, voice = voice, savedVoice = voice }
 
   -- Only once the answer is showing: hearing it beforehand would give it away.
   SpeakCurrent -> case state.screen of
     Studying session | session.flipped -> do
       for_ (currentCard session) \card ->
-        forkVoid $ liftEffect $ Speech.speak (accentOf state) card.spanish
+        forkVoid $ liftEffect $ Speech.speak (fromMaybe "" state.voice) (accentOf state) card.spanish
       pure state
     _ ->
       pure state
@@ -241,6 +255,14 @@ update state = case _ of
 -- | most engines still pronounce Spanish when told to.
 accentOf :: State -> String
 accentOf state = fromMaybe "es-ES" state.accent
+
+-- | Re-derive both preferences from whatever the device currently reports.
+-- | Called from both racing startup messages, so neither ordering matters.
+settle :: Maybe String -> Maybe String -> Array Accent.Voice -> State -> State
+settle savedAccent savedVoice voices state =
+  state { accent = accent, voice = Accent.resolveVoice (fromMaybe "es-ES" accent) savedVoice voices }
+  where
+    accent = Accent.resolve savedAccent $ Accent.locales voices
 
 noticing :: State -> String -> Transition Message State
 noticing state message = do
@@ -358,6 +380,7 @@ panelView state dispatch =
   [ H.div_ "backdrop" { onClick: dispatch <| TogglePanel } H.empty
   , H.div "panel"
     [ accentPicker
+    , voicePicker
     , H.button_ "panel-item" { onClick: dispatch <| Export } "Save progress to a file"
     , H.button_ "panel-item" { onClick: dispatch <| Import } "Load progress from a file"
     , H.p "panel-note" $
@@ -366,15 +389,27 @@ panelView state dispatch =
     ]
   ]
   where
+    available = Accent.locales state.voices
+
     -- Nothing to choose between when the device speaks only one Spanish.
     accentPicker
-      | Array.length state.accents < 2 = H.empty
+      | Array.length available < 2 = H.empty
       | otherwise =
-          H.div "accents" $ state.accents <#> \accent ->
+          H.div "accents" $ available <#> \accent ->
             H.button_
               ("accent" <> if Just accent == state.accent then " chosen" else "")
               { key: accent, onClick: dispatch <| ChooseAccent accent }
               (Accent.label accent)
+
+    -- A listed voice can have nothing behind it, and no API says so. Cycling
+    -- lets the ear settle what the code cannot detect.
+    voicePicker
+      | Array.length (Accent.voicesIn (fromMaybe "" state.accent) state.voices) < 2 = H.empty
+      | otherwise =
+          H.button_ "panel-voice" { onClick: dispatch <| CycleVoice }
+          [ H.span "panel-voice-label" "Voice"
+          , H.span "panel-voice-name" $ fromMaybe "—" state.voice
+          ]
 
 keyMessage :: String -> Maybe Message
 keyMessage = case _ of
