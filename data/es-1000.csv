@@ -1,0 +1,1001 @@
+Order,English,Español
+1,I,yo
+2,to want,querer
+3,this,este
+4,yes,sí
+5,no,no
+6,to be able to,poder
+7,to speak,hablar
+8,to find,encontrar
+9,to have,tener
+10,to need,necesitar
+11,where,donde
+12,that,que
+13,the,el / la
+14,place,lugar
+15,home,casa
+16,something,algo
+17,that,ese
+18,and,y
+19,to see,ver
+20,but,pero
+21,to go (go away/leave),ir(se)
+22,"to, at",a
+23,to say,decir
+24,or,o
+25,a,un
+26,more,más
+27,"as, like",como
+28,"is, oneself",se
+29,to come,venir
+30,my,mi
+31,to be,ser
+32,to be,estar
+33,to live,vivir
+34,to pass,pasar
+35,day,día
+36,year,año
+37,week,semana
+38,month,mes
+39,each,cada
+40,time,tiempo
+41,to know,saber
+42,to know (be familiar with),conocer
+43,to do,hacer
+44,to practice,practicar
+45,to arrive,llegar
+46,"too, also",también
+47,when,cuando
+48,until,hasta
+49,morning,mañana
+50,he / she,él / ella
+51,is pleasing to (to like),gustar
+52,me,me
+53,you,te
+54,"you, him, her",le
+55,us,nos
+56,them,les
+57,friend,amigo
+58,food,comida
+59,other,otro
+60,work,trabajo
+61,"for, through",por
+62,"for, in order to",para
+63,example,ejemplo
+64,of,de
+65,"in, on",en
+66,with,con
+67,to give,dar
+68,country,país
+69,man,hombre
+70,woman,mujer
+71,to have,haber
+72,very,muy
+73,much,mucho
+74,large,grande
+75,less,menos
+76,little,poco
+77,thing,cosa
+78,if,si
+79,our,nuestro
+80,always,siempre
+81,life,vida
+82,after,después
+83,then,entonces
+84,to put,poner
+85,duty,deber
+86,well,bien
+87,between,entre
+88,word,palabra
+89,now,ahora
+90,to learn,aprender
+91,your,tu
+92,to believe,creer
+93,is seeming to (to seem),parecer
+94,nothing,nada
+95,all,todo
+96,because,porque
+97,to help,ayudar
+98,to ask,pedir
+99,to question,preguntar
+100,what,qué
+101,"it, the, him",lo
+102,"his, her, their",su
+103,here,aquí
+104,already,ya
+105,without,sin
+106,time,vez
+107,"there is, there are",hay
+108,about,sobre
+109,you (informal),tú
+110,"any, some",alguno
+111,same,mismo
+112,"like that, so",así
+113,how,cómo
+114,two,dos
+115,only,sólo
+116,first,primero
+117,from,desde
+118,or,ni
+119,thanks,gracias
+120,good,bueno
+121,one,uno
+122,you (formal),usted
+123,"so many, so much",tanto
+124,Mr.,señor
+125,"such, as, so",tan
+126,who,quién
+127,part,parte
+128,is remaining to (to stay),quedar
+129,favor,favor
+130,where,dónde
+131,never,nunca
+132,to lead,llevar
+133,to leave,dejar
+134,truth,verdad
+135,to follow,seguir
+136,new,nuevo
+137,well,pues
+138,to call (be called/name),llamar(se)
+139,best,mejor
+140,to think,pensar
+141,that,aquel
+142,moment,momento
+143,god,dios
+144,"but, rather",sino
+145,to leave,salir
+146,to return,volver
+147,form,forma
+148,before,antes
+149,although,aunque
+150,world,mundo
+151,three,tres
+152,such,tal
+153,there,ahí
+154,to take,tomar
+155,certain,cierto
+156,"to, towards",hacia
+157,case,caso
+158,night,noche
+159,to feel,sentir
+160,"then, later",luego
+161,someone,alguien
+162,to try,tratar
+163,person,persona
+164,higher,mayor
+165,last,último
+166,single,solo
+167,own,propio
+168,no one,nadie
+169,whoever,quien
+170,us,nosotros
+171,to look,mirar
+172,father,padre
+173,"time, hour",hora
+174,people,gente
+175,none,ninguno
+176,money,dinero
+177,almost,casi
+178,point,punto
+179,done,hecho
+180,during,durante
+181,any,cualquier
+182,hand,mano
+183,way,manera
+184,which,cual
+185,while,mientras
+186,to count,contar
+187,end,fin
+188,type,tipo
+189,clear,claro
+190,"also, besides",además
+191,to start,empezar
+192,to wait,esperar
+193,today,hoy
+194,side,lado
+195,son,hijo
+196,there,allí
+197,this,éste
+198,problem,problema
+199,agreement,acuerdo
+200,account,cuenta
+201,medium,medio
+202,against,contra
+203,out,fuera
+204,search,buscar
+205,within,dentro
+206,long,largo
+207,"safe, secure",seguro
+208,to exist,existir
+209,child,niño
+210,to enter,entrar
+211,mother,madre
+212,embargo,embargo
+213,only,único
+214,to work,trabajar
+215,small,pequeño
+216,high,alto
+217,change,cambio
+218,to write,escribir
+219,four,cuatro
+220,to lose,perder
+221,history,historia
+222,wait,espera
+223,idea,idea
+224,water,agua
+225,to produce,producir
+226,city,ciudad
+227,state,estado
+228,mode,modo
+229,name,nombre
+230,to occur,ocurrir
+231,family,familia
+232,reality,realidad
+233,to understand,entender
+234,to receive,recibir
+235,work,obra
+236,important,importante
+237,with me,conmigo
+238,wrong,mal
+239,yet,todavía
+240,reason,razón
+241,that,cuanto
+242,low,bajo
+243,to remember,recordar
+244,group,grupo
+245,love,amor
+246,thousand,mil
+247,mine,mío
+248,human,humano
+249,to finish,terminar
+250,to allow,permitir
+251,to appear,aparecer
+252,to get,conseguir
+253,afternoon,tarde
+254,to start,comenzar
+255,several,varios
+256,possible,posible
+257,yet,aún
+258,to serve,servir
+259,general,general
+260,to take,sacar
+261,relationship,relación
+262,five,cinco
+263,body,cuerpo
+264,with you,contigo
+265,to maintain,mantener
+266,before,ante
+267,principle,principio
+268,to result,resultar
+269,equal,igual
+270,too,demasiado
+271,town,pueblo
+272,second,segundo
+273,to read,leer
+274,to fall,caer
+275,to change,cambiar
+276,eye,ojo
+277,goodbye,adiós
+278,street,calle
+279,to present,presentar
+280,white,blanco
+281,to create,crear
+282,to open,abrir
+283,book,libro
+284,different,distinto
+285,force,fuerza
+286,light,luz
+287,according to,según
+288,saint,santo
+289,front,frente
+290,to consider,considerar
+291,really,realmente
+292,police,policía
+293,to hear,oír
+294,whose,cuyo
+295,sense,sentido
+296,to end,acabar
+297,step,paso
+298,situation,situación
+299,serious,serio
+300,head,cabeza
+301,quite,bastante
+302,brother,hermano
+303,to convert,convertir
+304,grace,gracia
+305,century,siglo
+306,"last, past",pasado
+307,bad,malo
+308,land,tierra
+309,paper,papel
+310,affection,cariño
+311,"valid, voucher",vale
+312,neither,tampoco
+313,social,social
+314,old,viejo
+315,Mrs.,señora
+316,topic,tema
+317,political,político
+318,Spanish,Español
+319,dead,muerto
+320,to win,ganar
+321,to form,formar
+322,class,clase
+323,fast,rápido
+324,to bring,traer
+325,"to start from, to divide",partir
+326,to die,morir
+327,even,incluso
+328,luck,suerte
+329,"field, country",campo
+330,care,cuidado
+331,to accept,aceptar
+332,perhaps,quizás
+333,to perform,realizar
+334,hundred,ciento
+335,fear,miedo
+336,order,orden
+337,door,puerta
+338,soon,pronto
+339,to suppose,suponer
+340,to understand,comprender
+341,final,final
+342,interest,interés
+343,following,siguiente
+344,view,vista
+345,to achieve,lograr
+346,"other, the rest",demás
+347,you,os
+348,boy,chico
+349,difficult,difícil
+350,how much,cuánto
+351,number,número
+352,to explain,explicar
+353,come,venga
+354,black,negro
+355,road,camino
+356,background,fondo
+357,voice,voz
+358,study,estudio
+359,necessary,necesario
+360,there,allá
+361,to touch,tocar
+362,value,valor
+363,to recognize,reconocer
+364,to study,estudiar
+365,to achieve,alcanzar
+366,to be born,nacer
+367,to direct,dirigir
+368,to run,correr
+369,happy,feliz
+370,measure,medida
+371,less,menor
+372,war,guerra
+373,only,solamente
+374,wife,esposa
+375,to use,utilizar
+376,forward,adelante
+377,center,centro
+378,what,cuál
+379,need,necesidad
+380,condition,condición
+381,to pay,pagar
+382,it,ello
+383,lack,falta
+384,death,muerte
+385,ten,diez
+386,through,través
+387,old,antiguo
+388,supposed,supuesto
+389,age,edad
+390,to play,jugar
+391,heart,corazón
+392,face,cara
+393,"boss, chief",jefe
+394,"era, time",época
+395,color,color
+396,to listen,escuchar
+397,help,ayuda
+398,experience,experiencia
+399,movement,movimiento
+400,to fulfill,cumplir
+401,special,especial
+402,different,diferente
+403,sorrow,pesar
+404,possibility,posibilidad
+405,to offer,ofrecer
+406,up,arriba
+407,to discover,descubrir
+408,daughter,hija
+409,previous,anterior
+410,game,juego
+411,to lift (to get up),levantar(se)
+412,poor,pobre
+413,air,aire
+414,six,seis
+415,to try,intentar
+416,together,junto
+417,result,resultado
+418,use,usar
+419,to decide,decidir
+420,to repeat,repetir
+421,to forget,olvidar
+422,law,ley
+423,appearance,aspecto
+424,foot,pie
+425,worth,valer
+426,species,especie
+427,to eat,comer
+428,service,servicio
+429,close,cerca
+430,to show,mostrar
+431,activity,actividad
+432,third,tercero
+433,uncle,tío
+434,to occupy,ocupar
+435,question,cuestión
+436,doubt,duda
+437,at least,siquiera
+438,difference,diferencia
+439,to move,mover
+440,to continue,continuar
+441,amount,cantidad
+442,action,acción
+443,to happen,suceder
+444,to set,fijar
+445,society,sociedad
+446,to refer,referir
+447,to close,acercar
+448,able,capaz
+449,free,libre
+450,natural,natural
+451,to devote,dedicar
+452,weight,peso
+453,effect,efecto
+454,object,objeto
+455,doctor,doctor
+456,TRUE,verdadero
+457,enough,suficiente
+458,young,joven
+459,party,partido
+460,economic,económico
+461,below,abajo
+462,right,derecho
+463,first,primer
+464,importance,importancia
+465,brilliant,genial
+466,system,sistema
+467,just,justo
+468,trip,viaje
+469,soil,suelo
+470,"respect, in regards to",respecto
+471,knowledge,conocimiento
+472,freedom,libertad
+473,above,encima
+474,to buy,comprar
+475,common,común
+476,open,abierto
+477,next,próximo
+478,strong,fuerte
+479,attention,atención
+480,to rise,subir
+481,effort,esfuerzo
+482,to avoid,evitar
+483,rest,resto
+484,is interesting to (to interest),interesar
+485,back,atrás
+486,area,zona
+487,process,proceso
+488,alive,vivo
+489,to close,cerrar
+490,wine,vino
+491,"to throw, cast",echar
+492,to reply,responder
+493,to suffer,sufrir
+494,complete,completo
+495,minute,minuto
+496,school,escuela
+497,contrary,contrario
+498,table,mesa
+499,real,real
+500,occasion,ocasión
+501,blood,sangre
+502,is important to (to matter),importar
+503,public,público
+504,car,coche
+505,to obtain,obtener
+506,program,programa
+507,away,lejos
+508,seven,siete
+509,huge,enorme
+510,response,respuesta
+511,line,línea
+512,space,espacio
+513,level,nivel
+514,peace,paz
+515,government,gobierno
+516,"end, cape",cabo
+517,return,vuelta
+518,to observe,observar
+519,to indicate,indicar
+520,question,pregunta
+521,image,imagen
+522,career,carrera
+523,fault,culpa
+524,to imagine,imaginar
+525,to be in the habit of,soler
+526,both,ambos
+527,to accompany,acompañar
+528,deep,profundo
+529,to stop,detener
+530,to develop,desarrollar
+531,eight,ocho
+532,easy,fácil
+533,to signal,señalar
+534,to choose,elegir
+535,figure,figura
+536,main,principal
+537,to sleep,dormir
+538,animal,animal
+539,base,base
+540,to prepare,preparar
+541,to propose,proponer
+542,to show,demostrar
+543,party,fiesta
+544,to mean,significar
+545,position,posición
+546,bed,cama
+547,motive,motivo
+548,test,prueba
+549,policy,politica
+550,national,nacional
+551,full,lleno
+552,phone,teléfono
+553,to gather,reunir
+554,Is missing to (to lack),faltar
+555,team,equipo
+556,datum,dato
+557,to wish,desear
+558,company,empresa
+559,issue,asunto
+560,presence,presencia
+561,yours,suyo
+562,culture,cultura
+563,series,serie
+564,million,millón
+565,to teach,enseñar
+566,to build,construir
+567,opportunity,oportunidad
+568,to sell,vender
+569,to kill,matar
+570,to represent,representar
+571,to disappear,desaparecer
+572,to send,mandar
+573,character,carácter
+574,where,adónde
+575,most,mayoría
+576,red,rojo
+577,after,tras
+578,top,superior
+579,to walk,andar
+580,short,corto
+581,author,autor
+582,fourth,cuarto
+583,sky,cielo
+584,known,conocido
+585,to prefer,preferir
+586,memory,recuerdo
+587,to ensure,asegurar
+588,forgiveness,perdón
+589,function,función
+590,cause,causa
+591,serious,grave
+592,decision,decisión
+593,music,música
+594,strange,extraño
+595,to grow,crecer
+596,to emerge,surgir
+597,movie,película
+598,expression,expresión
+599,husband,marido
+600,around,alrededor
+601,dog,perro
+602,to deliver,entregar
+603,river,río
+604,exactly,exactamente
+605,security,seguridad
+606,king,rey
+607,term,término
+608,to place,colocar
+609,metro,metro
+610,doctor,médico
+611,room,habitación
+612,to establish,establecer
+613,to save,guardar
+614,art,arte
+615,pair,par
+616,to start,iniciar
+617,fire,fuego
+618,to lower,bajar
+619,consequence,consecuencia
+620,to note,notar
+621,act,acto
+622,to put,meter
+623,absolute,absoluto
+624,penalty,pena
+625,to act,actuar
+626,height,altura
+627,desire,deseo
+628,"out, outside",afuera
+629,precisely,precisamente
+630,twenty,veinte
+631,dream,sueño
+632,claim,pretender
+633,task,tarea
+634,coffee,café
+635,letter,carta
+636,"barely, just",apenas
+637,property,propiedad
+638,product,producto
+639,personal,personal
+640,simply,simplemente
+641,impossible,imposible
+642,taste,gusto
+643,to agree (remember),acordar(se)
+644,site,sitio
+645,language,lengua
+646,to cut,cortar
+647,plan,plan
+648,baby,bebé
+649,to correspond,corresponder
+650,to break,romper
+651,never,jamás
+652,to acquire,adquirir
+653,weapon,arma
+654,project,proyecto
+655,memory,memoria
+656,origin,origen
+657,element,elemento
+658,lost,perdido
+659,English,inglés
+660,market,mercado
+661,course,curso
+662,to launch,lanzar
+663,given,dado
+664,to take advantage of,aprovechar
+665,interior,interior
+666,hard,duro
+667,to support,apoyar
+668,worse,peor
+669,deny,negar
+670,advance,avanzar
+671,use,uso
+672,arm,brazo
+673,teacher,profesor
+674,resolve,resolver
+675,future,futuro
+676,half,mitad
+677,clothing,ropa
+678,is costly to (to cost),costar
+679,rich,rico
+680,total,total
+681,to require,exigir
+682,opinion,opinión
+683,to increase,aumentar
+684,to collect,recoger
+685,mouth,boca
+686,address,dirección
+687,pure,puro
+688,president,presidente
+689,to abandon,abandonar
+690,piece,pieza
+691,last night,anoche
+692,professional,profesional
+693,to impose,imponer
+694,about,acerca
+695,to force,obligar
+696,physical,físico
+697,attitude,actitud
+698,sea,mar
+699,entry,entrada
+700,contact,contacto
+701,to apply,aplicar
+702,correct,correcto
+703,capital,capital
+704,title,título
+705,back,detrás
+706,post,puesto
+707,material,material
+708,blow,golpe
+709,to dispose,disponer
+710,communication,comunicación
+711,to express,expresar
+712,sorry,disculpe
+713,simple,simple
+714,completely,totalmente
+715,to provoke,provocar
+716,normal,normal
+717,to defend,defender
+718,disease,enfermedad
+719,matter,materia
+720,remove,quitar
+721,to conserve,conservar
+722,modern,moderno
+723,hospital,hospital
+724,to depend,depender
+725,nature,naturaleza
+726,capacity,capacidad
+727,current,actual
+728,mark,marcar
+729,distance,distancia
+730,full,pleno
+731,perfect,perfecto
+732,closed,cerrado
+733,to share,compartir
+734,quiet,tranquilo
+735,information,información
+736,environment,ambiente
+737,especially,especialmente
+738,development,desarrollo
+739,sun,sol
+740,to consist,consistir
+741,probably,probablemente
+742,to constitute,constituir
+743,yesterday,ayer
+744,ready,dispuesto
+745,to cover,cubrir
+746,to function,funcionar
+747,partner,compañero
+748,nice,bonito
+749,output,salida
+750,to fit,caber
+751,awareness,conciencia
+752,to meet,atender
+753,sick,enfermo
+754,incredible,increíble
+755,to insist,insistir
+756,custom,costumbre
+757,silly,tonto
+758,news,noticia
+759,circumstance,circunstancia
+760,is painful to (to hurt),doler
+761,private,privado
+762,style,estilo
+763,price,precio
+764,popular,popular
+765,to sit,sentar
+766,plant,planta
+767,that,ése
+768,character,personaje
+769,famous,famoso
+770,hunger,hambre
+771,success,éxito
+772,to merit,merecer
+773,building,edificio
+774,authority,autoridad
+775,stone,piedra
+776,to include,incluir
+777,boat,barco
+778,set,conjunto
+779,hotel,hotel
+780,thirty,treinta
+781,immediate,inmediato
+782,to cross,cruzar
+783,yours,tuyo
+784,to tend,tender
+785,finally,finalmente
+786,to advertise,anunciar
+787,bath,baño
+788,spirit,espíritu
+789,member,miembro
+790,direct,directo
+791,pleasure,placer
+792,to wake,despertar
+793,resource,recurso
+794,wall,pared
+795,error,error
+796,accurate,preciso
+797,miscellaneous,diverso
+798,difficulty,dificultad
+799,to comment,comentar
+800,to publish,publicar
+801,"family, familiar",familiar
+802,will,voluntad
+803,meeting,reunión
+804,model,modelo
+805,secret,secreto
+806,to load,cargar
+807,date,fecha
+808,to participate,participar
+809,train,tren
+810,to prevent,impedir
+811,purpose,propósito
+812,to save,salvar
+813,hurry,prisa
+814,degree,grado
+815,to escape,escapar
+816,deal,negocio
+817,fight,lucha
+818,to throw,tirar
+819,whole,entero
+820,interesting,interesante
+821,wide,amplio
+822,silence,silencio
+823,to answer,contestar
+824,newspaper,periódico
+825,is worrying to (to worry),preocupar
+826,teacher,maestro
+827,provide,prestar
+828,quality,calidad
+829,salt,sal
+830,to exhibit,exponer
+831,control,control
+832,civil,civil
+833,rare,raro
+834,science,ciencia
+835,size,tamaño
+836,table,cuadro
+837,horse,caballo
+838,responsibility,responsabilidad
+839,fifty,cincuenta
+840,internal,interno
+841,detail,detalle
+842,march,marcha
+843,nine,nueve
+844,meat,carne
+845,plane,avión
+846,hair,pelo
+847,thought,pensamiento
+848,to travel,viajar
+849,charge,cargo
+850,to separate,separar
+851,construction,construcción
+852,trial,juicio
+853,ground,terreno
+854,floor,piso
+855,company,compañia
+856,gold,oro
+857,to return,regresar
+858,text,texto
+859,source,fuente
+860,present,presente
+861,official,oficial
+862,difinitive,difinitivo
+863,magazine,revista
+864,damage,daño
+865,hope,esperanza
+866,machine,máquina
+867,to contemplate,contemplar
+868,to travel,recorrer
+869,mind,mente
+870,phrase,frase
+871,exercise,ejercicio
+872,room,sala
+873,to last,durar
+874,instrument,instrumento
+875,that,aquello
+876,defense,defensa
+877,director,director
+878,remove,retirar
+879,explanation,explicación
+880,article,artículo
+881,below,debajo
+882,to remain,permanecer
+883,to attend,asistir
+884,twelve,doce
+885,permission,permiso
+886,radio,radio
+887,to organize,organizar
+888,choice,elección
+889,visit,visita
+890,funny,divertido
+891,to contain,contener
+892,support,apoyo
+893,tree,árbol
+894,to visit,visitar
+895,to report,informar
+896,encounter,encuentro
+897,sex,sexo
+898,like,parecido
+899,current,corriente
+900,friendly,amable
+901,reading,lectura
+902,message,mensaje
+903,existence,existencia
+904,language,lenguaje
+905,costume,traje
+906,to send,enviar
+907,soul,alma
+908,"even, yet, still",aun
+909,destination,destino
+910,education,educación
+911,to care,cuidar
+912,to intervene,intervenir
+913,dinner,cena
+914,operation,operación
+915,perfectly,perfectamente
+916,to extend,extender
+917,to check,comprobar
+918,note,nota
+919,particular,particular
+920,to delay,tardar
+921,"in, inside",adentro
+922,military,militar
+923,song,canción
+924,attached,unido
+925,to discuss,discutir
+926,to fear,temer
+927,extraordinary,extraordinario
+928,theater,teatro
+929,to face,enfrentar
+930,"newly, freshly",recién
+931,average,media
+932,letter,letra
+933,feeling,sentimiento
+934,to drive,conducir
+935,completely,completamente
+936,cold,frío
+937,to sign,firmar
+938,solution,solución
+939,health,salud
+940,works,funciona
+941,print,impresión
+942,to complain,quejarse
+943,intention,intención
+944,rate,ritmo
+945,green,verde
+946,exact,exacto
+947,to respect,respetar
+948,terrible,terrible
+949,bank,banco
+950,via,vía
+951,to hold,sostener
+952,moon,luna
+953,skin,piel
+954,left,izquierda
+955,before,delante
+956,religious,religioso
+957,to warn,advertir
+958,dark,oscuro
+959,research,investigación
+960,heat,calor
+961,shop,tienda
+962,conversation,conversación
+963,Christmas,navidad
+964,summer,verano
+965,respect,respeto
+966,grandfather,abuelo
+967,north,norte
+968,through,mediante
+969,tradition,tradición
+970,is sufficient to (to be enough),bastar
+971,couple,pareja
+972,population,población
+973,lawyer,abogado
+974,daily,diario
+975,honor,honor
+976,blue,azul
+977,to mention,mencionar
+978,generation,generación
+979,vision,visión
+980,concrete,concrete
+981,completed,terminado
+982,to propose,plantear
+983,left,dejado
+984,to test,probar
+985,"to swear, pledge",jurar
+986,beautiful,hermoso
+987,danger,peligro
+988,confidence,confianza
+989,to fill,llenar
+990,simple,sencillo
+991,to improve,mejorar
+992,concept,concepto
+993,to highlight,destacar
+994,wood,madera
+995,to walk,caminar
+996,to employ,emplear
+997,to agree,convenir
+998,energy,energía
+999,to admit,admitir
+1000,is delightful to (to love),encantar

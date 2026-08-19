@@ -1,0 +1,11 @@
+/node_modules/
+/output/
+/public/
+/.spago
+/generated-docs/
+/.psc*
+/.purs*
+/.psa*
+.netlify
+.DS_Store
+.spec-results

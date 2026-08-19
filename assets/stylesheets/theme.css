@@ -1,0 +1,198 @@
+:root {
+  --bg: #faf8f5;
+  --fg: #17171c;
+  --muted: #5e5e6b;
+  --faint: #9d9daa;
+  --accent: #c2410c;
+  --accent-fg: #fffaf6;
+  --track: #e7e2da;
+  --ghost: #ece7df;
+  --ghost-fg: #3d3d47;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111116;
+    --fg: #f3f1ed;
+    --muted: #a3a3b0;
+    --faint: #63636f;
+    --accent: #f97316;
+    --accent-fg: #1a0f07;
+    --track: #26262f;
+    --ghost: #22222b;
+    --ghost-fg: #d6d4d0;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  height: 100dvh;
+  max-width: 34rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.5rem;
+  padding: max(0.75rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+}
+
+.pips {
+  display: flex;
+  gap: 3px;
+  height: 3px;
+}
+
+.pip {
+  flex: 1;
+  border-radius: 2px;
+  background: var(--track);
+  transition: background 180ms ease;
+}
+
+.pip.done {
+  background: var(--accent);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.prompt {
+  font-size: clamp(2.75rem, 13vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  transition: font-size 160ms ease, color 160ms ease;
+}
+
+.prompt.small {
+  font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.answer {
+  font-size: clamp(2rem, 9vw, 3.25rem);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.rank {
+  font-size: 0.8125rem;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  min-height: 4rem;
+}
+
+.grade {
+  flex: 1;
+  appearance: none;
+  border: 0;
+  border-radius: 14px;
+  padding: 1.05rem 1rem;
+  font-family: inherit;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 80ms ease;
+}
+
+.grade:active {
+  transform: scale(0.975);
+}
+
+/* "Again" is deliberately neutral, never red: missing a word is a routing
+   decision, not a failure. */
+.again {
+  background: var(--ghost);
+  color: var(--ghost-fg);
+}
+
+.got-it {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.wide {
+  flex: initial;
+  width: 100%;
+}
+
+.hint {
+  margin: 0 auto;
+  color: var(--faint);
+  font-size: 0.875rem;
+}
+
+.app.done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.done-title {
+  margin: 0;
+  font-size: clamp(1.75rem, 7vw, 2.5rem);
+  font-weight: 600;
+}
+
+.done-stats {
+  margin: 0;
+  color: var(--muted);
+}
+
+.deck-progress {
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+.bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--track);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--accent);
+  transition: width 400ms ease;
+}
+
+.deck-count {
+  margin: 0.6rem 0 0;
+  color: var(--faint);
+  font-size: 0.875rem;
+}

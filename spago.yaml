@@ -1,0 +1,33 @@
+package:
+  name: flashcards
+  dependencies:
+    - argonaut
+    - arrays
+    - console
+    - datetime
+    - effect
+    - either
+    - elmish
+    - elmish-html
+    - foldable-traversable
+    - integers
+    - maybe
+    - now
+    - ordered-collections
+    - prelude
+    - strings
+    - tuples
+    - web-html
+    - web-storage
+  test:
+    main: Test.Main
+    dependencies:
+      - aff
+      - console
+      - partial
+      - spec
+      - spec-node
+workspace:
+  extraPackages: {}
+  packageSet:
+    registry: 67.0.1
