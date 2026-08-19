@@ -29,31 +29,45 @@ export const onAccents_ = handler => {
 // novelty voice carries a "(Spanish (Region))" suffix that the real voices —
 // Mónica, Paulina — do not, so this picks the useful one out of the nine each
 // locale offers.
+const rank = list =>
+  list.find(v => v.isDefault) || list.find(v => !v.name.includes("(")) || list[0] || null
+
+// Exact locale first, then any Spanish voice at all. Handing the engine no
+// voice lets it fall back to its own default, which on a US machine is an
+// English voice reading Spanish text — the worst possible outcome and worse
+// than the wrong flavour of Spanish.
 const bestVoiceFor = locale => {
-  const candidates = spanishVoices().filter(v => v.lang === locale)
-  const pick =
-    candidates.find(v => v.isDefault) ||
-    candidates.find(v => !v.name.includes("(")) ||
-    candidates[0]
-  return pick ? pick.voice : null
+  const spanish = spanishVoices()
+  const found = rank(spanish.filter(v => v.lang === locale)) || rank(spanish)
+  return found ? found.voice : null
 }
 
 export const speak_ = (locale, text) => {
   const synth = window.speechSynthesis
   if (!synth) return
 
-  // Tapping twice should repeat the word, not queue a backlog behind it.
-  synth.cancel()
-
   const utterance = new SpeechSynthesisUtterance(text)
-  utterance.lang = locale
   // A shade under natural pace: these are single words being learned, not prose.
   utterance.rate = 0.9
 
-  // If the locale has no voice installed, the lang hint alone still gets
-  // Spanish pronunciation out of most engines.
   const voice = bestVoiceFor(locale)
-  if (voice) utterance.voice = voice
+  if (voice) {
+    utterance.voice = voice
+    // Match lang to the voice actually chosen. Engines that re-resolve from
+    // lang will otherwise discard the voice when the two disagree — which is
+    // how you end up with an English voice reading Spanish.
+    utterance.lang = voice.lang
+  } else {
+    utterance.lang = locale
+  }
 
-  synth.speak(utterance)
+  // Chrome is known to mis-voice or silently drop an utterance queued in the
+  // same tick as a cancel(). Only cancel when there is something to cancel,
+  // and let the queue settle before speaking.
+  if (synth.speaking || synth.pending) {
+    synth.cancel()
+    setTimeout(() => synth.speak(utterance), 80)
+  } else {
+    synth.speak(utterance)
+  }
 }
