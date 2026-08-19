@@ -17,3 +17,10 @@
   for = "/index.js"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+
+# Netlify does not know the .webmanifest extension and falls back to
+# application/octet-stream.
+[[headers]]
+  for = "/assets/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
