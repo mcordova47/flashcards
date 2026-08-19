@@ -46,6 +46,27 @@ export const speak_ = (locale, text) => {
   const synth = window.speechSynthesis
   if (!synth) return
 
+  let already = false
+  const go = () => {
+    if (already) return
+    already = true
+    utter(synth, locale, text)
+  }
+
+  // A cold engine reports no voices at all, and speaking then would fall
+  // through to whatever default is loaded — an English one on a US machine.
+  // That is the most likely cause of an *intermittent* wrong voice: tap early
+  // and you get English, tap later and you get Spanish. Wait for the engine to
+  // announce its list, but not forever.
+  if (spanishVoices().length) {
+    go()
+  } else {
+    if (synth.addEventListener) synth.addEventListener("voiceschanged", go, { once: true })
+    setTimeout(go, 600)
+  }
+}
+
+const utter = (synth, locale, text) => {
   const utterance = new SpeechSynthesisUtterance(text)
   // A shade under natural pace: these are single words being learned, not prose.
   utterance.rate = 0.9
@@ -71,3 +92,4 @@ export const speak_ = (locale, text) => {
     synth.speak(utterance)
   }
 }
+
