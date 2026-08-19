@@ -2,7 +2,10 @@
 
 Spaced-repetition flashcards for the 1000 most common Spanish words.
 
-No account, no backend, no database. Open it and a card is already there.
+**[palabras.mcord.dev](https://palabras.mcord.dev)**
+
+No account, no backend, no database. Open it and a card is already there. Add it
+to your home screen and it works with no signal.
 
 ## Quick start
 
@@ -44,6 +47,14 @@ applyGrade   :: Grade -> Instant -> Maybe CardProgress -> CardProgress
 **Storage lives at the edge.** `Flashcards.Storage` is the only module that
 touches `localStorage`. Corrupt or future-versioned data starts you over rather
 than crashing — losing a streak beats a white screen.
+
+## Offline
+
+`sw.js` is network-first with the cache as fallback. At 76 KB the cache buys
+almost nothing in speed, but everything in being usable underground — and
+network-first means a deploy always wins, so you can never get wedged on a stale
+bundle. The cache name is stamped at build time with a hash of the shell, so a
+deploy invalidates it and nothing else does.
 
 ## The study model
 
@@ -92,10 +103,10 @@ indefinitely.
 
 ## Roadmap
 
-- **Now** — ES→EN, self-graded, Leitner, `localStorage`, static deploy.
-- **Next** — installable PWA that works offline, audio via the browser's
-  `SpeechSynthesis`, EN→ES with every valid answer shown on the reveal,
-  progress screen, JSON export/import.
+- **Now** — ES→EN, self-graded, Leitner, `localStorage`, installable and
+  offline, deployed.
+- **Next** — audio via the browser's `SpeechSynthesis`, JSON export/import,
+  EN→ES with every valid answer shown on the reveal, progress screen.
 - **Later** — cross-device sync (opaque user key, one blob per key, last write
   wins), more languages, FSRS scheduling.
 
