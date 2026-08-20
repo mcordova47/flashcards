@@ -168,6 +168,54 @@ spec = do
       (_.direction <$> after 1) `shouldEqual` Just Recognition
       (_.direction <$> after 2) `shouldEqual` Just Production
 
+  describe "the whole ladder, end to end" do
+    -- Answer each card exactly when it comes due, and record the day it next
+    -- falls due along with where it sits. This is the schedule a person
+    -- actually experiences.
+    let
+      walk grades = _.steps $ Array.foldl step { day: 0.0, previous: Nothing, steps: [] } grades
+        where
+          step acc grade =
+            let
+              cp = Scheduler.applyGrade grade (at $ acc.day * day) acc.previous
+              nextDay = unwrap (unInstant cp.due) / day
+            in
+              { day: nextDay
+              , previous: Just cp
+              , steps: acc.steps <>
+                  [ { onDay: acc.day
+                    , nextIn: nextDay - acc.day
+                    , box: cp.box
+                    , producing: cp.direction == Production
+                    }
+                  ]
+              }
+
+    it "a word you already knew reaches production on the second answer" do
+      map (\s -> s.onDay) (walk [ GotIt, GotIt, GotIt, GotIt, GotIt, GotIt ])
+        `shouldEqual` [ 0.0, 7.0, 8.0, 11.0, 18.0, 39.0 ]
+
+    it "and is fully retired after six" do
+      map (\s -> s.box) (walk [ GotIt, GotIt, GotIt, GotIt, GotIt, GotIt ])
+        `shouldEqual` [ 3, 1, 2, 3, 4, 5 ]
+
+    it "graduating on the second answer, then climbing in production" do
+      map (\s -> s.producing) (walk [ GotIt, GotIt, GotIt, GotIt, GotIt, GotIt ])
+        `shouldEqual` [ false, true, true, true, true, true ]
+
+    it "a word you have to learn takes four answers to graduate" do
+      let learned = walk [ Again, GotIt, GotIt, GotIt, GotIt, GotIt, GotIt, GotIt ]
+      map (\s -> s.onDay) learned `shouldEqual` [ 0.0, 0.0, 1.0, 4.0, 11.0, 12.0, 15.0, 22.0 ]
+      map (\s -> s.producing) learned
+        `shouldEqual` [ false, false, false, false, true, true, true, true ]
+
+    it "missing one in production costs you the ladder, not the direction" do
+      let slipped = walk [ GotIt, GotIt, GotIt, Again, GotIt ]
+      map (\s -> s.box) slipped `shouldEqual` [ 3, 1, 2, 0, 1 ]
+      map (\s -> s.producing) slipped `shouldEqual` [ false, true, true, true, true ]
+      -- Box 0 is due immediately: it comes back in the same session.
+      map (\s -> s.nextIn) slipped `shouldEqual` [ 7.0, 1.0, 3.0, 0.0, 1.0 ]
+
   describe "requeue" do
     it "brings a missed card back five cards later" do
       Scheduler.requeue (Rank 99) 0 (Rank <$> [ 1, 2, 3, 4, 5, 6, 7, 8 ])
