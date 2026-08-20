@@ -11,6 +11,7 @@ import Data.Maybe (Maybe(..), fromJust)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Stats as Stats
 import Flashcards.Types.Card (Card, Rank(..))
+import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 import Partial.Unsafe (unsafePartial)
@@ -34,7 +35,7 @@ deck = Array.range 1 20 <#> \n ->
 card :: Int -> Int -> Int -> Int -> Int -> Number -> Progress -> Progress
 card rank box seen missed lapses dueIn =
   Progress.insert (Rank rank)
-    { box, seen, missed, lapses, due: at $ (100.0 + dueIn) * day }
+    { box, seen, missed, lapses, due: at $ (100.0 + dueIn) * day, direction: Recognition }
 
 spec :: Spec Unit
 spec = do
@@ -43,21 +44,21 @@ spec = do
       Stats.masteryOf Nothing `shouldEqual` Stats.Unseen
 
     it "treats the short boxes as still being learned" do
-      Stats.masteryOf (Just { box: 0, seen: 1, missed: 1, lapses: 0, due: now })
+      Stats.masteryOf (Just { box: 0, seen: 1, missed: 1, lapses: 0, due: now, direction: Recognition })
         `shouldEqual` Stats.Learning
-      Stats.masteryOf (Just { box: 1, seen: 1, missed: 0, lapses: 0, due: now })
+      Stats.masteryOf (Just { box: 1, seen: 1, missed: 0, lapses: 0, due: now, direction: Recognition })
         `shouldEqual` Stats.Learning
 
     it "counts the week-and-three-week boxes as familiar" do
-      Stats.masteryOf (Just { box: 2, seen: 1, missed: 0, lapses: 0, due: now })
+      Stats.masteryOf (Just { box: 2, seen: 1, missed: 0, lapses: 0, due: now, direction: Recognition })
         `shouldEqual` Stats.Familiar
-      Stats.masteryOf (Just { box: 3, seen: 1, missed: 0, lapses: 0, due: now })
+      Stats.masteryOf (Just { box: 3, seen: 1, missed: 0, lapses: 0, due: now, direction: Recognition })
         `shouldEqual` Stats.Familiar
 
     it "only calls the long boxes mastered" do
-      Stats.masteryOf (Just { box: 4, seen: 1, missed: 0, lapses: 0, due: now })
+      Stats.masteryOf (Just { box: 4, seen: 1, missed: 0, lapses: 0, due: now, direction: Recognition })
         `shouldEqual` Stats.Mastered
-      Stats.masteryOf (Just { box: 5, seen: 1, missed: 0, lapses: 0, due: now })
+      Stats.masteryOf (Just { box: 5, seen: 1, missed: 0, lapses: 0, due: now, direction: Recognition })
         `shouldEqual` Stats.Mastered
 
   describe "frequency bands" do

@@ -5,8 +5,10 @@ module Flashcards.Scheduler
   ( applyGrade
   , buildSession
   , firstSightingBox
+  , graduationBox
   , intervalFor
   , maxBox
+  , productionStartBox
   , requeue
   , requeueGap
   , sessionSize
@@ -17,10 +19,11 @@ import Prelude
 
 import Data.Array as Array
 import Data.DateTime.Instant (Instant, instant, unInstant)
-import Data.Maybe (Maybe(..), fromMaybe, isNothing)
+import Data.Maybe (Maybe(..), fromMaybe, isJust, isNothing)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Types.Card (Card, Rank)
+import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
 import Flashcards.Types.Progress as Progress
@@ -50,6 +53,20 @@ maxBox = 5
 -- | missing the word later drops it straight back to box 0.
 firstSightingBox :: Int
 firstSightingBox = 3
+
+-- | Recognise a word reliably enough to reach this box and it graduates: the
+-- | card flips to production and starts being asked English to Spanish.
+-- |
+-- | Recognition and production are different skills, and recognition is the
+-- | one that comes first naturally — so rather than scheduling both from the
+-- | start and doubling the deck, a word earns the harder question.
+graduationBox :: Int
+graduationBox = 4
+
+-- | Production restarts near the beginning: knowing a word on sight is real
+-- | evidence, but it is weak evidence that you can summon it unprompted.
+productionStartBox :: Int
+productionStartBox = 1
 
 -- | Box 0 is due immediately, so a missed card reappears in the same session.
 intervalFor :: Int -> Milliseconds
@@ -86,14 +103,37 @@ buildSession deck progress now size =
 -- | `firstSightingBox`.
 applyGrade :: Grade -> Instant -> Maybe CardProgress -> CardProgress
 applyGrade grade now previous =
-  { box, due: addInterval now $ intervalFor box, seen: prev.seen + 1, lapses, missed }
+  { box
+  , direction
+  , due: addInterval now $ intervalFor box
+  , seen: prev.seen + 1
+  , lapses
+  , missed
+  }
   where
-    prev = fromMaybe { box: 0, due: now, seen: 0, lapses: 0, missed: 0 } previous
+    prev = fromMaybe
+      { box: 0, due: now, seen: 0, lapses: 0, missed: 0, direction: Recognition }
+      previous
+
+    -- Where an ordinary correct answer would land it.
+    promoted = min maxBox $ prev.box + 1
+
+    -- Never on a first sighting: fast-tracking already handles a word you
+    -- turned out to know, and one correct answer is not evidence you can
+    -- produce it.
+    graduates =
+      grade == GotIt
+        && isJust previous
+        && prev.direction == Recognition
+        && promoted >= graduationBox
+
+    direction = if graduates then Production else prev.direction
 
     box = case grade, previous of
       Again, _ -> 0
       GotIt, Nothing -> firstSightingBox
-      GotIt, Just seen' -> min maxBox $ seen'.box + 1
+      GotIt, Just _ | graduates -> productionStartBox
+      GotIt, Just _ -> promoted
 
     -- Forgetting a word you had never learned is not a lapse.
     lapses = case grade of

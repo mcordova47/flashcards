@@ -33,6 +33,8 @@ import Data.Time.Duration (Milliseconds(..))
 import Data.Traversable (traverse)
 import Data.Tuple.Nested (type (/\), (/\))
 import Flashcards.Types.Card (Rank(..), rankToInt)
+import Flashcards.Types.Direction (Direction(..))
+import Flashcards.Types.Direction as Direction
 
 -- | `box` is the Leitner box: 0 is "still learning, show me again this
 -- | session", 5 is "retired for two months".
@@ -48,6 +50,7 @@ type CardProgress =
   , seen :: Int
   , lapses :: Int
   , missed :: Int
+  , direction :: Direction
   }
 
 newtype Progress = Progress (Map Rank CardProgress)
@@ -65,12 +68,13 @@ type Saved =
   , progress :: Progress
   }
 
--- | v1 had no deck fingerprint, v2 no miss count. Both stay readable and get
--- | written back at the current version on the next save. A missing miss count
--- | reads as zero, which understates history that was never recorded rather
--- | than inventing any.
+-- | v1 had no deck fingerprint, v2 no miss count, v3 no direction. All stay
+-- | readable and get written back at the current version on the next save.
+-- | Absent fields read as their starting value — zero misses, recognition —
+-- | which understates history that was never recorded rather than inventing
+-- | any.
 currentVersion :: Int
-currentVersion = 3
+currentVersion = 4
 
 empty :: Progress
 empty = Progress Map.empty
@@ -109,6 +113,7 @@ type WireCard =
   , seen :: Int
   , lapses :: Int
   , missed :: Maybe Int
+  , direction :: Maybe String
   }
 
 toJson :: String -> Progress -> Json
@@ -127,6 +132,7 @@ toJson deck (Progress m) = encodeJson
       , seen: cp.seen
       , lapses: cp.lapses
       , missed: Just cp.missed
+      , direction: Just $ Direction.toString cp.direction
       }
 
 fromJson :: Json -> Either JsonDecodeError Saved
@@ -146,4 +152,5 @@ fromJson json = do
         , seen: w.seen
         , lapses: w.lapses
         , missed: fromMaybe 0 w.missed
+        , direction: fromMaybe Recognition $ Direction.fromString =<< w.direction
         }

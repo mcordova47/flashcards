@@ -13,6 +13,7 @@ import Data.Int as Int
 import Data.Maybe (Maybe(..), fromJust)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Types.Card (Rank(..))
+import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
 import Flashcards.Types.Progress as Progress
 import Partial.Unsafe (unsafePartial)
@@ -25,7 +26,7 @@ at ms = unsafePartial $ fromJust $ instant $ Milliseconds ms
 -- | `due` is derived from `seen` so records are distinguishable in assertions.
 entry :: Int -> Int -> Int -> Progress -> Progress
 entry rank box seen =
-  Progress.insert (Rank rank) { box, due: at (Int.toNumber seen * 1000.0), seen, lapses: 0, missed: 0 }
+  Progress.insert (Rank rank) { box, due: at (Int.toNumber seen * 1000.0), seen, lapses: 0, missed: 0, direction: Recognition }
 
 boxOf :: Int -> Progress -> Maybe Int
 boxOf rank p = _.box <$> Progress.lookup (Rank rank) p
@@ -85,6 +86,21 @@ spec = do
     it "records the deck it was written against" do
       (_.deck <$> Progress.fromJson (Progress.toJson "deadbeef" Progress.empty))
         `shouldEqual` Right (Just "deadbeef")
+
+    it "reads a v3 payload, which predates directions" do
+      let
+        decoded = decode """{"version":3,"deck":"deadbeef","cards":[{"rank":4,"box":2,"due":1000,"seen":6,"lapses":2,"missed":3}]}"""
+        directionOf = map (map _.direction <<< Progress.lookup (Rank 4) <<< _.progress) decoded
+      -- Every card started life in recognition, so that is the honest default.
+      directionOf `shouldEqual` Right (Just Recognition)
+
+    it "round-trips a production card" do
+      let
+        producing = Progress.insert (Rank 1)
+          { box: 2, due: at 5000.0, seen: 9, lapses: 1, missed: 4, direction: Production }
+          Progress.empty
+      (_.progress <$> Progress.fromJson (Progress.toJson "deadbeef" producing))
+        `shouldEqual` Right producing
 
     it "reads a v2 payload, which predates the miss count" do
       let
