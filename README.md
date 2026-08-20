@@ -51,6 +51,25 @@ applyGrade   :: Grade -> Instant -> Maybe CardProgress -> CardProgress
 touches `localStorage`. Corrupt or future-versioned data starts you over rather
 than crashing — losing a streak beats a white screen.
 
+## Progress
+
+`•••` → **See your progress** opens a sheet with three figures, a chart, and a
+list.
+
+The chart is one bar per hundred words, stacked by mastery. Because the deck is
+frequency-ordered, its shape is the story: a solid left edge decaying
+rightwards, with the boundary marking how far you have got.
+
+Accuracy divides by `missed`, a plain tally of every wrong answer, rather than
+by `lapses`. A lapse is deliberately only counted when you forget a word you
+had already learned — right for scheduling, and fatal for a percentage, since
+it hides exactly the struggles that make you wrong. Accuracy reads as `—` until
+there is something to divide.
+
+**Keeps slipping** uses the opposite measure, and on purpose. Struggling with a
+brand-new word is just learning; forgetting one you had already earned is a
+leech. A word missed eight times on the way in but never since does not appear.
+
 ## Backup and transfer
 
 The `•••` control opens a panel to save your progress to a file and load it

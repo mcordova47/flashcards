@@ -20,7 +20,7 @@ import Data.Foldable (for_)
 import Data.Int as Int
 import Data.Map (Map)
 import Data.Map as Map
-import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Tuple.Nested ((/\))
 import Effect (Effect)
 import Effect.Aff (Milliseconds(..), delay)
@@ -33,6 +33,7 @@ import Flashcards.Accent as Accent
 import Flashcards.Backup as Backup
 import Flashcards.Data.Deck.Spanish as Deck
 import Flashcards.Scheduler as Scheduler
+import Flashcards.Stats as Stats
 import Flashcards.Speech as Speech
 import Flashcards.Storage as Storage
 import Flashcards.Types.Card (Card, Rank, rankToInt)
@@ -70,6 +71,9 @@ type State =
   , voice :: Maybe String
   , savedAccent :: Maybe String
   , savedVoice :: Maybe String
+  -- | `Just` the moment the screen was opened, which doubles as "is it open".
+  -- | The time is fixed at open so the due counts cannot shift underneath you.
+  , statsAt :: Maybe Instant
   }
 
 data Message
@@ -94,6 +98,9 @@ data Message
   | ChooseAccent String
   | VoicesAvailable (Array Accent.Voice)
   | CycleVoice
+  | ShowStats
+  | StatsAt Instant
+  | HideStats
 
 init :: Transition Message State
 init = do
@@ -119,6 +126,7 @@ init = do
     , voice: Nothing
     , savedAccent: Nothing
     , savedVoice: Nothing
+    , statsAt: Nothing
     }
 
 update :: State -> Message -> Transition Message State
@@ -233,6 +241,16 @@ update state = case _ of
   DismissNotice ->
     pure state { notice = Nothing }
 
+  ShowStats -> do
+    fork $ liftEffect $ StatsAt <$> Now.now
+    pure state
+
+  StatsAt now ->
+    pure state { statsAt = Just now, panel = false }
+
+  HideStats ->
+    pure state { statsAt = Nothing }
+
   ChooseAccent accent -> do
     let voice = Accent.autoVoice accent state.voices
     forkVoid $ liftEffect $ Storage.saveAccent accent
@@ -289,6 +307,9 @@ view state dispatch =
       Studying session -> studyingView state.canSpeak session dispatch
       Complete summary -> completeView state.progress summary dispatch
   , if state.panel then panelView state dispatch else H.empty
+  , case state.statsAt of
+      Nothing -> H.empty
+      Just now -> statsView now state.progress dispatch
   , case state.notice of
       Nothing -> H.empty
       Just message -> H.div "notice" message
@@ -381,6 +402,7 @@ panelView state dispatch =
   , H.div "panel"
     [ accentPicker
     , voicePicker
+    , H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
     , H.button_ "panel-item" { onClick: dispatch <| Export } "Save progress to a file"
     , H.button_ "panel-item" { onClick: dispatch <| Import } "Load progress from a file"
     , H.p "panel-note" $
@@ -410,6 +432,66 @@ panelView state dispatch =
           [ H.span "panel-voice-label" "Voice"
           , H.span "panel-voice-name" $ fromMaybe "—" state.voice
           ]
+
+statsView :: Instant -> Progress -> Dispatch Message -> ReactElement
+statsView now progress dispatch =
+  H.div "sheet"
+  [ H.div "sheet-head"
+    [ H.h2 "sheet-title" "Progress"
+    , H.button_ "sheet-close" { onClick: dispatch <| HideStats, title: "Close" } "✕"
+    ]
+  , H.div "sheet-body"
+    [ H.div "deck-progress"
+      [ H.div "bar" $ H.div_ "fill" { style: H.css { width: show percent <> "%" } } H.empty
+      , H.p "deck-count" $ show o.seen <> " of " <> show o.total <> " words seen"
+      ]
+    , H.div "tiles"
+      [ tile (maybe "—" (\a -> show (Int.round a) <> "%") o.accuracy) "correct"
+      , tile (show o.mastered) "mastered"
+      , tile (show o.dueTomorrow) "due tomorrow"
+      ]
+    , H.p "tiles-note" $
+        if o.answers == 0 then "No answers yet."
+        else show o.answers <> " answers · " <> show o.misses <> " wrong"
+            <> (if o.dueNow > 0 then " · " <> show o.dueNow <> " due now" else "")
+    , H.h3 "sheet-heading" "By frequency"
+    , H.div "bands" $ Stats.bands Stats.bandSize Deck.deck progress <#> \band ->
+        H.div_ "band" { key: show band.from }
+        [ H.div "band-label" $ show band.from <> "–" <> show band.to
+        , H.div "band-bar"
+          [ segment "mastered" band.counts.mastered
+          , segment "familiar" band.counts.familiar
+          , segment "learning" band.counts.learning
+          , segment "unseen" band.counts.unseen
+          ]
+        ]
+    , H.div "legend" $ [ "mastered", "familiar", "learning", "unseen" ] <#> \name ->
+        H.div_ "legend-item" { key: name } [ H.span ("swatch " <> name) H.empty, H.span "" name ]
+    , if Array.null slipping then H.empty else
+        H.fragment
+        [ H.h3 "sheet-heading" "Keeps slipping"
+        , H.p "sheet-note" "Words you had learned and then forgot again."
+        , H.div "leeches" $ slipping <#> \leech ->
+            H.div_ "leech" { key: show (rankToInt leech.rank) }
+            [ H.span "leech-word" leech.spanish
+            , H.span "leech-gloss" leech.english
+            , H.span "leech-count" $ show leech.lapses
+            ]
+        ]
+    ]
+  ]
+  where
+    o = Stats.overview now Deck.deck progress
+    percent = 100.0 * Int.toNumber o.seen / Int.toNumber o.total
+    slipping = Stats.leeches Stats.leechThreshold Deck.deck progress
+
+    tile value label =
+      H.div "tile" [ H.div "tile-value" value, H.div "tile-label" label ]
+
+    -- Zero-width segments would still draw a border radius sliver.
+    segment name n =
+      if n == 0 then H.empty
+      else H.div_ ("seg " <> name) { key: name, style: H.css { flexGrow: n } } H.empty
 
 keyMessage :: String -> Maybe Message
 keyMessage = case _ of
