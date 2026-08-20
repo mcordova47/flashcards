@@ -27,6 +27,7 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Types.Card (Card, Rank, rankToInt)
+import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
 import Flashcards.Types.Progress as Progress
 
@@ -70,6 +71,8 @@ type Overview =
   , accuracy :: Maybe Number
   , dueNow :: Int
   , dueTomorrow :: Int
+  -- | How many words have graduated to being asked English to Spanish.
+  , producing :: Int
   }
 
 type Leech =
@@ -89,13 +92,20 @@ bandSize = 100
 leechThreshold :: Int
 leechThreshold = 3
 
+-- | Direction matters as much as box here. A card in production box 1 knows
+-- | more than one in recognition box 3, so ranking on box alone would order
+-- | them backwards. "Mastered" means you can produce the word, which is the
+-- | only sense in which you really know it.
 masteryOf :: Maybe CardProgress -> Mastery
 masteryOf = case _ of
   Nothing -> Unseen
-  Just cp
-    | cp.box >= 4 -> Mastered
-    | cp.box >= 2 -> Familiar
-    | otherwise -> Learning
+  Just cp -> case cp.direction of
+    Recognition
+      | cp.box >= 2 -> Familiar
+      | otherwise -> Learning
+    Production
+      | cp.box >= 3 -> Mastered
+      | otherwise -> Familiar
 
 tally :: Progress -> Array Card -> Counts
 tally progress = Array.foldl add { unseen: 0, learning: 0, familiar: 0, mastered: 0 }
@@ -129,7 +139,7 @@ overview :: Instant -> Array Card -> Progress -> Overview
 overview now deck progress =
   { seen: Array.length tracked
   , total: Array.length deck
-  , mastered: Array.length $ Array.filter (\cp -> cp.box >= 4) tracked
+  , mastered: Array.length $ Array.filter (\cp -> masteryOf (Just cp) == Mastered) tracked
   , answers
   , misses
   , accuracy:
@@ -137,6 +147,7 @@ overview now deck progress =
       else Just $ 100.0 * Int.toNumber (answers - misses) / Int.toNumber answers
   , dueNow: Array.length $ Array.filter (\cp -> cp.due <= now) tracked
   , dueTomorrow: Array.length $ Array.filter (\cp -> cp.due > now && cp.due <= tomorrow) tracked
+  , producing: Array.length $ Array.filter (\cp -> cp.direction == Production) tracked
   }
   where
     -- Only cards still in the deck count, so a resynced deck cannot leave

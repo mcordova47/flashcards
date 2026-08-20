@@ -7,6 +7,7 @@ import Prelude
 
 import Effect (Effect)
 import Test.Flashcards.AccentSpec as AccentSpec
+import Test.Flashcards.DeckSpec as DeckSpec
 import Test.Flashcards.ProgressSpec as ProgressSpec
 import Test.Flashcards.SchedulerSpec as SchedulerSpec
 import Test.Flashcards.StatsSpec as StatsSpec
@@ -19,3 +20,4 @@ main = runSpecAndExitProcess [ consoleReporter ] do
   ProgressSpec.spec
   AccentSpec.spec
   StatsSpec.spec
+  DeckSpec.spec

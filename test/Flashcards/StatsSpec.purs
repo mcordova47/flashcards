@@ -33,9 +33,15 @@ deck = Array.range 1 20 <#> \n ->
 
 -- | rank, box, seen, missed, lapses, days until due
 card :: Int -> Int -> Int -> Int -> Int -> Number -> Progress -> Progress
-card rank box seen missed lapses dueIn =
+card = cardIn Recognition
+
+producing :: Int -> Int -> Int -> Int -> Int -> Number -> Progress -> Progress
+producing = cardIn Production
+
+cardIn :: Direction -> Int -> Int -> Int -> Int -> Int -> Number -> Progress -> Progress
+cardIn direction rank box seen missed lapses dueIn =
   Progress.insert (Rank rank)
-    { box, seen, missed, lapses, due: at $ (100.0 + dueIn) * day, direction: Recognition }
+    { box, seen, missed, lapses, due: at $ (100.0 + dueIn) * day, direction }
 
 spec :: Spec Unit
 spec = do
@@ -55,11 +61,25 @@ spec = do
       Stats.masteryOf (Just { box: 3, seen: 1, missed: 0, lapses: 0, due: now, direction: Recognition })
         `shouldEqual` Stats.Familiar
 
-    it "only calls the long boxes mastered" do
-      Stats.masteryOf (Just { box: 4, seen: 1, missed: 0, lapses: 0, due: now, direction: Recognition })
-        `shouldEqual` Stats.Mastered
+    it "never calls a recognition card mastered, however high its box" do
+      -- Recognising a word is not knowing it; producing it is.
       Stats.masteryOf (Just { box: 5, seen: 1, missed: 0, lapses: 0, due: now, direction: Recognition })
+        `shouldEqual` Stats.Familiar
+
+    it "treats a freshly graduated card as familiar, not mastered" do
+      Stats.masteryOf (Just { box: 1, seen: 9, missed: 2, lapses: 0, due: now, direction: Production })
+        `shouldEqual` Stats.Familiar
+
+    it "calls a word mastered once it can be produced reliably" do
+      Stats.masteryOf (Just { box: 3, seen: 9, missed: 2, lapses: 0, due: now, direction: Production })
         `shouldEqual` Stats.Mastered
+
+    it "ranks production above recognition even at a lower box" do
+      let
+        recognising = Just { box: 3, seen: 4, missed: 0, lapses: 0, due: now, direction: Recognition }
+        producing = Just { box: 3, seen: 9, missed: 2, lapses: 0, due: now, direction: Production }
+      Stats.masteryOf recognising `shouldEqual` Stats.Familiar
+      Stats.masteryOf producing `shouldEqual` Stats.Mastered
 
   describe "frequency bands" do
     it "slices the deck into bands of the requested size" do
@@ -77,11 +97,17 @@ spec = do
     it "places each word in the right bucket" do
       let
         progress = Progress.empty
-          # card 1 5 3 0 0 30.0
+          # producing 1 3 9 1 0 30.0
           # card 2 3 2 0 0 5.0
           # card 3 0 1 1 0 0.0
         counts = _.counts <$> Array.head (Stats.bands 5 deck progress)
       counts `shouldEqual` Just { unseen: 2, learning: 1, familiar: 1, mastered: 1 }
+
+    it "counts a high recognition box as familiar, not mastered" do
+      let
+        progress = Progress.empty # card 1 5 3 0 0 30.0
+        counts = _.counts <$> Array.head (Stats.bands 5 deck progress)
+      counts `shouldEqual` Just { unseen: 4, learning: 0, familiar: 1, mastered: 0 }
 
     it "shows an untouched deck as entirely unseen" do
       let counts = _.counts <$> Array.head (Stats.bands 5 deck Progress.empty)
@@ -106,9 +132,13 @@ spec = do
       o.dueNow `shouldEqual` 1
       o.dueTomorrow `shouldEqual` 1
 
-    it "counts only words that are mastered" do
-      let progress = Progress.empty # card 1 4 1 0 0 30.0 # card 2 3 1 0 0 5.0
+    it "counts only words that can be produced as mastered" do
+      let progress = Progress.empty # producing 1 3 9 1 0 30.0 # card 2 3 1 0 0 5.0
       (Stats.overview now deck progress).mastered `shouldEqual` 1
+
+    it "counts how many words have graduated to production" do
+      let progress = Progress.empty # producing 1 1 9 1 0 30.0 # card 2 3 1 0 0 5.0
+      (Stats.overview now deck progress).producing `shouldEqual` 1
 
     it "ignores history for words no longer in the deck" do
       -- A rank beyond the deck must not inflate the totals.

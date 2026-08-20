@@ -18,10 +18,7 @@ import Data.DateTime.Instant (Instant)
 import Data.Either (Either(..))
 import Data.Foldable (for_)
 import Data.Int as Int
-import Data.Map (Map)
-import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
-import Data.Tuple.Nested ((/\))
 import Effect (Effect)
 import Effect.Aff (Milliseconds(..), delay)
 import Effect.Class (liftEffect)
@@ -32,6 +29,7 @@ import Elmish.HTML.Styled as H
 import Flashcards.Accent as Accent
 import Flashcards.Backup as Backup
 import Flashcards.Data.Deck.Spanish as Deck
+import Flashcards.Deck as DeckIndex
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
 import Flashcards.Speech as Speech
@@ -296,8 +294,8 @@ startSession progress now =
     queue -> Studying { queue, position: 0, flipped: false, gotIt: 0, again: 0 }
 
 -- | Built once: the deck is static.
-cardsByRank :: Map Rank Card
-cardsByRank = Map.fromFoldable $ Deck.deck <#> \card -> card.rank /\ card
+deckIndex :: DeckIndex.Index
+deckIndex = DeckIndex.index Deck.deck
 
 view :: State -> Dispatch Message -> ReactElement
 view state dispatch =
@@ -327,7 +325,7 @@ topBar session dispatch =
 
 currentCard :: Session -> Maybe Card
 currentCard session =
-  Array.index session.queue session.position >>= flip Map.lookup cardsByRank
+  Array.index session.queue session.position >>= flip DeckIndex.card deckIndex
 
 studyingView :: Boolean -> Session -> Dispatch Message -> ReactElement
 studyingView canSpeak session dispatch =
@@ -453,6 +451,7 @@ statsView now progress dispatch =
     , H.p "tiles-note" $
         if o.answers == 0 then "No answers yet."
         else show o.answers <> " answers · " <> show o.misses <> " wrong"
+            <> (if o.producing > 0 then " · " <> show o.producing <> " in production" else "")
             <> (if o.dueNow > 0 then " · " <> show o.dueNow <> " due now" else "")
     , H.h3 "sheet-heading" "By frequency"
     , H.div "bands" $ Stats.bands Stats.bandSize Deck.deck progress <#> \band ->
