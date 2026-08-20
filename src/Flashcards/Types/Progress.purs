@@ -27,7 +27,7 @@ import Data.DateTime.Instant (Instant, instant, unInstant)
 import Data.Either (Either(..), note)
 import Data.Map (Map)
 import Data.Map as Map
-import Data.Maybe (Maybe(..))
+import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Data.Traversable (traverse)
@@ -36,11 +36,18 @@ import Flashcards.Types.Card (Rank(..), rankToInt)
 
 -- | `box` is the Leitner box: 0 is "still learning, show me again this
 -- | session", 5 is "retired for two months".
+-- |
+-- | `lapses` and `missed` count different things on purpose. A lapse is
+-- | forgetting a word you had already learned, which is what marks a leech.
+-- | `missed` is every wrong answer including the initial struggle, which is
+-- | the only honest basis for an accuracy figure — `seen - missed` is right,
+-- | whereas `seen - lapses` flatters you exactly where you are weakest.
 type CardProgress =
   { box :: Int
   , due :: Instant
   , seen :: Int
   , lapses :: Int
+  , missed :: Int
   }
 
 newtype Progress = Progress (Map Rank CardProgress)
@@ -58,10 +65,12 @@ type Saved =
   , progress :: Progress
   }
 
--- | v1 had no deck fingerprint. It is still readable — it predates any
--- | renumbering — and gets written back as v2 on the next save.
+-- | v1 had no deck fingerprint, v2 no miss count. Both stay readable and get
+-- | written back at the current version on the next save. A missing miss count
+-- | reads as zero, which understates history that was never recorded rather
+-- | than inventing any.
 currentVersion :: Int
-currentVersion = 2
+currentVersion = 3
 
 empty :: Progress
 empty = Progress Map.empty
@@ -99,6 +108,7 @@ type WireCard =
   , due :: Number
   , seen :: Int
   , lapses :: Int
+  , missed :: Maybe Int
   }
 
 toJson :: String -> Progress -> Json
@@ -116,6 +126,7 @@ toJson deck (Progress m) = encodeJson
       , due: unwrap $ unInstant cp.due
       , seen: cp.seen
       , lapses: cp.lapses
+      , missed: Just cp.missed
       }
 
 fromJson :: Json -> Either JsonDecodeError Saved
@@ -129,4 +140,10 @@ fromJson json = do
   where
     fromWire w = do
       due <- note (TypeMismatch "due is not a valid instant") $ instant $ Milliseconds w.due
-      pure $ Rank w.rank /\ { box: w.box, due, seen: w.seen, lapses: w.lapses }
+      pure $ Rank w.rank /\
+        { box: w.box
+        , due
+        , seen: w.seen
+        , lapses: w.lapses
+        , missed: fromMaybe 0 w.missed
+        }

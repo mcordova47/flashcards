@@ -34,10 +34,10 @@ deck = Array.range 1 50 <#> \n ->
   { rank: Rank n, english: "en" <> show n, spanish: "es" <> show n }
 
 reviewed :: Int -> Int -> Number -> Progress -> Progress
-reviewed rank box due = Progress.insert (Rank rank) { box, due: at due, seen: 1, lapses: 0 }
+reviewed rank box due = Progress.insert (Rank rank) { box, due: at due, seen: 1, lapses: 0, missed: 0 }
 
 boxedAt :: Int -> Maybe CardProgress
-boxedAt box = Just { box, due: at $ 99.0 * day, seen: 4, lapses: 2 }
+boxedAt box = Just { box, due: at $ 99.0 * day, seen: 4, lapses: 2, missed: 3 }
 
 -- | Days from `now` until the card is next due.
 dueInDays :: CardProgress -> Number
@@ -99,6 +99,15 @@ spec = do
 
     it "does not count a lapse on a word that was never learned" do
       (Scheduler.applyGrade Again now Nothing).lapses `shouldEqual` 0
+
+    it "does count it as a miss, though — accuracy should not flatter you" do
+      (Scheduler.applyGrade Again now Nothing).missed `shouldEqual` 1
+
+    it "tallies every wrong answer, learned or not" do
+      (Scheduler.applyGrade Again now $ boxedAt 3).missed `shouldEqual` 4
+
+    it "leaves the tally alone on a right answer" do
+      (Scheduler.applyGrade GotIt now $ boxedAt 3).missed `shouldEqual` 3
 
     it "counts every answer as a sighting" do
       (Scheduler.applyGrade Again now $ boxedAt 3).seen `shouldEqual` 5

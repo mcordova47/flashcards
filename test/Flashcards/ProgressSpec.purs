@@ -25,7 +25,7 @@ at ms = unsafePartial $ fromJust $ instant $ Milliseconds ms
 -- | `due` is derived from `seen` so records are distinguishable in assertions.
 entry :: Int -> Int -> Int -> Progress -> Progress
 entry rank box seen =
-  Progress.insert (Rank rank) { box, due: at (Int.toNumber seen * 1000.0), seen, lapses: 0 }
+  Progress.insert (Rank rank) { box, due: at (Int.toNumber seen * 1000.0), seen, lapses: 0, missed: 0 }
 
 boxOf :: Int -> Progress -> Maybe Int
 boxOf rank p = _.box <$> Progress.lookup (Rank rank) p
@@ -85,6 +85,13 @@ spec = do
     it "records the deck it was written against" do
       (_.deck <$> Progress.fromJson (Progress.toJson "deadbeef" Progress.empty))
         `shouldEqual` Right (Just "deadbeef")
+
+    it "reads a v2 payload, which predates the miss count" do
+      let
+        decoded = decode """{"version":2,"deck":"deadbeef","cards":[{"rank":4,"box":1,"due":1000,"seen":6,"lapses":2}]}"""
+        missedOf = map (map _.missed <<< Progress.lookup (Rank 4) <<< _.progress) decoded
+      -- Absent history reads as zero rather than being invented.
+      missedOf `shouldEqual` Right (Just 0)
 
     it "reads a v1 payload, which predates the deck fingerprint" do
       let decoded = decode """{"version":1,"cards":[{"rank":7,"box":2,"due":1000,"seen":3,"lapses":1}]}"""

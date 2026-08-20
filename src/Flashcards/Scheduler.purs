@@ -86,9 +86,9 @@ buildSession deck progress now size =
 -- | `firstSightingBox`.
 applyGrade :: Grade -> Instant -> Maybe CardProgress -> CardProgress
 applyGrade grade now previous =
-  { box, due: addInterval now $ intervalFor box, seen: prev.seen + 1, lapses }
+  { box, due: addInterval now $ intervalFor box, seen: prev.seen + 1, lapses, missed }
   where
-    prev = fromMaybe { box: 0, due: now, seen: 0, lapses: 0 } previous
+    prev = fromMaybe { box: 0, due: now, seen: 0, lapses: 0, missed: 0 } previous
 
     box = case grade, previous of
       Again, _ -> 0
@@ -99,6 +99,12 @@ applyGrade grade now previous =
     lapses = case grade of
       Again | prev.box > 0 -> prev.lapses + 1
       _ -> prev.lapses
+
+    -- Every wrong answer, including the initial struggle. Unlike `lapses` this
+    -- is a plain tally, so accuracy computed from it is not flattering.
+    missed = case grade of
+      Again -> prev.missed + 1
+      GotIt -> prev.missed
 
 -- | Put a missed card back into the queue a few positions later, so the loop
 -- | closes before the session ends. Lands at the end if there is no room left.
