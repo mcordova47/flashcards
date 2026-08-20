@@ -125,6 +125,23 @@ A session is 20 cards: everything due, then new words **in frequency order**.
 The deck is never shuffled — its order *is* the curriculum, so the next new word
 is always the most common one you don't yet know.
 
+Cards start as **recognition** — see `encontrar`, recall "to find". Reach box 4
+that way and the card **graduates to production**: it starts asking the other
+way round, restarting at box 1. Recognising a word and being able to summon it
+are different skills, and recognition is the one that comes first naturally, so
+a word earns the harder question rather than both being scheduled from the
+start.
+
+Production cannot expect a single answer. 61 English sides in the deck map to
+more than one — `that` covers six — so the reveal shows every valid answer and
+you grade yourself against the set.
+
+A consequence: a recognition card never reaches box 5, because it graduates
+first. The 21-day and 60-day intervals belong to production, which is right —
+those are for retaining a mastered skill, and the mastered skill is being able
+to produce the word. For the same reason the progress screen never calls a
+recognition card mastered, however high its box.
+
 Getting a word right the **first time you ever see it** skips straight to box 3.
 A frequency-ordered deck opens with `yo`, `no`, `sí`, `que` — words you already
 know cold — and marching those up through five boxes would spend your first

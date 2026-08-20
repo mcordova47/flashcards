@@ -16,7 +16,7 @@ import Prelude
 import Data.Array as Array
 import Data.DateTime.Instant (Instant)
 import Data.Either (Either(..))
-import Data.Foldable (for_)
+import Data.Foldable (for_, intercalate)
 import Data.Int as Int
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Effect (Effect)
@@ -35,6 +35,7 @@ import Flashcards.Stats as Stats
 import Flashcards.Speech as Speech
 import Flashcards.Storage as Storage
 import Flashcards.Types.Card (Card, Rank, rankToInt)
+import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
@@ -302,7 +303,7 @@ view state dispatch =
   H.fragment
   [ case state.screen of
       Loading -> H.div "app" H.empty
-      Studying session -> studyingView state.canSpeak session dispatch
+      Studying session -> studyingView state session dispatch
       Complete summary -> completeView state.progress summary dispatch
   , if state.panel then panelView state dispatch else H.empty
   , case state.statsAt of
@@ -327,8 +328,8 @@ currentCard :: Session -> Maybe Card
 currentCard session =
   Array.index session.queue session.position >>= flip DeckIndex.card deckIndex
 
-studyingView :: Boolean -> Session -> Dispatch Message -> ReactElement
-studyingView canSpeak session dispatch =
+studyingView :: State -> Session -> Dispatch Message -> ReactElement
+studyingView state session dispatch =
   H.div "app"
   [ topBar (Just session) dispatch
   , H.div_ "card" { onClick: dispatch <| Flip } face
@@ -339,19 +340,42 @@ studyingView canSpeak session dispatch =
       Nothing ->
         H.empty
       Just card ->
-        H.fragment
-        [ H.div "prompt-row"
-          [ H.div (if session.flipped then "prompt small" else "prompt") card.spanish
-          , if session.flipped && canSpeak then
-              -- Clicks bubble to the card, but flipping an already-flipped card
-              -- is a no-op, so there is nothing to stop.
-              H.button_ "speak" { onClick: dispatch <| SpeakCurrent, title: "Hear it" } H.empty
-            else
-              H.empty
+        let
+          -- A card asks whichever way it has earned; unseen words start on
+          -- recognition.
+          producing =
+            (maybe Recognition _.direction $ Progress.lookup card.rank state.progress) == Production
+
+          prompt = if producing then card.english else card.spanish
+
+          -- Production cannot expect one answer: 61 English sides in the deck
+          -- have more than one, so grade yourself against the whole set.
+          answers =
+            if producing then DeckIndex.answersFor card.english deckIndex
+            else [ card.english ]
+        in
+          H.fragment
+          [ H.div "direction" $ if producing then "answer in Spanish" else "answer in English"
+          , H.div "prompt-row"
+            [ H.div (if session.flipped then "prompt small" else "prompt") prompt
+            , speaker $ session.flipped && not producing
+            ]
+          , if not session.flipped then H.empty else
+              H.div "answer-row"
+              [ H.div (if Array.length answers > 1 then "answer many" else "answer") $
+                  intercalate " · " answers
+              , speaker producing
+              ]
+          , H.div "rank" $ "#" <> show (rankToInt card.rank)
           ]
-        , if session.flipped then H.div "answer" card.english else H.empty
-        , H.div "rank" $ "#" <> show (rankToInt card.rank)
-        ]
+
+    -- Sits beside whichever side is showing the Spanish. Clicks bubble to the
+    -- card, but flipping an already-flipped card is a no-op.
+    speaker shown =
+      if shown && state.canSpeak then
+        H.button_ "speak" { onClick: dispatch <| SpeakCurrent, title: "Hear it" } H.empty
+      else
+        H.empty
 
     controls
       | session.flipped =
