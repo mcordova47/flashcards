@@ -1,0 +1,168 @@
+-- | Everything the progress screen shows, as pure functions of the deck, the
+-- | saved progress, and the current time. No `Effect`, no formatting, no view
+-- | concerns — the screen renders what this returns.
+module Flashcards.Stats
+  ( Band
+  , Counts
+  , Leech
+  , Mastery(..)
+  , Overview
+  , bandSize
+  , bands
+  , leechThreshold
+  , leeches
+  , masteryOf
+  , overview
+  )
+  where
+
+import Prelude
+
+import Control.Alternative (guard)
+import Data.Array as Array
+import Data.DateTime.Instant (Instant, instant, unInstant)
+import Data.Foldable (sum)
+import Data.Int as Int
+import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Newtype (unwrap)
+import Data.Time.Duration (Milliseconds(..))
+import Flashcards.Types.Card (Card, Rank, rankToInt)
+import Flashcards.Types.Progress (CardProgress, Progress)
+import Flashcards.Types.Progress as Progress
+
+-- | Four buckets rather than six boxes: the boxes are a scheduling detail, and
+-- | a stacked bar with six segments reads as noise.
+data Mastery
+  = Unseen
+  | Learning
+  | Familiar
+  | Mastered
+
+derive instance Eq Mastery
+
+instance Show Mastery where
+  show Unseen = "Unseen"
+  show Learning = "Learning"
+  show Familiar = "Familiar"
+  show Mastered = "Mastered"
+
+type Counts =
+  { unseen :: Int
+  , learning :: Int
+  , familiar :: Int
+  , mastered :: Int
+  }
+
+type Band =
+  { from :: Int
+  , to :: Int
+  , counts :: Counts
+  }
+
+type Overview =
+  { seen :: Int
+  , total :: Int
+  , mastered :: Int
+  , answers :: Int
+  , misses :: Int
+  -- | Percentage right. `Nothing` until there is something to divide, rather
+  -- | than a meaningless 0% or 100% on an untouched deck.
+  , accuracy :: Maybe Number
+  , dueNow :: Int
+  , dueTomorrow :: Int
+  }
+
+type Leech =
+  { rank :: Rank
+  , spanish :: String
+  , english :: String
+  , lapses :: Int
+  }
+
+-- | One bar per hundred words. Fine enough to show the frontier moving,
+-- | coarse enough to fit on a phone.
+bandSize :: Int
+bandSize = 100
+
+-- | Three failures after you had already learned a word is enough to call it a
+-- | leech; below that it is ordinary forgetting.
+leechThreshold :: Int
+leechThreshold = 3
+
+masteryOf :: Maybe CardProgress -> Mastery
+masteryOf = case _ of
+  Nothing -> Unseen
+  Just cp
+    | cp.box >= 4 -> Mastered
+    | cp.box >= 2 -> Familiar
+    | otherwise -> Learning
+
+tally :: Progress -> Array Card -> Counts
+tally progress = Array.foldl add { unseen: 0, learning: 0, familiar: 0, mastered: 0 }
+  where
+    add acc card = case masteryOf $ Progress.lookup card.rank progress of
+      Unseen -> acc { unseen = acc.unseen + 1 }
+      Learning -> acc { learning = acc.learning + 1 }
+      Familiar -> acc { familiar = acc.familiar + 1 }
+      Mastered -> acc { mastered = acc.mastered + 1 }
+
+-- | The deck sliced into frequency bands. Because the deck is ordered by
+-- | frequency, the shape of this is the story: a solid left edge decaying
+-- | rightwards, with the boundary marking how far you have got.
+bands :: Int -> Array Card -> Progress -> Array Band
+bands size deck progress =
+  Array.range 0 (count - 1) <#> \i ->
+    let
+      from = i * size + 1
+      to = from + size - 1
+    in
+      { from
+      , to: min to total
+      , counts: tally progress $ Array.filter (within from to) deck
+      }
+  where
+    total = Array.length deck
+    count = max 1 $ (total + size - 1) / size
+    within from to card = rankToInt card.rank >= from && rankToInt card.rank <= to
+
+overview :: Instant -> Array Card -> Progress -> Overview
+overview now deck progress =
+  { seen: Array.length tracked
+  , total: Array.length deck
+  , mastered: Array.length $ Array.filter (\cp -> cp.box >= 4) tracked
+  , answers
+  , misses
+  , accuracy:
+      if answers == 0 then Nothing
+      else Just $ 100.0 * Int.toNumber (answers - misses) / Int.toNumber answers
+  , dueNow: Array.length $ Array.filter (\cp -> cp.due <= now) tracked
+  , dueTomorrow: Array.length $ Array.filter (\cp -> cp.due > now && cp.due <= tomorrow) tracked
+  }
+  where
+    -- Only cards still in the deck count, so a resynced deck cannot leave
+    -- orphaned history inflating the totals.
+    tracked = Array.mapMaybe (\card -> Progress.lookup card.rank progress) deck
+    answers = sum $ map _.seen tracked
+    misses = sum $ map _.missed tracked
+    tomorrow = plusDays 1.0 now
+
+-- | Words that keep slipping *after* you had learned them.
+-- |
+-- | `lapses` is the right measure here and `missed` is not: struggling with a
+-- | brand-new word is just learning, whereas forgetting one you had already
+-- | earned is the thing worth surfacing.
+leeches :: Int -> Array Card -> Progress -> Array Leech
+leeches threshold deck progress =
+  Array.sortBy mostLapsedFirst $ Array.mapMaybe toLeech deck
+  where
+    toLeech card = do
+      cp <- Progress.lookup card.rank progress
+      guard $ cp.lapses >= threshold
+      pure { rank: card.rank, spanish: card.spanish, english: card.english, lapses: cp.lapses }
+
+    -- Stable sort, so equal counts stay in frequency order.
+    mostLapsedFirst a b = compare b.lapses a.lapses
+
+plusDays :: Number -> Instant -> Instant
+plusDays days t =
+  fromMaybe t $ instant $ Milliseconds $ unwrap (unInstant t) + days * 86400000.0
