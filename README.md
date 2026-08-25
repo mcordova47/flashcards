@@ -23,9 +23,25 @@ npm start        # http://localhost:8000
 | --- | --- |
 | `npm start` | Dev server, rebuilds on change |
 | `npm run build` | Compile and bundle into `public/` |
-| `npm test` | Scheduler specs |
+| `npm test` | Unit specs — the pure core |
+| `npm run verify` | Browser suites against a real Chrome |
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
 | `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
+
+## Testing
+
+`npm test` covers the pure core: scheduling, merging, the saved format,
+accents, deck lookups and stats. It is fast and it is where the logic lives.
+
+`npm run verify` builds the site and drives a real Chrome against it. That
+layer exists because the interesting failures have all been ones unit tests
+cannot see — a toast positioned over the buttons it was reporting on, a voice
+list that arrives too late for the picker to render, a panel gaining an item
+and shifting the ones a test clicked by index.
+
+It uses `puppeteer-core`, which drives the Chrome you already have rather than
+downloading one. If yours lives somewhere unusual, set `CHROME=/path/to/chrome`.
+Run a single suite with `npm run verify -- speech`.
 
 ## How it works
 

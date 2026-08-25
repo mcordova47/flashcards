@@ -7,11 +7,13 @@
     "build": "spago build && node build.mjs",
     "start": "spago build && node dev.mjs",
     "test": "spago test",
+    "verify": "npm run build && node test/browser/run.mjs",
     "sync-deck": "node tools/sync-deck.mjs"
   },
   "license": "ISC",
   "devDependencies": {
     "esbuild": "^0.25.10",
+    "puppeteer-core": "^25.8.0",
     "purescript": "^0.15.7",
     "spago": "^0.93.44"
   },
