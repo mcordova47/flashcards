@@ -9,9 +9,11 @@ module Flashcards.Stats
   , Overview
   , bandSize
   , bands
+  , describeDuration
   , leechThreshold
   , leeches
   , masteryOf
+  , nextDueIn
   , overview
   )
   where
@@ -21,7 +23,7 @@ import Prelude
 import Control.Alternative (guard)
 import Data.Array as Array
 import Data.DateTime.Instant (Instant, instant, unInstant)
-import Data.Foldable (sum)
+import Data.Foldable (minimum, sum)
 import Data.Int as Int
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (unwrap)
@@ -173,6 +175,36 @@ leeches threshold deck progress =
 
     -- Stable sort, so equal counts stay in frequency order.
     mostLapsedFirst a b = compare b.lapses a.lapses
+
+-- | How long until the soonest card falls due. `Nothing` when nothing is
+-- | scheduled ahead at all — an untouched deck, or one where everything is
+-- | already waiting for you.
+nextDueIn :: Instant -> Array Card -> Progress -> Maybe Milliseconds
+nextDueIn now deck progress = do
+  soonest <- minimum $ Array.filter (_ > now) $ map _.due tracked
+  pure $ Milliseconds $ unwrap (unInstant soonest) - unwrap (unInstant now)
+  where
+    tracked = Array.mapMaybe (\card -> Progress.lookup card.rank progress) deck
+
+-- | A wait in round human units — "4 hours", "1 day". Deliberately coarse:
+-- | the exact minute is noise when the answer is "come back this evening".
+-- |
+-- | Each unit is chosen from its own rounded value, so 59.7 minutes reads as
+-- | "1 hour" rather than "60 minutes", and 23.8 hours as "1 day".
+describeDuration :: Milliseconds -> String
+describeDuration (Milliseconds ms) =
+  -- A `let` rather than guards with a `where`: PureScript does not bring
+  -- `where` bindings into scope inside guard expressions.
+  let
+    minutes = Int.round $ ms / 60000.0
+    hours = Int.round $ ms / 3600000.0
+    days = Int.round $ ms / 86400000.0
+    plural n unit = show n <> " " <> unit <> (if n == 1 then "" else "s")
+  in
+    if ms < 60000.0 then "under a minute"
+    else if minutes < 60 then plural minutes "minute"
+    else if hours < 24 then plural hours "hour"
+    else plural days "day"
 
 plusDays :: Number -> Instant -> Instant
 plusDays days t =

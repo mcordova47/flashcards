@@ -121,6 +121,12 @@ Scheduling is Leitner with five boxes:
 | 4 | 3 weeks |
 | 5 | 2 months |
 
+When there is nothing left to review, the screen says how long the wait is —
+"Nothing due for another 4 hours" — measured to the soonest card still ahead.
+After an ordinary session it appears as a separate line, but only when the
+queue is genuinely empty: announcing the next review while thirty cards are
+still waiting would be a lie of omission.
+
 A session is 20 cards: everything due, then new words **in frequency order**.
 The deck is never shuffled — its order *is* the curriculum, so the next new word
 is always the most common one you don't yet know.

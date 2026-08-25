@@ -592,3 +592,9 @@ body {
   font-size: clamp(1.35rem, 5.5vw, 2rem);
   line-height: 1.25;
 }
+
+.next-due {
+  margin: -0.35rem 0 0;
+  color: var(--faint);
+  font-size: 0.875rem;
+}

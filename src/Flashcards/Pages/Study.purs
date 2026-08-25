@@ -52,6 +52,9 @@ type Summary =
   { answered :: Int
   , gotIt :: Int
   , again :: Int
+  -- | When the session ended, so "next review in ..." has something to count
+  -- | from without the view needing a clock.
+  , at :: Instant
   }
 
 data Screen
@@ -200,6 +203,7 @@ update state = case _ of
                   { answered: advanced.position
                   , gotIt: advanced.gotIt
                   , again: advanced.again
+                  , at: now
                   }
               else
                 Studying advanced
@@ -291,7 +295,7 @@ noticing state message = do
 startSession :: Progress -> Instant -> Screen
 startSession progress now =
   case Scheduler.buildSession Deck.deck progress now Scheduler.sessionSize of
-    [] -> Complete { answered: 0, gotIt: 0, again: 0 }
+    [] -> Complete { answered: 0, gotIt: 0, again: 0, at: now }
     queue -> Studying { queue, position: 0, flipped: false, gotIt: 0, again: 0 }
 
 -- | Built once: the deck is static.
@@ -392,6 +396,7 @@ completeView progress summary dispatch =
   , H.div "done-body"
     [ H.h1 "done-title" title
     , H.p "done-stats" stats
+    , nextLine
     , H.div "deck-progress"
       [ H.div "bar" $ H.div_ "fill" { style: H.css { width: show percent <> "%" } } H.empty
       , H.p "deck-count" $ show seen <> " of " <> show total <> " words seen"
@@ -406,14 +411,29 @@ completeView progress summary dispatch =
     percent = 100.0 * Int.toNumber seen / Int.toNumber total
     caughtUp = summary.answered == 0
 
+    dueNow = (Stats.overview summary.at Deck.deck progress).dueNow
+    waitFor = Stats.describeDuration <$> Stats.nextDueIn summary.at Deck.deck progress
+
     title = if caughtUp then "All caught up" else "¡Bien hecho!"
 
     stats
-      | caughtUp = "Nothing is due right now. Come back later."
+      | caughtUp = case waitFor of
+          Just wait -> "Nothing due for another " <> wait <> "."
+          Nothing -> "Nothing is due right now."
       | otherwise =
           show summary.answered <> " cards · "
             <> show summary.gotIt <> " got it · "
             <> show summary.again <> " again"
+
+    -- After a finished session, and only when the queue is genuinely empty:
+    -- announcing the next review while thirty cards are still waiting would
+    -- be a lie of omission. On the caught-up screen the headline says it
+    -- already, so there is nothing to add.
+    nextLine = case waitFor of
+      Just wait | not caughtUp && dueNow == 0 ->
+        H.p "next-due" $ "Next review in " <> wait
+      _ ->
+        H.empty
 
     cta = if caughtUp then "Check again" else "Study " <> show Scheduler.sessionSize <> " more"
 

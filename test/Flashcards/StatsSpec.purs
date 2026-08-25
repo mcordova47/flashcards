@@ -76,10 +76,10 @@ spec = do
 
     it "ranks production above recognition even at a lower box" do
       let
-        recognising = Just { box: 3, seen: 4, missed: 0, lapses: 0, due: now, direction: Recognition }
-        producing = Just { box: 3, seen: 9, missed: 2, lapses: 0, due: now, direction: Production }
-      Stats.masteryOf recognising `shouldEqual` Stats.Familiar
-      Stats.masteryOf producing `shouldEqual` Stats.Mastered
+        recognised = Just { box: 3, seen: 4, missed: 0, lapses: 0, due: now, direction: Recognition }
+        produced = Just { box: 3, seen: 9, missed: 2, lapses: 0, due: now, direction: Production }
+      Stats.masteryOf recognised `shouldEqual` Stats.Familiar
+      Stats.masteryOf produced `shouldEqual` Stats.Mastered
 
   describe "frequency bands" do
     it "slices the deck into bands of the requested size" do
@@ -145,6 +145,44 @@ spec = do
       let progress = Progress.empty # card 1 2 4 1 0 5.0 # card 999 5 50 20 9 5.0
       (Stats.overview now deck progress).answers `shouldEqual` 4
       (Stats.overview now deck progress).seen `shouldEqual` 1
+
+  describe "how long until the next card" do
+    it "measures to the soonest card still ahead" do
+      let
+        progress = Progress.empty
+          # card 1 1 1 0 0 3.0
+          # card 2 1 1 0 0 0.25
+          # card 3 1 1 0 0 9.0
+      Stats.nextDueIn now deck progress `shouldEqual` Just (Milliseconds $ 0.25 * day)
+
+    it "ignores cards already waiting for you" do
+      let progress = Progress.empty # card 1 1 1 0 0 (-2.0) # card 2 1 1 0 0 5.0
+      Stats.nextDueIn now deck progress `shouldEqual` Just (Milliseconds $ 5.0 * day)
+
+    it "has nothing to report when everything is already due" do
+      let progress = Progress.empty # card 1 1 1 0 0 (-2.0)
+      Stats.nextDueIn now deck progress `shouldEqual` Nothing
+
+    it "has nothing to report on an untouched deck" do
+      Stats.nextDueIn now deck Progress.empty `shouldEqual` Nothing
+
+  describe "describing a wait" do
+    it "does not bother with seconds" do
+      Stats.describeDuration (Milliseconds 20000.0) `shouldEqual` "under a minute"
+
+    it "counts minutes, then hours, then days" do
+      Stats.describeDuration (Milliseconds $ 25.0 * 60000.0) `shouldEqual` "25 minutes"
+      Stats.describeDuration (Milliseconds $ 4.0 * 3600000.0) `shouldEqual` "4 hours"
+      Stats.describeDuration (Milliseconds $ 3.0 * day) `shouldEqual` "3 days"
+
+    it "says one of a thing without an s" do
+      Stats.describeDuration (Milliseconds 60000.0) `shouldEqual` "1 minute"
+      Stats.describeDuration (Milliseconds 3600000.0) `shouldEqual` "1 hour"
+      Stats.describeDuration (Milliseconds day) `shouldEqual` "1 day"
+
+    it "rolls up rather than saying 60 minutes or 24 hours" do
+      Stats.describeDuration (Milliseconds $ 59.7 * 60000.0) `shouldEqual` "1 hour"
+      Stats.describeDuration (Milliseconds $ 23.8 * 3600000.0) `shouldEqual` "1 day"
 
   describe "leeches" do
     it "surfaces words that keep slipping, worst first" do
