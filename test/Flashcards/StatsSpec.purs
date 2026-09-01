@@ -61,10 +61,16 @@ spec = do
       Stats.masteryOf (Just { box: 3, seen: 1, missed: 0, lapses: 0, due: now, direction: Recognition })
         `shouldEqual` Stats.Familiar
 
-    it "never calls a recognition card mastered, however high its box" do
+    it "does not call a recognition card mastered on its way up" do
       -- Recognising a word is not knowing it; producing it is.
-      Stats.masteryOf (Just { box: 5, seen: 1, missed: 0, lapses: 0, due: now, direction: Recognition })
+      Stats.masteryOf (Just { box: 3, seen: 1, missed: 0, lapses: 0, due: now, direction: Recognition })
         `shouldEqual` Stats.Familiar
+
+    it "but does at the very top, where only a card barred from production sits" do
+      -- A graduating card leaves recognition at box 3, so this is a card that
+      -- shares its English side and has gone as far as it can.
+      Stats.masteryOf (Just { box: 5, seen: 9, missed: 1, lapses: 0, due: now, direction: Recognition })
+        `shouldEqual` Stats.Mastered
 
     it "treats a freshly graduated card as familiar, not mastered" do
       Stats.masteryOf (Just { box: 1, seen: 9, missed: 2, lapses: 0, due: now, direction: Production })
@@ -103,9 +109,9 @@ spec = do
         counts = _.counts <$> Array.head (Stats.bands 5 deck progress)
       counts `shouldEqual` Just { unseen: 2, learning: 1, familiar: 1, mastered: 1 }
 
-    it "counts a high recognition box as familiar, not mastered" do
+    it "counts a mid recognition box as familiar, not mastered" do
       let
-        progress = Progress.empty # card 1 5 3 0 0 30.0
+        progress = Progress.empty # card 1 3 3 0 0 30.0
         counts = _.counts <$> Array.head (Stats.bands 5 deck progress)
       counts `shouldEqual` Just { unseen: 4, learning: 0, familiar: 1, mastered: 0 }
 

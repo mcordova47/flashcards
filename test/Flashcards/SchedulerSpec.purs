@@ -40,6 +40,10 @@ reviewed rank box due = Progress.insert (Rank rank) { box, due: at due, seen: 1,
 boxedAt :: Int -> Maybe CardProgress
 boxedAt box = Just { box, due: at $ 99.0 * day, seen: 4, lapses: 2, missed: 3, direction: Recognition }
 
+-- | Most of these concern a card free to move to production.
+graded :: Grade -> Instant -> Maybe CardProgress -> CardProgress
+graded grade at' = Scheduler.applyGrade grade at' Scheduler.MayGraduate
+
 -- | Days from `now` until the card is next due.
 dueInDays :: CardProgress -> Number
 dueInDays cp = (unwrap (unInstant cp.due) - unwrap (unInstant now)) / day
@@ -72,16 +76,16 @@ spec = do
 
   describe "applyGrade" do
     it "fast-tracks a word you knew on sight, skipping the short intervals" do
-      let cp = Scheduler.applyGrade GotIt now Nothing
+      let cp = graded GotIt now Nothing
       cp.box `shouldEqual` Scheduler.firstSightingBox
       dueInDays cp `shouldEqual` 7.0
 
     it "promotes one box at a time once a word has been struggled with" do
       -- Missing it first means the next success is ordinary progress, not a
       -- sign you already knew the word.
-      let missed = Scheduler.applyGrade Again now Nothing
+      let missed = graded Again now Nothing
       missed.box `shouldEqual` 0
-      let recovered = Scheduler.applyGrade GotIt now (Just missed)
+      let recovered = graded GotIt now (Just missed)
       recovered.box `shouldEqual` 1
       dueInDays recovered `shouldEqual` 1.0
 
@@ -90,80 +94,80 @@ spec = do
       -- it can climb this high.
       let
         retiring = Just { box: Scheduler.maxBox, due: at 0.0, seen: 12, lapses: 1, missed: 4, direction: Production }
-        cp = Scheduler.applyGrade GotIt now retiring
+        cp = graded GotIt now retiring
       cp.box `shouldEqual` Scheduler.maxBox
       dueInDays cp `shouldEqual` 60.0
 
     it "tops recognition out below the graduation box, so the long intervals belong to production" do
-      let climbed = Scheduler.applyGrade GotIt now $ boxedAt (Scheduler.graduationBox - 2)
+      let climbed = graded GotIt now $ boxedAt (Scheduler.graduationBox - 2)
       climbed.box `shouldEqual` (Scheduler.graduationBox - 1)
       climbed.direction `shouldEqual` Recognition
       dueInDays climbed `shouldEqual` 7.0
 
     it "sends a missed card back to box 0, due immediately" do
-      let cp = Scheduler.applyGrade Again now $ boxedAt 3
+      let cp = graded Again now $ boxedAt 3
       cp.box `shouldEqual` 0
       dueInDays cp `shouldEqual` 0.0
 
     it "counts a lapse when a promoted card is missed" do
-      (Scheduler.applyGrade Again now $ boxedAt 3).lapses `shouldEqual` 3
+      (graded Again now $ boxedAt 3).lapses `shouldEqual` 3
 
     it "does not count a lapse on a word that was never learned" do
-      (Scheduler.applyGrade Again now Nothing).lapses `shouldEqual` 0
+      (graded Again now Nothing).lapses `shouldEqual` 0
 
     it "does count it as a miss, though — accuracy should not flatter you" do
-      (Scheduler.applyGrade Again now Nothing).missed `shouldEqual` 1
+      (graded Again now Nothing).missed `shouldEqual` 1
 
     it "tallies every wrong answer, learned or not" do
-      (Scheduler.applyGrade Again now $ boxedAt 3).missed `shouldEqual` 4
+      (graded Again now $ boxedAt 3).missed `shouldEqual` 4
 
     it "leaves the tally alone on a right answer" do
-      (Scheduler.applyGrade GotIt now $ boxedAt 3).missed `shouldEqual` 3
+      (graded GotIt now $ boxedAt 3).missed `shouldEqual` 3
 
     it "counts every answer as a sighting" do
-      (Scheduler.applyGrade Again now $ boxedAt 3).seen `shouldEqual` 5
-      (Scheduler.applyGrade GotIt now Nothing).seen `shouldEqual` 1
+      (graded Again now $ boxedAt 3).seen `shouldEqual` 5
+      (graded GotIt now Nothing).seen `shouldEqual` 1
 
   describe "graduating to production" do
     it "flips direction on the answer that would reach the graduation box" do
-      let cp = Scheduler.applyGrade GotIt now $ boxedAt (Scheduler.graduationBox - 1)
+      let cp = graded GotIt now $ boxedAt (Scheduler.graduationBox - 1)
       cp.direction `shouldEqual` Production
 
     it "restarts the box, because producing is a skill you have not shown yet" do
-      let cp = Scheduler.applyGrade GotIt now $ boxedAt (Scheduler.graduationBox - 1)
+      let cp = graded GotIt now $ boxedAt (Scheduler.graduationBox - 1)
       cp.box `shouldEqual` Scheduler.productionStartBox
       dueInDays cp `shouldEqual` 1.0
 
     it "leaves a card in recognition until it has earned the move" do
-      let cp = Scheduler.applyGrade GotIt now $ boxedAt (Scheduler.graduationBox - 2)
+      let cp = graded GotIt now $ boxedAt (Scheduler.graduationBox - 2)
       cp.direction `shouldEqual` Recognition
 
     it "never graduates on a first sighting, however well it went" do
-      let cp = Scheduler.applyGrade GotIt now Nothing
+      let cp = graded GotIt now Nothing
       cp.direction `shouldEqual` Recognition
 
     it "does not graduate a card you just got wrong" do
-      let cp = Scheduler.applyGrade Again now $ boxedAt (Scheduler.graduationBox - 1)
+      let cp = graded Again now $ boxedAt (Scheduler.graduationBox - 1)
       cp.direction `shouldEqual` Recognition
       cp.box `shouldEqual` 0
 
     it "keeps climbing normally once in production" do
       let
         producing = Just { box: 2, due: at 0.0, seen: 9, lapses: 1, missed: 4, direction: Production }
-        cp = Scheduler.applyGrade GotIt now producing
+        cp = graded GotIt now producing
       cp.direction `shouldEqual` Production
       cp.box `shouldEqual` 3
 
     it "sends a missed production card back to box 0 without demoting the skill" do
       let
         producing = Just { box: 3, due: at 0.0, seen: 9, lapses: 1, missed: 4, direction: Production }
-        cp = Scheduler.applyGrade Again now producing
+        cp = graded Again now producing
       cp.direction `shouldEqual` Production
       cp.box `shouldEqual` 0
 
     it "takes a known word to production in two answers, an unknown one in four" do
       let
-        step cp _ = Just $ Scheduler.applyGrade GotIt now cp
+        step cp _ = Just $ graded GotIt now cp
         after n = Array.foldl step Nothing (Array.replicate n unit)
       (_.direction <$> after 1) `shouldEqual` Just Recognition
       (_.direction <$> after 2) `shouldEqual` Just Production
@@ -177,7 +181,7 @@ spec = do
         where
           step acc grade =
             let
-              cp = Scheduler.applyGrade grade (at $ acc.day * day) acc.previous
+              cp = graded grade (at $ acc.day * day) acc.previous
               nextDay = unwrap (unInstant cp.due) / day
             in
               { day: nextDay
@@ -215,6 +219,27 @@ spec = do
       map (\s -> s.producing) slipped `shouldEqual` [ false, true, true, true, true ]
       -- Box 0 is due immediately: it comes back in the same session.
       map (\s -> s.nextIn) slipped `shouldEqual` [ 7.0, 1.0, 3.0, 0.0, 1.0 ]
+
+    it "a card barred from production never graduates, however well it goes" do
+      let
+        cp = Scheduler.applyGrade GotIt now Scheduler.RecognitionOnly $
+          boxedAt (Scheduler.graduationBox - 1)
+      cp.direction `shouldEqual` Recognition
+      cp.box `shouldEqual` Scheduler.graduationBox
+
+    it "and climbs the full ladder instead of stopping at the graduation box" do
+      let
+        climb prev _ = Just $ Scheduler.applyGrade GotIt now Scheduler.RecognitionOnly prev
+        after n = Array.foldl climb Nothing (Array.replicate n unit)
+      (_.box <$> after 6) `shouldEqual` Just Scheduler.maxBox
+      (_.direction <$> after 6) `shouldEqual` Just Recognition
+
+    it "which is a box a graduating card can never reach" do
+      let
+        climb prev _ = Just $ graded GotIt now prev
+        after n = Array.foldl climb Nothing (Array.replicate n unit)
+      (_.box <$> after 6) `shouldEqual` Just Scheduler.maxBox
+      (_.direction <$> after 6) `shouldEqual` Just Production
 
   describe "requeue" do
     it "brings a missed card back five cards later" do

@@ -2,7 +2,8 @@
 -- | No `Effect`, no storage, no clock of its own — the caller passes the time
 -- | in. This is the file to rewrite when Leitner gets replaced by SM-2 or FSRS.
 module Flashcards.Scheduler
-  ( applyGrade
+  ( Graduation(..)
+  , applyGrade
   , buildSession
   , firstSightingBox
   , graduationBox
@@ -54,6 +55,22 @@ maxBox = 5
 firstSightingBox :: Int
 firstSightingBox = 3
 
+-- | Whether a card is allowed to move to production at all.
+-- |
+-- | A card whose English gloss it shares with others cannot: in production the
+-- | gloss is the entire prompt, so the siblings would be the same question
+-- | asked repeatedly, and answering one would credit all of them. Those stay
+-- | in recognition and climb the full ladder to `maxBox` instead.
+data Graduation
+  = MayGraduate
+  | RecognitionOnly
+
+derive instance Eq Graduation
+
+instance Show Graduation where
+  show MayGraduate = "MayGraduate"
+  show RecognitionOnly = "RecognitionOnly"
+
 -- | Recognise a word reliably enough to reach this box and it graduates: the
 -- | card flips to production and starts being asked English to Spanish.
 -- |
@@ -101,8 +118,8 @@ buildSession deck progress now size =
 -- | session ends. `GotIt` promotes it one box and pushes the next review out —
 -- | except on a word's first ever sighting, which fast-tracks to
 -- | `firstSightingBox`.
-applyGrade :: Grade -> Instant -> Maybe CardProgress -> CardProgress
-applyGrade grade now previous =
+applyGrade :: Grade -> Instant -> Graduation -> Maybe CardProgress -> CardProgress
+applyGrade grade now allowed previous =
   { box
   , direction
   , due: addInterval now $ intervalFor box
@@ -122,7 +139,8 @@ applyGrade grade now previous =
     -- turned out to know, and one correct answer is not evidence you can
     -- produce it.
     graduates =
-      grade == GotIt
+      allowed == MayGraduate
+        && grade == GotIt
         && isJust previous
         && prev.direction == Recognition
         && promoted >= graduationBox

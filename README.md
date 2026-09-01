@@ -158,11 +158,18 @@ Production cannot expect a single answer. 61 English sides in the deck map to
 more than one — `that` covers six — so the reveal shows every valid answer and
 you grade yourself against the set.
 
-A consequence: a recognition card never reaches box 5, because it graduates
-first. The 21-day and 60-day intervals belong to production, which is right —
-those are for retaining a mastered skill, and the mastered skill is being able
-to produce the word. For the same reason the progress screen never calls a
-recognition card mastered, however high its box.
+Only the **most frequent** member of such a group graduates. In production the
+gloss is the entire prompt, so the six cards behind `that` would be the same
+unanswerable question six times over, and producing *que* would credit all of
+them. The other 70 cards stay in recognition and climb the full ladder to box 5
+instead — which is why a recognition card at the top box counts as mastered:
+that is as far as it can go. Giving those groups distinct English sides would
+let them graduate again with no code change; see #4.
+
+A consequence: a card that *can* graduate never reaches recognition box 4 or 5,
+because it leaves at 3. Those two boxes therefore belong either to production or
+to a card barred from it, which is what lets mastery be read off box and
+direction alone.
 
 Getting a word right the **first time you ever see it** skips straight to box 3.
 A frequency-ordered deck opens with `yo`, `no`, `sí`, `que` — words you already

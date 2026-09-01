@@ -177,9 +177,15 @@ update state = case _ of
         let
           countOf g = if grade == g then 1 else 0
 
+          -- Only the card that carries the production question for its
+          -- English side may graduate; see `Deck.isCanonical`.
+          allowed = case DeckIndex.card rank deckIndex of
+            Just c | DeckIndex.isCanonical c deckIndex -> Scheduler.MayGraduate
+            _ -> Scheduler.RecognitionOnly
+
           progress =
             Progress.insert rank
-              (Scheduler.applyGrade grade now $ Progress.lookup rank state.progress)
+              (Scheduler.applyGrade grade now allowed $ Progress.lookup rank state.progress)
               state.progress
 
           queue = case grade of

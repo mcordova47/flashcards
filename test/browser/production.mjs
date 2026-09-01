@@ -21,6 +21,19 @@ export default async ({ check, open }) => {
   check("restarting the box, since producing is unproven", graduated.box, 1)
   await edge.close()
 
+  // Rank 17 is "ese", the second card glossed "that". In production its prompt
+  // would be identical to rank 12's, so it must stay in recognition.
+  const sibling = await open({ seed: seed(
+    { rank: 17, box: 3, seen: 4, missed: 1, lapses: 0, direction: "recognition", due: overdue() }) })
+  await sibling.waitForSelector(".prompt")
+  check("a sibling of a colliding gloss is asked in recognition", await sibling.text(".prompt"), "ese")
+  await sibling.tap(".card")
+  await sibling.tap(".got-it")
+  const barred = (await sibling.stored()).cards.find(c => c.rank === 17)
+  check("it does not graduate", barred.direction, "recognition")
+  check("climbing past the graduation box instead", barred.box, 4)
+  await sibling.close()
+
   const many = await open({ seed: seed(
     { rank: 12, box: 1, seen: 5, missed: 1, lapses: 0, direction: "production", due: overdue() }) })
   await many.waitForSelector(".prompt")

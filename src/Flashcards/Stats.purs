@@ -28,6 +28,7 @@ import Data.Int as Int
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
+import Flashcards.Scheduler (maxBox)
 import Flashcards.Types.Card (Card, Rank, rankToInt)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
@@ -102,7 +103,11 @@ masteryOf :: Maybe CardProgress -> Mastery
 masteryOf = case _ of
   Nothing -> Unseen
   Just cp -> case cp.direction of
+    -- A graduating card leaves recognition at box 3, so only a card barred
+    -- from production can be up here: this is as far as it can go, and that
+    -- is what mastery means for it.
     Recognition
+      | cp.box >= maxBox -> Mastered
       | cp.box >= 2 -> Familiar
       | otherwise -> Learning
     Production

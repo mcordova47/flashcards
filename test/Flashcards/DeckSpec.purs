@@ -5,6 +5,7 @@ module Test.Flashcards.DeckSpec
 
 import Prelude
 
+import Data.Array as Array
 import Data.Maybe (Maybe(..))
 import Flashcards.Data.Deck.Spanish as Spanish
 import Flashcards.Deck as Deck
@@ -42,6 +43,34 @@ spec = do
 
     it "returns nothing for an English side not in the deck" do
       Deck.answersFor "petunia" (Deck.index deck) `shouldEqual` []
+
+  describe "which card carries the production question" do
+    it "the most frequent member of a colliding group" do
+      Deck.isCanonical { rank: Rank 1, english: "that", spanish: "que" } (Deck.index deck)
+        `shouldEqual` true
+
+    it "and not its rarer siblings, which would be the same prompt again" do
+      Deck.isCanonical { rank: Rank 3, english: "that", spanish: "ese" } (Deck.index deck)
+        `shouldEqual` false
+      Deck.isCanonical { rank: Rank 4, english: "that", spanish: "aquel" } (Deck.index deck)
+        `shouldEqual` false
+
+    it "a word that collides with nothing always carries its own" do
+      Deck.isCanonical { rank: Rank 2, english: "to find", spanish: "encontrar" } (Deck.index deck)
+        `shouldEqual` true
+
+    it "exactly one member of every real group carries it" do
+      let
+        index = Deck.index Spanish.deck
+        carried = Array.filter (\c -> Deck.isCanonical c index) Spanish.deck
+        englishSides = Array.nub $ map _.english Spanish.deck
+      Array.length carried `shouldEqual` Array.length englishSides
+
+    it "leaving the rest recognition-only" do
+      let
+        index = Deck.index Spanish.deck
+        barred = Array.filter (\c -> not $ Deck.isCanonical c index) Spanish.deck
+      Array.length barred `shouldEqual` 70
 
   describe "against the real deck" do
     it "still finds six answers for 'that', the worst collision" do

@@ -5,6 +5,7 @@ module Flashcards.Deck
   , answersFor
   , card
   , index
+  , isCanonical
   )
   where
 
@@ -43,3 +44,13 @@ card rank = Map.lookup rank <<< _.byRank
 -- | to show the whole set to grade yourself against.
 answersFor :: String -> Index -> Array String
 answersFor english = fromMaybe [] <<< Map.lookup english <<< _.answers
+
+-- | Whether this is the card asked in production for its English side.
+-- |
+-- | Several cards can share one gloss — six share `that` — and in production
+-- | the gloss is the whole prompt, so the siblings are indistinguishable from
+-- | each other. Asking all of them would credit you six times over for
+-- | producing one word. The most frequent member carries the question; see
+-- | `Flashcards.Scheduler.Graduation`.
+isCanonical :: Card -> Index -> Boolean
+isCanonical c = (_ == Just c.spanish) <<< Array.head <<< answersFor c.english
