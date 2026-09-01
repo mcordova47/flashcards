@@ -59,6 +59,32 @@ export default async ({ check, open }) => {
   check("no page errors", one.errors, [])
   await one.close()
 
+  // Progress from before the rule existed: rank 17 ("ese") already graduated.
+  {
+    const stale = await open({ seed: { version: formatVersion(), deck: FP, cards: [
+      { rank: 12, box: 2, seen: 9, missed: 2, lapses: 1, direction: "production", due: overdue() },
+      { rank: 17, box: 3, seen: 7, missed: 3, lapses: 2, direction: "production", due: overdue() + 1000 },
+    ] } })
+    await stale.waitForSelector(".prompt")
+    check("the repair is announced rather than happening silently",
+      await stale.text(".notice"), "Fixed 1 repeated prompt")
+    const cards = (await stale.stored()).cards
+    const moved = cards.find(c => c.rank === 17)
+    check("the stranded card is back in recognition", moved.direction, "recognition")
+    check("at the box it graduated from", moved.box, 4)
+    check("with its history intact", { seen: moved.seen, missed: moved.missed, lapses: moved.lapses },
+      { seen: 7, missed: 3, lapses: 2 })
+    const kept = cards.find(c => c.rank === 12)
+    check("the card that carries the gloss is untouched", kept.direction, "production")
+    check("keeping its box", kept.box, 2)
+    check("and the fix is written straight away, not on the next answer",
+      (await stale.stored()).cards.find(c => c.rank === 17).direction, "recognition")
+    await stale.reload({ waitUntil: "networkidle0" })
+    await stale.waitForSelector(".prompt")
+    check("with nothing left to fix on the next load", await stale.$(".notice"), null)
+    await stale.close()
+  }
+
   // Missing in production costs the ladder, not the direction.
   const slipped = await open({ seed: seed(
     { rank: 8, box: 3, seen: 9, missed: 1, lapses: 1, direction: "production", due: overdue() }) })

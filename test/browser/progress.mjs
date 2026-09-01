@@ -1,10 +1,15 @@
-import { deckFingerprint, formatVersion, wait } from "./harness.mjs"
+import { deckFingerprint, formatVersion, nonCanonicalRanks, wait } from "./harness.mjs"
 
 export const name = "Progress sheet and next-due"
 
 const FP = deckFingerprint()
 const DAY = 86400000
 const V = formatVersion()
+const BARRED = nonCanonicalRanks()
+// Three of the opening hundred share a gloss with an earlier word, so they can
+// never be produced; they sit at the top of recognition instead, which is
+// their ceiling and counts as mastered all the same.
+const PRODUCING = 100 - [...BARRED].filter(r => r <= 100).length
 
 // A plausible few weeks in: the opening hundred graduated and produced, a
 // frontier around 180, three words that keep slipping.
@@ -12,7 +17,8 @@ const worked = () => {
   const cards = []
   const add = (rank, box, seen, missed, lapses, dueIn, direction = "recognition") =>
     cards.push({ rank, box, seen, missed, lapses, direction, due: Date.now() + dueIn * DAY })
-  for (let r = 1; r <= 100; r++) add(r, 4, 6, 0, 0, 40, "production")
+  for (let r = 1; r <= 100; r++)
+    BARRED.has(r) ? add(r, 5, 6, 0, 0, 40) : add(r, 4, 6, 0, 0, 40, "production")
   for (let r = 101; r <= 160; r++) add(r, 3, 2, 0, 0, 6)
   for (let r = 161; r <= 180; r++) add(r, 1, 3, 1, 0, 0.5)
   add(181, 0, 9, 5, 4, -0.1)
@@ -25,7 +31,8 @@ const worked = () => {
 const caughtUp = soonestHours => {
   const cards = []
   for (let r = 1; r <= 1000; r++)
-    cards.push({ rank: r, box: 4, seen: 6, missed: 0, lapses: 0, direction: "production",
+    cards.push({ rank: r, box: BARRED.has(r) ? 5 : 4, seen: 6, missed: 0, lapses: 0,
+                 direction: BARRED.has(r) ? "recognition" : "production",
                  due: Date.now() + (r === 500 ? soonestHours * 3600000 : 20 * DAY) })
   return { version: V, deck: FP, cards }
 }
@@ -43,10 +50,10 @@ export default async ({ check, open }) => {
 
   const tiles = await page.$$eval(".tile", es => es.map(e => e.textContent))
   check("accuracy divides by every wrong answer", tiles[0], "96%correct")
-  check("mastered means produced, not merely recognised", tiles[1], "100mastered")
+  check("mastered counts produced words and those that can go no further", tiles[1], "100mastered")
   check("and it says what is coming tomorrow", tiles[2], "21due tomorrow")
   check("with the raw numbers behind the percentage", await page.text(".tiles-note"),
-    "808 answers · 36 wrong · 100 in production · 2 due now")
+    `808 answers · 36 wrong · ${PRODUCING} in production · 2 due now`)
 
   check("one bar per hundred words", (await page.$$(".band")).length, 10)
   check("the graduated band reads as mastered",
@@ -90,7 +97,8 @@ export default async ({ check, open }) => {
   {
     const cards = []
     for (let r = 21; r <= 1000; r++)
-      cards.push({ rank: r, box: 4, seen: 6, missed: 0, lapses: 0, direction: "production", due: Date.now() + 30 * DAY })
+      cards.push({ rank: r, box: BARRED.has(r) ? 5 : 4, seen: 6, missed: 0, lapses: 0,
+                   direction: BARRED.has(r) ? "recognition" : "production", due: Date.now() + 30 * DAY })
     const p = await open({ seed: { version: V, deck: FP, cards } })
     await p.waitForSelector(".prompt")
     for (let i = 0; i < 20; i++) { await p.tap(".card"); await p.tap(".got-it") }
@@ -106,7 +114,8 @@ export default async ({ check, open }) => {
     for (let r = 1; r <= 30; r++)
       cards.push({ rank: r, box: 2, seen: 4, missed: 0, lapses: 0, direction: "recognition", due: Date.now() - (31 - r) * 1000 })
     for (let r = 31; r <= 1000; r++)
-      cards.push({ rank: r, box: 4, seen: 6, missed: 0, lapses: 0, direction: "production", due: Date.now() + 30 * DAY })
+      cards.push({ rank: r, box: BARRED.has(r) ? 5 : 4, seen: 6, missed: 0, lapses: 0,
+                   direction: BARRED.has(r) ? "recognition" : "production", due: Date.now() + 30 * DAY })
     const p = await open({ seed: { version: V, deck: FP, cards } })
     await p.waitForSelector(".prompt")
     for (let i = 0; i < 20; i++) { await p.tap(".card"); await p.tap(".got-it") }

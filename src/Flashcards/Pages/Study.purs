@@ -135,14 +135,28 @@ update :: State -> Message -> Transition Message State
 update state = case _ of
   -- `Loaded` and `VoicesAvailable` race, so both resolve preferences from
   -- whatever the other has already put in state.
-  Loaded { progress, now, canSpeak, savedAccent, savedVoice } ->
-    pure $ settle savedAccent savedVoice state.voices state
-      { progress = progress
-      , canSpeak = canSpeak
-      , savedAccent = savedAccent
-      , savedVoice = savedVoice
-      , screen = startSession progress now
-      }
+  Loaded { progress, now, canSpeak, savedAccent, savedVoice } -> do
+    -- Progress saved before colliding glosses were barred can hold cards that
+    -- graduated when they should not have. Put them back before building a
+    -- session out of them.
+    let repaired = DeckIndex.demoteIneligible deckIndex progress
+    when (repaired.demoted > 0) $
+      forkVoid $ liftEffect $ Storage.save Deck.fingerprint repaired.progress
+    let
+      loaded = settle savedAccent savedVoice state.voices state
+        { progress = repaired.progress
+        , canSpeak = canSpeak
+        , savedAccent = savedAccent
+        , savedVoice = savedVoice
+        , screen = startSession repaired.progress now
+        }
+    if repaired.demoted == 0 then
+      pure loaded
+    else
+      -- Otherwise a word you were producing yesterday is suddenly asked the
+      -- other way round with no explanation.
+      noticing loaded $ "Fixed " <> show repaired.demoted <> " repeated "
+        <> (if repaired.demoted == 1 then "prompt" else "prompts")
 
   VoicesAvailable voices ->
     pure $ settle state.savedAccent state.savedVoice voices state { voices = voices }
@@ -240,7 +254,8 @@ update state = case _ of
     Left message ->
       noticing state message
     Right incoming -> do
-      let progress = Progress.merge state.progress incoming
+      -- A backup can carry cards that graduated before the rule existed.
+      let progress = (DeckIndex.demoteIneligible deckIndex $ Progress.merge state.progress incoming).progress
       forkVoid $ liftEffect $ Storage.save Deck.fingerprint progress
       -- The queue was built from the old history, so start over from the new.
       fork $ liftEffect $ StartedAnother <$> Now.now

@@ -8,9 +8,11 @@ module Flashcards.Types.Progress
   , Saved
   , currentVersion
   , empty
+  , entries
   , fromJson
   , insert
   , lookup
+  , mapWithRank
   , merge
   , seenCount
   , toJson
@@ -84,6 +86,12 @@ lookup rank (Progress m) = Map.lookup rank m
 
 insert :: Rank -> CardProgress -> Progress -> Progress
 insert rank cp (Progress m) = Progress $ Map.insert rank cp m
+
+entries :: Progress -> Array (Rank /\ CardProgress)
+entries (Progress m) = Map.toUnfoldable m
+
+mapWithRank :: (Rank -> CardProgress -> CardProgress) -> Progress -> Progress
+mapWithRank f (Progress m) = Progress $ Map.mapMaybeWithKey (\rank cp -> Just $ f rank cp) m
 
 -- | How many of the 1000 words have been seen at least once.
 seenCount :: Progress -> Int

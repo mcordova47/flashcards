@@ -9,7 +9,14 @@ import Data.Array as Array
 import Data.Maybe (Maybe(..))
 import Flashcards.Data.Deck.Spanish as Spanish
 import Flashcards.Deck as Deck
+import Data.DateTime.Instant (Instant, instant)
+import Data.Time.Duration (Milliseconds(..))
+import Flashcards.Scheduler as Scheduler
 import Flashcards.Types.Card (Card, Rank(..))
+import Flashcards.Types.Direction (Direction(..))
+import Flashcards.Types.Progress as Progress
+import Partial.Unsafe (unsafePartial)
+import Data.Maybe (fromJust)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
 
@@ -21,6 +28,9 @@ deck =
   , { rank: Rank 3, english: "that", spanish: "ese" }
   , { rank: Rank 4, english: "that", spanish: "aquel" }
   ]
+
+epoch :: Instant
+epoch = unsafePartial $ fromJust $ instant $ Milliseconds 0.0
 
 spec :: Spec Unit
 spec = do
@@ -71,6 +81,58 @@ spec = do
         index = Deck.index Spanish.deck
         barred = Array.filter (\c -> not $ Deck.isCanonical c index) Spanish.deck
       Array.length barred `shouldEqual` 70
+
+  describe "repairing cards that reached production before the rule" do
+    let
+      at rank direction box =
+        Progress.insert (Rank rank)
+          { box, due: epoch, seen: 9, missed: 2, lapses: 1, direction }
+
+    it "sends a non-carrying card back to recognition" do
+      let
+        stranded = Progress.empty # at 3 Production 2
+        fixed = Deck.demoteIneligible (Deck.index deck) stranded
+      (_.direction <$> Progress.lookup (Rank 3) fixed.progress) `shouldEqual` Just Recognition
+      fixed.demoted `shouldEqual` 1
+
+    it "putting it back where it stood when it graduated" do
+      let fixed = Deck.demoteIneligible (Deck.index deck) (Progress.empty # at 3 Production 4)
+      (_.box <$> Progress.lookup (Rank 3) fixed.progress) `shouldEqual` Just Scheduler.graduationBox
+
+    it "keeping the history, which did happen" do
+      let
+        fixed = Deck.demoteIneligible (Deck.index deck) (Progress.empty # at 3 Production 2)
+        kept = Progress.lookup (Rank 3) fixed.progress
+      (_.seen <$> kept) `shouldEqual` Just 9
+      (_.missed <$> kept) `shouldEqual` Just 2
+      (_.lapses <$> kept) `shouldEqual` Just 1
+
+    it "leaving the card that does carry its English side alone" do
+      let
+        ok = Progress.empty # at 1 Production 2
+        fixed = Deck.demoteIneligible (Deck.index deck) ok
+      (_.direction <$> Progress.lookup (Rank 1) fixed.progress) `shouldEqual` Just Production
+      (_.box <$> Progress.lookup (Rank 1) fixed.progress) `shouldEqual` Just 2
+      fixed.demoted `shouldEqual` 0
+
+    it "leaving recognition cards alone whether they carry it or not" do
+      let fixed = Deck.demoteIneligible (Deck.index deck) (Progress.empty # at 3 Recognition 5)
+      (_.box <$> Progress.lookup (Rank 3) fixed.progress) `shouldEqual` Just 5
+      fixed.demoted `shouldEqual` 0
+
+    it "counting every one it moved" do
+      let
+        many = Progress.empty # at 1 Production 3 # at 3 Production 2 # at 4 Production 5
+        fixed = Deck.demoteIneligible (Deck.index deck) many
+      fixed.demoted `shouldEqual` 2
+
+    it "and doing nothing the second time" do
+      let
+        idx = Deck.index deck
+        once = Deck.demoteIneligible idx (Progress.empty # at 3 Production 2)
+        twice = Deck.demoteIneligible idx once.progress
+      twice.demoted `shouldEqual` 0
+      twice.progress `shouldEqual` once.progress
 
   describe "against the real deck" do
     it "still finds six answers for 'that', the worst collision" do

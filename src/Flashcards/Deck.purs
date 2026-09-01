@@ -2,8 +2,10 @@
 -- | at first use and reused for the life of the page.
 module Flashcards.Deck
   ( Index
+  , Repair
   , answersFor
   , card
+  , demoteIneligible
   , index
   , isCanonical
   )
@@ -15,8 +17,14 @@ import Data.Array as Array
 import Data.Map (Map)
 import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
+import Data.Tuple (fst, snd)
 import Data.Tuple.Nested ((/\))
+import Data.Tuple.Nested (type (/\))
+import Flashcards.Scheduler (graduationBox)
 import Flashcards.Types.Card (Card, Rank)
+import Flashcards.Types.Direction (Direction(..))
+import Flashcards.Types.Progress (CardProgress, Progress)
+import Flashcards.Types.Progress as Progress
 
 type Index =
   { byRank :: Map Rank Card
@@ -54,3 +62,39 @@ answersFor english = fromMaybe [] <<< Map.lookup english <<< _.answers
 -- | `Flashcards.Scheduler.Graduation`.
 isCanonical :: Card -> Index -> Boolean
 isCanonical c = (_ == Just c.spanish) <<< Array.head <<< answersFor c.english
+
+type Repair =
+  { progress :: Progress
+  , demoted :: Int
+  }
+
+-- | Send back to recognition any card sitting in production that does not
+-- | carry its English side.
+-- |
+-- | Progress saved before that rule existed contains them, and so can a backup
+-- | from a device that predates it. Left alone they keep asking a prompt that
+-- | cannot identify them.
+-- |
+-- | A demoted card returns to the box it occupied when it graduated, rather
+-- | than keeping its production box: those answers were given against a prompt
+-- | that could not distinguish the card from its siblings, so they are not
+-- | evidence of anything. `seen`, `missed` and `lapses` are left as they are —
+-- | those answers did happen, and the recognition and production parts of that
+-- | history cannot be told apart after the fact.
+demoteIneligible :: Index -> Progress -> Repair
+demoteIneligible idx progress =
+  { progress: Progress.mapWithRank fix progress
+  , demoted: Array.length $ Array.filter stranded $ Progress.entries progress
+  }
+  where
+    ineligible :: Rank -> CardProgress -> Boolean
+    ineligible rank cp = case card rank idx of
+      Just c -> cp.direction == Production && not (isCanonical c idx)
+      Nothing -> false
+
+    stranded :: Rank /\ CardProgress -> Boolean
+    stranded pair = ineligible (fst pair) (snd pair)
+
+    fix rank cp =
+      if ineligible rank cp then cp { direction = Recognition, box = graduationBox }
+      else cp

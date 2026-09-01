@@ -52,6 +52,24 @@ export const formatVersion = () =>
 
 export const storageKey = "flashcards.es.v1"
 
+// Ranks that share an English gloss with an earlier card, and so are barred
+// from production. Read from the deck rather than hardcoded, so fixtures stay
+// honest when the deck changes.
+export const nonCanonicalRanks = () => {
+  const csv = fs.readFileSync(path.join(REPO, "data/es-1000.csv"), "utf-8")
+  const seen = new Set()
+  const barred = new Set()
+  for (const line of csv.split("\n").slice(1)) {
+    if (!line.trim()) continue
+    const cells = line.match(/("([^"]|"")*"|[^,]*)/g).filter((_, i) => i % 2 === 0)
+    const rank = Number(cells[0])
+    const english = cells[1].replace(/^"|"$/g, "").replace(/""/g, '"').trim()
+    if (seen.has(english)) barred.add(rank)
+    else seen.add(english)
+  }
+  return barred
+}
+
 // A device with the real voice buried among novelty ones, delivered late the
 // way engines actually deliver it.
 export const VOICES = [

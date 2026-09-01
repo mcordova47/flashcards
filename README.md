@@ -166,6 +166,12 @@ instead — which is why a recognition card at the top box counts as mastered:
 that is as far as it can go. Giving those groups distinct English sides would
 let them graduate again with no code change; see #4.
 
+Progress saved before that rule existed can hold cards that graduated when they
+should not have, and so can a backup from an older device. Both are repaired on
+the way in: the card returns to the box it graduated from, keeps its history,
+and the fix is written immediately and announced, since a word you were
+producing yesterday turning up the other way round otherwise looks like a bug.
+
 A consequence: a card that *can* graduate never reaches recognition box 4 or 5,
 because it leaves at 3. Those two boxes therefore belong either to production or
 to a card barred from it, which is what lets mastery be read off box and
