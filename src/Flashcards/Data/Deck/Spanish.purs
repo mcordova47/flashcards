@@ -187,7 +187,7 @@ deck =
   ,
   { rank: Rank 84, english: "to put, place", spanish: "poner" }
   ,
-  { rank: Rank 85, english: "duty", spanish: "deber" }
+  { rank: Rank 85, english: "should, must, to owe", spanish: "deber" }
   ,
   { rank: Rank 86, english: "well (properly)", spanish: "bien" }
   ,
@@ -823,7 +823,7 @@ deck =
   ,
   { rank: Rank 402, english: "different", spanish: "diferente" }
   ,
-  { rank: Rank 403, english: "sorrow", spanish: "pesar" }
+  { rank: Rank 403, english: "to weigh; despite (a pesar de)", spanish: "pesar" }
   ,
   { rank: Rank 404, english: "possibility", spanish: "posibilidad" }
   ,
@@ -1897,7 +1897,7 @@ deck =
   ,
   { rank: Rank 939, english: "health", spanish: "salud" }
   ,
-  { rank: Rank 940, english: "works", spanish: "funciona" }
+  { rank: Rank 940, english: "it works", spanish: "funciona" }
   ,
   { rank: Rank 941, english: "print", spanish: "impresión" }
   ,
