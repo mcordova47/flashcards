@@ -80,7 +80,7 @@ spec = do
       let
         index = Deck.index Spanish.deck
         barred = Array.filter (\c -> not $ Deck.isCanonical c index) Spanish.deck
-      Array.length barred `shouldEqual` 16
+      Array.length barred `shouldEqual` 14
 
   describe "repairing cards that reached production before the rule" do
     let

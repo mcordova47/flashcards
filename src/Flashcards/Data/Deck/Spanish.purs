@@ -247,7 +247,7 @@ deck =
   ,
   { rank: Rank 114, english: "two", spanish: "dos" }
   ,
-  { rank: Rank 115, english: "only", spanish: "sólo" }
+  { rank: Rank 115, english: "only (pre-2010 spelling)", spanish: "sólo" }
   ,
   { rank: Rank 116, english: "first", spanish: "primero" }
   ,
@@ -411,7 +411,7 @@ deck =
   ,
   { rank: Rank 196, english: "there", spanish: "allí" }
   ,
-  { rank: Rank 197, english: "this", spanish: "éste" }
+  { rank: Rank 197, english: "this one (pre-2010 spelling)", spanish: "éste" }
   ,
   { rank: Rank 198, english: "problem", spanish: "problema" }
   ,
@@ -1125,7 +1125,7 @@ deck =
   ,
   { rank: Rank 553, english: "to gather", spanish: "reunir" }
   ,
-  { rank: Rank 554, english: "Is missing to (to lack)", spanish: "faltar" }
+  { rank: Rank 554, english: "is missing to (to lack)", spanish: "faltar" }
   ,
   { rank: Rank 555, english: "team", spanish: "equipo" }
   ,
@@ -1551,7 +1551,7 @@ deck =
   ,
   { rank: Rank 766, english: "plant", spanish: "planta" }
   ,
-  { rank: Rank 767, english: "that", spanish: "ése" }
+  { rank: Rank 767, english: "that one (pre-2010 spelling)", spanish: "ése" }
   ,
   { rank: Rank 768, english: "character (in a story)", spanish: "personaje" }
   ,
