@@ -425,7 +425,7 @@ deck =
   ,
   { rank: Rank 203, english: "out", spanish: "fuera" }
   ,
-  { rank: Rank 204, english: "search", spanish: "buscar" }
+  { rank: Rank 204, english: "to search", spanish: "buscar" }
   ,
   { rank: Rank 205, english: "within", spanish: "dentro" }
   ,
@@ -867,7 +867,7 @@ deck =
   ,
   { rank: Rank 424, english: "foot", spanish: "pie" }
   ,
-  { rank: Rank 425, english: "worth", spanish: "valer" }
+  { rank: Rank 425, english: "to be worth", spanish: "valer" }
   ,
   { rank: Rank 426, english: "species", spanish: "especie" }
   ,
@@ -1281,7 +1281,7 @@ deck =
   ,
   { rank: Rank 631, english: "dream", spanish: "sueño" }
   ,
-  { rank: Rank 632, english: "claim", spanish: "pretender" }
+  { rank: Rank 632, english: "to intend, to claim", spanish: "pretender" }
   ,
   { rank: Rank 633, english: "task", spanish: "tarea" }
   ,
@@ -1355,9 +1355,9 @@ deck =
   ,
   { rank: Rank 668, english: "worse", spanish: "peor" }
   ,
-  { rank: Rank 669, english: "deny", spanish: "negar" }
+  { rank: Rank 669, english: "to deny", spanish: "negar" }
   ,
-  { rank: Rank 670, english: "advance", spanish: "avanzar" }
+  { rank: Rank 670, english: "to advance", spanish: "avanzar" }
   ,
   { rank: Rank 671, english: "usage", spanish: "uso" }
   ,
@@ -1365,7 +1365,7 @@ deck =
   ,
   { rank: Rank 673, english: "teacher, professor", spanish: "profesor" }
   ,
-  { rank: Rank 674, english: "resolve", spanish: "resolver" }
+  { rank: Rank 674, english: "to resolve", spanish: "resolver" }
   ,
   { rank: Rank 675, english: "future", spanish: "futuro" }
   ,
@@ -1473,7 +1473,7 @@ deck =
   ,
   { rank: Rank 727, english: "current, present-day", spanish: "actual" }
   ,
-  { rank: Rank 728, english: "mark", spanish: "marcar" }
+  { rank: Rank 728, english: "to mark", spanish: "marcar" }
   ,
   { rank: Rank 729, english: "distance", spanish: "distancia" }
   ,
@@ -1671,7 +1671,7 @@ deck =
   ,
   { rank: Rank 826, english: "schoolteacher, master", spanish: "maestro" }
   ,
-  { rank: Rank 827, english: "provide", spanish: "prestar" }
+  { rank: Rank 827, english: "to lend", spanish: "prestar" }
   ,
   { rank: Rank 828, english: "quality", spanish: "calidad" }
   ,

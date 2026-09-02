@@ -202,7 +202,7 @@ Order,English,Español
 201,medium,medio
 202,against,contra
 203,out,fuera
-204,search,buscar
+204,to search,buscar
 205,within,dentro
 206,long,largo
 207,"safe, secure",seguro
@@ -423,7 +423,7 @@ Order,English,Español
 422,law,ley
 423,appearance,aspecto
 424,foot,pie
-425,worth,valer
+425,to be worth,valer
 426,species,especie
 427,to eat,comer
 428,service,servicio
@@ -630,7 +630,7 @@ Order,English,Español
 629,precisely,precisamente
 630,twenty,veinte
 631,dream,sueño
-632,claim,pretender
+632,"to intend, to claim",pretender
 633,task,tarea
 634,coffee,café
 635,letter (you send),carta
@@ -667,12 +667,12 @@ Order,English,Español
 666,hard,duro
 667,to support,apoyar
 668,worse,peor
-669,deny,negar
-670,advance,avanzar
+669,to deny,negar
+670,to advance,avanzar
 671,usage,uso
 672,arm,brazo
 673,"teacher, professor",profesor
-674,resolve,resolver
+674,to resolve,resolver
 675,future,futuro
 676,half,mitad
 677,clothing,ropa
@@ -726,7 +726,7 @@ Order,English,Español
 725,nature,naturaleza
 726,capacity,capacidad
 727,"current, present-day",actual
-728,mark,marcar
+728,to mark,marcar
 729,distance,distancia
 730,"full, in the middle of",pleno
 731,perfect,perfecto
@@ -825,7 +825,7 @@ Order,English,Español
 824,newspaper,periódico
 825,is worrying to (to worry),preocupar
 826,"schoolteacher, master",maestro
-827,provide,prestar
+827,to lend,prestar
 828,quality,calidad
 829,salt,sal
 830,to exhibit,exponer
