@@ -767,7 +767,7 @@ deck =
   ,
   { rank: Rank 374, english: "wife", spanish: "esposa" }
   ,
-  { rank: Rank 375, english: "to utilize", spanish: "utilizar" }
+  { rank: Rank 375, english: "to use", spanish: "utilizar" }
   ,
   { rank: Rank 376, english: "forward", spanish: "adelante" }
   ,
@@ -1237,7 +1237,7 @@ deck =
   ,
   { rank: Rank 609, english: "metro", spanish: "metro" }
   ,
-  { rank: Rank 610, english: "physician", spanish: "médico" }
+  { rank: Rank 610, english: "doctor", spanish: "médico" }
   ,
   { rank: Rank 611, english: "room (bedroom)", spanish: "habitación" }
   ,

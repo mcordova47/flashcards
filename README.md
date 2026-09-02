@@ -163,7 +163,7 @@ you grade yourself against the set.
 
 Most of those groups have been given distinct English sides — `to be (what it
 is)` and `to be (how or where it is)` — so each card is separately answerable
-and graduates on its own. Twelve remain, deliberately: they are true synonyms,
+and graduates on its own. Fourteen remain, deliberately: they are true synonyms,
 where a parenthetical would be circular (`to start (empezar)` teaches nothing)
 and producing the commonest is the right answer.
 
