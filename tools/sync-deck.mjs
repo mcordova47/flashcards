@@ -38,12 +38,23 @@ const fail = msg => { console.error(`✗ ${msg}`); process.exit(1) }
 if (process.argv.includes("--fetch")) {
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`
   console.log(`↓ fetching ${url}`)
+  const previous = fs.existsSync(CSV_PATH) ? fs.readFileSync(CSV_PATH, "utf-8") : ""
+
   const res = await fetch(url)
   if (!res.ok) fail(`sheet fetch failed: ${res.status} ${res.statusText}`)
   const body = await res.text()
   if (!body.startsWith("Order,")) fail("sheet did not return the expected CSV header")
-  fs.writeFileSync(CSV_PATH, body)
-  console.log(`✓ wrote ${CSV_PATH}`)
+  // The sheet exports CRLF. Normalise, or every fetch rewrites all 1000 lines
+  // and buries the real change.
+  const normalised = body.replace(/\r\n/g, "\n")
+  fs.writeFileSync(CSV_PATH, normalised)
+
+  // Loud, because the sheet overwrites local edits and the deck is edited in
+  // both places.
+  const was = previous.split("\n")
+  const now = normalised.split("\n")
+  const differing = now.filter((line, i) => line !== was[i]).length
+  console.log(`✓ wrote ${CSV_PATH}` + (differing ? ` — ${differing} row(s) differ from the local snapshot` : " — unchanged"))
 }
 
 const [header, ...rows] = parseCsv(fs.readFileSync(CSV_PATH, "utf-8"))
@@ -81,12 +92,18 @@ const collisions = [...byEnglish.entries()].filter(([, v]) => v.length > 1)
 
 const escape = s => s.replace(/\\/g, "\\\\").replace(/"/g, '\\"')
 
-// Identifies this exact deck content. Exports carry it so a progress file made
+// Identifies what a rank *means*. Exports carry it so a progress file made
 // against a renumbered deck is rejected instead of silently remapping onto the
 // wrong words.
+//
+// Deliberately excludes the English side. Progress is keyed by rank, so the
+// only change that can corrupt it is one that moves a Spanish word to a
+// different rank. Rewording a gloss cannot, and folding English into this
+// would refuse every existing backup over an edit that changed nothing about
+// what the progress refers to.
 const fingerprint = crypto
   .createHash("sha256")
-  .update(cards.map(c => `${c.rank}\u0000${c.english}\u0000${c.spanish}`).join("\n"))
+  .update(cards.map(c => `${c.rank}\u0000${c.spanish}`).join("\n"))
   .digest("hex")
   .slice(0, 12)
 

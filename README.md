@@ -98,10 +98,13 @@ between two records for the same card the one with more sightings has strictly
 more history behind it and wins. No timestamps to reconcile, no lost sessions.
 The same function is what a sync layer will need later.
 
-Every file carries the deck's content fingerprint. Progress is keyed by rank,
-so a renumbered deck is a different deck as far as saved progress is concerned
-— importing across that boundary is refused outright, because it would remap
-your history onto the wrong words with no visible symptom. Loading your own
+Every file carries the deck's fingerprint, which hashes **rank and Spanish
+side only**. Progress is keyed by rank, so the one change that can corrupt it
+is a Spanish word moving to a different rank; rewording an English gloss cannot,
+and folding English into the hash would refuse every backup over an edit that
+changed nothing about what the progress refers to. A renumbered deck is a different deck as far as saved progress is concerned —
+importing across that boundary is refused outright, because it would remap your
+history onto the wrong words with no visible symptom. Loading your own
 `localStorage` only warns: refusing to open your own history would be worse
 than the drift.
 
@@ -157,6 +160,12 @@ start.
 Production cannot expect a single answer. 61 English sides in the deck map to
 more than one — `that` covers six — so the reveal shows every valid answer and
 you grade yourself against the set.
+
+Most of those groups have been given distinct English sides — `to be (what it
+is)` and `to be (how or where it is)` — so each card is separately answerable
+and graduates on its own. Twelve remain, deliberately: they are true synonyms,
+where a parenthetical would be circular (`to start (empezar)` teaches nothing)
+and producing the commonest is the right answer.
 
 Only the **most frequent** member of such a group graduates. In production the
 gloss is the entire prompt, so the six cards behind `that` would be the same

@@ -12,7 +12,7 @@ import Flashcards.Types.Card (Card, Rank(..))
 -- | Content hash of this deck. Progress is keyed by rank, so a deck whose rows
 -- | were renumbered is a different deck as far as saved progress is concerned.
 fingerprint :: String
-fingerprint = "c023e748cdde"
+fingerprint = "c687d9574f46"
 
 -- | The 1000 most common Spanish words, most frequent first. The index into
 -- | this deck is meaningful: it is the curriculum order.
@@ -35,13 +35,13 @@ deck =
   ,
   { rank: Rank 8, english: "to find", spanish: "encontrar" }
   ,
-  { rank: Rank 9, english: "to have", spanish: "tener" }
+  { rank: Rank 9, english: "to have (own)", spanish: "tener" }
   ,
   { rank: Rank 10, english: "to need", spanish: "necesitar" }
   ,
-  { rank: Rank 11, english: "where", spanish: "donde" }
+  { rank: Rank 11, english: "where (the place that)", spanish: "donde" }
   ,
-  { rank: Rank 12, english: "that", spanish: "que" }
+  { rank: Rank 12, english: "that (linking clauses)", spanish: "que" }
   ,
   { rank: Rank 13, english: "the", spanish: "el / la" }
   ,
@@ -51,7 +51,7 @@ deck =
   ,
   { rank: Rank 16, english: "something", spanish: "algo" }
   ,
-  { rank: Rank 17, english: "that", spanish: "ese" }
+  { rank: Rank 17, english: "that (near you)", spanish: "ese" }
   ,
   { rank: Rank 18, english: "and", spanish: "y" }
   ,
@@ -79,9 +79,9 @@ deck =
   ,
   { rank: Rank 30, english: "my", spanish: "mi" }
   ,
-  { rank: Rank 31, english: "to be", spanish: "ser" }
+  { rank: Rank 31, english: "to be (what it is)", spanish: "ser" }
   ,
-  { rank: Rank 32, english: "to be", spanish: "estar" }
+  { rank: Rank 32, english: "to be (how or where it is)", spanish: "estar" }
   ,
   { rank: Rank 33, english: "to live", spanish: "vivir" }
   ,
@@ -97,7 +97,7 @@ deck =
   ,
   { rank: Rank 39, english: "each", spanish: "cada" }
   ,
-  { rank: Rank 40, english: "time", spanish: "tiempo" }
+  { rank: Rank 40, english: "time (duration)", spanish: "tiempo" }
   ,
   { rank: Rank 41, english: "to know", spanish: "saber" }
   ,
@@ -123,11 +123,11 @@ deck =
   ,
   { rank: Rank 52, english: "me", spanish: "me" }
   ,
-  { rank: Rank 53, english: "you", spanish: "te" }
+  { rank: Rank 53, english: "you (one person, object)", spanish: "te" }
   ,
   { rank: Rank 54, english: "you, him, her", spanish: "le" }
   ,
-  { rank: Rank 55, english: "us", spanish: "nos" }
+  { rank: Rank 55, english: "us (object)", spanish: "nos" }
   ,
   { rank: Rank 56, english: "them", spanish: "les" }
   ,
@@ -137,7 +137,7 @@ deck =
   ,
   { rank: Rank 59, english: "other", spanish: "otro" }
   ,
-  { rank: Rank 60, english: "work", spanish: "trabajo" }
+  { rank: Rank 60, english: "work (job)", spanish: "trabajo" }
   ,
   { rank: Rank 61, english: "for, through", spanish: "por" }
   ,
@@ -159,7 +159,7 @@ deck =
   ,
   { rank: Rank 70, english: "woman", spanish: "mujer" }
   ,
-  { rank: Rank 71, english: "to have", spanish: "haber" }
+  { rank: Rank 71, english: "to have (done something)", spanish: "haber" }
   ,
   { rank: Rank 72, english: "very", spanish: "muy" }
   ,
@@ -181,15 +181,15 @@ deck =
   ,
   { rank: Rank 81, english: "life", spanish: "vida" }
   ,
-  { rank: Rank 82, english: "after", spanish: "después" }
+  { rank: Rank 82, english: "afterwards", spanish: "después" }
   ,
   { rank: Rank 83, english: "then", spanish: "entonces" }
   ,
-  { rank: Rank 84, english: "to put", spanish: "poner" }
+  { rank: Rank 84, english: "to put, place", spanish: "poner" }
   ,
   { rank: Rank 85, english: "duty", spanish: "deber" }
   ,
-  { rank: Rank 86, english: "well", spanish: "bien" }
+  { rank: Rank 86, english: "well (properly)", spanish: "bien" }
   ,
   { rank: Rank 87, english: "between", spanish: "entre" }
   ,
@@ -229,11 +229,11 @@ deck =
   ,
   { rank: Rank 105, english: "without", spanish: "sin" }
   ,
-  { rank: Rank 106, english: "time", spanish: "vez" }
+  { rank: Rank 106, english: "time (an occasion)", spanish: "vez" }
   ,
   { rank: Rank 107, english: "there is, there are", spanish: "hay" }
   ,
-  { rank: Rank 108, english: "about", spanish: "sobre" }
+  { rank: Rank 108, english: "on, about", spanish: "sobre" }
   ,
   { rank: Rank 109, english: "you (informal)", spanish: "tú" }
   ,
@@ -253,7 +253,7 @@ deck =
   ,
   { rank: Rank 117, english: "from", spanish: "desde" }
   ,
-  { rank: Rank 118, english: "or", spanish: "ni" }
+  { rank: Rank 118, english: "nor", spanish: "ni" }
   ,
   { rank: Rank 119, english: "thanks", spanish: "gracias" }
   ,
@@ -277,13 +277,13 @@ deck =
   ,
   { rank: Rank 129, english: "favor", spanish: "favor" }
   ,
-  { rank: Rank 130, english: "where", spanish: "dónde" }
+  { rank: Rank 130, english: "where? (asking)", spanish: "dónde" }
   ,
   { rank: Rank 131, english: "never", spanish: "nunca" }
   ,
   { rank: Rank 132, english: "to lead", spanish: "llevar" }
   ,
-  { rank: Rank 133, english: "to leave", spanish: "dejar" }
+  { rank: Rank 133, english: "to leave behind, to let", spanish: "dejar" }
   ,
   { rank: Rank 134, english: "truth", spanish: "verdad" }
   ,
@@ -291,7 +291,7 @@ deck =
   ,
   { rank: Rank 136, english: "new", spanish: "nuevo" }
   ,
-  { rank: Rank 137, english: "well", spanish: "pues" }
+  { rank: Rank 137, english: "so, then", spanish: "pues" }
   ,
   { rank: Rank 138, english: "to call (be called/name)", spanish: "llamar(se)" }
   ,
@@ -299,7 +299,7 @@ deck =
   ,
   { rank: Rank 140, english: "to think", spanish: "pensar" }
   ,
-  { rank: Rank 141, english: "that", spanish: "aquel" }
+  { rank: Rank 141, english: "that (over there)", spanish: "aquel" }
   ,
   { rank: Rank 142, english: "moment", spanish: "momento" }
   ,
@@ -307,13 +307,13 @@ deck =
   ,
   { rank: Rank 144, english: "but, rather", spanish: "sino" }
   ,
-  { rank: Rank 145, english: "to leave", spanish: "salir" }
+  { rank: Rank 145, english: "to go out, to leave", spanish: "salir" }
   ,
   { rank: Rank 146, english: "to return", spanish: "volver" }
   ,
   { rank: Rank 147, english: "form", spanish: "forma" }
   ,
-  { rank: Rank 148, english: "before", spanish: "antes" }
+  { rank: Rank 148, english: "before (in time)", spanish: "antes" }
   ,
   { rank: Rank 149, english: "although", spanish: "aunque" }
   ,
@@ -325,7 +325,7 @@ deck =
   ,
   { rank: Rank 153, english: "there", spanish: "ahí" }
   ,
-  { rank: Rank 154, english: "to take", spanish: "tomar" }
+  { rank: Rank 154, english: "to take, to drink", spanish: "tomar" }
   ,
   { rank: Rank 155, english: "certain", spanish: "cierto" }
   ,
@@ -341,7 +341,7 @@ deck =
   ,
   { rank: Rank 161, english: "someone", spanish: "alguien" }
   ,
-  { rank: Rank 162, english: "to try", spanish: "tratar" }
+  { rank: Rank 162, english: "to treat, deal with", spanish: "tratar" }
   ,
   { rank: Rank 163, english: "person", spanish: "persona" }
   ,
@@ -357,7 +357,7 @@ deck =
   ,
   { rank: Rank 169, english: "whoever", spanish: "quien" }
   ,
-  { rank: Rank 170, english: "us", spanish: "nosotros" }
+  { rank: Rank 170, english: "we", spanish: "nosotros" }
   ,
   { rank: Rank 171, english: "to look", spanish: "mirar" }
   ,
@@ -443,7 +443,7 @@ deck =
   ,
   { rank: Rank 212, english: "embargo", spanish: "embargo" }
   ,
-  { rank: Rank 213, english: "only", spanish: "único" }
+  { rank: Rank 213, english: "only one, unique", spanish: "único" }
   ,
   { rank: Rank 214, english: "to work", spanish: "trabajar" }
   ,
@@ -487,7 +487,7 @@ deck =
   ,
   { rank: Rank 234, english: "to receive", spanish: "recibir" }
   ,
-  { rank: Rank 235, english: "work", spanish: "obra" }
+  { rank: Rank 235, english: "work (of art)", spanish: "obra" }
   ,
   { rank: Rank 236, english: "important", spanish: "importante" }
   ,
@@ -499,7 +499,7 @@ deck =
   ,
   { rank: Rank 240, english: "reason", spanish: "razón" }
   ,
-  { rank: Rank 241, english: "that", spanish: "cuanto" }
+  { rank: Rank 241, english: "as much as", spanish: "cuanto" }
   ,
   { rank: Rank 242, english: "low", spanish: "bajo" }
   ,
@@ -537,7 +537,7 @@ deck =
   ,
   { rank: Rank 259, english: "general", spanish: "general" }
   ,
-  { rank: Rank 260, english: "to take", spanish: "sacar" }
+  { rank: Rank 260, english: "to take out", spanish: "sacar" }
   ,
   { rank: Rank 261, english: "relationship", spanish: "relación" }
   ,
@@ -549,7 +549,7 @@ deck =
   ,
   { rank: Rank 265, english: "to maintain", spanish: "mantener" }
   ,
-  { rank: Rank 266, english: "before", spanish: "ante" }
+  { rank: Rank 266, english: "faced with", spanish: "ante" }
   ,
   { rank: Rank 267, english: "principle", spanish: "principio" }
   ,
@@ -615,7 +615,7 @@ deck =
   ,
   { rank: Rank 298, english: "situation", spanish: "situación" }
   ,
-  { rank: Rank 299, english: "serious", spanish: "serio" }
+  { rank: Rank 299, english: "serious (person)", spanish: "serio" }
   ,
   { rank: Rank 300, english: "head", spanish: "cabeza" }
   ,
@@ -645,7 +645,7 @@ deck =
   ,
   { rank: Rank 313, english: "social", spanish: "social" }
   ,
-  { rank: Rank 314, english: "old", spanish: "viejo" }
+  { rank: Rank 314, english: "old (aged)", spanish: "viejo" }
   ,
   { rank: Rank 315, english: "Mrs.", spanish: "señora" }
   ,
@@ -711,7 +711,7 @@ deck =
   ,
   { rank: Rank 346, english: "other, the rest", spanish: "demás" }
   ,
-  { rank: Rank 347, english: "you", spanish: "os" }
+  { rank: Rank 347, english: "you (several people, object)", spanish: "os" }
   ,
   { rank: Rank 348, english: "boy", spanish: "chico" }
   ,
@@ -747,7 +747,7 @@ deck =
   ,
   { rank: Rank 364, english: "to study", spanish: "estudiar" }
   ,
-  { rank: Rank 365, english: "to achieve", spanish: "alcanzar" }
+  { rank: Rank 365, english: "to reach", spanish: "alcanzar" }
   ,
   { rank: Rank 366, english: "to be born", spanish: "nacer" }
   ,
@@ -759,7 +759,7 @@ deck =
   ,
   { rank: Rank 370, english: "measure", spanish: "medida" }
   ,
-  { rank: Rank 371, english: "less", spanish: "menor" }
+  { rank: Rank 371, english: "lesser, younger", spanish: "menor" }
   ,
   { rank: Rank 372, english: "war", spanish: "guerra" }
   ,
@@ -767,13 +767,13 @@ deck =
   ,
   { rank: Rank 374, english: "wife", spanish: "esposa" }
   ,
-  { rank: Rank 375, english: "to use", spanish: "utilizar" }
+  { rank: Rank 375, english: "to utilize", spanish: "utilizar" }
   ,
   { rank: Rank 376, english: "forward", spanish: "adelante" }
   ,
   { rank: Rank 377, english: "center", spanish: "centro" }
   ,
-  { rank: Rank 378, english: "what", spanish: "cuál" }
+  { rank: Rank 378, english: "which one", spanish: "cuál" }
   ,
   { rank: Rank 379, english: "need", spanish: "necesidad" }
   ,
@@ -789,9 +789,9 @@ deck =
   ,
   { rank: Rank 385, english: "ten", spanish: "diez" }
   ,
-  { rank: Rank 386, english: "through", spanish: "través" }
+  { rank: Rank 386, english: "through, across", spanish: "través" }
   ,
-  { rank: Rank 387, english: "old", spanish: "antiguo" }
+  { rank: Rank 387, english: "ancient, former", spanish: "antiguo" }
   ,
   { rank: Rank 388, english: "supposed", spanish: "supuesto" }
   ,
@@ -853,7 +853,7 @@ deck =
   ,
   { rank: Rank 417, english: "result", spanish: "resultado" }
   ,
-  { rank: Rank 418, english: "use", spanish: "usar" }
+  { rank: Rank 418, english: "to use", spanish: "usar" }
   ,
   { rank: Rank 419, english: "to decide", spanish: "decidir" }
   ,
@@ -887,7 +887,7 @@ deck =
   ,
   { rank: Rank 434, english: "to occupy", spanish: "ocupar" }
   ,
-  { rank: Rank 435, english: "question", spanish: "cuestión" }
+  { rank: Rank 435, english: "matter, issue", spanish: "cuestión" }
   ,
   { rank: Rank 436, english: "doubt", spanish: "duda" }
   ,
@@ -911,7 +911,7 @@ deck =
   ,
   { rank: Rank 446, english: "to refer", spanish: "referir" }
   ,
-  { rank: Rank 447, english: "to close", spanish: "acercar" }
+  { rank: Rank 447, english: "to bring closer", spanish: "acercar" }
   ,
   { rank: Rank 448, english: "able", spanish: "capaz" }
   ,
@@ -935,15 +935,15 @@ deck =
   ,
   { rank: Rank 458, english: "young", spanish: "joven" }
   ,
-  { rank: Rank 459, english: "party", spanish: "partido" }
+  { rank: Rank 459, english: "political party, match", spanish: "partido" }
   ,
   { rank: Rank 460, english: "economic", spanish: "económico" }
   ,
-  { rank: Rank 461, english: "below", spanish: "abajo" }
+  { rank: Rank 461, english: "below, downstairs", spanish: "abajo" }
   ,
   { rank: Rank 462, english: "right", spanish: "derecho" }
   ,
-  { rank: Rank 463, english: "first", spanish: "primer" }
+  { rank: Rank 463, english: "first (before a noun)", spanish: "primer" }
   ,
   { rank: Rank 464, english: "importance", spanish: "importancia" }
   ,
@@ -987,7 +987,7 @@ deck =
   ,
   { rank: Rank 484, english: "is interesting to (to interest)", spanish: "interesar" }
   ,
-  { rank: Rank 485, english: "back", spanish: "atrás" }
+  { rank: Rank 485, english: "back, backwards", spanish: "atrás" }
   ,
   { rank: Rank 486, english: "area", spanish: "zona" }
   ,
@@ -995,7 +995,7 @@ deck =
   ,
   { rank: Rank 488, english: "alive", spanish: "vivo" }
   ,
-  { rank: Rank 489, english: "to close", spanish: "cerrar" }
+  { rank: Rank 489, english: "to close, shut", spanish: "cerrar" }
   ,
   { rank: Rank 490, english: "wine", spanish: "vino" }
   ,
@@ -1013,7 +1013,7 @@ deck =
   ,
   { rank: Rank 497, english: "contrary", spanish: "contrario" }
   ,
-  { rank: Rank 498, english: "table", spanish: "mesa" }
+  { rank: Rank 498, english: "table (furniture)", spanish: "mesa" }
   ,
   { rank: Rank 499, english: "real", spanish: "real" }
   ,
@@ -1101,9 +1101,9 @@ deck =
   ,
   { rank: Rank 541, english: "to propose", spanish: "proponer" }
   ,
-  { rank: Rank 542, english: "to show", spanish: "demostrar" }
+  { rank: Rank 542, english: "to demonstrate, prove", spanish: "demostrar" }
   ,
-  { rank: Rank 543, english: "party", spanish: "fiesta" }
+  { rank: Rank 543, english: "party, celebration", spanish: "fiesta" }
   ,
   { rank: Rank 544, english: "to mean", spanish: "significar" }
   ,
@@ -1119,7 +1119,7 @@ deck =
   ,
   { rank: Rank 550, english: "national", spanish: "nacional" }
   ,
-  { rank: Rank 551, english: "full", spanish: "lleno" }
+  { rank: Rank 551, english: "full (filled up)", spanish: "lleno" }
   ,
   { rank: Rank 552, english: "phone", spanish: "teléfono" }
   ,
@@ -1133,13 +1133,13 @@ deck =
   ,
   { rank: Rank 557, english: "to wish", spanish: "desear" }
   ,
-  { rank: Rank 558, english: "company", spanish: "empresa" }
+  { rank: Rank 558, english: "company, firm", spanish: "empresa" }
   ,
   { rank: Rank 559, english: "issue", spanish: "asunto" }
   ,
   { rank: Rank 560, english: "presence", spanish: "presencia" }
   ,
-  { rank: Rank 561, english: "yours", spanish: "suyo" }
+  { rank: Rank 561, english: "his, hers, theirs", spanish: "suyo" }
   ,
   { rank: Rank 562, english: "culture", spanish: "cultura" }
   ,
@@ -1161,17 +1161,17 @@ deck =
   ,
   { rank: Rank 571, english: "to disappear", spanish: "desaparecer" }
   ,
-  { rank: Rank 572, english: "to send", spanish: "mandar" }
+  { rank: Rank 572, english: "to send, to order", spanish: "mandar" }
   ,
-  { rank: Rank 573, english: "character", spanish: "carácter" }
+  { rank: Rank 573, english: "character (nature)", spanish: "carácter" }
   ,
-  { rank: Rank 574, english: "where", spanish: "adónde" }
+  { rank: Rank 574, english: "where to? (asking)", spanish: "adónde" }
   ,
   { rank: Rank 575, english: "most", spanish: "mayoría" }
   ,
   { rank: Rank 576, english: "red", spanish: "rojo" }
   ,
-  { rank: Rank 577, english: "after", spanish: "tras" }
+  { rank: Rank 577, english: "after, behind", spanish: "tras" }
   ,
   { rank: Rank 578, english: "top", spanish: "superior" }
   ,
@@ -1189,7 +1189,7 @@ deck =
   ,
   { rank: Rank 585, english: "to prefer", spanish: "preferir" }
   ,
-  { rank: Rank 586, english: "memory", spanish: "recuerdo" }
+  { rank: Rank 586, english: "memory (a recollection)", spanish: "recuerdo" }
   ,
   { rank: Rank 587, english: "to ensure", spanish: "asegurar" }
   ,
@@ -1199,7 +1199,7 @@ deck =
   ,
   { rank: Rank 590, english: "cause", spanish: "causa" }
   ,
-  { rank: Rank 591, english: "serious", spanish: "grave" }
+  { rank: Rank 591, english: "grave, severe", spanish: "grave" }
   ,
   { rank: Rank 592, english: "decision", spanish: "decisión" }
   ,
@@ -1237,13 +1237,13 @@ deck =
   ,
   { rank: Rank 609, english: "metro", spanish: "metro" }
   ,
-  { rank: Rank 610, english: "doctor", spanish: "médico" }
+  { rank: Rank 610, english: "physician", spanish: "médico" }
   ,
-  { rank: Rank 611, english: "room", spanish: "habitación" }
+  { rank: Rank 611, english: "room (bedroom)", spanish: "habitación" }
   ,
   { rank: Rank 612, english: "to establish", spanish: "establecer" }
   ,
-  { rank: Rank 613, english: "to save", spanish: "guardar" }
+  { rank: Rank 613, english: "to keep, to store", spanish: "guardar" }
   ,
   { rank: Rank 614, english: "art", spanish: "arte" }
   ,
@@ -1261,7 +1261,7 @@ deck =
   ,
   { rank: Rank 621, english: "act", spanish: "acto" }
   ,
-  { rank: Rank 622, english: "to put", spanish: "meter" }
+  { rank: Rank 622, english: "to put inside", spanish: "meter" }
   ,
   { rank: Rank 623, english: "absolute", spanish: "absoluto" }
   ,
@@ -1287,7 +1287,7 @@ deck =
   ,
   { rank: Rank 634, english: "coffee", spanish: "café" }
   ,
-  { rank: Rank 635, english: "letter", spanish: "carta" }
+  { rank: Rank 635, english: "letter (you send)", spanish: "carta" }
   ,
   { rank: Rank 636, english: "barely, just", spanish: "apenas" }
   ,
@@ -1307,7 +1307,7 @@ deck =
   ,
   { rank: Rank 644, english: "site", spanish: "sitio" }
   ,
-  { rank: Rank 645, english: "language", spanish: "lengua" }
+  { rank: Rank 645, english: "language, tongue", spanish: "lengua" }
   ,
   { rank: Rank 646, english: "to cut", spanish: "cortar" }
   ,
@@ -1327,7 +1327,7 @@ deck =
   ,
   { rank: Rank 654, english: "project", spanish: "proyecto" }
   ,
-  { rank: Rank 655, english: "memory", spanish: "memoria" }
+  { rank: Rank 655, english: "memory (the faculty)", spanish: "memoria" }
   ,
   { rank: Rank 656, english: "origin", spanish: "origen" }
   ,
@@ -1359,11 +1359,11 @@ deck =
   ,
   { rank: Rank 670, english: "advance", spanish: "avanzar" }
   ,
-  { rank: Rank 671, english: "use", spanish: "uso" }
+  { rank: Rank 671, english: "usage", spanish: "uso" }
   ,
   { rank: Rank 672, english: "arm", spanish: "brazo" }
   ,
-  { rank: Rank 673, english: "teacher", spanish: "profesor" }
+  { rank: Rank 673, english: "teacher, professor", spanish: "profesor" }
   ,
   { rank: Rank 674, english: "resolve", spanish: "resolver" }
   ,
@@ -1405,7 +1405,7 @@ deck =
   ,
   { rank: Rank 693, english: "to impose", spanish: "imponer" }
   ,
-  { rank: Rank 694, english: "about", spanish: "acerca" }
+  { rank: Rank 694, english: "concerning", spanish: "acerca" }
   ,
   { rank: Rank 695, english: "to force", spanish: "obligar" }
   ,
@@ -1427,7 +1427,7 @@ deck =
   ,
   { rank: Rank 704, english: "title", spanish: "título" }
   ,
-  { rank: Rank 705, english: "back", spanish: "detrás" }
+  { rank: Rank 705, english: "behind", spanish: "detrás" }
   ,
   { rank: Rank 706, english: "post", spanish: "puesto" }
   ,
@@ -1457,7 +1457,7 @@ deck =
   ,
   { rank: Rank 719, english: "matter", spanish: "materia" }
   ,
-  { rank: Rank 720, english: "remove", spanish: "quitar" }
+  { rank: Rank 720, english: "to take away", spanish: "quitar" }
   ,
   { rank: Rank 721, english: "to conserve", spanish: "conservar" }
   ,
@@ -1471,13 +1471,13 @@ deck =
   ,
   { rank: Rank 726, english: "capacity", spanish: "capacidad" }
   ,
-  { rank: Rank 727, english: "current", spanish: "actual" }
+  { rank: Rank 727, english: "current, present-day", spanish: "actual" }
   ,
   { rank: Rank 728, english: "mark", spanish: "marcar" }
   ,
   { rank: Rank 729, english: "distance", spanish: "distancia" }
   ,
-  { rank: Rank 730, english: "full", spanish: "pleno" }
+  { rank: Rank 730, english: "full, in the middle of", spanish: "pleno" }
   ,
   { rank: Rank 731, english: "perfect", spanish: "perfecto" }
   ,
@@ -1553,7 +1553,7 @@ deck =
   ,
   { rank: Rank 767, english: "that", spanish: "ése" }
   ,
-  { rank: Rank 768, english: "character", spanish: "personaje" }
+  { rank: Rank 768, english: "character (in a story)", spanish: "personaje" }
   ,
   { rank: Rank 769, english: "famous", spanish: "famoso" }
   ,
@@ -1641,7 +1641,7 @@ deck =
   ,
   { rank: Rank 811, english: "purpose", spanish: "propósito" }
   ,
-  { rank: Rank 812, english: "to save", spanish: "salvar" }
+  { rank: Rank 812, english: "to rescue", spanish: "salvar" }
   ,
   { rank: Rank 813, english: "hurry", spanish: "prisa" }
   ,
@@ -1669,7 +1669,7 @@ deck =
   ,
   { rank: Rank 825, english: "is worrying to (to worry)", spanish: "preocupar" }
   ,
-  { rank: Rank 826, english: "teacher", spanish: "maestro" }
+  { rank: Rank 826, english: "schoolteacher, master", spanish: "maestro" }
   ,
   { rank: Rank 827, english: "provide", spanish: "prestar" }
   ,
@@ -1689,7 +1689,7 @@ deck =
   ,
   { rank: Rank 835, english: "size", spanish: "tamaño" }
   ,
-  { rank: Rank 836, english: "table", spanish: "cuadro" }
+  { rank: Rank 836, english: "chart, painting", spanish: "cuadro" }
   ,
   { rank: Rank 837, english: "horse", spanish: "caballo" }
   ,
@@ -1727,7 +1727,7 @@ deck =
   ,
   { rank: Rank 854, english: "floor", spanish: "piso" }
   ,
-  { rank: Rank 855, english: "company", spanish: "compañia" }
+  { rank: Rank 855, english: "companionship, company", spanish: "compañia" }
   ,
   { rank: Rank 856, english: "gold", spanish: "oro" }
   ,
@@ -1753,7 +1753,7 @@ deck =
   ,
   { rank: Rank 867, english: "to contemplate", spanish: "contemplar" }
   ,
-  { rank: Rank 868, english: "to travel", spanish: "recorrer" }
+  { rank: Rank 868, english: "to travel through, cover", spanish: "recorrer" }
   ,
   { rank: Rank 869, english: "mind", spanish: "mente" }
   ,
@@ -1761,25 +1761,25 @@ deck =
   ,
   { rank: Rank 871, english: "exercise", spanish: "ejercicio" }
   ,
-  { rank: Rank 872, english: "room", spanish: "sala" }
+  { rank: Rank 872, english: "hall, living room", spanish: "sala" }
   ,
   { rank: Rank 873, english: "to last", spanish: "durar" }
   ,
   { rank: Rank 874, english: "instrument", spanish: "instrumento" }
   ,
-  { rank: Rank 875, english: "that", spanish: "aquello" }
+  { rank: Rank 875, english: "that thing", spanish: "aquello" }
   ,
   { rank: Rank 876, english: "defense", spanish: "defensa" }
   ,
   { rank: Rank 877, english: "director", spanish: "director" }
   ,
-  { rank: Rank 878, english: "remove", spanish: "retirar" }
+  { rank: Rank 878, english: "to withdraw", spanish: "retirar" }
   ,
   { rank: Rank 879, english: "explanation", spanish: "explicación" }
   ,
   { rank: Rank 880, english: "article", spanish: "artículo" }
   ,
-  { rank: Rank 881, english: "below", spanish: "debajo" }
+  { rank: Rank 881, english: "underneath", spanish: "debajo" }
   ,
   { rank: Rank 882, english: "to remain", spanish: "permanecer" }
   ,
@@ -1815,7 +1815,7 @@ deck =
   ,
   { rank: Rank 898, english: "like", spanish: "parecido" }
   ,
-  { rank: Rank 899, english: "current", spanish: "corriente" }
+  { rank: Rank 899, english: "ordinary, current (of water)", spanish: "corriente" }
   ,
   { rank: Rank 900, english: "friendly", spanish: "amable" }
   ,
@@ -1825,7 +1825,7 @@ deck =
   ,
   { rank: Rank 903, english: "existence", spanish: "existencia" }
   ,
-  { rank: Rank 904, english: "language", spanish: "lenguaje" }
+  { rank: Rank 904, english: "language (speech, style)", spanish: "lenguaje" }
   ,
   { rank: Rank 905, english: "costume", spanish: "traje" }
   ,
@@ -1881,7 +1881,7 @@ deck =
   ,
   { rank: Rank 931, english: "average", spanish: "media" }
   ,
-  { rank: Rank 932, english: "letter", spanish: "letra" }
+  { rank: Rank 932, english: "letter (of the alphabet)", spanish: "letra" }
   ,
   { rank: Rank 933, english: "feeling", spanish: "sentimiento" }
   ,
@@ -1925,9 +1925,9 @@ deck =
   ,
   { rank: Rank 953, english: "skin", spanish: "piel" }
   ,
-  { rank: Rank 954, english: "left", spanish: "izquierda" }
+  { rank: Rank 954, english: "left (direction)", spanish: "izquierda" }
   ,
-  { rank: Rank 955, english: "before", spanish: "delante" }
+  { rank: Rank 955, english: "in front", spanish: "delante" }
   ,
   { rank: Rank 956, english: "religious", spanish: "religioso" }
   ,
@@ -1953,7 +1953,7 @@ deck =
   ,
   { rank: Rank 967, english: "north", spanish: "norte" }
   ,
-  { rank: Rank 968, english: "through", spanish: "mediante" }
+  { rank: Rank 968, english: "by means of", spanish: "mediante" }
   ,
   { rank: Rank 969, english: "tradition", spanish: "tradición" }
   ,
@@ -1981,9 +1981,9 @@ deck =
   ,
   { rank: Rank 981, english: "completed", spanish: "terminado" }
   ,
-  { rank: Rank 982, english: "to propose", spanish: "plantear" }
+  { rank: Rank 982, english: "to raise (an issue)", spanish: "plantear" }
   ,
-  { rank: Rank 983, english: "left", spanish: "dejado" }
+  { rank: Rank 983, english: "left behind", spanish: "dejado" }
   ,
   { rank: Rank 984, english: "to test", spanish: "probar" }
   ,

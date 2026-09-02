@@ -80,7 +80,7 @@ spec = do
       let
         index = Deck.index Spanish.deck
         barred = Array.filter (\c -> not $ Deck.isCanonical c index) Spanish.deck
-      Array.length barred `shouldEqual` 70
+      Array.length barred `shouldEqual` 14
 
   describe "repairing cards that reached production before the rule" do
     let
@@ -135,9 +135,16 @@ spec = do
       twice.progress `shouldEqual` once.progress
 
   describe "against the real deck" do
-    it "still finds six answers for 'that', the worst collision" do
-      Deck.answersFor "that" (Deck.index Spanish.deck)
-        `shouldEqual` [ "que", "ese", "aquel", "cuanto", "ése", "aquello" ]
+    it "gathers a synonym group, which is what collisions are now for" do
+      Deck.answersFor "there" (Deck.index Spanish.deck)
+        `shouldEqual` [ "ahí", "allí", "allá" ]
+
+    it "and gives the disambiguated senses one answer each" do
+      -- `that` used to cover six words; each now says which sense it is.
+      Deck.answersFor "that (linking clauses)" (Deck.index Spanish.deck) `shouldEqual` [ "que" ]
+      Deck.answersFor "that (near you)" (Deck.index Spanish.deck) `shouldEqual` [ "ese" ]
+      Deck.answersFor "to be (what it is)" (Deck.index Spanish.deck) `shouldEqual` [ "ser" ]
+      Deck.answersFor "to be (how or where it is)" (Deck.index Spanish.deck) `shouldEqual` [ "estar" ]
 
     it "gives an unambiguous word exactly one answer" do
       Deck.answersFor "to find" (Deck.index Spanish.deck) `shouldEqual` [ "encontrar" ]

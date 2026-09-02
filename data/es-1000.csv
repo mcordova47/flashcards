@@ -7,15 +7,15 @@ Order,English,Español
 6,to be able to,poder
 7,to speak,hablar
 8,to find,encontrar
-9,to have,tener
+9,to have (own),tener
 10,to need,necesitar
-11,where,donde
-12,that,que
+11,where (the place that),donde
+12,that (linking clauses),que
 13,the,el / la
 14,place,lugar
 15,home,casa
 16,something,algo
-17,that,ese
+17,that (near you),ese
 18,and,y
 19,to see,ver
 20,but,pero
@@ -29,8 +29,8 @@ Order,English,Español
 28,"is, oneself",se
 29,to come,venir
 30,my,mi
-31,to be,ser
-32,to be,estar
+31,to be (what it is),ser
+32,to be (how or where it is),estar
 33,to live,vivir
 34,to pass,pasar
 35,day,día
@@ -38,7 +38,7 @@ Order,English,Español
 37,week,semana
 38,month,mes
 39,each,cada
-40,time,tiempo
+40,time (duration),tiempo
 41,to know,saber
 42,to know (be familiar with),conocer
 43,to do,hacer
@@ -51,14 +51,14 @@ Order,English,Español
 50,he / she,él / ella
 51,is pleasing to (to like),gustar
 52,me,me
-53,you,te
+53,"you (one person, object)",te
 54,"you, him, her",le
-55,us,nos
+55,us (object),nos
 56,them,les
 57,friend,amigo
 58,food,comida
 59,other,otro
-60,work,trabajo
+60,work (job),trabajo
 61,"for, through",por
 62,"for, in order to",para
 63,example,ejemplo
@@ -69,7 +69,7 @@ Order,English,Español
 68,country,país
 69,man,hombre
 70,woman,mujer
-71,to have,haber
+71,to have (done something),haber
 72,very,muy
 73,much,mucho
 74,large,grande
@@ -80,11 +80,11 @@ Order,English,Español
 79,our,nuestro
 80,always,siempre
 81,life,vida
-82,after,después
+82,afterwards,después
 83,then,entonces
-84,to put,poner
+84,"to put, place",poner
 85,duty,deber
-86,well,bien
+86,well (properly),bien
 87,between,entre
 88,word,palabra
 89,now,ahora
@@ -104,9 +104,9 @@ Order,English,Español
 103,here,aquí
 104,already,ya
 105,without,sin
-106,time,vez
+106,time (an occasion),vez
 107,"there is, there are",hay
-108,about,sobre
+108,"on, about",sobre
 109,you (informal),tú
 110,"any, some",alguno
 111,same,mismo
@@ -116,7 +116,7 @@ Order,English,Español
 115,only,sólo
 116,first,primero
 117,from,desde
-118,or,ni
+118,nor,ni
 119,thanks,gracias
 120,good,bueno
 121,one,uno
@@ -128,31 +128,31 @@ Order,English,Español
 127,part,parte
 128,is remaining to (to stay),quedar
 129,favor,favor
-130,where,dónde
+130,where? (asking),dónde
 131,never,nunca
 132,to lead,llevar
-133,to leave,dejar
+133,"to leave behind, to let",dejar
 134,truth,verdad
 135,to follow,seguir
 136,new,nuevo
-137,well,pues
+137,"so, then",pues
 138,to call (be called/name),llamar(se)
 139,best,mejor
 140,to think,pensar
-141,that,aquel
+141,that (over there),aquel
 142,moment,momento
 143,god,dios
 144,"but, rather",sino
-145,to leave,salir
+145,"to go out, to leave",salir
 146,to return,volver
 147,form,forma
-148,before,antes
+148,before (in time),antes
 149,although,aunque
 150,world,mundo
 151,three,tres
 152,such,tal
 153,there,ahí
-154,to take,tomar
+154,"to take, to drink",tomar
 155,certain,cierto
 156,"to, towards",hacia
 157,case,caso
@@ -160,7 +160,7 @@ Order,English,Español
 159,to feel,sentir
 160,"then, later",luego
 161,someone,alguien
-162,to try,tratar
+162,"to treat, deal with",tratar
 163,person,persona
 164,higher,mayor
 165,last,último
@@ -168,7 +168,7 @@ Order,English,Español
 167,own,propio
 168,no one,nadie
 169,whoever,quien
-170,us,nosotros
+170,we,nosotros
 171,to look,mirar
 172,father,padre
 173,"time, hour",hora
@@ -211,7 +211,7 @@ Order,English,Español
 210,to enter,entrar
 211,mother,madre
 212,embargo,embargo
-213,only,único
+213,"only one, unique",único
 214,to work,trabajar
 215,small,pequeño
 216,high,alto
@@ -233,13 +233,13 @@ Order,English,Español
 232,reality,realidad
 233,to understand,entender
 234,to receive,recibir
-235,work,obra
+235,work (of art),obra
 236,important,importante
 237,with me,conmigo
 238,wrong,mal
 239,yet,todavía
 240,reason,razón
-241,that,cuanto
+241,as much as,cuanto
 242,low,bajo
 243,to remember,recordar
 244,group,grupo
@@ -258,13 +258,13 @@ Order,English,Español
 257,yet,aún
 258,to serve,servir
 259,general,general
-260,to take,sacar
+260,to take out,sacar
 261,relationship,relación
 262,five,cinco
 263,body,cuerpo
 264,with you,contigo
 265,to maintain,mantener
-266,before,ante
+266,faced with,ante
 267,principle,principio
 268,to result,resultar
 269,equal,igual
@@ -297,7 +297,7 @@ Order,English,Español
 296,to end,acabar
 297,step,paso
 298,situation,situación
-299,serious,serio
+299,serious (person),serio
 300,head,cabeza
 301,quite,bastante
 302,brother,hermano
@@ -312,7 +312,7 @@ Order,English,Español
 311,"valid, voucher",vale
 312,neither,tampoco
 313,social,social
-314,old,viejo
+314,old (aged),viejo
 315,Mrs.,señora
 316,topic,tema
 317,political,político
@@ -345,7 +345,7 @@ Order,English,Español
 344,view,vista
 345,to achieve,lograr
 346,"other, the rest",demás
-347,you,os
+347,"you (several people, object)",os
 348,boy,chico
 349,difficult,difícil
 350,how much,cuánto
@@ -363,20 +363,20 @@ Order,English,Español
 362,value,valor
 363,to recognize,reconocer
 364,to study,estudiar
-365,to achieve,alcanzar
+365,to reach,alcanzar
 366,to be born,nacer
 367,to direct,dirigir
 368,to run,correr
 369,happy,feliz
 370,measure,medida
-371,less,menor
+371,"lesser, younger",menor
 372,war,guerra
 373,only,solamente
 374,wife,esposa
-375,to use,utilizar
+375,to utilize,utilizar
 376,forward,adelante
 377,center,centro
-378,what,cuál
+378,which one,cuál
 379,need,necesidad
 380,condition,condición
 381,to pay,pagar
@@ -384,8 +384,8 @@ Order,English,Español
 383,lack,falta
 384,death,muerte
 385,ten,diez
-386,through,través
-387,old,antiguo
+386,"through, across",través
+387,"ancient, former",antiguo
 388,supposed,supuesto
 389,age,edad
 390,to play,jugar
@@ -416,7 +416,7 @@ Order,English,Español
 415,to try,intentar
 416,together,junto
 417,result,resultado
-418,use,usar
+418,to use,usar
 419,to decide,decidir
 420,to repeat,repetir
 421,to forget,olvidar
@@ -433,7 +433,7 @@ Order,English,Español
 432,third,tercero
 433,uncle,tío
 434,to occupy,ocupar
-435,question,cuestión
+435,"matter, issue",cuestión
 436,doubt,duda
 437,at least,siquiera
 438,difference,diferencia
@@ -445,7 +445,7 @@ Order,English,Español
 444,to set,fijar
 445,society,sociedad
 446,to refer,referir
-447,to close,acercar
+447,to bring closer,acercar
 448,able,capaz
 449,free,libre
 450,natural,natural
@@ -457,11 +457,11 @@ Order,English,Español
 456,TRUE,verdadero
 457,enough,suficiente
 458,young,joven
-459,party,partido
+459,"political party, match",partido
 460,economic,económico
-461,below,abajo
+461,"below, downstairs",abajo
 462,right,derecho
-463,first,primer
+463,first (before a noun),primer
 464,importance,importancia
 465,brilliant,genial
 466,system,sistema
@@ -483,11 +483,11 @@ Order,English,Español
 482,to avoid,evitar
 483,rest,resto
 484,is interesting to (to interest),interesar
-485,back,atrás
+485,"back, backwards",atrás
 486,area,zona
 487,process,proceso
 488,alive,vivo
-489,to close,cerrar
+489,"to close, shut",cerrar
 490,wine,vino
 491,"to throw, cast",echar
 492,to reply,responder
@@ -496,7 +496,7 @@ Order,English,Español
 495,minute,minuto
 496,school,escuela
 497,contrary,contrario
-498,table,mesa
+498,table (furniture),mesa
 499,real,real
 500,occasion,ocasión
 501,blood,sangre
@@ -540,8 +540,8 @@ Order,English,Español
 539,base,base
 540,to prepare,preparar
 541,to propose,proponer
-542,to show,demostrar
-543,party,fiesta
+542,"to demonstrate, prove",demostrar
+543,"party, celebration",fiesta
 544,to mean,significar
 545,position,posición
 546,bed,cama
@@ -549,17 +549,17 @@ Order,English,Español
 548,test,prueba
 549,policy,politica
 550,national,nacional
-551,full,lleno
+551,full (filled up),lleno
 552,phone,teléfono
 553,to gather,reunir
 554,Is missing to (to lack),faltar
 555,team,equipo
 556,datum,dato
 557,to wish,desear
-558,company,empresa
+558,"company, firm",empresa
 559,issue,asunto
 560,presence,presencia
-561,yours,suyo
+561,"his, hers, theirs",suyo
 562,culture,cultura
 563,series,serie
 564,million,millón
@@ -570,12 +570,12 @@ Order,English,Español
 569,to kill,matar
 570,to represent,representar
 571,to disappear,desaparecer
-572,to send,mandar
-573,character,carácter
-574,where,adónde
+572,"to send, to order",mandar
+573,character (nature),carácter
+574,where to? (asking),adónde
 575,most,mayoría
 576,red,rojo
-577,after,tras
+577,"after, behind",tras
 578,top,superior
 579,to walk,andar
 580,short,corto
@@ -584,12 +584,12 @@ Order,English,Español
 583,sky,cielo
 584,known,conocido
 585,to prefer,preferir
-586,memory,recuerdo
+586,memory (a recollection),recuerdo
 587,to ensure,asegurar
 588,forgiveness,perdón
 589,function,función
 590,cause,causa
-591,serious,grave
+591,"grave, severe",grave
 592,decision,decisión
 593,music,música
 594,strange,extraño
@@ -608,10 +608,10 @@ Order,English,Español
 607,term,término
 608,to place,colocar
 609,metro,metro
-610,doctor,médico
-611,room,habitación
+610,physician,médico
+611,room (bedroom),habitación
 612,to establish,establecer
-613,to save,guardar
+613,"to keep, to store",guardar
 614,art,arte
 615,pair,par
 616,to start,iniciar
@@ -620,7 +620,7 @@ Order,English,Español
 619,consequence,consecuencia
 620,to note,notar
 621,act,acto
-622,to put,meter
+622,to put inside,meter
 623,absolute,absoluto
 624,penalty,pena
 625,to act,actuar
@@ -633,7 +633,7 @@ Order,English,Español
 632,claim,pretender
 633,task,tarea
 634,coffee,café
-635,letter,carta
+635,letter (you send),carta
 636,"barely, just",apenas
 637,property,propiedad
 638,product,producto
@@ -643,7 +643,7 @@ Order,English,Español
 642,taste,gusto
 643,to agree (remember),acordar(se)
 644,site,sitio
-645,language,lengua
+645,"language, tongue",lengua
 646,to cut,cortar
 647,plan,plan
 648,baby,bebé
@@ -653,7 +653,7 @@ Order,English,Español
 652,to acquire,adquirir
 653,weapon,arma
 654,project,proyecto
-655,memory,memoria
+655,memory (the faculty),memoria
 656,origin,origen
 657,element,elemento
 658,lost,perdido
@@ -669,9 +669,9 @@ Order,English,Español
 668,worse,peor
 669,deny,negar
 670,advance,avanzar
-671,use,uso
+671,usage,uso
 672,arm,brazo
-673,teacher,profesor
+673,"teacher, professor",profesor
 674,resolve,resolver
 675,future,futuro
 676,half,mitad
@@ -692,7 +692,7 @@ Order,English,Español
 691,last night,anoche
 692,professional,profesional
 693,to impose,imponer
-694,about,acerca
+694,concerning,acerca
 695,to force,obligar
 696,physical,físico
 697,attitude,actitud
@@ -703,7 +703,7 @@ Order,English,Español
 702,correct,correcto
 703,capital,capital
 704,title,título
-705,back,detrás
+705,behind,detrás
 706,post,puesto
 707,material,material
 708,blow,golpe
@@ -718,17 +718,17 @@ Order,English,Español
 717,to defend,defender
 718,disease,enfermedad
 719,matter,materia
-720,remove,quitar
+720,to take away,quitar
 721,to conserve,conservar
 722,modern,moderno
 723,hospital,hospital
 724,to depend,depender
 725,nature,naturaleza
 726,capacity,capacidad
-727,current,actual
+727,"current, present-day",actual
 728,mark,marcar
 729,distance,distancia
-730,full,pleno
+730,"full, in the middle of",pleno
 731,perfect,perfecto
 732,closed,cerrado
 733,to share,compartir
@@ -766,7 +766,7 @@ Order,English,Español
 765,to sit,sentar
 766,plant,planta
 767,that,ése
-768,character,personaje
+768,character (in a story),personaje
 769,famous,famoso
 770,hunger,hambre
 771,success,éxito
@@ -810,7 +810,7 @@ Order,English,Español
 809,train,tren
 810,to prevent,impedir
 811,purpose,propósito
-812,to save,salvar
+812,to rescue,salvar
 813,hurry,prisa
 814,degree,grado
 815,to escape,escapar
@@ -824,7 +824,7 @@ Order,English,Español
 823,to answer,contestar
 824,newspaper,periódico
 825,is worrying to (to worry),preocupar
-826,teacher,maestro
+826,"schoolteacher, master",maestro
 827,provide,prestar
 828,quality,calidad
 829,salt,sal
@@ -834,7 +834,7 @@ Order,English,Español
 833,rare,raro
 834,science,ciencia
 835,size,tamaño
-836,table,cuadro
+836,"chart, painting",cuadro
 837,horse,caballo
 838,responsibility,responsabilidad
 839,fifty,cincuenta
@@ -853,7 +853,7 @@ Order,English,Español
 852,trial,juicio
 853,ground,terreno
 854,floor,piso
-855,company,compañia
+855,"companionship, company",compañia
 856,gold,oro
 857,to return,regresar
 858,text,texto
@@ -866,20 +866,20 @@ Order,English,Español
 865,hope,esperanza
 866,machine,máquina
 867,to contemplate,contemplar
-868,to travel,recorrer
+868,"to travel through, cover",recorrer
 869,mind,mente
 870,phrase,frase
 871,exercise,ejercicio
-872,room,sala
+872,"hall, living room",sala
 873,to last,durar
 874,instrument,instrumento
-875,that,aquello
+875,that thing,aquello
 876,defense,defensa
 877,director,director
-878,remove,retirar
+878,to withdraw,retirar
 879,explanation,explicación
 880,article,artículo
-881,below,debajo
+881,underneath,debajo
 882,to remain,permanecer
 883,to attend,asistir
 884,twelve,doce
@@ -897,12 +897,12 @@ Order,English,Español
 896,encounter,encuentro
 897,sex,sexo
 898,like,parecido
-899,current,corriente
+899,"ordinary, current (of water)",corriente
 900,friendly,amable
 901,reading,lectura
 902,message,mensaje
 903,existence,existencia
-904,language,lenguaje
+904,"language (speech, style)",lenguaje
 905,costume,traje
 906,to send,enviar
 907,soul,alma
@@ -930,7 +930,7 @@ Order,English,Español
 929,to face,enfrentar
 930,"newly, freshly",recién
 931,average,media
-932,letter,letra
+932,letter (of the alphabet),letra
 933,feeling,sentimiento
 934,to drive,conducir
 935,completely,completamente
@@ -952,8 +952,8 @@ Order,English,Español
 951,to hold,sostener
 952,moon,luna
 953,skin,piel
-954,left,izquierda
-955,before,delante
+954,left (direction),izquierda
+955,in front,delante
 956,religious,religioso
 957,to warn,advertir
 958,dark,oscuro
@@ -966,7 +966,7 @@ Order,English,Español
 965,respect,respeto
 966,grandfather,abuelo
 967,north,norte
-968,through,mediante
+968,by means of,mediante
 969,tradition,tradición
 970,is sufficient to (to be enough),bastar
 971,couple,pareja
@@ -980,8 +980,8 @@ Order,English,Español
 979,vision,visión
 980,concrete,concrete
 981,completed,terminado
-982,to propose,plantear
-983,left,dejado
+982,to raise (an issue),plantear
+983,left behind,dejado
 984,to test,probar
 985,"to swear, pledge",jurar
 986,beautiful,hermoso
