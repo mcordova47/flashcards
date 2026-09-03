@@ -240,7 +240,7 @@ Order,English,Español
 239,yet,todavía
 240,reason,razón
 241,as much as,cuanto
-242,low,bajo
+242,low; under,bajo
 243,to remember,recordar
 244,group,grupo
 245,love,amor
@@ -401,7 +401,7 @@ Order,English,Español
 400,to fulfill,cumplir
 401,special,especial
 402,different,diferente
-403,to weigh; despite (a pesar de),pesar
+403,to weigh,pesar
 404,possibility,posibilidad
 405,to offer,ofrecer
 406,up,arriba
@@ -589,7 +589,7 @@ Order,English,Español
 588,forgiveness,perdón
 589,function,función
 590,cause,causa
-591,"grave, severe",grave
+591,severe,grave
 592,decision,decisión
 593,music,música
 594,strange,extraño
@@ -616,7 +616,7 @@ Order,English,Español
 615,pair,par
 616,to start,iniciar
 617,fire,fuego
-618,to lower,bajar
+618,"to go down, to lower",bajar
 619,consequence,consecuencia
 620,to note,notar
 621,act,acto
@@ -799,7 +799,7 @@ Order,English,Español
 798,difficulty,dificultad
 799,to comment,comentar
 800,to publish,publicar
-801,"family, familiar",familiar
+801,"relating to family, a relative",familiar
 802,will,voluntad
 803,meeting,reunión
 804,model,modelo

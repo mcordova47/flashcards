@@ -501,7 +501,7 @@ deck =
   ,
   { rank: Rank 241, english: "as much as", spanish: "cuanto" }
   ,
-  { rank: Rank 242, english: "low", spanish: "bajo" }
+  { rank: Rank 242, english: "low; under", spanish: "bajo" }
   ,
   { rank: Rank 243, english: "to remember", spanish: "recordar" }
   ,
@@ -823,7 +823,7 @@ deck =
   ,
   { rank: Rank 402, english: "different", spanish: "diferente" }
   ,
-  { rank: Rank 403, english: "to weigh; despite (a pesar de)", spanish: "pesar" }
+  { rank: Rank 403, english: "to weigh", spanish: "pesar" }
   ,
   { rank: Rank 404, english: "possibility", spanish: "posibilidad" }
   ,
@@ -1199,7 +1199,7 @@ deck =
   ,
   { rank: Rank 590, english: "cause", spanish: "causa" }
   ,
-  { rank: Rank 591, english: "grave, severe", spanish: "grave" }
+  { rank: Rank 591, english: "severe", spanish: "grave" }
   ,
   { rank: Rank 592, english: "decision", spanish: "decisión" }
   ,
@@ -1253,7 +1253,7 @@ deck =
   ,
   { rank: Rank 617, english: "fire", spanish: "fuego" }
   ,
-  { rank: Rank 618, english: "to lower", spanish: "bajar" }
+  { rank: Rank 618, english: "to go down, to lower", spanish: "bajar" }
   ,
   { rank: Rank 619, english: "consequence", spanish: "consecuencia" }
   ,
@@ -1619,7 +1619,7 @@ deck =
   ,
   { rank: Rank 800, english: "to publish", spanish: "publicar" }
   ,
-  { rank: Rank 801, english: "family, familiar", spanish: "familiar" }
+  { rank: Rank 801, english: "relating to family, a relative", spanish: "familiar" }
   ,
   { rank: Rank 802, english: "will", spanish: "voluntad" }
   ,
