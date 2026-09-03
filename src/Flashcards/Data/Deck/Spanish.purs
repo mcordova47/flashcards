@@ -12,7 +12,7 @@ import Flashcards.Types.Card (Card, Rank(..))
 -- | Content hash of this deck. Progress is keyed by rank, so a deck whose rows
 -- | were renumbered is a different deck as far as saved progress is concerned.
 fingerprint :: String
-fingerprint = "c687d9574f46"
+fingerprint = "654958a3f958"
 
 -- | The 1000 most common Spanish words, most frequent first. The index into
 -- | this deck is meaningful: it is the curriculum order.
@@ -275,7 +275,7 @@ deck =
   ,
   { rank: Rank 128, english: "is remaining to (to stay)", spanish: "quedar" }
   ,
-  { rank: Rank 129, english: "favor", spanish: "favor" }
+  { rank: Rank 129, english: "please", spanish: "por favor" }
   ,
   { rank: Rank 130, english: "where? (asking)", spanish: "dónde" }
   ,
@@ -441,7 +441,7 @@ deck =
   ,
   { rank: Rank 211, english: "mother", spanish: "madre" }
   ,
-  { rank: Rank 212, english: "embargo", spanish: "embargo" }
+  { rank: Rank 212, english: "however", spanish: "sin embargo" }
   ,
   { rank: Rank 213, english: "only one, unique", spanish: "único" }
   ,
@@ -1977,7 +1977,7 @@ deck =
   ,
   { rank: Rank 979, english: "vision", spanish: "visión" }
   ,
-  { rank: Rank 980, english: "concrete", spanish: "concrete" }
+  { rank: Rank 980, english: "concrete", spanish: "concreto" }
   ,
   { rank: Rank 981, english: "completed", spanish: "terminado" }
   ,
