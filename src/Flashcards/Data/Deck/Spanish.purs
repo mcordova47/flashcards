@@ -515,7 +515,7 @@ deck =
   ,
   { rank: Rank 248, english: "human", spanish: "humano" }
   ,
-  { rank: Rank 249, english: "to finish", spanish: "terminar" }
+  { rank: Rank 249, english: "to finish, to end", spanish: "terminar" }
   ,
   { rank: Rank 250, english: "to allow", spanish: "permitir" }
   ,
@@ -609,7 +609,7 @@ deck =
   ,
   { rank: Rank 295, english: "sense", spanish: "sentido" }
   ,
-  { rank: Rank 296, english: "to end", spanish: "acabar" }
+  { rank: Rank 296, english: "to have just done; to finish", spanish: "acabar" }
   ,
   { rank: Rank 297, english: "step", spanish: "paso" }
   ,
