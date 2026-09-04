@@ -119,6 +119,18 @@ network-first means a deploy always wins, so you can never get wedged on a stale
 bundle. The cache name is stamped at build time with a hash of the shell, so a
 deploy invalidates it and nothing else does.
 
+### What `sync-deck` refuses
+
+Contiguous ranks, non-empty sides, and a unique Spanish side, which ES→EN
+prompting depends on. It also fails on spreadsheet damage: a cell reading
+`TRUE` or `FALSE` (Sheets decides the string "true" is a boolean, which is how
+`verdadero` was glossed for months) or a `#REF!`-style error value.
+
+Two heuristics only warn, because both have legitimate exceptions: an all-caps
+gloss, and a gloss containing its own Spanish answer — the latter makes a
+production card free, though a whole gloss equal to its Spanish is just a
+cognate and fine.
+
 ## The study model
 
 Cards are shown **Spanish → English** and graded by hand: tap to flip, then

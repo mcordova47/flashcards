@@ -35,6 +35,9 @@ const parseCsv = text => {
 
 const fail = msg => { console.error(`✗ ${msg}`); process.exit(1) }
 
+const warnings = []
+const warn = msg => warnings.push(msg)
+
 if (process.argv.includes("--fetch")) {
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`
   console.log(`↓ fetching ${url}`)
@@ -75,6 +78,38 @@ const cards = rows.map((cells, i) => {
 cards.forEach((c, i) => {
   if (c.rank !== i + 1) fail(`Order is not contiguous: expected ${i + 1}, got ${c.rank}`)
 })
+
+// Spreadsheet coercions. Sheets decides the string "true" is a boolean and
+// exports it as TRUE; `verdadero` was glossed that way from the very first
+// import and nobody noticed for months. Lowercase "true" is a legitimate
+// gloss, so only the shouting form is a coercion.
+const SHEET_ERRORS = /^#(REF|N\/A|VALUE|ERROR|NAME|DIV\/0|NUM|NULL)[!?]?$/i
+for (const c of cards) {
+  for (const [side, value] of [["English", c.english], ["Spanish", c.spanish]]) {
+    if (value === "TRUE" || value === "FALSE") {
+      fail(`#${c.rank} ${side} is ${value} — the spreadsheet turned a word into a boolean. `
+         + `Force the cell to text, or untick "Convert text to numbers, dates, and formulas" on import.`)
+    }
+    if (SHEET_ERRORS.test(value)) {
+      fail(`#${c.rank} ${side} is ${value}, a spreadsheet error value rather than a word`)
+    }
+    if (value.length > 1 && value === value.toUpperCase() && /[A-Z]{2}/.test(value)) {
+      warn(`#${c.rank} ${side} is all capitals (${value!== undefined ? JSON.stringify(value) : ""}) — often a coercion`)
+    }
+  }
+}
+
+// A prompt that contains its own answer makes the production card free. Whole
+// gloss equal to the Spanish is a true cognate and fine — the answer simply is
+// that word — but the Spanish buried inside a longer gloss gives it away.
+for (const c of cards) {
+  const stem = c.spanish.replace(/\(se\)$/, "").trim()
+  if (stem.length < 3) continue
+  if (c.english.toLowerCase() === c.spanish.toLowerCase()) continue
+  if (new RegExp(`\\b${stem.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(c.english)) {
+    warn(`#${c.rank} the gloss ${JSON.stringify(c.english)} contains its own answer, ${JSON.stringify(c.spanish)}`)
+  }
+}
 
 const bySpanish = new Map()
 for (const c of cards) {
@@ -138,5 +173,6 @@ ${entries}
 
 console.log(`✓ wrote ${OUT_PATH} (${cards.length} cards, fingerprint ${fingerprint})`)
 console.log(`  ${cards.filter(c => c.english.startsWith("to ")).length} verbs`)
+for (const w of warnings) console.warn(`  ! ${w}`)
 console.log(`  ${collisions.length} English sides map to >1 Spanish word `
           + `(${collisions.reduce((n, [, v]) => n + v.length, 0)} rows) — relevant when EN→ES lands in v2`)
