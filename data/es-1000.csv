@@ -96,8 +96,8 @@ Order,English,Español
 95,all,todo
 96,because,porque
 97,to help,ayudar
-98,to ask,pedir
-99,to question,preguntar
+98,"to ask for, to request",pedir
+99,to ask (a question),preguntar
 100,what,qué
 101,"it, the, him",lo
 102,"his, her, their",su
@@ -454,7 +454,7 @@ Order,English,Español
 453,effect,efecto
 454,object,objeto
 455,doctor,doctor
-456,TRUE,verdadero
+456,true,verdadero
 457,enough,suficiente
 458,young,joven
 459,"political party, match",partido
@@ -575,7 +575,7 @@ Order,English,Español
 574,where to? (asking),adónde
 575,most,mayoría
 576,red,rojo
-577,"after, behind",tras
+577,"after, behind (formal)",tras
 578,top,superior
 579,to walk,andar
 580,short,corto

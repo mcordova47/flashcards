@@ -213,9 +213,9 @@ deck =
   ,
   { rank: Rank 97, english: "to help", spanish: "ayudar" }
   ,
-  { rank: Rank 98, english: "to ask", spanish: "pedir" }
+  { rank: Rank 98, english: "to ask for, to request", spanish: "pedir" }
   ,
-  { rank: Rank 99, english: "to question", spanish: "preguntar" }
+  { rank: Rank 99, english: "to ask (a question)", spanish: "preguntar" }
   ,
   { rank: Rank 100, english: "what", spanish: "qué" }
   ,
@@ -929,7 +929,7 @@ deck =
   ,
   { rank: Rank 455, english: "doctor", spanish: "doctor" }
   ,
-  { rank: Rank 456, english: "TRUE", spanish: "verdadero" }
+  { rank: Rank 456, english: "true", spanish: "verdadero" }
   ,
   { rank: Rank 457, english: "enough", spanish: "suficiente" }
   ,
@@ -1171,7 +1171,7 @@ deck =
   ,
   { rank: Rank 576, english: "red", spanish: "rojo" }
   ,
-  { rank: Rank 577, english: "after, behind", spanish: "tras" }
+  { rank: Rank 577, english: "after, behind (formal)", spanish: "tras" }
   ,
   { rank: Rank 578, english: "top", spanish: "superior" }
   ,
