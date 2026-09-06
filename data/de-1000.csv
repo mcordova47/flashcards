@@ -1,0 +1,1006 @@
+Order,English,Deutsch,Gender,Type,Level,Unit,Example
+1,on (days/times),am,null,preposition,A1,1,Wir treffen uns am Dienstag.
+2,article,der Artikel,masculine,noun,A1,1,Ich lese einen interessanten Artikel online.
+3,Goodbye!,Auf Wiedersehen!,null,phrase,A1,1,Auf Wiedersehen! Bis nächste Woche!
+4,"from, out of",aus,null,preposition,A1,1,Ich komme aus der Schweiz.
+5,"machine, vending machine",der Automat,masculine,noun,A1,1,Der Automat nimmt keine Zehn-Euro-Scheine an.
+6,ATM,der Bankautomat,masculine,noun,A1,1,Wo ist der nächste Bankautomat hier bitte?
+7,"picture, image",das Bild,neuter,noun,A1,1,Das ist ein schönes Bild.
+8,book,das Buch,neuter,noun,A1,1,Ich lese ein Buch.
+9,letter (of the alphabet),der Buchstabe,masculine,noun,A1,1,Wie viele Buchstaben hat das Wort?
+10,to spell,buchstabieren,null,verb,A1,1,Können Sie bitte Ihren Namen buchstabieren?
+11,computer,der Computer,masculine,noun,A1,1,Ich brauche einen neuen Computer.
+12,German,deutsch,null,adjective,A1,1,Er ist ein deutscher Lehrer.
+13,Germany,Deutschland,null,noun,A1,1,Ich komme aus Deutschland.
+14,Tuesday,der Dienstag,masculine,noun,A1,1,Am Dienstag habe ich frei.
+15,Thursday,der Donnerstag,masculine,noun,A1,1,Donnerstag ist unser Sporttag.
+16,family,die Familie,feminine,noun,A1,1,Meine Familie ist klein.
+17,feminine,feminin,null,adjective,A1,1,Sie hat einen femininen Stil.
+18,question,die Frage,feminine,noun,A1,1,Ich habe eine Frage.
+19,to ask,fragen,null,verb,A1,1,Ich frage den Lehrer.
+20,Friday,der Freitag,masculine,noun,A1,1,Freitag ist der letzte Arbeitstag.
+21,to believe,glauben,null,verb,A1,1,"Ich glaube, du schaffst das."
+22,Good day!,Guten Tag!,null,phrase,A1,1,Guten Tag! Wie geht es Ihnen?
+23,Hello!,Hallo!,null,phrase,A1,1,Hallo! Wie geht's dir?
+24,"notebook, exercise book",das Heft,neuter,noun,A1,1,Schreibe es in dein Heft.
+25,to be called,heißen,null,verb,A1,1,Ich heiße Anna und komme aus Berlin.
+26,conjugation,die Konjugation,feminine,noun,A1,1,Die Konjugation der Verben ist wichtig.
+27,ballpoint pen,der Kuli,masculine,noun,A1,1,Wo ist mein Kuli?
+28,"easy, light",leicht,null,adjective,A1,1,Diese Übung ist sehr leicht.
+29,to learn,lernen,null,verb,A1,1,Wir lernen jeden Tag Deutsch.
+30,masculine,maskulin,null,adjective,A1,1,Das Wort „Mann“ ist maskulin.
+31,"person, human being",der Mensch,masculine,noun,A1,1,Jeder Mensch braucht Wasser.
+32,Wednesday,der Mittwoch,masculine,noun,A1,1,Am Mittwoch habe ich frei.
+33,Monday,der Montag,masculine,noun,A1,1,Der Montag ist der erste Wochentag.
+34,no,nein,null,adverb,A1,1,"Nein, das ist leider nicht die richtige Antwort."
+35,neuter,neutral,null,adjective,A1,1,Das Wort „Kind“ ist neutral.
+36,"still, yet",noch,null,adverb,A1,1,Ich wohne noch bei meinen Eltern in München.
+37,noun,das Nomen,neuter,noun,A1,1,Ein Nomen hat immer einen Artikel.
+38,paper,das Papier,neuter,noun,A1,1,Ich brauche ein Blatt Papier.
+39,person,die Person,feminine,noun,A1,1,Er ist eine nette Person.
+40,radio,das Radio,neuter,noun,A1,1,Das Radio spielt meine Lieblingsmusik.
+41,Saturday,der Samstag,masculine,noun,A1,1,Am Samstag habe ich frei.
+42,sentence,der Satz,masculine,noun,A1,1,Bitte bilden Sie einen Satz.
+43,to write,schreiben,null,verb,A1,1,Ich schreibe einen Brief.
+44,Sunday,der Sonntag,masculine,noun,A1,1,Am Sonntag schlafe ich lange.
+45,to speak,sprechen,null,verb,A1,1,Ich spreche Deutsch.
+46,"pen, pencil",der Stift,masculine,noun,A1,1,Hast du einen Stift für mich?
+47,"super, great",super,null,adjective,A1,1,Dein neues Hemd sieht super aus!
+48,blackboard,die Tafel,feminine,noun,A1,1,Der Lehrer schreibt an die Tafel.
+49,bag,die Tasche,feminine,noun,A1,1,Meine Tasche ist sehr schwer.
+50,"clock, watch",die Uhr,feminine,noun,A1,1,Meine Uhr geht fünf Minuten vor.
+51,verb,das Verb,neuter,noun,A1,1,Ich lerne ein neues deutsches Verb heute.
+52,late morning,der Vormittag,masculine,noun,A1,1,Am Vormittag habe ich Zeit.
+53,when,wann,null,adverb,A1,1,Wann fährt der nächste Zug nach Berlin ab?
+54,who,wer,null,adverb,A1,1,Wer ist der nette Mann dort drüben an der Tür?
+55,how,wie,null,adverb,A1,1,Wie lange dauert die Fahrt zum Flughafen von hier?
+56,welcome,willkommen,null,adjective,A1,1,Herzlich willkommen in unserem neuen Haus!
+57,where from,woher,null,adverb,A1,1,Woher kommen Sie?
+58,word order,die Wortstellung,feminine,noun,A1,1,Die deutsche Wortstellung ist manchmal schwierig.
+59,alone,allein,null,adjective,A1,2,Sie ist heute allein.
+60,answer,die Antwort,feminine,noun,A1,2,Ich warte auf deine Antwort.
+61,to work,arbeiten,null,verb,A1,2,Ich arbeite in einem Büro.
+62,architect (male),der Architekt,masculine,noun,A1,2,Der Architekt plant ein modernes Haus.
+63,architect (female),die Architektin,feminine,noun,A1,2,Sie ist eine gute Architektin.
+64,"also, too",auch,null,adverb,A1,2,Ich komme auch aus Deutschland.
+65,"abroad, foreign country",das Ausland,neuter,noun,A1,2,Er arbeitet im Ausland.
+66,brother,der Bruder,masculine,noun,A1,2,Mein Bruder spielt gern Fußball im Park.
+67,cousin (male),der Cousin,masculine,noun,A1,2,Mein Cousin wohnt in Hamburg.
+68,cousin (female),die Cousine,feminine,noun,A1,2,Meine Cousine ist sehr nett.
+69,then,dann,null,adverb,A1,2,"Zuerst essen wir, dann gehen wir nach Hause."
+70,your (informal),dein,null,phrase,A1,2,Ist das dein neues Buch?
+71,designer (male),der Designer,masculine,noun,A1,2,Der Designer entwirft schöne Kleidung.
+72,designer (female),die Designerin,feminine,noun,A1,2,Sie ist eine gute Designerin.
+73,"yes (contradicting), but",doch,null,adverb,A1,2,"Du bist nicht müde? Doch, ich bin müde!"
+74,thirty,dreißig,null,phrase,A1,2,Ich bin dreißig Jahre alt.
+75,one,eins / ein,null,phrase,A1,2,"Ich nehme ein Bier, bitte."
+76,only child,das Einzelkind,neuter,noun,A1,2,Ich bin ein Einzelkind.
+77,parents,die Eltern,feminine,noun,A1,2,Meine Eltern sind zu Hause.
+78,your (plural informal),euer,null,phrase,A1,2,Ist das euer Auto?
+79,photo,das Foto,neuter,noun,A1,2,Ich mache ein Foto.
+80,photographer,der Fotograf,masculine,noun,A1,2,Der Fotograf macht schöne Fotos.
+81,woman,die Frau,feminine,noun,A1,2,Die Frau liest ein Buch.
+82,friend,der Freund,masculine,noun,A1,2,Das ist mein bester Freund.
+83,friend (female),die Freundin,feminine,noun,A1,2,Meine Freundin heißt Anna.
+84,to play football,Fußball (spielen),null,phrase,A1,2,Wir spielen gern Fußball.
+85,"gladly, with pleasure",gern,null,adverb,A1,2,Ich esse gern Pizza.
+86,divorced,geschieden,null,adjective,A1,2,Sie ist leider schon geschieden.
+87,siblings,die Geschwister,feminine,noun,A1,2,Ich habe zwei Geschwister.
+88,grandparents,die Großeltern,feminine,noun,A1,2,Meine Großeltern wohnen hier.
+89,grandmother,die Großmutter,feminine,noun,A1,2,Meine Großmutter backt Kuchen.
+90,grandfather,der Großvater,masculine,noun,A1,2,Mein Großvater erzählt Geschichten.
+91,good,gut,null,adjective,A1,2,Dieses Essen ist sehr gut.
+92,to hear,hören,null,verb,A1,2,Hörst du die laute Musik?
+93,hundred,hundert,null,phrase,A1,2,Das Buch kostet hundert Euro.
+94,their,ihr (Pl.),null,phrase,A1,2,Das sind ihre Kinder.
+95,IT specialist (male),der Informatiker,masculine,noun,A1,2,Mein Bruder ist Informatiker.
+96,IT specialist (female),die Informatikerin,feminine,noun,A1,2,Sie ist eine gute Informatikerin.
+97,engineer (male),der Ingenieur,masculine,noun,A1,2,Mein Vater ist Ingenieur.
+98,engineer (female),die Ingenieurin,feminine,noun,A1,2,Meine Schwester ist Ingenieurin.
+99,international,international,null,adjective,A1,2,Die Firma ist international.
+100,yes,ja,null,adverb,A1,2,"Ja, das stimmt."
+101,now,jetzt,null,adverb,A1,2,Ich gehe jetzt nach Hause.
+102,child,das Kind,neuter,noun,A1,2,Das Kind spielt im Garten.
+103,small,klein,null,adjective,A1,2,Meine Katze ist sehr klein.
+104,"cook, chef (male)",der Koch,masculine,noun,A1,2,Der Koch macht gutes Essen.
+105,to cook,kochen,null,verb,A1,2,Ich koche heute Abend Suppe.
+106,"cook, chef (female)",die Köchin,feminine,noun,A1,2,Die Köchin macht gutes Essen.
+107,colleague (male),der Kollege,masculine,noun,A1,2,Mein Kollege kommt aus Berlin.
+108,colleague (female),die Kollegin,feminine,noun,A1,2,Das ist meine neue Kollegin.
+109,"country, land",das Land,neuter,noun,A1,2,Deutschland ist ein schönes Land.
+110,life,das Leben,neuter,noun,A1,2,Mein Leben ist sehr schön.
+111,single (unmarried),ledig,null,adjective,A1,2,Bist du verheiratet oder ledig?
+112,teacher,der Lehrer,masculine,noun,A1,2,Der Lehrer erklärt die Aufgabe.
+113,love,die Liebe,feminine,noun,A1,2,Die Liebe ist ein schönes Gefühl.
+114,favorite topic,das Lieblingsthema,neuter,noun,A1,2,Politik ist nicht mein Lieblingsthema.
+115,mom,das Mam,neuter,noun,A1,2,Meine Mam kocht heute Spaghetti.
+116,one (impersonal pronoun),man,null,pronoun,A1,2,Hier spricht man Englisch.
+117,manager (male),der Manager,masculine,noun,A1,2,Der Manager leitet das Team.
+118,manager (female),die Managerin,feminine,noun,A1,2,Unsere Managerin ist sehr nett.
+119,man,der Mann,masculine,noun,A1,2,Der Mann liest ein Buch.
+120,my,mein,null,phrase,A1,2,Das ist mein Auto.
+121,to mean/think,meinen,null,verb,A1,2,Was meinst du zu diesem Thema?
+122,musician (male),der Musiker,masculine,noun,A1,2,Mein Bruder ist Musiker.
+123,musician (female),die Musikerin,feminine,noun,A1,2,Sie ist eine bekannte Musikerin.
+124,mother,die Mutter,feminine,noun,A1,2,Meine Mutter wohnt in Berlin.
+125,not,nicht,null,adverb,A1,2,Ich verstehe diese komplizierte Aufgabe leider nicht.
+126,the Netherlands,die Niederlande,feminine,noun,A1,2,Sie reisen in die Niederlande.
+127,zero,null,null,phrase,A1,2,Die Temperatur ist null Grad.
+128,opera,die Oper,feminine,noun,A1,2,Gehen wir heute Abend in die Oper?
+129,Austria,Österreich,null,noun,A1,2,Ich fahre diesen Sommer nach Österreich.
+130,partner,der Partner,masculine,noun,A1,2,"Das ist mein Partner, Julian."
+131,plural,der Plural,masculine,noun,A1,2,Was ist der Plural von „Buch“?
+132,puzzle,das Puzzle,neuter,noun,A1,2,Wir machen ein großes Puzzle zusammen.
+133,ship,das Schiff,neuter,noun,A1,2,Das große Schiff fährt auf dem Meer.
+134,beautiful,schön,null,adjective,A1,2,Der Park ist im Frühling sehr schön.
+135,sister,die Schwester,feminine,noun,A1,2,Das ist meine ältere Schwester.
+136,to swim,schwimmen,null,verb,A1,2,Ich schwimme gern im See.
+137,very,sehr,null,adverb,A1,2,Das Wetter ist heute sehr schön und warm in Berlin.
+138,to be,sein,null,verb,A1,2,Ich bin müde.
+139,"independent, self-employed",selbständig,null,adjective,A1,2,Meine Schwester ist sehr selbständig im Leben.
+140,singular,der Singular,masculine,noun,A1,2,Was ist der Singular von „Häuser“?
+141,son,der Sohn,masculine,noun,A1,2,Mein Sohn ist fünf Jahre alt.
+142,to play,spielen,null,verb,A1,2,Er spielt Fußball.
+143,flight attendant (male),der Steward,masculine,noun,A1,2,Der Steward bringt uns Getränke.
+144,flight attendant (female),die Stewardess,feminine,noun,A1,2,Die Stewardess ist sehr freundlich.
+145,day,der Tag,masculine,noun,A1,2,Guten Tag! Wie geht es Ihnen?
+146,dance,der Tanz,masculine,noun,A1,2,Wir lieben den Tanz sehr.
+147,to dance,tanzen,null,verb,A1,2,Wir tanzen gerne am Wochenende.
+148,to play tennis,Tennis (spielen),null,phrase,A1,2,Ich spiele gern Tennis am Samstag.
+149,"topic, subject",das Thema,neuter,noun,A1,2,Das ist ein sehr interessantes Thema.
+150,daughter,die Tochter,feminine,noun,A1,2,Meine Tochter ist noch klein.
+151,"great, awesome",toll,null,adjective,A1,2,Das Konzert war gestern wirklich toll.
+152,Turkey,die Türkei,feminine,noun,A1,2,Wir fliegen in die Türkei.
+153,Ukraine,die Ukraine,feminine,noun,A1,2,Die Ukraine ist ein Land in Osteuropa.
+154,our,unser,null,phrase,A1,2,Das ist unser Haus hier.
+155,father,der Vater,masculine,noun,A1,2,Mein Vater arbeitet sehr viel.
+156,married,verheiratet,null,adjective,A1,2,Sind Sie verheiratet oder ledig?
+157,because,weil,null,conjunction,A1,2,"Ich bleibe zu Hause, weil ich müde bin."
+158,week,die Woche,feminine,noun,A1,2,Ich arbeite fünf Tage pro Woche.
+159,number,die Zahl,feminine,noun,A1,2,Welche Zahl ist deine Lieblingszahl?
+160,to draw,zeichnen,null,verb,A1,2,Sie zeichnet sehr schöne Bilder.
+161,twenty,zwanzig,null,phrase,A1,2,Meine Schwester ist zwanzig Jahre alt.
+162,evening,der Abend,masculine,noun,A1,3,"Guten Abend, wie geht es Ihnen heute?"
+163,apple,der Apfel,masculine,noun,A1,3,Ich esse jeden Tag einen Apfel.
+164,to order,bestellen,null,verb,A1,3,Ich möchte einen Kaffee bestellen.
+165,beer,das Bier,neuter,noun,A1,3,Möchten Sie ein Bier?
+166,organic,bio,null,adjective,A1,3,Ich kaufe gern Bio-Gemüse.
+167,bread,das Brot,neuter,noun,A1,3,Ich esse gern Brot.
+168,butter,die Butter,feminine,noun,A1,3,Ich mag Butter auf dem Brot.
+169,thirst,der Durst,masculine,noun,A1,3,Ich habe großen Durst.
+170,to be thirsty,Durst haben,null,phrase,A1,3,Ich habe Durst.
+171,egg,das Ei,neuter,noun,A1,3,Ich esse ein Ei zum Frühstück.
+172,a/an (indefinite article),ein / eine / einen,null,phrase,A1,3,Ich habe einen Hund.
+173,to eat,essen,null,verb,A1,3,Ich esse einen Apfel.
+174,fish,der Fisch,masculine,noun,A1,3,Ich esse gerne Fisch zum Abendessen.
+175,meat,das Fleisch,neuter,noun,A1,3,Ich esse kein Fleisch.
+176,vegetables,das Gemüse,neuter,noun,A1,3,Ich esse viel Gemüse.
+177,open (of a shop/restaurant),geöffnet,null,adjective,A1,3,Der Laden ist jetzt geöffnet.
+178,closed,geschlossen,null,adjective,A1,3,Die Bank ist heute geschlossen.
+179,"drink, beverage",das Getränk,neuter,noun,A1,3,Möchtest du ein kaltes Getränk?
+180,separately (paying),getrennt,null,adverb,A1,3,Wir möchten bitte getrennt zahlen.
+181,main course,die Hauptspeise,feminine,noun,A1,3,Die Hauptspeise ist sehr lecker.
+182,hunger,der Hunger,masculine,noun,A1,3,Ich habe großen Hunger.
+183,to be hungry,Hunger haben,null,phrase,A1,3,Ich habe Hunger. Lass uns essen!
+184,potato,die Kartoffel,feminine,noun,A1,3,Ich esse gerne Kartoffeln.
+185,cheese,der Käse,masculine,noun,A1,3,Ich esse gern Käse.
+186,to buy,kaufen,null,verb,A1,3,Ich kaufe Brot im Supermarkt.
+187,"no, not a",kein / keine,null,adjective,A1,3,Ich habe kein Geld.
+188,"delicious, tasty",lecker,null,adjective,A1,3,Das Abendessen ist sehr lecker.
+189,to read,lesen,null,verb,A1,3,Ich lese gern interessante Bücher.
+190,set menu / menu,das Menü,neuter,noun,A1,3,Wir bestellen das Tagesmenü.
+191,minute,die Minute,feminine,noun,A1,3,Warte bitte eine Minute hier.
+192,"noon, midday",der Mittag,masculine,noun,A1,3,Wir essen zu Mittag.
+193,"at midday, at lunchtime",mittags,null,adverb,A1,3,Wir essen mittags immer zusammen in der Kantine.
+194,to like (general preference),mögen,null,verb,A1,3,Ich mag Pizza mit viel Käse.
+195,morning,der Morgen,masculine,noun,A1,3,Ich stehe jeden Morgen früh auf.
+196,dessert,der Nachtisch,masculine,noun,A1,3,Was gibt es zum Nachtisch?
+197,to take,nehmen,null,verb,A1,3,Ich nehme oft den Bus zur Arbeit.
+198,not really (like),nicht so gern,null,phrase,A1,3,Ich esse nicht so gern Fisch.
+199,fruit,das Obst,neuter,noun,A1,3,Ich esse gern frisches Obst.
+200,pasta,die Pasta,feminine,noun,A1,3,Ich koche heute Abend Pasta.
+201,pizza,die Pizza,feminine,noun,A1,3,Wir bestellen eine große Pizza.
+202,juice,der Saft,masculine,noun,A1,3,Möchtest du Orangensaft oder Apfelsaft?
+203,salad / lettuce,der Salat,masculine,noun,A1,3,Ich esse gerne Salat zum Abendessen.
+204,schnitzel (breaded meat cutlet),das Schnitzel,neuter,noun,A1,3,Ich esse gern Wiener Schnitzel mit Pommes.
+205,"dish, food item",die Speise,feminine,noun,A1,3,Das ist eine gute Speise.
+206,hour,die Stunde,feminine,noun,A1,3,Der Kurs dauert eine Stunde.
+207,soup,die Suppe,feminine,noun,A1,3,Ich mag Gemüsesuppe sehr.
+208,tea,der Tee,masculine,noun,A1,3,Ich trinke gern heißen Tee.
+209,tomato,die Tomate,feminine,noun,A1,3,Ich esse eine frische Tomate.
+210,to meet,treffen,null,verb,A1,3,Ich treffe meine Freunde im Café.
+211,to drink,trinken,null,verb,A1,3,Ich trinke Wasser jeden Tag.
+212,time (clock time),die Uhrzeit,feminine,noun,A1,3,Ich frage nach der Uhrzeit.
+213,at (clock time),um,null,preposition,A1,3,Der Unterricht beginnt um neun Uhr.
+214,from ... to,von ... bis,null,preposition,A1,3,Der Laden ist von neun bis achtzehn Uhr geöffnet.
+215,water,das Wasser,neuter,noun,A1,3,Ich trinke gern kaltes Wasser im Sommer.
+216,wine,der Wein,masculine,noun,A1,3,Ich trinke gern roten Wein.
+217,important,wichtig,null,adjective,A1,3,Diese Information ist sehr wichtig für uns.
+218,sausage / cold cuts,die Wurst,feminine,noun,A1,3,Ich esse gerne eine Wurst mit Brot.
+219,together,zusammen,null,adverb,A1,3,Wir essen zusammen zu Abend.
+220,battery (device),der Akku,masculine,noun,A1,4,Der Akku von meinem Handy ist leer.
+221,"to get dressed, to put on",anziehen,null,verb,A1,4,Ich ziehe mir schnell die Jacke an.
+222,work,die Arbeit,feminine,noun,A1,4,Ich gehe jetzt zur Arbeit.
+223,to open,aufmachen,null,verb,A1,4,Kannst du das Fenster aufmachen?
+224,to tidy up,aufräumen,null,verb,A1,4,Ich muss mein Zimmer aufräumen.
+225,to get up,aufstehen,null,verb,A1,4,Ich stehe jeden Morgen um sechs Uhr auf.
+226,meeting,die Besprechung,feminine,noun,A1,4,Wir haben eine wichtige Besprechung.
+227,office,das Büro,neuter,noun,A1,4,Ich arbeite im Büro.
+228,"boss, manager (male)",der Chef,masculine,noun,A1,4,Mein Chef ist sehr freundlich.
+229,"boss, manager (female)",die Chefin,feminine,noun,A1,4,Meine Chefin ist sehr nett.
+230,to download,downloaden,null,verb,A1,4,Ich downloade die App.
+231,"to go shopping, to buy groceries",einkaufen,null,verb,A1,4,Ich kaufe heute ein.
+232,"allowed, permitted",erlaubt,null,adjective,A1,4,Rauchen ist hier nicht erlaubt.
+233,early,früh,null,adjective,A1,4,Der Bus kommt immer sehr früh.
+234,frustrated,frustriert,null,adjective,A1,4,Er ist momentan sehr frustriert.
+235,"to work, to function",funktionieren,null,verb,A1,4,Das Handy funktioniert.
+236,house rules,die Hausordnung,feminine,noun,A1,4,Bitte lesen Sie die Hausordnung.
+237,pet,das Haustier,neuter,noun,A1,4,Hast du ein Haustier?
+238,to help,helfen,null,verb,A1,4,Kann ich Ihnen bitte helfen?
+239,today,heute,null,adverb,A1,4,Heute ist Dienstag.
+240,always,immer,null,adverb,A1,4,Ich trinke immer Wasser.
+241,can/be able to,können,null,verb,A1,4,Ich kann Deutsch sprechen.
+242,to charge / to load,laden,null,verb,A1,4,Er lädt die Taschen in den Kofferraum.
+243,laptop,das Laptop,neuter,noun,A1,4,Mein Laptop ist sehr schnell.
+244,"loud, noisy",laut,null,adjective,A1,4,Die Musik ist zu laut.
+245,would like (polite request),möchten,null,verb,A1,4,"Ich möchte einen großen Kaffee, bitte."
+246,tomorrow,morgen,null,adverb,A1,4,Ich habe morgen einen wichtigen Termin beim Arzt.
+247,tired,müde,null,adjective,A1,4,Ich bin heute sehr müde.
+248,must/have to,müssen,null,verb,A1,4,Ich muss jetzt wirklich gehen.
+249,nervous,nervös,null,adjective,A1,4,Bist du vor der Prüfung nervös?
+250,"normally, usually",normalerweise,null,adverb,A1,4,Normalerweise stehe ich früh am Morgen um sechs Uhr auf.
+251,to park,parken,null,verb,A1,4,Ich parke hier mein Auto nicht.
+252,password,das Passwort,neuter,noun,A1,4,Bitte gib dein Passwort ein.
+253,problem,das Problem,neuter,noun,A1,4,Ich habe ein Problem mit meinem Computer.
+254,to smoke,rauchen,null,verb,A1,4,Er raucht keine Zigaretten mehr.
+255,rule,die Regel,feminine,noun,A1,4,Du musst dich an die Regel halten.
+256,sentence bracket (grammar term),die Satzklammer,feminine,noun,A1,4,Im Deutschen bildet das konjugierte Verb oft die erste Satzklammer.
+257,late,spät,null,adjective,A1,4,Es ist schon sehr spät für mich.
+258,to surf (internet),surfen,null,verb,A1,4,Ich surfe oft im Internet.
+259,tablet,das Tablet,neuter,noun,A1,4,Ich habe ein neues Tablet zum Lesen.
+260,daily routine,der Tagesablauf,masculine,noun,A1,4,Mein Tagesablauf ist immer gleich.
+261,"forbidden, not allowed",verboten,null,adjective,A1,4,Parken ist hier streng verboten.
+262,"laundry, washing",die Wäsche,feminine,noun,A1,4,Ich hänge die nasse Wäsche auf.
+263,to wash,waschen,null,verb,A1,4,Ich wasche meine Hände oft.
+264,WiFi connection,die WLAN-Verbindung,feminine,noun,A1,4,Die WLAN-Verbindung ist sehr langsam hier.
+265,to want,wollen,null,verb,A1,4,Ich will ein Eis essen.
+266,angry,wütend,null,adjective,A1,4,Warum bist du so wütend heute?
+267,"content, satisfied",zufrieden,null,adjective,A1,4,Bist du mit der Arbeit zufrieden?
+268,to close,zumachen,null,verb,A1,4,Machst du bitte das Fenster zu?
+269,to turn (direction),abbiegen,null,verb,A1,5,Ich biege an der nächsten Ampel links ab.
+270,bank,die Bank,feminine,noun,A1,5,Ich gehe heute zur Bank.
+271,bed,das Bett,neuter,noun,A1,5,Ich gehe jetzt ins Bett.
+272,library,die Bibliothek,feminine,noun,A1,5,Ich lerne am liebsten in der Bibliothek.
+273,to need,brauchen,null,verb,A1,5,Ich brauche deine Hilfe jetzt.
+274,café,das Café,neuter,noun,A1,5,Wir gehen ins Café.
+275,because (coord. conjunction),denn,null,conjunction,A1,5,"Ich bleibe zu Hause, denn ich bin müde."
+276,"you (accusative, informal)",dich,null,adverb,A1,5,Ich sehe dich im Park.
+277,there,dort,null,adverb,A1,5,Das Auto steht dort.
+278,corner,die Ecke,feminine,noun,A1,5,Das Buch liegt in der Ecke.
+279,along,entlang,null,preposition,A1,5,Gehen Sie diese Straße entlang.
+280,it,es,null,pronoun,A1,5,Es ist kalt heute.
+281,window,das Fenster,neuter,noun,A1,5,Das Fenster ist offen.
+282,to find,finden,null,verb,A1,5,Ich finde den Schlüssel.
+283,for,für,null,preposition,A1,5,Dieses Geschenk ist für dich.
+284,"opposite, across from",gegenüber,null,preposition,A1,5,Die Post ist gegenüber dem Park.
+285,straight ahead,geradeaus,null,adverb,A1,5,Gehen Sie geradeaus bis zur Post.
+286,"gift, present",das Geschenk,neuter,noun,A1,5,Ich habe ein Geschenk für dich.
+287,here,hier,null,adverb,A1,5,Komm bitte hierher.
+288,him (accusative),ihn,null,adverb,A1,5,Ich sehe ihn jeden Tag.
+289,"nearby, in the vicinity",in der Nähe,null,phrase,A1,5,Der Park ist in der Nähe.
+290,hospital,das Krankenhaus,neuter,noun,A1,5,Er arbeitet im Krankenhaus.
+291,to lie (position),liegen,null,verb,A1,5,Das Buch liegt auf dem Tisch.
+292,left,links,null,adverb,A1,5,Gehen Sie hier links.
+293,me (accusative),mich,null,adverb,A1,5,Er sieht mich oft in der Stadt.
+294,not far,nicht weit,null,phrase,A1,5,Das Kino ist nicht weit von hier.
+295,park,der Park,masculine,noun,A1,5,Ich gehe gern in den Park.
+296,"square, plaza",der Platz,masculine,noun,A1,5,Wir treffen uns am Platz.
+297,post office,die Post,feminine,noun,A1,5,Ich gehe jetzt zur Post.
+298,city hall,das Rathaus,neuter,noun,A1,5,Das Rathaus ist im Zentrum der Stadt.
+299,right,rechts,null,adverb,A1,5,Nach der Ampel müssen Sie rechts in die Hauptstraße fahren.
+300,she,sie,null,pronoun,A1,5,Sie ist meine neue Kollegin.
+301,city map,der Stadtplan,masculine,noun,A1,5,Haben Sie einen Stadtplan für Berlin?
+302,street,die Straße,feminine,noun,A1,5,Das Auto fährt auf der Straße.
+303,chair,der Stuhl,masculine,noun,A1,5,Nimm bitte auf diesem Stuhl Platz.
+304,to search,suchen,null,verb,A1,5,Ich suche meinen Schlüssel.
+305,supermarket,der Supermarkt,masculine,noun,A1,5,Ich gehe zum Supermarkt einkaufen.
+306,table,der Tisch,masculine,noun,A1,5,Der Tisch ist wirklich groß.
+307,door,die Tür,feminine,noun,A1,5,Mach bitte die Tür zu.
+308,to know (fact),wissen,null,verb,A1,5,Ich weiß die Antwort nicht.
+309,where (location),wo,null,adverb,A1,5,Wo ist die nächste Bushaltestelle hier bitte schön?
+310,eye,das Auge,neuter,noun,A1,6,Das Baby hat große Augen.
+311,better,besser,null,adjective,A1,6,Mir geht es heute besser.
+312,blue,blau,null,adjective,A1,6,Der Himmel ist heute blau.
+313,brown,braun,null,adjective,A1,6,Ihre Augen sind sehr braun.
+314,doctor (informal title),der Doktor,masculine,noun,A1,6,Ich gehe zum Doktor.
+315,"a/an (dative, masc./neut.)",einem,null,adverb,A1,6,Ich helfe einem Mann.
+316,having a cold,erkältet,null,adjective,A1,6,Meine Kollegin ist heute erkältet.
+317,the first (ordinal),erste,null,phrase,A1,6,Heute ist der erste Mai.
+318,yellow,gelb,null,adjective,A1,6,Die Sonne ist heute sehr gelb.
+319,yesterday,gestern,null,adverb,A1,6,Ich war gestern im Kino.
+320,grey,grau,null,adjective,A1,6,Der Himmel ist heute grau.
+321,green,grün,null,adjective,A1,6,Der Apfel ist grün.
+322,hand,die Hand,feminine,noun,A1,6,Sie hält ihre Hand in den warmen Regen.
+323,cough,der Husten,masculine,noun,A1,6,Ich habe starken Husten.
+324,"no (dative, masc./neut.)",keinem,null,adverb,A1,6,Ich helfe keinem Freund.
+325,head,der Kopf,masculine,noun,A1,6,Mein Kopf tut weh.
+326,headache,Kopfschmerzen (Pl.),null,noun,A1,6,Ich habe starke Kopfschmerzen heute.
+327,last week,letzte Woche,null,phrase,A1,6,Letzte Woche war ich krank.
+328,last month,letzten Monat,null,phrase,A1,6,Letzten Monat war es sehr kalt.
+329,purple / lilac,lila,null,adjective,A1,6,Ihre neue Bluse ist lila.
+330,"my (dative, masc./neut.)",meinem,null,adverb,A1,6,Ich helfe meinem kleinen Bruder sehr gerne.
+331,orange,orange,null,adjective,A1,6,Der Ball ist orange.
+332,doctor's office / practice,die Praxis,feminine,noun,A1,6,Die Praxis öffnet um neun Uhr.
+333,red,rot,null,adjective,A1,6,Die Rose ist rot.
+334,"rest, quiet",die Ruhe,feminine,noun,A1,6,Ich brauche etwas Ruhe.
+335,"bad, terrible",schlimm,null,adjective,A1,6,Die Situation ist wirklich schlimm.
+336,pain,Schmerzen (Pl.),null,noun,A1,6,Ich habe starke Schmerzen im Bein.
+337,black,schwarz,null,adjective,A1,6,Ihr neues Fahrrad ist schwarz und modern.
+338,bandage,der Verband,masculine,noun,A1,6,Er braucht einen neuen Verband.
+339,"from, of (+ dative)",von + Dativ,null,preposition,A1,6,Das Auto ist von meinem Vater.
+340,the day before yesterday,vorgestern,null,adverb,A1,6,Vorgestern war ein sehr regnerischer Tag mit viel Wind.
+341,white,weiß,null,adjective,A1,6,Der Schnee ist im Winter sehr weiß.
+342,tooth,der Zahn,masculine,noun,A1,6,Mein Zahn tut heute weh.
+343,old town,die Altstadt,feminine,noun,A1,7,Wir wohnen in der Altstadt.
+344,to the (lake/sea/river),an den,null,phrase,A1,7,Wir fahren an den See.
+345,to the (mountain),auf den,null,phrase,A1,7,Ich steige auf den Berg.
+346,train station,der Bahnhof,masculine,noun,A1,7,"Ich gehe zum Bahnhof, um den Zug zu nehmen."
+347,fantastic,fantastisch,null,adjective,A1,7,Das Essen ist wirklich fantastisch!
+348,degree,der Grad,masculine,noun,A1,7,Es sind zwanzig Grad Celsius.
+349,to have,haben,null,verb,A1,7,Ich habe heute keine Zeit.
+350,to the (countries with feminine article),in die,null,phrase,A1,7,Ich fliege in die Schweiz.
+351,into the,ins,null,phrase,A1,7,Wir gehen jetzt ins Kino.
+352,coffee,der Kaffee,masculine,noun,A1,7,Ich trinke gern Kaffee.
+353,cool,kühl,null,adjective,A1,7,Es ist heute kühl draußen.
+354,"kind regards, love from",liebe Grüße,null,phrase,A1,7,Liebe Grüße aus Berlin!
+355,to (cities/countries without article),nach,null,preposition,A1,7,Wir fahren heute nach Berlin.
+356,night,die Nacht,feminine,noun,A1,7,Wir schlafen gut in der Nacht.
+357,to reserve,reservieren,null,verb,A1,7,Ich reserviere einen Tisch für zwei Personen.
+358,"reception, front desk",die Rezeption,feminine,noun,A1,7,Wo ist die Rezeption?
+359,"castle, palace",das Schloss,neuter,noun,A1,7,Das alte Schloss ist ein Museum.
+360,key,der Schlüssel,masculine,noun,A1,7,Ich suche meinen Schlüssel.
+361,sun,die Sonne,feminine,noun,A1,7,Die Sonne scheint heute sehr hell.
+362,many greetings from,viele Grüße,null,phrase,A1,7,Viele Grüße aus Deutschland!
+363,"wonderful, gorgeous",wunderschön,null,adjective,A1,7,Der Garten sieht im Sommer wunderschön aus.
+364,train,der Zug,masculine,noun,A1,7,Der Zug fährt sehr schnell.
+365,to wake up,aufwachen,null,verb,A1,8,Ich wache immer um sieben Uhr auf.
+366,to stay/remain,bleiben,null,verb,A1,8,Ich bleibe heute Abend zu Hause.
+367,this (demonstrative article),dieser,null,adjective,A1,8,Dieser Tisch ist wirklich groß.
+368,"you (dative, informal)",dir,null,adverb,A1,8,Wie geht es dir?
+369,to fall asleep,einschlafen,null,verb,A1,8,Ich schlafe schnell ein.
+370,you all (accusative),euch,null,adverb,A1,8,Ich sehe euch alle.
+371,to drive/travel,fahren,null,verb,A1,8,Ich fahre nach Berlin.
+372,"film, movie",der Film,masculine,noun,A1,8,Wir sehen heute Abend einen Film.
+373,to fly,fliegen,null,verb,A1,8,Der Vogel fliegt hoch.
+374,to please/like,gefallen,null,verb,A1,8,Das Haus gefällt mir.
+375,to go/walk,gehen,null,verb,A1,8,Ich gehe nach Hause.
+376,gloves (plural),die Handschuhe,feminine,noun,A1,8,Ich trage warme Handschuhe.
+377,him (dative),ihm,null,adverb,A1,8,Ich gebe ihm einen Apfel.
+378,them (dative),ihnen,null,adverb,A1,8,Ich gebe ihnen das Geld.
+379,you (plural),ihr,null,pronoun,A1,8,Was macht ihr am Wochenende?
+380,Carnival / Mardi Gras,der Karneval,masculine,noun,A1,8,Ich mag Karneval sehr.
+381,to come,kommen,null,verb,A1,8,Ich komme heute Abend nach Hause.
+382,to run,laufen,null,verb,A1,8,Ich laufe jeden Morgen im Park.
+383,me (dative),mir,null,adverb,A1,8,Meine Mutter gibt mir einen Apfel.
+384,"hat, woolly hat",die Mütze,feminine,noun,A1,8,Er trägt eine warme Mütze.
+385,news (always plural),die Nachrichten,feminine,noun,A1,8,Ich sehe die Nachrichten jeden Abend.
+386,Oktoberfest,das Oktoberfest,neuter,noun,A1,8,Das Oktoberfest findet in München statt.
+387,online,online,null,adverb,A1,8,Ich kaufe meine Kleidung oft online bei diesem Shop ein.
+388,to happen,passieren,null,verb,A1,8,Das passiert manchmal im Leben.
+389,podcast,der Podcast,masculine,noun,A1,8,Ich höre jeden Morgen einen Podcast.
+390,scarf,der Schal,masculine,noun,A1,8,Sie trägt einen warmen Schal.
+391,to taste (good/bad),schmecken,null,verb,A1,8,Das Essen schmeckt mir sehr gut.
+392,already,schon,null,adverb,A1,8,Es ist schon zehn Uhr am Abend und ich bin müde.
+393,TV series,die Serie,feminine,noun,A1,8,Ich mag diese neue Serie sehr.
+394,to stand,stehen,null,verb,A1,8,Ich stehe am Fenster.
+395,us (accusative),uns,null,adverb,A1,8,Unsere Freunde besuchen uns nächstes Wochenende in Köln.
+396,why,warum,null,adverb,A1,8,Warum lernst du Deutsch für deinen neuen Job?
+397,Christmas market,der Weihnachtsmarkt,masculine,noun,A1,8,Wir gehen zum Weihnachtsmarkt heute.
+398,which (question word for nouns),welcher,null,adjective,A1,8,Welcher Zug fährt nach Berlin?
+399,magazine,die Zeitschrift,feminine,noun,A1,8,Ich lese eine interessante Zeitschrift.
+400,newspaper,die Zeitung,feminine,noun,A1,8,Mein Vater liest jeden Morgen die Zeitung.
+401,abbreviation,die Abkürzung,feminine,noun,A2,9,Was bedeutet diese Abkürzung?
+402,"cancellation, decline",die Absage,feminine,noun,A2,9,Ich habe eine Absage für das Treffen bekommen.
+403,"to cancel, decline",absagen,null,verb,A2,9,Ich muss unseren Termin absagen.
+404,"to begin, to start",anfangen,null,verb,A2,9,Der Kurs fängt um neun Uhr an.
+405,to call (phone),anrufen,null,verb,A2,9,Ich muss meine Mutter anrufen.
+406,"announcement, outgoing message",die Ansage,feminine,noun,A2,9,Ich habe die Ansage am Telefon nicht verstanden.
+407,app,die App,feminine,noun,A2,9,Ich lade die neue App auf mein Handy herunter.
+408,"to stop, to cease",aufhören,null,verb,A2,9,Hör bitte auf zu reden!
+409,"to receive, to get",bekommen,null,verb,A2,9,Ich bekomme oft Post von dir.
+410,to insult,beleidigen,null,verb,A2,9,Man sollte niemals jemanden beleidigen.
+411,to use,benutzen,null,verb,A2,9,Kann ich dein Handy benutzen?
+412,letter,der Brief,masculine,noun,A2,9,Ich schrieb einen Brief an meinen Freund.
+413,chat,der Chat,masculine,noun,A2,9,Ich habe gestern Abend im Chat geschrieben.
+414,to chat,chatten,null,verb,A2,9,Sie chatten jeden Abend mit Freunden.
+415,cyberbullying,das Cybermobbing,neuter,noun,A2,9,Cybermobbing ist ein ernstes Problem für Jugendliche.
+416,that (conjunction),dass,null,conjunction,A2,9,"Ich hoffe, dass du kommst."
+417,to discuss,diskutieren,null,verb,A2,9,Sie diskutieren oft über Politik.
+418,urgent,dringend,null,adjective,A2,9,Ich habe eine dringende Frage an dich.
+419,email,die E-Mail,feminine,noun,A2,9,Ich habe heute eine wichtige E-Mail bekommen.
+420,to invite,einladen,null,verb,A2,9,Ich möchte dich zum Essen einladen.
+421,to develop,entwickeln,null,verb,A2,9,Das Kind entwickelt sich gut.
+422,to invent,erfinden,null,verb,A2,9,Wer hat das Telefon erfunden?
+423,invention,die Erfindung,feminine,noun,A2,9,Das Telefon war eine wichtige Erfindung.
+424,"celebration, party",die Feier,feminine,noun,A2,9,Wir gehen heute Abend zu einer Feier.
+425,to celebrate,feiern,null,verb,A2,9,Wir haben seinen Geburtstag gefeiert.
+426,"celebration, party, festival",das Fest,neuter,noun,A2,9,Das Fest war sehr lustig.
+427,formal,formell,null,adjective,A2,9,Das war ein sehr formelles Treffen.
+428,"in the past, formerly",früher,null,adverb,A2,9,Früher wohnte ich in Berlin.
+429,history / story,die Geschichte,feminine,noun,A2,9,Ich lese gerne alte Geschichten vor dem Schlafengehen.
+430,mobile phone,das Handy,neuter,noun,A2,9,Ich habe mein Handy zu Hause vergessen.
+431,main clause,der Hauptsatz,masculine,noun,A2,9,Ein Hauptsatz kann alleine stehen.
+432,"heartfelt, warm",herzlich,null,adjective,A2,9,Wir senden Ihnen herzliche Grüße aus Berlin.
+433,nowadays,heutzutage,null,adverb,A2,9,Heutzutage ist alles teurer als früher.
+434,to stay in contact,in Kontakt bleiben,null,phrase,A2,9,Lasst uns nach dem Kurs in Kontakt bleiben.
+435,indirect,indirekt,null,adjective,A2,9,Seine Antwort war sehr indirekt.
+436,informal,informell,null,adjective,A2,9,Die Besprechung war ziemlich informell.
+437,internet,das Internet,neuter,noun,A2,9,Das Internet funktioniert heute sehr langsam.
+438,century,das Jahrhundert,neuter,noun,A2,9,Diese Kirche wurde im 15. Jahrhundert gebaut.
+439,every day,jeden Tag,null,phrase,A2,9,Ich gehe jeden Tag spazieren.
+440,communication,die Kommunikation,feminine,noun,A2,9,Gute Kommunikation ist wichtig für ein Team.
+441,voicemail / mailbox,die Mailbox,feminine,noun,A2,9,Sie haben eine Nachricht auf Ihrer Mailbox.
+442,sometimes,manchmal,null,adverb,A2,9,Manchmal regnet es im Sommer viel.
+443,to bring along,mitbringen,null,verb,A2,9,Soll ich etwas zum Essen mitbringen?
+444,"to inform, communicate",mitteilen,null,verb,A2,9,Bitte teilen Sie mir das Datum mit.
+445,message,die Nachricht,feminine,noun,A2,9,Ich habe eine wichtige Nachricht für dich.
+446,subordinate clause,der Nebensatz,masculine,noun,A2,9,Ein Nebensatz beginnt oft mit einer Konjunktion.
+447,never,nie,null,adverb,A2,9,Er hat das noch nie gemacht.
+448,"whether, if",ob,null,conjunction,A2,9,"Ich frage mich, ob er kommt."
+449,often,oft,null,adverb,A2,9,Wir sehen uns oft am Wochenende.
+450,past participle,das Partizip II,neuter,noun,A2,9,Wir lernen heute das Partizip II der starken Verben.
+451,"since, for (time)",seit,null,preposition,A2,9,Ich lerne seit drei Monaten Deutsch.
+452,rarely,selten,null,adverb,A2,9,Sie geht selten ins Kino.
+453,smartphone,das Smartphone,neuter,noun,A2,9,Ich habe mein Smartphone verloren.
+454,"smiley, emoji",der Smiley,masculine,noun,A2,9,Er schickte mir einen lustigen Smiley.
+455,text message,die SMS,feminine,noun,A2,9,Ich habe dir eine SMS geschickt.
+456,technology,die Technologie,feminine,noun,A2,9,Neue Technologie verändert unser Leben stark.
+457,telephone,das Telefon,neuter,noun,A2,9,"Mein Telefon klingelt, aber ich habe keine Zeit."
+458,separable (prefix),trennbar,null,adjective,A2,9,Das Verb 'anrufen' ist trennbar.
+459,approximately,ungefähr,null,adverb,A2,9,Das dauert ungefähr zehn Minuten.
+460,"impolite, rude",unhöflich,null,adjective,A2,9,Das war sehr unhöflich von ihm.
+461,inseparable (prefix),untrennbar,null,adjective,A2,9,Glück und Liebe sind untrennbar verbunden.
+462,video,das Video,neuter,noun,A2,9,Hast du das neue Video schon gesehen?
+463,to call back,zurückrufen,null,verb,A2,9,Ich rufe dich später zurück.
+464,acceptance (of an invitation),die Zusage,feminine,noun,A2,9,Wir warten noch auf die Zusage.
+465,to accept (invitation),zusagen,null,verb,A2,9,Ich werde die Einladung zusagen.
+466,suit,der Anzug,masculine,noun,A2,10,Er kaufte einen neuen Anzug für die Hochzeit.
+467,"to look, to appear",aussehen,null,verb,A2,10,Das Wetter sieht heute gut aus.
+468,appearance / looks,das Aussehen,neuter,noun,A2,10,Sein Aussehen war ihm sehr wichtig.
+469,blog,der Blog,masculine,noun,A2,10,Ich lese oft seinen Reise-Blog.
+470,blouse,die Bluse,feminine,noun,A2,10,Ich habe eine neue weiße Bluse gekauft.
+471,to be in favour,dafür sein,null,phrase,A2,10,"Ich bin dafür, dass wir das Projekt bald starten."
+472,to be against,dagegen sein,null,phrase,A2,10,"Er ist dagegen, am Sonntag lange zu arbeiten."
+473,demonstrative pronoun,das Demonstrativpronomen,neuter,noun,A2,10,Dieses Demonstrativpronomen zeigt auf den Mann.
+474,energetic,energisch,null,adjective,A2,10,Sie hat energisch an dem Projekt gearbeitet.
+475,tight / narrow,eng,null,adjective,A2,10,Diese Hose ist mir zu eng.
+476,first impression,erste Eindruck,masculine,phrase,A2,10,Der erste Eindruck ist oft sehr wichtig im Leben.
+477,gladly → preferably → most of all,gern → lieber → am liebsten,null,phrase,A2,10,"Ich schwimme gern, aber ich tanze lieber."
+478,size,die Größe,feminine,noun,A2,10,Welche Größe hat dieses Hemd?
+479,good → better → best,gut → besser → am besten,null,phrase,A2,10,"Dein Kaffee ist gut, aber mein Tee ist besser."
+480,handbag,die Handtasche,feminine,noun,A2,10,Sie hat ihre Schlüssel in der Handtasche vergessen.
+481,shirt,das Hemd,neuter,noun,A2,10,Er trug ein blaues Hemd zur Hose.
+482,trousers / pants,die Hose,feminine,noun,A2,10,Ich brauche eine neue Hose für die Arbeit.
+483,pretty / good-looking,hübsch,null,adjective,A2,10,Das neue Kleid ist wirklich hübsch.
+484,hat,der Hut,masculine,noun,A2,10,Er setzte sich einen eleganten Hut auf.
+485,intelligent,intelligent,null,adjective,A2,10,Mein Hund ist sehr intelligent und lernt schnell.
+486,jacket,die Jacke,feminine,noun,A2,10,"Zieh deine Jacke an, es ist kalt draußen."
+487,jeans,die Jeans,feminine,noun,A2,10,Ich trage am liebsten bequeme Jeans.
+488,young,jung,null,adjective,A2,10,Meine Schwester ist noch sehr jung.
+489,dress,das Kleid,neuter,noun,A2,10,Sie hat ein schönes rotes Kleid getragen.
+490,comparative,der Komparativ,masculine,noun,A2,10,„Schneller“ ist der Komparativ von „schnell“.
+491,subjunctive II (for polite requests),der Konjunktiv II,masculine,noun,A2,10,Für höfliche Bitten nutzt man den Konjunktiv II.
+492,short,kurz,null,adjective,A2,10,Der Weg zum Bahnhof ist sehr kurz.
+493,long,lang,null,adjective,A2,10,Dieser Film ist mir zu lang.
+494,coat,der Mantel,masculine,noun,A2,10,"Es ist kalt, zieh deinen Mantel an."
+495,opinion,die Meinung,feminine,noun,A2,10,Was ist deine Meinung dazu?
+496,operation,die Operation,feminine,noun,A2,10,Die Operation verlief ohne Probleme.
+497,optimistic,optimistisch,null,adjective,A2,10,Trotz der Probleme blieb sie optimistisch.
+498,to fit,passen,null,verb,A2,10,Die Schuhe passen mir nicht.
+499,pessimistic,pessimistisch,null,adjective,A2,10,Sei nicht so pessimistisch!
+500,to try (on),probieren,null,verb,A2,10,Kann ich dieses Hemd mal probieren?
+501,pullover / jumper,der Pullover,masculine,noun,A2,10,Ich brauche einen warmen Pullover für den Winter.
+502,discount,der Rabatt,masculine,noun,A2,10,Wir haben einen Rabatt auf die Schuhe bekommen.
+503,smoking ban,das Rauchverbot,neuter,noun,A2,10,In diesem Gebäude gibt es ein striktes Rauchverbot.
+504,to be right,recht haben,null,phrase,A2,10,"Du hast recht, wir sollten jetzt gehen."
+505,skirt,der Rock,masculine,noun,A2,10,Sie trägt heute einen neuen Rock.
+506,calm / quiet,ruhig,null,adjective,A2,10,Bitte sei ruhig!
+507,seamstress / tailor (female),die Schneiderin,feminine,noun,A2,10,Ich bringe mein Kleid zur Schneiderin zum Ändern.
+508,cosmetic surgeon,der Schönheitschirurg,masculine,noun,A2,10,Der Schönheitschirurg ist sehr bekannt.
+509,cosmetic surgery,die Schönheitsoperation,feminine,noun,A2,10,Sie dachte über eine Schönheitsoperation im Gesicht nach.
+510,shoes,die Schuhe,feminine,noun,A2,10,Ich brauche neue Schuhe für den Winter.
+511,as ... as,so ... wie,null,phrase,A2,10,Er ist so schnell wie ein Blitz.
+512,immediately / right away,sofort,null,adverb,A2,10,Bitte schick mir die E-Mail sofort.
+513,special offer,das Sonderangebot,neuter,noun,A2,10,Dieses Sonderangebot ist sehr günstig.
+514,sporty / athletic,sportlich,null,adjective,A2,10,Sie ist sehr sportlich und fit.
+515,boots,die Stiefel,feminine,noun,A2,10,Ich brauche neue warme Stiefel für den Winter.
+516,voice,die Stimme,feminine,noun,A2,10,Sie hat eine sehr schöne Stimme.
+517,superlative,der Superlativ,masculine,noun,A2,10,Der Superlativ ist die höchste Form.
+518,T-shirt,das T-Shirt,neuter,noun,A2,10,Ich trage oft ein T-Shirt im Sommer.
+519,changing room / fitting room,die Umkleidekabine,feminine,noun,A2,10,Die Umkleidekabine ist dort drüben.
+520,not dangerous / safe,ungefährlich,null,adjective,A2,10,Der kleine Hund ist völlig ungefährlich.
+521,unpleasant / unlikeable,unsympathisch,null,adjective,A2,10,Ihr neuer Chef ist mir leider unsympathisch.
+522,salesman,der Verkäufer,masculine,noun,A2,10,Der Verkäufer war sehr freundlich.
+523,much → more → most,viel → mehr → am meisten,null,phrase,A2,10,"Ich habe viel Geld, aber er hat mehr."
+524,wide / loose,weit,null,adjective,A2,10,Sie trägt eine weite Hose.
+525,too big / too small,zu groß / zu klein,null,phrase,A2,10,Das Hemd ist mir leider zu groß.
+526,to depart,abfahren,null,verb,A2,11,Der Zug fährt pünktlich ab.
+527,to arrive,ankommen,null,verb,A2,11,Wann kommt der Bus an?
+528,"day trip, excursion",der Ausflug,masculine,noun,A2,11,Wir machten einen schönen Ausflug zum See.
+529,mountain,der Berg,masculine,noun,A2,11,Wir wanderten auf den Berg.
+530,"to visit, to sightsee",besichtigen,null,verb,A2,11,Wir wollen die Stadt besichtigen.
+531,cloudy,bewölkt,null,adjective,A2,11,Heute ist der Himmel bewölkt.
+532,flight,der Flug,masculine,noun,A2,11,Unser Flug nach Berlin startet um acht Uhr.
+533,to photograph,fotografieren,null,verb,A2,11,Ich habe gestern viele Fotos fotografiert.
+534,to enjoy,genießen,null,verb,A2,11,Ich genieße die Sonne sehr.
+535,thunderstorm,das Gewitter,neuter,noun,A2,11,Letzte Nacht gab es ein starkes Gewitter.
+536,hot,heiß,null,adjective,A2,11,Es war ein sehr heißer Sommer letztes Jahr.
+537,hostel,das Hostel,neuter,noun,A2,11,Wir haben in einem günstigen Hostel übernachtet.
+538,cold,kalt,null,adjective,A2,11,Mir ist heute sehr kalt.
+539,camera,die Kamera,feminine,noun,A2,11,Hast du deine Kamera mitgebracht?
+540,church,die Kirche,feminine,noun,A2,11,Wir haben am Sonntag die alte Kirche besucht.
+541,last summer,letzten Sommer,null,phrase,A2,11,Letzten Sommer waren wir in Italien.
+542,market,der Markt,masculine,noun,A2,11,Wir gehen jeden Samstag auf den Markt.
+543,fog,der Nebel,masculine,noun,A2,11,Heute Morgen gab es starken Nebel.
+544,to pack,packen,null,verb,A2,11,Ich muss meinen Koffer packen.
+545,passport,der Pass,masculine,noun,A2,11,Haben Sie Ihren Pass dabei?
+546,postcard,die Postkarte,feminine,noun,A2,11,Ich schicke dir eine Postkarte aus dem Urlaub.
+547,rain,der Regen,masculine,noun,A2,11,Der Regen fällt seit Stunden.
+548,rainy,regnerisch,null,adjective,A2,11,Das Wetter war gestern sehr regnerisch.
+549,to travel,reisen,null,verb,A2,11,Sie reisen oft in andere Länder.
+550,reservation,die Reservierung,feminine,noun,A2,11,Haben Sie eine Reservierung auf meinen Namen?
+551,snow,der Schnee,masculine,noun,A2,11,Der Schnee bedeckt die ganze Landschaft.
+552,to have nice weather,schönes Wetter haben,null,phrase,A2,11,Wir haben heute endlich schönes Wetter.
+553,"sight, tourist attraction",die Sehenswürdigkeit,feminine,noun,A2,11,Berlin hat viele interessante Sehenswürdigkeiten.
+554,sunny,sonnig,null,adjective,A2,11,Heute ist es sehr sonnig.
+555,souvenir,das Souvenir,neuter,noun,A2,11,Ich möchte ein Souvenir für meine Mutter kaufen.
+556,stem (of a verb),der Stamm,masculine,noun,A2,11,Der Stamm ist der feste Teil eines Verbs.
+557,taxi,das Taxi,neuter,noun,A2,11,Wir nehmen ein Taxi zum Flughafen.
+558,ticket,das Ticket,neuter,noun,A2,11,Ich habe mein Ticket online gekauft.
+559,tourist,der Tourist,masculine,noun,A2,11,Viele Touristen besuchen diese Stadt.
+560,tourist information office,die Touristeninformation,feminine,noun,A2,11,Wir fragten in der Touristeninformation nach einem Stadtplan.
+561,to stay overnight,übernachten,null,verb,A2,11,Wir übernachteten in einem kleinen Hotel.
+562,irregular,unregelmäßig,null,adjective,A2,11,Ihre Arbeitszeiten sind unregelmäßig.
+563,a year ago,vor einem Jahr,null,phrase,A2,11,Wir sind vor einem Jahr umgezogen.
+564,narrative past,die Vorvergangenheit,feminine,noun,A2,11,Die Vorvergangenheit ist eine Zeitform im Deutschen.
+565,forest,der Wald,masculine,noun,A2,11,Wir gehen oft im Wald spazieren.
+566,to hike,wandern,null,verb,A2,11,Wir wandern gern in den Bergen.
+567,warm,warm,null,adjective,A2,11,Heute ist es draußen sehr warm.
+568,weather,das Wetter,neuter,noun,A2,11,Das Wetter wird morgen wahrscheinlich besser sein.
+569,wind,der Wind,masculine,noun,A2,11,Der Wind weht heute stark.
+570,for the first time,zum ersten Mal,null,phrase,A2,11,Ich bin zum ersten Mal in Deutschland.
+571,allergy,die Allergie,feminine,noun,A2,12,Ich habe eine Allergie gegen Nüsse.
+572,arm,der Arm,masculine,noun,A2,12,Mein Arm tut nach dem Sturz weh.
+573,aspirin,das Aspirin,neuter,noun,A2,12,Ich habe ein Aspirin gegen meine Kopfschmerzen genommen.
+574,sufficiently,ausreichend,null,adverb,A2,12,Du hast nicht ausreichend geschlafen.
+575,"belly, stomach",der Bauch,masculine,noun,A2,12,Mein Bauch tut nach zu viel Essen weh.
+576,leg,das Bein,neuter,noun,A2,12,Er hat sich bei einem Unfall das Bein gebrochen.
+577,please,Bitte,null,adverb,A2,12,Kannst du mir bitte helfen?
+578,"chest, breast",die Brust,feminine,noun,A2,12,Er hatte leichte Schmerzen in der Brust.
+579,"may, to be allowed to",dürfen,null,verb,A2,12,Dürfen wir hier parken?
+580,Get well!,Erhol dich!,null,phrase,A2,12,Du bist müde. Erhol dich gut!
+581,fever,das Fieber,neuter,noun,A2,12,Ich hatte gestern hohes Fieber.
+582,finger,der Finger,masculine,noun,A2,12,Er zeigte mit dem Finger auf die Karte.
+583,foot,der Fuß,masculine,noun,A2,12,Er spürte Schmerzen in seinem linken Fuß.
+584,flu,die Grippe,feminine,noun,A2,12,Letzte Woche hatte ich die Grippe.
+585,"neck, throat",der Hals,masculine,noun,A2,12,Mein Hals tut seit gestern weh.
+586,sore throat,Halsschmerzen (Pl.),null,noun,A2,12,Ich habe starke Halsschmerzen und Fieber.
+587,imperative (grammar),der Imperativ,masculine,noun,A2,12,Der Imperativ wird für Befehle benutzt.
+588,knee,das Knie,neuter,noun,A2,12,Mein rechtes Knie tut seit gestern weh.
+589,headache,der Kopfschmerz,masculine,noun,A2,12,Ich habe heute Morgen starke Kopfschmerzen.
+590,"sick, ill",krank,null,adjective,A2,12,Ich bin leider krank und kann nicht kommen.
+591,health insurance,die Krankenkasse,feminine,noun,A2,12,Ich muss meine Krankenkasse kontaktieren.
+592,health insurance,die Krankenversicherung,feminine,noun,A2,12,Jeder braucht eine gute Krankenversicherung.
+593,mouth,der Mund,masculine,noun,A2,12,"Mach deinen Mund auf, bitte."
+594,nose,die Nase,feminine,noun,A2,12,Er hat eine kleine Nase.
+595,ear,das Ohr,neuter,noun,A2,12,Er hat sich sein linkes Ohr beim Sport verletzt.
+596,patient (male),der Patient,masculine,noun,A2,12,Der Patient wartet im Wartezimmer.
+597,patient (female),die Patientin,feminine,noun,A2,12,Die Patientin wartet schon lange auf den Arzt.
+598,advice,der Rat,masculine,noun,A2,12,Dein Rat war sehr hilfreich für mich.
+599,reflexive pronoun,das Reflexivpronomen,neuter,noun,A2,12,Heute üben wir die deutschen Reflexivpronomen im Akkusativ.
+600,back,der Rücken,masculine,noun,A2,12,Mein Rücken tut mir weh vom Sport.
+601,Get some rest!,Ruh dich aus!,null,phrase,A2,12,Du siehst müde aus. Ruh dich aus!
+602,to rest,ruhen,null,verb,A2,12,Du solltest dich nach der Arbeit ruhen.
+603,to swallow,schlucken,null,verb,A2,12,Bitte schlucke die Tablette mit Wasser.
+604,to have pain,Schmerzen haben,null,phrase,A2,12,Ich habe starke Schmerzen im Rücken.
+605,shoulder,die Schulter,feminine,noun,A2,12,Sie hat Schmerzen in der rechten Schulter.
+606,"to rest, to relax",sich ausruhen,null,verb,A2,12,Ich muss mich nach der Wanderung ausruhen.
+607,"to move, to exercise",sich bewegen,null,verb,A2,12,Wir sollten uns jeden Tag bewegen.
+608,to recover,sich erholen,null,verb,A2,12,Er muss sich von der Krankheit erholen.
+609,to catch a cold,sich erkälten,null,verb,A2,12,Ich will mich nicht erkälten.
+610,"to eat, to nourish oneself",sich ernähren,null,verb,A2,12,Man sollte sich gesund ernähren.
+611,to feel,sich fühlen,null,verb,A2,12,Wie fühlst du dich heute?
+612,to worry,sich Sorgen machen,null,phrase,A2,12,"Mach dir keine Sorgen, alles wird gut!"
+613,"should, ought to",sollen,null,verb,A2,12,Wir sollen jetzt wirklich gehen.
+614,consultation hours,die Sprechstunde,feminine,noun,A2,12,Die Ärztin hat heute Nachmittag Sprechstunde.
+615,symptom,das Symptom,neuter,noun,A2,12,Husten ist ein häufiges Symptom einer Erkältung.
+616,daily,täglich,null,adverb,A2,12,Sie liest täglich die Nachrichten.
+617,appointment,der Termin,masculine,noun,A2,12,Ich habe heute einen wichtigen Termin.
+618,to examine,untersuchen,null,verb,A2,12,Der Arzt untersuchte den jungen Patienten.
+619,to hurt,wehtun,null,verb,A2,12,Mein Kopf tut mir weh.
+620,when / whenever,wenn,null,conjunction,A2,12,"Wenn ich Zeit habe, lese ich."
+621,most of all / best of all,am liebsten,null,adverb,A2,13,Ich trinke am liebsten Kaffee.
+622,"at, on (vertical)",an,null,preposition,A2,13,Das Bild hängt an der Wand.
+623,apartment,das Apartment,neuter,noun,A2,13,Wir haben ein kleines Apartment in der Stadt gemietet.
+624,on (horizontal),auf,null,preposition,A2,13,Die Katze schläft auf dem Sofa.
+625,bathroom,das Badezimmer,neuter,noun,A2,13,Das Badezimmer war nach der Party schmutzig.
+626,to build,bauen,null,verb,A2,13,Sie bauen ein neues Haus hier.
+627,floor,der Boden,masculine,noun,A2,13,Der Boden ist sehr sauber.
+628,bookshelf,das Bücherregal,neuter,noun,A2,13,Wir haben ein neues Bücherregal gekauft.
+629,dark,dunkel,null,adjective,A2,13,Es wird schnell dunkel am Abend.
+630,to move in,einziehen,null,verb,A2,13,Wir wollen bald in die neue Wohnung einziehen.
+631,colour / paint,die Farbe,feminine,noun,A2,13,Welche Farbe hat dein neues Auto?
+632,finished / ready,fertig,null,adjective,A2,13,Bist du schon mit der Arbeit fertig?
+633,hallway,der Flur,masculine,noun,A2,13,Hängen Sie Ihren Mantel im Flur auf.
+634,dish / meal,das Gericht,neuter,noun,A2,13,"Dieses Gericht schmeckt sehr gut, was ist das?"
+635,cheap / good value,günstig,null,adjective,A2,13,Das neue Auto war sehr günstig.
+636,craftsman / tradesman,der Handwerker,masculine,noun,A2,13,Der Handwerker hat unsere Küche repariert.
+637,to hang,hängen,null,verb,A2,13,Die Jacke hängt im Schrank.
+638,main course,das Hauptgericht,neuter,noun,A2,13,Als Hauptgericht wähle ich den Fisch mit Reis.
+639,bright / light,hell,null,adjective,A2,13,Das Zimmer ist sehr hell und freundlich.
+640,behind,hinter,null,preposition,A2,13,Das Auto steht hinter dem Haus.
+641,ideal,ideal,null,adjective,A2,13,Das Wetter ist ideal für einen Spaziergang.
+642,"in, into",in,null,preposition,A2,13,Wir leben in einer kleinen Stadt.
+643,broken,kaputt,null,adjective,A2,13,Mein Handy ist leider kaputt.
+644,waiter,der Kellner,masculine,noun,A2,13,Der Kellner bringt uns bald das Essen.
+645,waitress,die Kellnerin,feminine,noun,A2,13,Die Kellnerin brachte uns das Essen.
+646,cushion / pillow,das Kissen,neuter,noun,A2,13,Ich brauche ein weiches Kissen für meinen Nacken.
+647,kitchen,die Küche,feminine,noun,A2,13,Wir haben in der Küche zu Abend gegessen.
+648,lamp,die Lampe,feminine,noun,A2,13,Kannst du bitte die Lampe anmachen?
+649,"to lay, to put (flat)",legen,null,verb,A2,13,Sie legt das Buch auf den Tisch.
+650,rather / preferably,lieber,null,adverb,A2,13,Ich trinke lieber Kaffee als Tee.
+651,painter (decorator),der Maler,masculine,noun,A2,13,Der Maler streicht unser Wohnzimmer nächste Woche.
+652,rent,die Miete,feminine,noun,A2,13,Die Miete für die Wohnung ist teuer.
+653,furniture,die Möbel,feminine,noun,A2,13,Wir haben neue Möbel für das Schlafzimmer gekauft.
+654,modern,modern,null,adjective,A2,13,Unsere neue Wohnung ist sehr modern.
+655,dessert,die Nachspeise,feminine,noun,A2,13,Als Nachspeise gab es Eis mit Früchten.
+656,next to,neben,null,preposition,A2,13,Er sitzt neben seiner Freundin.
+657,parquet (flooring),das Parkett,neuter,noun,A2,13,"Unser Wohnzimmer hat schönes, glänzendes Parkett."
+658,square metre,der Quadratmeter (m²),masculine,noun,A2,13,Die Wohnung ist 70 Quadratmeter groß.
+659,bill,die Rechnung,feminine,noun,A2,13,Können wir bitte die Rechnung für das Essen haben?
+660,shelf / bookcase,das Regal,neuter,noun,A2,13,Ich habe die Bücher ins Regal gestellt.
+661,to renovate,renovieren,null,verb,A2,13,Wir müssen die Küche bald renovieren.
+662,renovation,die Renovierung,feminine,noun,A2,13,Die Renovierung unserer Küche beginnt nächste Woche.
+663,to repair,reparieren,null,verb,A2,13,Kannst du bitte mein Fahrrad reparieren?
+664,restaurant,das Restaurant,neuter,noun,A2,13,Wir gehen heute Abend in ein italienisches Restaurant.
+665,bedroom,das Schlafzimmer,neuter,noun,A2,13,"Unser Schlafzimmer ist klein, aber sehr gemütlich."
+666,wardrobe / cupboard,der Schrank,masculine,noun,A2,13,Der Schrank ist voll mit Kleidung.
+667,armchair,der Sessel,masculine,noun,A2,13,Ich sitze gern im bequemen Sessel.
+668,sofa,das Sofa,neuter,noun,A2,13,Mein Hund schläft immer auf dem Sofa.
+669,menu,die Speisekarte,feminine,noun,A2,13,Könnten wir bitte die Speisekarte haben?
+670,to paint (walls),streichen,null,verb,A2,13,Wir haben die Wand weiß gestrichen.
+671,studio (flat),das Studio,neuter,noun,A2,13,Ich miete ein kleines Studio in der Stadt.
+672,rug / carpet,der Teppich,masculine,noun,A2,13,Der neue Teppich ist sehr weich.
+673,expensive,teuer,null,adjective,A2,13,Das Auto war zu teuer.
+674,"over, above",über,null,preposition,A2,13,Ein Vogel fliegt über dem Wald.
+675,to move (house),umziehen,null,verb,A2,13,Wir wollen nächsten Monat umziehen.
+676,under,unter,null,preposition,A2,13,Die Katze liegt unter dem Stuhl.
+677,landlord,der Vermieter,masculine,noun,A2,13,Unser Vermieter ist sehr nett.
+678,landlady,die Vermieterin,feminine,noun,A2,13,Wir haben mit der Vermieterin über die Miete gesprochen.
+679,in front of,vor,null,preposition,A2,13,Das Auto steht vor dem Haus.
+680,starter,die Vorspeise,feminine,noun,A2,13,Was möchten Sie als Vorspeise bestellen?
+681,wall,die Wand,feminine,noun,A2,13,Die Wand in meinem Zimmer ist blau gestrichen.
+682,to become,werden,null,verb,A2,13,Er möchte Arzt werden.
+683,flat / apartment,die Wohnung,feminine,noun,A2,13,Meine neue Wohnung hat drei Zimmer.
+684,living room,das Wohnzimmer,neuter,noun,A2,13,Wir haben im Wohnzimmer einen Film gesehen.
+685,wish,der Wunsch,masculine,noun,A2,13,Ich habe einen Wunsch zum Geburtstag.
+686,room,das Zimmer,neuter,noun,A2,13,"Mein Zimmer ist klein, aber hell."
+687,between,zwischen,null,preposition,A2,13,Der Park liegt zwischen zwei Straßen.
+688,school-leaving exam / A-levels (D),das Abitur,neuter,noun,A2,14,Sie hat letztes Jahr ihr Abitur bestanden.
+689,"graduation, qualification, degree",der Abschluss,masculine,noun,A2,14,Er feierte letzte Woche seinen Abschluss.
+690,than (in comparisons),als,null,conjunction,A2,14,Er ist größer als sein Bruder.
+691,in your position / if I were you,an deiner Stelle,null,phrase,A2,14,An deiner Stelle würde ich sofort zum Arzt gehen.
+692,in your position (formal),an Ihrer Stelle,null,phrase,A2,14,An Ihrer Stelle würde ich den Vertrag sorgfältig prüfen.
+693,doctor (male),der Arzt,masculine,noun,A2,14,Ich habe heute einen Termin beim Arzt.
+694,doctor (female),die Ärztin,feminine,noun,A2,14,Meine Ärztin hat mir gut geholfen.
+695,astronaut (male),der Astronaut,masculine,noun,A2,14,Er wollte immer ein Astronaut sein.
+696,"vocational training, apprenticeship",die Ausbildung,feminine,noun,A2,14,Sie macht gerade eine Ausbildung zur Mechanikerin.
+697,"profession, job",der Beruf,masculine,noun,A2,14,Was haben Sie für einen Beruf?
+698,vocational school,die Berufsschule,feminine,noun,A2,14,Ich besuche zweimal pro Woche die Berufsschule.
+699,job application,die Bewerbung,feminine,noun,A2,14,Ich habe meine Bewerbung letzte Woche abgeschickt.
+700,"therefore, that's why",deshalb,null,conjunction,A2,14,"Es regnet, deshalb bleiben wir drinnen."
+701,"mission, operation, deployment",der Einsatz,masculine,noun,A2,14,Die Polizei hatte einen schwierigen Einsatz.
+702,fire,das Feuer,neuter,noun,A2,14,Bitte mach das Feuer im Garten aus!
+703,firefighter (female),die Feuerwehrfrau,feminine,noun,A2,14,Die Feuerwehrfrau löschte das Feuer schnell.
+704,firefighter (male),der Feuerwehrmann,masculine,noun,A2,14,Ein mutiger Feuerwehrmann rettete die Katze.
+705,danger,die Gefahr,feminine,noun,A2,14,"Es besteht keine Gefahr, der Weg ist sicher."
+706,"contrast, opposite",der Gegensatz,masculine,noun,A2,14,Im Gegensatz zu mir mag er Sport.
+707,primary school,die Grundschule,feminine,noun,A2,14,Meine Tochter geht jetzt in die Grundschule.
+708,grammar school / academic secondary school,das Gymnasium,neuter,noun,A2,14,Meine Tochter geht auf das Gymnasium.
+709,lower secondary school (D),die Hauptschule,feminine,noun,A2,14,Mein Bruder ging nach der Grundschule auf die Hauptschule.
+710,"in (temporal, with dative)",in + Dativ (zeitlich),null,preposition,A2,14,Ich bin in zwei Stunden wieder da.
+711,in one year,in einem Jahr,null,phrase,A2,14,In einem Jahr ziehen wir um.
+712,in two weeks,in zwei Wochen,null,phrase,A2,14,Meine Prüfung ist in zwei Wochen.
+713,"every, each",jeder / jedes / jede,null,adjective,A2,14,Jeder Gast bekommt ein Getränk.
+714,physical,körperlich,null,adjective,A2,14,Er war körperlich sehr fit und stark.
+715,"CV, résumé",der Lebenslauf,masculine,noun,A2,14,Bitte schicken Sie Ihren Lebenslauf per E-Mail.
+716,to extinguish,löschen,null,verb,A2,14,Die Feuerwehr löschte den Brand schnell.
+717,school-leaving exam (A/CH equivalent of Abitur),die Matura,feminine,noun,A2,14,Er hat die Matura letztes Jahr bestanden.
+718,disadvantage,der Nachteil,masculine,noun,A2,14,Der Nachteil ist der hohe Preis.
+719,"although, even though",obwohl,null,conjunction,A2,14,"Obwohl es spät war, las ich weiter."
+720,pilot (male),der Pilot,masculine,noun,A2,14,Mein Bruder ist ein erfahrener Pilot.
+721,pilot (female),die Pilotin,feminine,noun,A2,14,Die Pilotin flog das Flugzeug sicher zum Ziel.
+722,police officer (male),der Polizist,masculine,noun,A2,14,Ein Polizist hat mir den Weg gezeigt.
+723,police officer (female),die Polizistin,feminine,noun,A2,14,Die Polizistin half uns bei dem Unfall.
+724,"psychological, mental",psychisch,null,adjective,A2,14,Sie hatte psychische Probleme.
+725,"career change, lateral entry",der Quereinstieg,masculine,noun,A2,14,Ein Quereinstieg kann neue Möglichkeiten bieten.
+726,piece of advice,der Ratschlag,masculine,noun,A2,14,Er gab mir einen wichtigen Ratschlag.
+727,intermediate secondary school (D),die Realschule,feminine,noun,A2,14,Meine Schwester besuchte die Realschule in der Stadt.
+728,"to save, to rescue",retten,null,verb,A2,14,Die Feuerwehr konnte die Katze retten.
+729,risky,riskant,null,adjective,A2,14,Der Plan war sehr riskant.
+730,to apply (for a job),sich bewerben,null,verb,A2,14,Ich möchte mich für diese Stelle bewerben.
+731,"exciting, thrilling",spannend,null,adjective,A2,14,Der Film war sehr spannend.
+732,stress,der Stress,masculine,noun,A2,14,Ich habe viel Stress bei der Arbeit.
+733,university studies,das Studium,neuter,noun,A2,14,Mein Studium in Berlin war sehr interessant.
+734,dream job,der Traumberuf,masculine,noun,A2,14,Mein Traumberuf ist Pilot.
+735,"nevertheless, still, anyway",trotzdem,null,adverb,A2,14,"Es regnete, trotzdem gingen wir spazieren."
+736,"to consider, to think about",überlegen,null,verb,A2,14,Ich werde es mir gut überlegen.
+737,around,um ... herum,null,phrase,A2,14,Wir saßen um den Tisch herum.
+738,university,die Universität,feminine,noun,A2,14,Sie studiert an der Universität in Berlin.
+739,advantage,der Vorteil,masculine,noun,A2,14,Was sind die Vorteile davon?
+740,"to change, to switch",wechseln,null,verb,A2,14,Wir müssen das Thema wechseln.
+741,government office,das Amt,neuter,noun,A2,15,Ich hatte gestern einen Termin beim Amt.
+742,exchange,der Austausch,masculine,noun,A2,15,Wir nahmen an einem Schüleraustausch teil.
+743,ID card,der Ausweis,masculine,noun,A2,15,Haben Sie Ihren Ausweis dabei?
+744,relationship,die Beziehung,feminine,noun,A2,15,Ihre Beziehung ist sehr glücklich und stark.
+745,blind date,das Blind Date,neuter,noun,A2,15,Meine Schwester hatte gestern Abend ein Blind Date.
+746,charm,der Charme,masculine,noun,A2,15,Er hat einen besonderen Charme.
+747,dating show,die Dating-Show,feminine,noun,A2,15,Er schaut jede Woche eine Dating-Show im Fernsehen.
+748,honest,ehrlich,null,adjective,A2,15,Er ist ein sehr ehrlicher Mensch.
+749,honesty,die Ehrlichkeit,feminine,noun,A2,15,Ehrlichkeit ist sehr wichtig in Freundschaften.
+750,"characteristic, quality",die Eigenschaft,feminine,noun,A2,15,Ihre Ehrlichkeit ist eine wichtige Eigenschaft.
+751,residents' registration office,das Einwohnermeldeamt,neuter,noun,A2,15,Ich muss zum Einwohnermeldeamt gehen.
+752,form (document),das Formular,neuter,noun,A2,15,Bitte füllen Sie das Formular vollständig aus.
+753,"free time, leisure",die Freizeit,feminine,noun,A2,15,Was machst du gern in deiner Freizeit?
+754,fresh,frisch,null,adjective,A2,15,"Der Fisch muss frisch sein, sonst kaufe ich ihn nicht."
+755,patience,die Geduld,feminine,noun,A2,15,"Man braucht viel Geduld, um eine neue Sprache zu lernen."
+756,patient,geduldig,null,adjective,A2,15,Meine Lehrerin ist immer sehr geduldig.
+757,stressed,gestresst,null,adjective,A2,15,Er war letzte Woche sehr gestresst von der Arbeit.
+758,hobby,das Hobby,neuter,noun,A2,15,"Mein Hobby ist es, Bücher zu lesen."
+759,humour,der Humor,masculine,noun,A2,15,Sie hat einen großartigen Sinn für Humor.
+760,boring,langweilig,null,adjective,A2,15,Das Meeting war wirklich langweilig.
+761,funny,lustig,null,adjective,A2,15,Der Witz war wirklich sehr lustig.
+762,native speaker,der Muttersprachler,masculine,noun,A2,15,Ein Muttersprachler kann dir gut helfen.
+763,"nice, kind",nett,null,adjective,A2,15,Sie ist eine sehr nette Kollegin.
+764,"curious, inquisitive",neugierig,null,adjective,A2,15,Kinder sind oft sehr neugierig.
+765,"open, open-minded",offen,null,adjective,A2,15,Ich bin offen für neue Ideen.
+766,personality,die Persönlichkeit,feminine,noun,A2,15,Sie hat eine starke Persönlichkeit.
+767,profile,das Profil,neuter,noun,A2,15,Ich muss mein Online-Profil auf der Webseite aktualisieren.
+768,romantic,romantisch,null,adjective,A2,15,Wir hatten einen romantischen Abend.
+769,queue / snake,die Schlange,feminine,noun,A2,15,Es gab eine lange Schlange vor dem Kino.
+770,to register,sich anmelden,null,verb,A2,15,Wir müssen uns für den Kurs anmelden.
+771,to hurry,sich beeilen,null,verb,A2,15,"Beeil dich, sonst verpassen wir den Zug!"
+772,to complain,sich beschweren,null,verb,A2,15,Der Gast beschwert sich über das Essen.
+773,to shower,sich duschen,null,verb,A2,15,Ich dusche mich jeden Morgen.
+774,to relax,sich entspannen,null,verb,A2,15,Ich möchte mich am Wochenende entspannen.
+775,to comb (hair),sich kämmen,null,verb,A2,15,Sie kämmt sich jeden Morgen die Haare.
+776,to get to know each other,sich kennenlernen,null,verb,A2,15,Wir wollen uns besser kennenlernen.
+777,to sit down,sich setzen,null,verb,A2,15,Bitte setzen Sie sich hierher.
+778,to meet up,sich treffen,null,verb,A2,15,Wir treffen uns um acht Uhr.
+779,to fall in love with,sich verlieben,null,verb,A2,15,Sie hat sich in ihn verliebt.
+780,to get along,sich verstehen,null,verb,A2,15,Sie verstehen sich sehr gut.
+781,to introduce oneself,sich vorstellen,null,verb,A2,15,Darf ich mich vorstellen?
+782,to feel comfortable,sich wohlfühlen,null,verb,A2,15,Ich fühle mich hier sehr wohl.
+783,to wish for,sich wünschen,null,verb,A2,15,Was wünschst du dir zum Geburtstag?
+784,language,die Sprache,feminine,noun,A2,15,Ich lerne Deutsch als Fremdsprache.
+785,likeable / pleasant,sympathisch,null,adjective,A2,15,Dein Kollege ist sehr sympathisch.
+786,tandem (language exchange partnership),das Tandem,neuter,noun,A2,15,Wir bilden ein Tandem für den Sprachaustausch.
+787,impatient,ungeduldig,null,adjective,A2,15,"Warte bitte, sei nicht ungeduldig."
+788,queue number,die Wartenummer,feminine,noun,A2,15,Wir haben eine Wartenummer gezogen.
+789,reliable,zuverlässig,null,adjective,A2,15,Mein altes Auto ist immer noch sehr zuverlässig.
+790,in the evenings,abends,null,adverb,A2,16,Abends sehe ich oft fern.
+791,balcony,der Balkon,masculine,noun,A2,16,Wir frühstückten auf dem Balkon.
+792,mountains,die Berge,feminine,noun,A2,16,Wir fahren am Wochenende in die Berge.
+793,to describe,beschreiben,null,verb,A2,16,Kannst du den Weg gut beschreiben?
+794,width,die Breite,feminine,noun,A2,16,Die Breite des Tisches beträgt 80 Zentimeter.
+795,to book,buchen,null,verb,A2,16,Wir müssen das Hotel buchen.
+796,camping,das Camping,neuter,noun,A2,16,Letzten Sommer waren wir oft beim Camping.
+797,campsite,der Campingplatz,masculine,noun,A2,16,Wir haben einen schönen Platz auf dem Campingplatz gebucht.
+798,of the father / of the mother,des Vaters / der Mutter,null,phrase,A2,16,Das neue Auto des Vaters steht vor dem Haus.
+799,double room,das Doppelzimmer,neuter,noun,A2,16,Wir möchten bitte ein Doppelzimmer für zwei Nächte.
+800,single room,das Einzelzimmer,neuter,noun,A2,16,Ich habe ein Einzelzimmer im Hotel gebucht.
+801,"memory, souvenir",die Erinnerung,feminine,noun,A2,16,Ich habe viele schöne Erinnerungen an meine Kindheit.
+802,breakfast,das Frühstück,neuter,noun,A2,16,Wir haben ein leckeres Frühstück zusammen gegessen.
+803,lost property office,das Fundbüro,neuter,noun,A2,16,Ich habe meinen Schlüssel im Fundbüro abgegeben.
+804,genitive case,der Genitiv,masculine,noun,A2,16,Im Deutschen ist der Genitiv oft schwierig.
+805,here (motion toward speaker),her,null,adverb,A2,16,Bring bitte die Bücher zu mir her.
+806,to come from,herkommen,null,verb,A2,16,Wo kommt dein Freund her?
+807,there (motion away from speaker),hin,null,adverb,A2,16,Gehen wir zum Park hin?
+808,to put down,hinlegen,null,verb,A2,16,Bitte leg das Buch dort hin.
+809,height,die Höhe,feminine,noun,A2,16,Die Höhe des Berges ist beeindruckend.
+810,hotel,das Hotel,neuter,noun,A2,16,Ich buche immer ein Hotel mit Frühstück.
+811,"inclusive, included",inklusive,null,adjective,A2,16,Der Preis ist inklusive Frühstück.
+812,island,die Insel,feminine,noun,A2,16,Wir haben unseren Urlaub auf einer schönen Insel verbracht.
+813,youth hostel,die Jugendherberge,feminine,noun,A2,16,Wir übernachteten in einer Jugendherberge in München.
+814,childhood,die Kindheit,feminine,noun,A2,16,Meine Kindheit war sehr glücklich und schön.
+815,suitcase,der Koffer,masculine,noun,A2,16,Hast du deinen Koffer schon gepackt?
+816,coast,die Küste,feminine,noun,A2,16,Letzten Sommer waren wir an der Nordsee-Küste.
+817,length,die Länge,feminine,noun,A2,16,Was ist die Länge dieses Tisches?
+818,sea,das Meer,neuter,noun,A2,16,Wir fahren diesen Sommer ans Meer in Italien.
+819,to measure,messen,null,verb,A2,16,Wir müssen die Raumtemperatur messen.
+820,on Mondays,montags,null,adverb,A2,16,Montags gehe ich immer ins Fitnessstudio.
+821,in the mornings,morgens,null,adverb,A2,16,Morgens trinkt sie gern einen großen Kaffee.
+822,"wallet, purse",das Portemonnaie,neuter,noun,A2,16,Ich habe mein Portemonnaie im Café vergessen.
+823,umbrella,der Regenschirm,masculine,noun,A2,16,"Nimm deinen Regenschirm mit, es regnet."
+824,"trip, journey",die Reise,feminine,noun,A2,16,Wir planen eine Reise nach Italien im Sommer.
+825,record,das Rekord,neuter,noun,A2,16,Der Athlet hat einen neuen Weltrekord aufgestellt.
+826,relative clause,der Relativsatz,masculine,noun,A2,16,Wir lernen heute den Relativsatz in der Grammatik.
+827,backpack,der Rucksack,masculine,noun,A2,16,Dein Rucksack ist sehr schwer.
+828,lake,der See,masculine,noun,A2,16,Wir fahren am Wochenende zum See.
+829,sunglasses,die Sonnenbrille,feminine,noun,A2,16,Wo ist meine Sonnenbrille geblieben?
+830,beach,der Strand,masculine,noun,A2,16,Wir waren gestern am Strand.
+831,overnight stay,die Übernachtung,feminine,noun,A2,16,Eine Übernachtung im Hotel ist teuer.
+832,accommodation,die Unterkunft,feminine,noun,A2,16,Wir suchen noch eine günstige Unterkunft.
+833,unforgettable,unvergesslich,null,adjective,A2,16,Dieser Urlaub war einfach unvergesslich.
+834,"vacation, holiday",der Urlaub,masculine,noun,A2,16,Wir wollen bald Urlaub machen.
+835,to spend (time),verbringen,null,verb,A2,16,Wir verbrachten das Wochenende zu Hause.
+836,to lose,verlieren,null,verb,A2,16,Ich habe meine Schlüssel leider verloren.
+837,world record,der Weltrekord,masculine,noun,A2,16,Er hat den Weltrekord gebrochen.
+838,tent,das Zelt,neuter,noun,A2,16,Wir haben das Zelt im Garten aufgebaut.
+839,to write down,aufschreiben,null,verb,A2,17,Schreib bitte deine Adresse auf.
+840,impressive,beeindruckend,null,adjective,A2,17,Seine Präsentation war wirklich beeindruckend.
+841,cache (hidden object),der Cache,masculine,noun,A2,17,Wir haben den Cache im Wald gefunden.
+842,for that / for what,dafür / wofür,null,adverb,A2,17,Ich habe viel Geld dafür bezahlt.
+843,about that / about what,darüber / worüber,null,adverb,A2,17,Wir haben lange darüber gesprochen.
+844,of/from that / of/from what,davon / wovon,null,adverb,A2,17,Er hat viel davon erzählt.
+845,"to agree, be in agreement",einverstanden sein,null,phrase,A2,17,Ich bin mit deinem Vorschlag einverstanden.
+846,festival,das Festival,neuter,noun,A2,17,Gehst du dieses Jahr zum Musikfestival?
+847,flash mob,der Flash Mob,masculine,noun,A2,17,Wir haben einen Flash Mob in der Stadt gesehen.
+848,geocaching,das Geocaching,neuter,noun,A2,17,Am Wochenende gehen wir Geocaching im Wald machen.
+849,interesting,interessant,null,adjective,A2,17,"Das Buch, das ich lese, ist sehr interessant."
+850,flashcard,die Karteikarte,feminine,noun,A2,17,Ich lerne Vokabeln mit Karteikarten.
+851,no problem,kein Problem,null,phrase,A2,17,"Kannst du mir helfen? Ja, kein Problem!"
+852,cinema,das Kino,neuter,noun,A2,17,Wir gehen heute Abend ins Kino.
+853,"to work out, to go as planned",klappen,null,verb,A2,17,Hoffentlich klappt unser Plan.
+854,concert,das Konzert,neuter,noun,A2,17,Wir gehen am Samstag zu einem Konzert.
+855,culture,die Kultur,feminine,noun,A2,17,Ich möchte mehr über die deutsche Kultur lernen.
+856,cultural,kulturell,null,adjective,A2,17,Berlin ist eine sehr kulturell vielfältige Stadt.
+857,art,die Kunst,feminine,noun,A2,17,Ich finde moderne Kunst sehr interessant.
+858,unfortunately,leider,null,adverb,A2,17,Leider kann ich heute nicht kommen.
+859,to participate,mitmachen,null,verb,A2,17,Willst du bei uns mitmachen?
+860,museum,das Museum,neuter,noun,A2,17,Am Wochenende besuchen wir ein interessantes Museum.
+861,music,die Musik,feminine,noun,A2,17,Ich höre gern klassische Musik.
+862,to think about,nachdenken,null,verb,A2,17,Ich muss über dein Angebot nachdenken.
+863,public,öffentlich,null,adjective,A2,17,Das ist ein öffentliches Gebäude.
+864,to organize,organisieren,null,verb,A2,17,Wir müssen die Party gut organisieren.
+865,regular,regelmäßig,null,adjective,A2,17,Wir treffen uns regelmäßig am Mittwoch.
+866,to be enthusiastic about,sich begeistern,null,verb,A2,17,Sie begeistern sich sehr für Musik.
+867,to look forward to,sich freuen auf,null,verb,A2,17,Ich freue mich auf den Urlaub.
+868,to be happy about,sich freuen über,null,verb,A2,17,Er freut sich über das Geschenk.
+869,to be interested in,sich interessieren,null,verb,A2,17,Ich interessiere mich für Geschichte.
+870,to arrange to meet,sich verabreden,null,verb,A2,17,Wir müssen uns bald verabreden.
+871,language learning app,das Sprachlernapp,neuter,noun,A2,17,Das Sprachlernapp hilft mir sehr.
+872,strategy,die Strategie,feminine,noun,A2,17,Wir müssen eine neue Strategie entwickeln.
+873,theatre,das Theater,neuter,noun,A2,17,Gehen wir heute Abend ins Theater?
+874,"tip, piece of advice",der Tipp,masculine,noun,A2,17,Kannst du mir einen Tipp geben?
+875,to dream of,träumen,null,verb,A2,17,Ich träume oft vom Fliegen.
+876,meeting point,der Treffpunkt,masculine,noun,A2,17,Der Treffpunkt ist am Bahnhof.
+877,"date, appointment (informal)",die Verabredung,feminine,noun,A2,17,Ich habe heute Abend eine Verabredung mit einem Freund.
+878,vocabulary word,die Vokabel,feminine,noun,A2,17,Ich lerne jeden Tag zehn neue Vokabeln.
+879,"to intend, to plan",vorhaben,null,verb,A2,17,Was hast du heute noch vor?
+880,"suggestion, proposal",der Vorschlag,masculine,noun,A2,17,Wie findest du meinen Vorschlag?
+881,to suggest,vorschlagen,null,verb,A2,17,Ich schlage einen Spaziergang im Park vor.
+882,to repeat,wiederholen,null,verb,A2,17,Können Sie das bitte wiederholen?
+883,aggressive,aggressiv,null,adjective,A2,18,Der Hund ist manchmal aggressiv.
+884,traffic light,die Ampel,feminine,noun,A2,18,"Die Ampel war rot, also musste ich warten."
+885,pharmacy,die Apotheke,feminine,noun,A2,18,"Ich muss zur Apotheke gehen, um Medikamente zu kaufen."
+886,"annoyance, anger",der Ärger,masculine,noun,A2,18,Es gab viel Ärger wegen der Verspätung.
+887,"to annoy, to anger",ärgern,null,verb,A2,18,"Es hat mich geärgert, dass er zu spät kam."
+888,exciting,aufregend,null,adjective,A2,18,Der Film war sehr aufregend.
+889,"endurance, stamina",die Ausdauer,feminine,noun,A2,18,Für den Marathon braucht man viel Ausdauer.
+890,car driver (male),der Autofahrer,masculine,noun,A2,18,Der Autofahrer hielt an der Ampel.
+891,car driver (female),die Autofahrerin,feminine,noun,A2,18,Die Autofahrerin parkte ihr Auto schnell ein.
+892,to brake,bremsen,null,verb,A2,18,Der Fahrer musste plötzlich bremsen.
+893,dosage,die Dosierung,feminine,noun,A2,18,Die richtige Dosierung ist wichtig für das Medikament.
+894,one (of them),einer,null,phrase,A2,18,Einer meiner Freunde kommt heute Abend bei mir vorbei.
+895,invitation,die Einladung,feminine,noun,A2,18,Ich habe eine Einladung zur Hochzeit bekommen.
+896,to recommend,empfehlen,null,verb,A2,18,Wir können dieses Restaurant sehr empfehlen.
+897,to relax,entspannen,null,verb,A2,18,Ich möchte mich am Wochenende entspannen.
+898,"inflammation, infection",die Entzündung,feminine,noun,A2,18,"Die Ärztin sagte, ich habe eine Entzündung."
+899,cold (illness),die Erkältung,feminine,noun,A2,18,"Ich kann heute nicht kommen, ich habe eine Erkältung."
+900,to explain,erklären,null,verb,A2,18,Er hat mir die Regeln erklärt.
+901,explanation,die Erklärung,feminine,noun,A2,18,Kannst du mir bitte eine Erklärung geben?
+902,extreme sport,das Extremsport,neuter,noun,A2,18,"Das Extremsport ist gefährlich, aber spannend."
+903,driver (male),der Fahrer,masculine,noun,A2,18,Der Fahrer hat uns sicher nach Hause gebracht.
+904,driver (female),die Fahrerin,feminine,noun,A2,18,Die Fahrerin hielt das Auto sofort an.
+905,bicycle,das Fahrrad,neuter,noun,A2,18,Mein neues Fahrrad ist rot.
+906,"fit, in shape",fit,null,adjective,A2,18,Ich muss wieder fit werden für den Marathon.
+907,"gym, fitness studio",das Fitnessstudio,neuter,noun,A2,18,Wir gehen dreimal pro Woche ins Fitnessstudio.
+908,pedestrian (male),der Fußgänger,masculine,noun,A2,18,Der Fußgänger überquerte die Straße vorsichtig.
+909,dangerous,gefährlich,null,adjective,A2,18,Diese Situation ist sehr gefährlich für uns.
+910,"pavement, sidewalk",der Gehweg,masculine,noun,A2,18,Gehen Sie bitte auf dem Gehweg.
+911,healthy,gesund,null,adjective,A2,18,"Es ist wichtig, gesund zu essen."
+912,health,die Gesundheit,feminine,noun,A2,18,Meine Gesundheit ist mir sehr wichtig.
+913,"action, plot",die Handlung,feminine,noun,A2,18,Die Handlung des Buches war sehr spannend.
+914,helmet,der Helm,masculine,noun,A2,18,Er trägt immer einen Helm beim Fahrradfahren.
+915,"to honk, to beep",hupen,null,verb,A2,18,Das Auto hat laut gehupt.
+916,cough syrup,der Hustensaft,masculine,noun,A2,18,Ich muss Hustensaft in der Apotheke kaufen.
+917,"none, no one",keiner,null,phrase,A2,18,Keiner von uns hat die Antwort gewusst.
+918,to climb,klettern,null,verb,A2,18,Die Kinder klettern auf Bäume.
+919,climbing (as activity noun),das Klettern,neuter,noun,A2,18,Das Klettern macht mir viel Spaß.
+920,"intersection, crossroads",die Kreuzung,feminine,noun,A2,18,Biegen Sie bitte an der nächsten Kreuzung links ab.
+921,teacher (female),die Lehrerin,feminine,noun,A2,18,Unsere neue Lehrerin ist sehr nett.
+922,to lend,leihen,null,verb,A2,18,Kannst du mir dein Fahrrad leihen?
+923,"medication, medicine",das Medikament,neuter,noun,A2,18,Sie muss dieses Medikament dreimal täglich nehmen.
+924,mine,meiner,null,phrase,A2,18,"Ist das dein Regenschirm? Nein, das ist meiner."
+925,courage,der Mut,masculine,noun,A2,18,"Er hatte den Mut, die Wahrheit zu sagen."
+926,"brave, courageous",mutig,null,adjective,A2,18,Das war eine sehr mutige Entscheidung von dir.
+927,"plaster, band-aid",das Pflaster,neuter,noun,A2,18,Sie klebte schnell ein Pflaster auf ihre Wunde.
+928,suddenly,plötzlich,null,adverb,A2,18,Plötzlich wurde es sehr dunkel.
+929,cyclist (male),der Radfahrer,masculine,noun,A2,18,Der Radfahrer trägt immer einen Helm.
+930,cyclist (female),die Radfahrerin,feminine,noun,A2,18,Die Radfahrerin trug einen Helm auf dem Kopf.
+931,prescription,das Rezept,neuter,noun,A2,18,Der Arzt hat mir ein Rezept für Schmerzmittel gegeben.
+932,prescription-only,rezeptpflichtig,null,adjective,A2,18,Dieses Medikament ist rezeptpflichtig.
+933,risk,das Risiko,neuter,noun,A2,18,"Er geht kein Risiko ein, er ist sehr vorsichtig."
+934,"ointment, cream",die Salbe,feminine,noun,A2,18,Ich muss diese Salbe auf meine Wunde auftragen.
+935,to be annoyed about,sich ärgern,null,verb,A2,18,Sie ärgert sich über den Lärm.
+936,situation,die Situation,feminine,noun,A2,18,Die Situation ist gerade etwas schwierig.
+937,skydiving,das Skydiving,neuter,noun,A2,18,Das Skydiving ist mein größter Traum.
+938,sport,der Sport,masculine,noun,A2,18,Ich mache gern Sport am Morgen.
+939,athlete (male),der Sportler,masculine,noun,A2,18,Der Sportler trainiert jeden Tag hart.
+940,athlete (female),die Sportlerin,feminine,noun,A2,18,Sie ist eine sehr erfolgreiche Sportlerin.
+941,traffic jam,der Stau,masculine,noun,A2,18,Ich stehe im Stau auf der Autobahn.
+942,surfing (as activity noun),das Surfen,neuter,noun,A2,18,Das Surfen im Internet macht ihm Spaß.
+943,"tablet, pill",die Tablette,feminine,noun,A2,18,Ich muss jeden Tag eine Tablette nehmen.
+944,"to train, to exercise",trainieren,null,verb,A2,18,Ich trainiere dreimal pro Woche im Fitnessstudio.
+945,to overtake,überholen,null,verb,A2,18,Das Auto hat den LKW schnell überholt.
+946,"exercise, practice",die Übung,feminine,noun,A2,18,Diese Übung ist sehr gut für Anfänger.
+947,unhealthy,ungesund,null,adjective,A2,18,Fast Food ist oft sehr ungesund.
+948,"examination, investigation",die Untersuchung,feminine,noun,A2,18,Der Arzt hat eine gründliche Untersuchung gemacht.
+949,injury,die Verletzung,feminine,noun,A2,18,Er hat sich eine leichte Verletzung beim Sport zugezogen.
+950,to prescribe,verschreiben,null,verb,A2,18,Der Arzt verschrieb die nötigen Medikamente.
+951,vitamin,das Vitamin,neuter,noun,A2,18,Obst enthält viele wichtige Vitamine.
+952,word formation,die Wortbildung,feminine,noun,A2,18,Wortbildung ist ein wichtiger Teil der Grammatik.
+953,to wish,wünschen,null,verb,A2,18,Ich wünsche dir einen schönen Tag.
+954,old,alt,null,adjective,A1,,Das Haus ist sehr alt.
+955,offered,angeboten,masculine,verb,A1,,Er hat mir seine Hilfe angeboten.
+956,stop,anhalten,null,verb,A2,,Der Bus hält hier an.
+957,turn on,anmachen,null,verb,A2,,Mach bitte das Licht an.
+958,look at / regard,ansehen,null,verb,A2,,Ich sehe mir den Film an.
+959,to answer,antworten,null,verb,A1,,Bitte antworten Sie auf die Frage.
+960,workplace,der Arbeitsplatz,masculine,noun,A2,,Mein Arbeitsplatz ist sehr ruhig.
+961,exit,der Ausgang,masculine,noun,A1,,Wo ist der Ausgang?
+962,spend / issue,ausgeben,null,verb,A2,,Wir geben zu viel Geld aus.
+963,go out / assume / run out,ausgehen,null,verb,A2,,Wir gehen heute Abend aus.
+964,except,ausgenommen,masculine,verb,A1,,"Alle waren eingeladen, ihn ausgenommen."
+965,pronunciation,die Aussprache,feminine,noun,A2,,Ihre Aussprache ist sehr gut.
+966,take off / move out,ausziehen,null,verb,A2,,Ich ziehe die Jacke aus.
+967,car,das Auto,neuter,noun,A1,,Ich habe ein neues Auto.
+968,to mean,bedeuten,null,verb,A1,,Was bedeutet dieses Wort auf Deutsch?
+969,to begin,beginnen,null,verb,A1,,Der Unterricht beginnt um neun Uhr.
+970,to bite,beißen,null,verb,A2,,Der Hund beißt nicht.
+971,known / familiar,bekannt,null,adjective,A2,,Der Sänger ist sehr bekannt.
+972,to visit,besuchen,null,verb,A1,,Wir besuchen unsere Freunde am Wochenende.
+973,to pay,bezahlen,null,verb,A1,,Ich bezahle die Rechnung an der Kasse.
+974,to offer,bieten,null,verb,A2,,Ich biete dir 50 Euro dafür.
+975,"to ask, request",bitten,null,verb,A1,,Ich bitte dich um Hilfe.
+976,to blow,blasen,null,verb,A2,,Der Wind bläst stark.
+977,flower,die Blume,feminine,noun,A1,,Ich kaufe eine schöne Blume.
+978,"to roast, fry",braten,null,verb,A2,,Ich brate Hähnchen.
+979,to break,brechen,null,verb,A2,,Du sollst das nicht brechen.
+980,to burn,brennen,null,verb,A1,,Das Holz brennt gut.
+981,to bring,bringen,null,verb,A1,,Kannst du mir bitte ein Glas Wasser bringen?
+982,to think,denken,null,verb,A1,,"Ich denke, das ist eine gute Idee."
+983,you (informal),du,null,pronoun,A1,,"Wie geht es dir, du?"
+984,thirsty,durstig,null,adjective,A1,,Ich bin jetzt sehr durstig.
+985,entrance,der Eingang,masculine,noun,A1,,Der Eingang ist links.
+986,shopping / purchase,der Einkauf,masculine,noun,A2,,Ich mache den Einkauf für die Woche.
+987,income,das Einkommen,neuter,noun,A2,,Sein Einkommen ist niedrig.
+988,to excuse/apologize,entschuldigen,null,verb,A1,,Ich entschuldige mich.
+989,he,er,null,pronoun,A1,,Er ist mein bester Freund.
+990,to recognize,erkennen,null,verb,A2,,Ich habe ihn sofort erkannt.
+991,to allow,erlauben,null,verb,A2,,Meine Eltern erlauben mir das nicht.
+992,to reach,erreichen,null,verb,A2,,Ich habe ihn telefonisch nicht erreicht.
+993,to expect,erwarten,null,verb,A2,,Ich erwarte einen Anruf von ihr.
+994,to tell/narrate,erzählen,null,verb,A1,,Ich erzähle eine Geschichte.
+995,ticket,die Fahrkarte,feminine,noun,A1,,Ich kaufe eine Fahrkarte.
+996,timetable,der Fahrplan,masculine,noun,A2,,Der Fahrplan hängt am Bahnhof.
+997,trip,die Fahrt,feminine,noun,A1,,Die Fahrt dauert zwei Stunden.
+998,vehicle,das Fahrzeug,neuter,noun,A2,,Das Fahrzeug ist sehr alt.
+999,to fall,fallen,null,verb,A1,,Das Glas fällt herunter.
+1000,to catch,fangen,null,verb,A2,,Ich fange den Ball.
+1001,"thanks, thank you",danke,null,phrase,A1,,Danke für deine Hilfe!
+1002,bye,tschüss,null,phrase,A1,,"Tschüss, bis morgen!"
+1003,"maybe, perhaps",vielleicht,null,adverb,A1,,Vielleicht komme ich später.
+1004,"of course, naturally",natürlich,null,adverb,A2,,Natürlich helfe ich dir.
+1005,once; softens a request,mal,null,adverb,A2,,Komm mal her!
