@@ -480,7 +480,7 @@ deck =
   ,
   { rank: Rank 230, english: "to download", word: "downloaden" }
   ,
-  { rank: Rank 231, english: "to go shopping, to buy groceries", word: "einkaufen" }
+  { rank: Rank 231, english: "to go shopping", word: "einkaufen" }
   ,
   { rank: Rank 232, english: "allowed, permitted", word: "erlaubt" }
   ,
@@ -718,7 +718,7 @@ deck =
   ,
   { rank: Rank 349, english: "to have", word: "haben" }
   ,
-  { rank: Rank 350, english: "to the (countries with feminine article)", word: "in die" }
+  { rank: Rank 350, english: "to the (feminine countries)", word: "in die" }
   ,
   { rank: Rank 351, english: "into the", word: "ins" }
   ,
@@ -728,7 +728,7 @@ deck =
   ,
   { rank: Rank 354, english: "kind regards, love from", word: "liebe Grüße" }
   ,
-  { rank: Rank 355, english: "to (cities/countries without article)", word: "nach" }
+  { rank: Rank 355, english: "to (cities, most countries)", word: "nach" }
   ,
   { rank: Rank 356, english: "night", word: "die Nacht" }
   ,
@@ -972,7 +972,7 @@ deck =
   ,
   { rank: Rank 476, english: "first impression", word: "erste Eindruck" }
   ,
-  { rank: Rank 477, english: "gladly → preferably → most of all", word: "gern → lieber → am liebsten" }
+  { rank: Rank 477, english: "gladly → preferably → most", word: "gern → lieber → am liebsten" }
   ,
   { rank: Rank 478, english: "size", word: "die Größe" }
   ,
@@ -1000,7 +1000,7 @@ deck =
   ,
   { rank: Rank 490, english: "comparative", word: "der Komparativ" }
   ,
-  { rank: Rank 491, english: "subjunctive II (for polite requests)", word: "der Konjunktiv II" }
+  { rank: Rank 491, english: "subjunctive II (polite)", word: "der Konjunktiv II" }
   ,
   { rank: Rank 492, english: "short", word: "kurz" }
   ,
@@ -1394,13 +1394,13 @@ deck =
   ,
   { rank: Rank 687, english: "between", word: "zwischen" }
   ,
-  { rank: Rank 688, english: "school-leaving exam / A-levels (D)", word: "das Abitur" }
+  { rank: Rank 688, english: "school-leaving exam (D)", word: "das Abitur" }
   ,
-  { rank: Rank 689, english: "graduation, qualification, degree", word: "der Abschluss" }
+  { rank: Rank 689, english: "graduation, degree", word: "der Abschluss" }
   ,
   { rank: Rank 690, english: "than (in comparisons)", word: "als" }
   ,
-  { rank: Rank 691, english: "in your position / if I were you", word: "an deiner Stelle" }
+  { rank: Rank 691, english: "if I were you", word: "an deiner Stelle" }
   ,
   { rank: Rank 692, english: "in your position (formal)", word: "an Ihrer Stelle" }
   ,
@@ -1410,7 +1410,7 @@ deck =
   ,
   { rank: Rank 695, english: "astronaut (male)", word: "der Astronaut" }
   ,
-  { rank: Rank 696, english: "vocational training, apprenticeship", word: "die Ausbildung" }
+  { rank: Rank 696, english: "vocational training", word: "die Ausbildung" }
   ,
   { rank: Rank 697, english: "profession, job", word: "der Beruf" }
   ,
@@ -1434,7 +1434,7 @@ deck =
   ,
   { rank: Rank 707, english: "primary school", word: "die Grundschule" }
   ,
-  { rank: Rank 708, english: "grammar school / academic secondary school", word: "das Gymnasium" }
+  { rank: Rank 708, english: "academic secondary school", word: "das Gymnasium" }
   ,
   { rank: Rank 709, english: "lower secondary school (D)", word: "die Hauptschule" }
   ,
@@ -1452,7 +1452,7 @@ deck =
   ,
   { rank: Rank 716, english: "to extinguish", word: "löschen" }
   ,
-  { rank: Rank 717, english: "school-leaving exam (A/CH equivalent of Abitur)", word: "die Matura" }
+  { rank: Rank 717, english: "school-leaving exam (A/CH)", word: "die Matura" }
   ,
   { rank: Rank 718, english: "disadvantage", word: "der Nachteil" }
   ,
@@ -1472,7 +1472,7 @@ deck =
   ,
   { rank: Rank 726, english: "piece of advice", word: "der Ratschlag" }
   ,
-  { rank: Rank 727, english: "intermediate secondary school (D)", word: "die Realschule" }
+  { rank: Rank 727, english: "intermediate secondary school", word: "die Realschule" }
   ,
   { rank: Rank 728, english: "to save, to rescue", word: "retten" }
   ,
@@ -1590,7 +1590,7 @@ deck =
   ,
   { rank: Rank 785, english: "likeable / pleasant", word: "sympathisch" }
   ,
-  { rank: Rank 786, english: "tandem (language exchange partnership)", word: "das Tandem" }
+  { rank: Rank 786, english: "language exchange partner", word: "das Tandem" }
   ,
   { rank: Rank 787, english: "impatient", word: "ungeduldig" }
   ,
@@ -1632,7 +1632,7 @@ deck =
   ,
   { rank: Rank 806, english: "to come from", word: "herkommen" }
   ,
-  { rank: Rank 807, english: "there (motion away from speaker)", word: "hin" }
+  { rank: Rank 807, english: "there (away from speaker)", word: "hin" }
   ,
   { rank: Rank 808, english: "to put down", word: "hinlegen" }
   ,

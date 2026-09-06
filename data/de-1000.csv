@@ -229,7 +229,7 @@ Order,English,Deutsch,Gender,Type,Level,Unit,Example
 228,"boss, manager (male)",der Chef,masculine,noun,A1,4,Mein Chef ist sehr freundlich.
 229,"boss, manager (female)",die Chefin,feminine,noun,A1,4,Meine Chefin ist sehr nett.
 230,to download,downloaden,null,verb,A1,4,Ich downloade die App.
-231,"to go shopping, to buy groceries",einkaufen,null,verb,A1,4,Ich kaufe heute ein.
+231,to go shopping,einkaufen,null,verb,A1,4,Ich kaufe heute ein.
 232,"allowed, permitted",erlaubt,null,adjective,A1,4,Rauchen ist hier nicht erlaubt.
 233,early,früh,null,adjective,A1,4,Der Bus kommt immer sehr früh.
 234,frustrated,frustriert,null,adjective,A1,4,Er ist momentan sehr frustriert.
@@ -348,12 +348,12 @@ Order,English,Deutsch,Gender,Type,Level,Unit,Example
 347,fantastic,fantastisch,null,adjective,A1,7,Das Essen ist wirklich fantastisch!
 348,degree,der Grad,masculine,noun,A1,7,Es sind zwanzig Grad Celsius.
 349,to have,haben,null,verb,A1,7,Ich habe heute keine Zeit.
-350,to the (countries with feminine article),in die,null,phrase,A1,7,Ich fliege in die Schweiz.
+350,to the (feminine countries),in die,null,phrase,A1,7,Ich fliege in die Schweiz.
 351,into the,ins,null,phrase,A1,7,Wir gehen jetzt ins Kino.
 352,coffee,der Kaffee,masculine,noun,A1,7,Ich trinke gern Kaffee.
 353,cool,kühl,null,adjective,A1,7,Es ist heute kühl draußen.
 354,"kind regards, love from",liebe Grüße,null,phrase,A1,7,Liebe Grüße aus Berlin!
-355,to (cities/countries without article),nach,null,preposition,A1,7,Wir fahren heute nach Berlin.
+355,"to (cities, most countries)",nach,null,preposition,A1,7,Wir fahren heute nach Berlin.
 356,night,die Nacht,feminine,noun,A1,7,Wir schlafen gut in der Nacht.
 357,to reserve,reservieren,null,verb,A1,7,Ich reserviere einen Tisch für zwei Personen.
 358,"reception, front desk",die Rezeption,feminine,noun,A1,7,Wo ist die Rezeption?
@@ -475,7 +475,7 @@ Order,English,Deutsch,Gender,Type,Level,Unit,Example
 474,energetic,energisch,null,adjective,A2,10,Sie hat energisch an dem Projekt gearbeitet.
 475,tight / narrow,eng,null,adjective,A2,10,Diese Hose ist mir zu eng.
 476,first impression,erste Eindruck,masculine,phrase,A2,10,Der erste Eindruck ist oft sehr wichtig im Leben.
-477,gladly → preferably → most of all,gern → lieber → am liebsten,null,phrase,A2,10,"Ich schwimme gern, aber ich tanze lieber."
+477,gladly → preferably → most,gern → lieber → am liebsten,null,phrase,A2,10,"Ich schwimme gern, aber ich tanze lieber."
 478,size,die Größe,feminine,noun,A2,10,Welche Größe hat dieses Hemd?
 479,good → better → best,gut → besser → am besten,null,phrase,A2,10,"Dein Kaffee ist gut, aber mein Tee ist besser."
 480,handbag,die Handtasche,feminine,noun,A2,10,Sie hat ihre Schlüssel in der Handtasche vergessen.
@@ -489,7 +489,7 @@ Order,English,Deutsch,Gender,Type,Level,Unit,Example
 488,young,jung,null,adjective,A2,10,Meine Schwester ist noch sehr jung.
 489,dress,das Kleid,neuter,noun,A2,10,Sie hat ein schönes rotes Kleid getragen.
 490,comparative,der Komparativ,masculine,noun,A2,10,„Schneller“ ist der Komparativ von „schnell“.
-491,subjunctive II (for polite requests),der Konjunktiv II,masculine,noun,A2,10,Für höfliche Bitten nutzt man den Konjunktiv II.
+491,subjunctive II (polite),der Konjunktiv II,masculine,noun,A2,10,Für höfliche Bitten nutzt man den Konjunktiv II.
 492,short,kurz,null,adjective,A2,10,Der Weg zum Bahnhof ist sehr kurz.
 493,long,lang,null,adjective,A2,10,Dieser Film ist mir zu lang.
 494,coat,der Mantel,masculine,noun,A2,10,"Es ist kalt, zieh deinen Mantel an."
@@ -686,15 +686,15 @@ Order,English,Deutsch,Gender,Type,Level,Unit,Example
 685,wish,der Wunsch,masculine,noun,A2,13,Ich habe einen Wunsch zum Geburtstag.
 686,room,das Zimmer,neuter,noun,A2,13,"Mein Zimmer ist klein, aber hell."
 687,between,zwischen,null,preposition,A2,13,Der Park liegt zwischen zwei Straßen.
-688,school-leaving exam / A-levels (D),das Abitur,neuter,noun,A2,14,Sie hat letztes Jahr ihr Abitur bestanden.
-689,"graduation, qualification, degree",der Abschluss,masculine,noun,A2,14,Er feierte letzte Woche seinen Abschluss.
+688,school-leaving exam (D),das Abitur,neuter,noun,A2,14,Sie hat letztes Jahr ihr Abitur bestanden.
+689,"graduation, degree",der Abschluss,masculine,noun,A2,14,Er feierte letzte Woche seinen Abschluss.
 690,than (in comparisons),als,null,conjunction,A2,14,Er ist größer als sein Bruder.
-691,in your position / if I were you,an deiner Stelle,null,phrase,A2,14,An deiner Stelle würde ich sofort zum Arzt gehen.
+691,if I were you,an deiner Stelle,null,phrase,A2,14,An deiner Stelle würde ich sofort zum Arzt gehen.
 692,in your position (formal),an Ihrer Stelle,null,phrase,A2,14,An Ihrer Stelle würde ich den Vertrag sorgfältig prüfen.
 693,doctor (male),der Arzt,masculine,noun,A2,14,Ich habe heute einen Termin beim Arzt.
 694,doctor (female),die Ärztin,feminine,noun,A2,14,Meine Ärztin hat mir gut geholfen.
 695,astronaut (male),der Astronaut,masculine,noun,A2,14,Er wollte immer ein Astronaut sein.
-696,"vocational training, apprenticeship",die Ausbildung,feminine,noun,A2,14,Sie macht gerade eine Ausbildung zur Mechanikerin.
+696,vocational training,die Ausbildung,feminine,noun,A2,14,Sie macht gerade eine Ausbildung zur Mechanikerin.
 697,"profession, job",der Beruf,masculine,noun,A2,14,Was haben Sie für einen Beruf?
 698,vocational school,die Berufsschule,feminine,noun,A2,14,Ich besuche zweimal pro Woche die Berufsschule.
 699,job application,die Bewerbung,feminine,noun,A2,14,Ich habe meine Bewerbung letzte Woche abgeschickt.
@@ -706,7 +706,7 @@ Order,English,Deutsch,Gender,Type,Level,Unit,Example
 705,danger,die Gefahr,feminine,noun,A2,14,"Es besteht keine Gefahr, der Weg ist sicher."
 706,"contrast, opposite",der Gegensatz,masculine,noun,A2,14,Im Gegensatz zu mir mag er Sport.
 707,primary school,die Grundschule,feminine,noun,A2,14,Meine Tochter geht jetzt in die Grundschule.
-708,grammar school / academic secondary school,das Gymnasium,neuter,noun,A2,14,Meine Tochter geht auf das Gymnasium.
+708,academic secondary school,das Gymnasium,neuter,noun,A2,14,Meine Tochter geht auf das Gymnasium.
 709,lower secondary school (D),die Hauptschule,feminine,noun,A2,14,Mein Bruder ging nach der Grundschule auf die Hauptschule.
 710,"in (temporal, with dative)",in + Dativ (zeitlich),null,preposition,A2,14,Ich bin in zwei Stunden wieder da.
 711,in one year,in einem Jahr,null,phrase,A2,14,In einem Jahr ziehen wir um.
@@ -715,7 +715,7 @@ Order,English,Deutsch,Gender,Type,Level,Unit,Example
 714,physical,körperlich,null,adjective,A2,14,Er war körperlich sehr fit und stark.
 715,"CV, résumé",der Lebenslauf,masculine,noun,A2,14,Bitte schicken Sie Ihren Lebenslauf per E-Mail.
 716,to extinguish,löschen,null,verb,A2,14,Die Feuerwehr löschte den Brand schnell.
-717,school-leaving exam (A/CH equivalent of Abitur),die Matura,feminine,noun,A2,14,Er hat die Matura letztes Jahr bestanden.
+717,school-leaving exam (A/CH),die Matura,feminine,noun,A2,14,Er hat die Matura letztes Jahr bestanden.
 718,disadvantage,der Nachteil,masculine,noun,A2,14,Der Nachteil ist der hohe Preis.
 719,"although, even though",obwohl,null,conjunction,A2,14,"Obwohl es spät war, las ich weiter."
 720,pilot (male),der Pilot,masculine,noun,A2,14,Mein Bruder ist ein erfahrener Pilot.
@@ -725,7 +725,7 @@ Order,English,Deutsch,Gender,Type,Level,Unit,Example
 724,"psychological, mental",psychisch,null,adjective,A2,14,Sie hatte psychische Probleme.
 725,"career change, lateral entry",der Quereinstieg,masculine,noun,A2,14,Ein Quereinstieg kann neue Möglichkeiten bieten.
 726,piece of advice,der Ratschlag,masculine,noun,A2,14,Er gab mir einen wichtigen Ratschlag.
-727,intermediate secondary school (D),die Realschule,feminine,noun,A2,14,Meine Schwester besuchte die Realschule in der Stadt.
+727,intermediate secondary school,die Realschule,feminine,noun,A2,14,Meine Schwester besuchte die Realschule in der Stadt.
 728,"to save, to rescue",retten,null,verb,A2,14,Die Feuerwehr konnte die Katze retten.
 729,risky,riskant,null,adjective,A2,14,Der Plan war sehr riskant.
 730,to apply (for a job),sich bewerben,null,verb,A2,14,Ich möchte mich für diese Stelle bewerben.
@@ -784,7 +784,7 @@ Order,English,Deutsch,Gender,Type,Level,Unit,Example
 783,to wish for,sich wünschen,null,verb,A2,15,Was wünschst du dir zum Geburtstag?
 784,language,die Sprache,feminine,noun,A2,15,Ich lerne Deutsch als Fremdsprache.
 785,likeable / pleasant,sympathisch,null,adjective,A2,15,Dein Kollege ist sehr sympathisch.
-786,tandem (language exchange partnership),das Tandem,neuter,noun,A2,15,Wir bilden ein Tandem für den Sprachaustausch.
+786,language exchange partner,das Tandem,neuter,noun,A2,15,Wir bilden ein Tandem für den Sprachaustausch.
 787,impatient,ungeduldig,null,adjective,A2,15,"Warte bitte, sei nicht ungeduldig."
 788,queue number,die Wartenummer,feminine,noun,A2,15,Wir haben eine Wartenummer gezogen.
 789,reliable,zuverlässig,null,adjective,A2,15,Mein altes Auto ist immer noch sehr zuverlässig.
@@ -805,7 +805,7 @@ Order,English,Deutsch,Gender,Type,Level,Unit,Example
 804,genitive case,der Genitiv,masculine,noun,A2,16,Im Deutschen ist der Genitiv oft schwierig.
 805,here (motion toward speaker),her,null,adverb,A2,16,Bring bitte die Bücher zu mir her.
 806,to come from,herkommen,null,verb,A2,16,Wo kommt dein Freund her?
-807,there (motion away from speaker),hin,null,adverb,A2,16,Gehen wir zum Park hin?
+807,there (away from speaker),hin,null,adverb,A2,16,Gehen wir zum Park hin?
 808,to put down,hinlegen,null,verb,A2,16,Bitte leg das Buch dort hin.
 809,height,die Höhe,feminine,noun,A2,16,Die Höhe des Berges ist beeindruckend.
 810,hotel,das Hotel,neuter,noun,A2,16,Ich buche immer ein Hotel mit Frühstück.
