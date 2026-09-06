@@ -117,7 +117,11 @@ export const run = async (name, body) => {
 
   const server = http.createServer((req, res) => {
     const rel = req.url === "/" ? "/index.html" : req.url.split("?")[0]
-    const file = path.join(PUBLIC, rel)
+    let file = path.join(PUBLIC, rel)
+    // Mirror the SPA rule in netlify.toml: a path with no file behind it and
+    // no extension is a route, and gets the app. Without this the language
+    // paths cannot be tested at all.
+    if (!fs.existsSync(file) && !path.extname(rel)) file = path.join(PUBLIC, "index.html")
     if (!file.startsWith(PUBLIC) || !fs.existsSync(file)) { res.writeHead(404); return res.end() }
     res.writeHead(200, { "Content-Type": TYPES[path.extname(file)] ?? "application/octet-stream" })
     res.end(fs.readFileSync(file))
@@ -137,14 +141,14 @@ export const run = async (name, body) => {
 
   // Every page starts from a clean slate: pages in one browser share an
   // origin's storage, and a previous block's progress will leak otherwise.
-  const open = async ({ stub, seed, scheme, viewport } = {}) => {
+  const open = async ({ stub, seed, scheme, viewport, path = "/" } = {}) => {
     const page = await browser.newPage()
     await page.setViewport(viewport ?? { width: 390, height: 844, deviceScaleFactor: 2 })
     if (scheme) await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: scheme }])
     if (stub) await page.evaluateOnNewDocument(stub)
     page.errors = []
     page.on("pageerror", e => page.errors.push(String(e)))
-    await page.goto(base, { waitUntil: "networkidle0" })
+    await page.goto(base + path, { waitUntil: "networkidle0" })
     await page.evaluate(() => localStorage.clear())
     if (seed) await page.evaluate((k, s) => localStorage.setItem(k, JSON.stringify(s)), storageKey, seed)
     await page.reload({ waitUntil: "networkidle0" })

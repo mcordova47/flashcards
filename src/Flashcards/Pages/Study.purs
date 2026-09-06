@@ -31,6 +31,7 @@ import Flashcards.Backup as Backup
 import Flashcards.Deck as DeckIndex
 import Flashcards.Language (Language)
 import Flashcards.Language as Language
+import Flashcards.Route as Route
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
 import Flashcards.Speech as Speech
@@ -116,7 +117,7 @@ data Message
 init :: Transition Message State
 init = do
   fork do
-    language <- liftEffect $ Language.resolve <$> Storage.loadLanguage
+    language <- liftEffect $ Language.resolve <$> Route.current <*> Storage.loadLanguage
     progress <- liftEffect $ Storage.load language.code language.fingerprint
     canSpeak <- liftEffect Speech.supported
     savedAccent <- liftEffect $ Storage.loadAccent language.code
@@ -298,7 +299,10 @@ update state = case _ of
     Nothing ->
       pure state
     Just language -> do
-      forkVoid $ liftEffect $ Storage.saveLanguage language.code
+      forkVoid $ liftEffect do
+        Storage.saveLanguage language.code
+        -- So the address bar is copyable straight after a switch.
+        Route.replace $ Language.pathFor language
       fork do
         progress <- liftEffect $ Storage.load language.code language.fingerprint
         savedAccent <- liftEffect $ Storage.loadAccent language.code

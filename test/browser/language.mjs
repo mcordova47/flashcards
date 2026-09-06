@@ -64,4 +64,31 @@ export default async ({ check, open }) => {
   await wait(400)
   check("and survives a reload", await page.text(".prompt"), "der Artikel")
   check("no page errors", page.errors, [])
+  await page.close()
+
+  // A shared link opens what it says, whatever the reader was last studying.
+  const shared = await open({ stub: speechStub(VOICES), path: "/de" })
+  await shared.evaluate(() => localStorage.setItem("flashcards.language", "es"))
+  await shared.reload({ waitUntil: "networkidle0" })
+  await shared.waitForSelector(".prompt")
+  await wait(400)
+  check("a /de link opens German over a saved Spanish choice", await shared.text(".prompt"), "am")
+
+  // The root defers to the reader instead, so the installed app reopens where
+  // they left off.
+  await shared.evaluate(() => localStorage.setItem("flashcards.language", "es"))
+  await shared.goto(shared.url().replace(/\/de$/, "/"), { waitUntil: "networkidle0" })
+  await shared.waitForSelector(".prompt")
+  await wait(400)
+  check("the root defers to their own choice", await shared.text(".prompt"), "yo")
+
+  // Switching makes the address bar copyable.
+  await shared.tap(".panel-toggle")
+  ;(await shared.byText(".lang", "German")).click()
+  await wait(600)
+  check("switching rewrites the path", new URL(shared.url()).pathname, "/de")
+  check("without stacking history entries",
+    await shared.evaluate(() => history.length) < 4, true)
+  check("still no page errors", shared.errors, [])
+  await shared.close()
 }

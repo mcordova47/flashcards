@@ -8,7 +8,9 @@ module Flashcards.Language
   , all
   , byCode
   , default
+  , fromPath
   , german
+  , pathFor
   , resolve
   , spanish
   )
@@ -16,8 +18,10 @@ module Flashcards.Language
 
 import Prelude
 
+import Control.Alt ((<|>))
 import Data.Array as Array
 import Data.Maybe (Maybe(..), fromMaybe)
+import Data.String as String
 import Flashcards.Data.Deck.German as German
 import Flashcards.Data.Deck.Spanish as Spanish
 import Flashcards.Types.Card (Card)
@@ -79,7 +83,17 @@ default = spanish
 byCode :: String -> Maybe Language
 byCode code = Array.find (\l -> l.code == code) all
 
--- | A remembered choice, falling back to the default if it names a language
--- | this build no longer ships.
-resolve :: Maybe String -> Language
-resolve saved = fromMaybe default $ byCode =<< saved
+-- | The language a path names, if it names one. Bare `/` names nothing on
+-- | purpose, so it can defer to whatever the reader last chose.
+fromPath :: String -> Maybe Language
+fromPath = byCode <<< String.trim <<< String.replaceAll (String.Pattern "/") (String.Replacement "")
+
+pathFor :: Language -> String
+pathFor language = "/" <> language.code
+
+-- | An explicit path wins, so a shared link opens what it says regardless of
+-- | what the reader was studying. Failing that, their own saved choice, so the
+-- | installed app reopens where they left off. Failing that, the default.
+resolve :: String -> Maybe String -> Language
+resolve path saved =
+  fromMaybe default $ fromPath path <|> (byCode =<< saved)

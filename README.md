@@ -8,6 +8,8 @@ Spaced-repetition flashcards for the 1000 most common Spanish words.
 **[palabras.mcord.dev](https://palabras.mcord.dev)**
 
 Spanish and German, switchable from the panel, each with its own progress.
+[palabras.mcord.dev/de](https://palabras.mcord.dev/de) opens German — the path
+names the language, so a link can be shared.
 
 No account, no backend, no database. Open it and a card is already there. Add it
 to your home screen and it works with no signal.
@@ -44,6 +46,12 @@ Spanish ones.
 
 Rank means different things in the two decks. Spanish is ordered by frequency;
 German is a course list, A1 then A2. The progress sheet says which.
+
+The path names the language: `/de` opens German for whoever you send it to,
+whatever they were last studying. Bare `/` deliberately does not, deferring to
+the reader's own saved choice, so the installed app reopens where they left off
+rather than resetting every time. Switching rewrites the path so the address
+bar stays copyable.
 
 Adding a third is a row in the `LANGUAGES` table in `tools/sync-deck.mjs`, a
 CSV, and an entry in `Flashcards.Language`.
