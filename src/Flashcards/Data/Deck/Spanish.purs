@@ -20,2003 +20,2003 @@ fingerprint = "654958a3f958"
 deck :: Array Card
 deck =
   [
-  { rank: Rank 1, english: "I", word: "yo" }
+  { rank: Rank 1, english: "I", word: "yo", example: "" }
   ,
-  { rank: Rank 2, english: "to want", word: "querer" }
+  { rank: Rank 2, english: "to want", word: "querer", example: "" }
   ,
-  { rank: Rank 3, english: "this", word: "este" }
+  { rank: Rank 3, english: "this", word: "este", example: "" }
   ,
-  { rank: Rank 4, english: "yes", word: "sí" }
+  { rank: Rank 4, english: "yes", word: "sí", example: "" }
   ,
-  { rank: Rank 5, english: "no", word: "no" }
+  { rank: Rank 5, english: "no", word: "no", example: "" }
   ,
-  { rank: Rank 6, english: "to be able to", word: "poder" }
+  { rank: Rank 6, english: "to be able to", word: "poder", example: "" }
   ,
-  { rank: Rank 7, english: "to speak", word: "hablar" }
+  { rank: Rank 7, english: "to speak", word: "hablar", example: "" }
   ,
-  { rank: Rank 8, english: "to find", word: "encontrar" }
+  { rank: Rank 8, english: "to find", word: "encontrar", example: "" }
   ,
-  { rank: Rank 9, english: "to have (own)", word: "tener" }
+  { rank: Rank 9, english: "to have (own)", word: "tener", example: "" }
   ,
-  { rank: Rank 10, english: "to need", word: "necesitar" }
+  { rank: Rank 10, english: "to need", word: "necesitar", example: "" }
   ,
-  { rank: Rank 11, english: "where (the place that)", word: "donde" }
+  { rank: Rank 11, english: "where (the place that)", word: "donde", example: "" }
   ,
-  { rank: Rank 12, english: "that (linking clauses)", word: "que" }
+  { rank: Rank 12, english: "that (linking clauses)", word: "que", example: "" }
   ,
-  { rank: Rank 13, english: "the", word: "el / la" }
+  { rank: Rank 13, english: "the", word: "el / la", example: "" }
   ,
-  { rank: Rank 14, english: "place", word: "lugar" }
+  { rank: Rank 14, english: "place", word: "lugar", example: "" }
   ,
-  { rank: Rank 15, english: "home", word: "casa" }
+  { rank: Rank 15, english: "home", word: "casa", example: "" }
   ,
-  { rank: Rank 16, english: "something", word: "algo" }
+  { rank: Rank 16, english: "something", word: "algo", example: "" }
   ,
-  { rank: Rank 17, english: "that (near you)", word: "ese" }
+  { rank: Rank 17, english: "that (near you)", word: "ese", example: "" }
   ,
-  { rank: Rank 18, english: "and", word: "y" }
+  { rank: Rank 18, english: "and", word: "y", example: "" }
   ,
-  { rank: Rank 19, english: "to see", word: "ver" }
+  { rank: Rank 19, english: "to see", word: "ver", example: "" }
   ,
-  { rank: Rank 20, english: "but", word: "pero" }
+  { rank: Rank 20, english: "but", word: "pero", example: "" }
   ,
-  { rank: Rank 21, english: "to go (go away/leave)", word: "ir(se)" }
+  { rank: Rank 21, english: "to go (go away/leave)", word: "ir(se)", example: "" }
   ,
-  { rank: Rank 22, english: "to, at", word: "a" }
+  { rank: Rank 22, english: "to, at", word: "a", example: "" }
   ,
-  { rank: Rank 23, english: "to say", word: "decir" }
+  { rank: Rank 23, english: "to say", word: "decir", example: "" }
   ,
-  { rank: Rank 24, english: "or", word: "o" }
+  { rank: Rank 24, english: "or", word: "o", example: "" }
   ,
-  { rank: Rank 25, english: "a", word: "un" }
+  { rank: Rank 25, english: "a", word: "un", example: "" }
   ,
-  { rank: Rank 26, english: "more", word: "más" }
+  { rank: Rank 26, english: "more", word: "más", example: "" }
   ,
-  { rank: Rank 27, english: "as, like", word: "como" }
+  { rank: Rank 27, english: "as, like", word: "como", example: "" }
   ,
-  { rank: Rank 28, english: "is, oneself", word: "se" }
+  { rank: Rank 28, english: "is, oneself", word: "se", example: "" }
   ,
-  { rank: Rank 29, english: "to come", word: "venir" }
+  { rank: Rank 29, english: "to come", word: "venir", example: "" }
   ,
-  { rank: Rank 30, english: "my", word: "mi" }
+  { rank: Rank 30, english: "my", word: "mi", example: "" }
   ,
-  { rank: Rank 31, english: "to be (what it is)", word: "ser" }
+  { rank: Rank 31, english: "to be (what it is)", word: "ser", example: "" }
   ,
-  { rank: Rank 32, english: "to be (how or where it is)", word: "estar" }
+  { rank: Rank 32, english: "to be (how or where it is)", word: "estar", example: "" }
   ,
-  { rank: Rank 33, english: "to live", word: "vivir" }
+  { rank: Rank 33, english: "to live", word: "vivir", example: "" }
   ,
-  { rank: Rank 34, english: "to pass", word: "pasar" }
+  { rank: Rank 34, english: "to pass", word: "pasar", example: "" }
   ,
-  { rank: Rank 35, english: "day", word: "día" }
+  { rank: Rank 35, english: "day", word: "día", example: "" }
   ,
-  { rank: Rank 36, english: "year", word: "año" }
+  { rank: Rank 36, english: "year", word: "año", example: "" }
   ,
-  { rank: Rank 37, english: "week", word: "semana" }
+  { rank: Rank 37, english: "week", word: "semana", example: "" }
   ,
-  { rank: Rank 38, english: "month", word: "mes" }
+  { rank: Rank 38, english: "month", word: "mes", example: "" }
   ,
-  { rank: Rank 39, english: "each", word: "cada" }
+  { rank: Rank 39, english: "each", word: "cada", example: "" }
   ,
-  { rank: Rank 40, english: "time (duration)", word: "tiempo" }
+  { rank: Rank 40, english: "time (duration)", word: "tiempo", example: "" }
   ,
-  { rank: Rank 41, english: "to know", word: "saber" }
+  { rank: Rank 41, english: "to know", word: "saber", example: "" }
   ,
-  { rank: Rank 42, english: "to know (be familiar with)", word: "conocer" }
+  { rank: Rank 42, english: "to know (be familiar with)", word: "conocer", example: "" }
   ,
-  { rank: Rank 43, english: "to do", word: "hacer" }
+  { rank: Rank 43, english: "to do", word: "hacer", example: "" }
   ,
-  { rank: Rank 44, english: "to practice", word: "practicar" }
+  { rank: Rank 44, english: "to practice", word: "practicar", example: "" }
   ,
-  { rank: Rank 45, english: "to arrive", word: "llegar" }
+  { rank: Rank 45, english: "to arrive", word: "llegar", example: "" }
   ,
-  { rank: Rank 46, english: "too, also", word: "también" }
+  { rank: Rank 46, english: "too, also", word: "también", example: "" }
   ,
-  { rank: Rank 47, english: "when", word: "cuando" }
+  { rank: Rank 47, english: "when", word: "cuando", example: "" }
   ,
-  { rank: Rank 48, english: "until", word: "hasta" }
+  { rank: Rank 48, english: "until", word: "hasta", example: "" }
   ,
-  { rank: Rank 49, english: "morning", word: "mañana" }
+  { rank: Rank 49, english: "morning", word: "mañana", example: "" }
   ,
-  { rank: Rank 50, english: "he / she", word: "él / ella" }
+  { rank: Rank 50, english: "he / she", word: "él / ella", example: "" }
   ,
-  { rank: Rank 51, english: "is pleasing to (to like)", word: "gustar" }
+  { rank: Rank 51, english: "is pleasing to (to like)", word: "gustar", example: "" }
   ,
-  { rank: Rank 52, english: "me", word: "me" }
+  { rank: Rank 52, english: "me", word: "me", example: "" }
   ,
-  { rank: Rank 53, english: "you (one person, object)", word: "te" }
+  { rank: Rank 53, english: "you (one person, object)", word: "te", example: "" }
   ,
-  { rank: Rank 54, english: "you, him, her", word: "le" }
+  { rank: Rank 54, english: "you, him, her", word: "le", example: "" }
   ,
-  { rank: Rank 55, english: "us (object)", word: "nos" }
+  { rank: Rank 55, english: "us (object)", word: "nos", example: "" }
   ,
-  { rank: Rank 56, english: "them", word: "les" }
+  { rank: Rank 56, english: "them", word: "les", example: "" }
   ,
-  { rank: Rank 57, english: "friend", word: "amigo" }
+  { rank: Rank 57, english: "friend", word: "amigo", example: "" }
   ,
-  { rank: Rank 58, english: "food", word: "comida" }
+  { rank: Rank 58, english: "food", word: "comida", example: "" }
   ,
-  { rank: Rank 59, english: "other", word: "otro" }
+  { rank: Rank 59, english: "other", word: "otro", example: "" }
   ,
-  { rank: Rank 60, english: "work (job)", word: "trabajo" }
+  { rank: Rank 60, english: "work (job)", word: "trabajo", example: "" }
   ,
-  { rank: Rank 61, english: "for, through", word: "por" }
+  { rank: Rank 61, english: "for, through", word: "por", example: "" }
   ,
-  { rank: Rank 62, english: "for, in order to", word: "para" }
+  { rank: Rank 62, english: "for, in order to", word: "para", example: "" }
   ,
-  { rank: Rank 63, english: "example", word: "ejemplo" }
+  { rank: Rank 63, english: "example", word: "ejemplo", example: "" }
   ,
-  { rank: Rank 64, english: "of", word: "de" }
+  { rank: Rank 64, english: "of", word: "de", example: "" }
   ,
-  { rank: Rank 65, english: "in, on", word: "en" }
+  { rank: Rank 65, english: "in, on", word: "en", example: "" }
   ,
-  { rank: Rank 66, english: "with", word: "con" }
+  { rank: Rank 66, english: "with", word: "con", example: "" }
   ,
-  { rank: Rank 67, english: "to give", word: "dar" }
+  { rank: Rank 67, english: "to give", word: "dar", example: "" }
   ,
-  { rank: Rank 68, english: "country", word: "país" }
+  { rank: Rank 68, english: "country", word: "país", example: "" }
   ,
-  { rank: Rank 69, english: "man", word: "hombre" }
+  { rank: Rank 69, english: "man", word: "hombre", example: "" }
   ,
-  { rank: Rank 70, english: "woman", word: "mujer" }
+  { rank: Rank 70, english: "woman", word: "mujer", example: "" }
   ,
-  { rank: Rank 71, english: "to have (done something)", word: "haber" }
+  { rank: Rank 71, english: "to have (done something)", word: "haber", example: "" }
   ,
-  { rank: Rank 72, english: "very", word: "muy" }
+  { rank: Rank 72, english: "very", word: "muy", example: "" }
   ,
-  { rank: Rank 73, english: "much", word: "mucho" }
+  { rank: Rank 73, english: "much", word: "mucho", example: "" }
   ,
-  { rank: Rank 74, english: "large", word: "grande" }
+  { rank: Rank 74, english: "large", word: "grande", example: "" }
   ,
-  { rank: Rank 75, english: "less", word: "menos" }
+  { rank: Rank 75, english: "less", word: "menos", example: "" }
   ,
-  { rank: Rank 76, english: "little", word: "poco" }
+  { rank: Rank 76, english: "little", word: "poco", example: "" }
   ,
-  { rank: Rank 77, english: "thing", word: "cosa" }
+  { rank: Rank 77, english: "thing", word: "cosa", example: "" }
   ,
-  { rank: Rank 78, english: "if", word: "si" }
+  { rank: Rank 78, english: "if", word: "si", example: "" }
   ,
-  { rank: Rank 79, english: "our", word: "nuestro" }
+  { rank: Rank 79, english: "our", word: "nuestro", example: "" }
   ,
-  { rank: Rank 80, english: "always", word: "siempre" }
+  { rank: Rank 80, english: "always", word: "siempre", example: "" }
   ,
-  { rank: Rank 81, english: "life", word: "vida" }
+  { rank: Rank 81, english: "life", word: "vida", example: "" }
   ,
-  { rank: Rank 82, english: "afterwards", word: "después" }
+  { rank: Rank 82, english: "afterwards", word: "después", example: "" }
   ,
-  { rank: Rank 83, english: "then", word: "entonces" }
+  { rank: Rank 83, english: "then", word: "entonces", example: "" }
   ,
-  { rank: Rank 84, english: "to put, place", word: "poner" }
+  { rank: Rank 84, english: "to put, place", word: "poner", example: "" }
   ,
-  { rank: Rank 85, english: "should, must, to owe", word: "deber" }
+  { rank: Rank 85, english: "should, must, to owe", word: "deber", example: "" }
   ,
-  { rank: Rank 86, english: "well (properly)", word: "bien" }
+  { rank: Rank 86, english: "well (properly)", word: "bien", example: "" }
   ,
-  { rank: Rank 87, english: "between", word: "entre" }
+  { rank: Rank 87, english: "between", word: "entre", example: "" }
   ,
-  { rank: Rank 88, english: "word", word: "palabra" }
+  { rank: Rank 88, english: "word", word: "palabra", example: "" }
   ,
-  { rank: Rank 89, english: "now", word: "ahora" }
+  { rank: Rank 89, english: "now", word: "ahora", example: "" }
   ,
-  { rank: Rank 90, english: "to learn", word: "aprender" }
+  { rank: Rank 90, english: "to learn", word: "aprender", example: "" }
   ,
-  { rank: Rank 91, english: "your", word: "tu" }
+  { rank: Rank 91, english: "your", word: "tu", example: "" }
   ,
-  { rank: Rank 92, english: "to believe", word: "creer" }
+  { rank: Rank 92, english: "to believe", word: "creer", example: "" }
   ,
-  { rank: Rank 93, english: "is seeming to (to seem)", word: "parecer" }
+  { rank: Rank 93, english: "is seeming to (to seem)", word: "parecer", example: "" }
   ,
-  { rank: Rank 94, english: "nothing", word: "nada" }
+  { rank: Rank 94, english: "nothing", word: "nada", example: "" }
   ,
-  { rank: Rank 95, english: "all", word: "todo" }
+  { rank: Rank 95, english: "all", word: "todo", example: "" }
   ,
-  { rank: Rank 96, english: "because", word: "porque" }
+  { rank: Rank 96, english: "because", word: "porque", example: "" }
   ,
-  { rank: Rank 97, english: "to help", word: "ayudar" }
+  { rank: Rank 97, english: "to help", word: "ayudar", example: "" }
   ,
-  { rank: Rank 98, english: "to ask for, to request", word: "pedir" }
+  { rank: Rank 98, english: "to ask for, to request", word: "pedir", example: "" }
   ,
-  { rank: Rank 99, english: "to ask (a question)", word: "preguntar" }
+  { rank: Rank 99, english: "to ask (a question)", word: "preguntar", example: "" }
   ,
-  { rank: Rank 100, english: "what", word: "qué" }
+  { rank: Rank 100, english: "what", word: "qué", example: "" }
   ,
-  { rank: Rank 101, english: "it, the, him", word: "lo" }
+  { rank: Rank 101, english: "it, the, him", word: "lo", example: "" }
   ,
-  { rank: Rank 102, english: "his, her, their", word: "su" }
+  { rank: Rank 102, english: "his, her, their", word: "su", example: "" }
   ,
-  { rank: Rank 103, english: "here", word: "aquí" }
+  { rank: Rank 103, english: "here", word: "aquí", example: "" }
   ,
-  { rank: Rank 104, english: "already", word: "ya" }
+  { rank: Rank 104, english: "already", word: "ya", example: "" }
   ,
-  { rank: Rank 105, english: "without", word: "sin" }
+  { rank: Rank 105, english: "without", word: "sin", example: "" }
   ,
-  { rank: Rank 106, english: "time (an occasion)", word: "vez" }
+  { rank: Rank 106, english: "time (an occasion)", word: "vez", example: "" }
   ,
-  { rank: Rank 107, english: "there is, there are", word: "hay" }
+  { rank: Rank 107, english: "there is, there are", word: "hay", example: "" }
   ,
-  { rank: Rank 108, english: "on, about", word: "sobre" }
+  { rank: Rank 108, english: "on, about", word: "sobre", example: "" }
   ,
-  { rank: Rank 109, english: "you (informal)", word: "tú" }
+  { rank: Rank 109, english: "you (informal)", word: "tú", example: "" }
   ,
-  { rank: Rank 110, english: "any, some", word: "alguno" }
+  { rank: Rank 110, english: "any, some", word: "alguno", example: "" }
   ,
-  { rank: Rank 111, english: "same", word: "mismo" }
+  { rank: Rank 111, english: "same", word: "mismo", example: "" }
   ,
-  { rank: Rank 112, english: "like that, so", word: "así" }
+  { rank: Rank 112, english: "like that, so", word: "así", example: "" }
   ,
-  { rank: Rank 113, english: "how", word: "cómo" }
+  { rank: Rank 113, english: "how", word: "cómo", example: "" }
   ,
-  { rank: Rank 114, english: "two", word: "dos" }
+  { rank: Rank 114, english: "two", word: "dos", example: "" }
   ,
-  { rank: Rank 115, english: "only (pre-2010 spelling)", word: "sólo" }
+  { rank: Rank 115, english: "only (pre-2010 spelling)", word: "sólo", example: "" }
   ,
-  { rank: Rank 116, english: "first", word: "primero" }
+  { rank: Rank 116, english: "first", word: "primero", example: "" }
   ,
-  { rank: Rank 117, english: "from", word: "desde" }
+  { rank: Rank 117, english: "from", word: "desde", example: "" }
   ,
-  { rank: Rank 118, english: "nor", word: "ni" }
+  { rank: Rank 118, english: "nor", word: "ni", example: "" }
   ,
-  { rank: Rank 119, english: "thanks", word: "gracias" }
+  { rank: Rank 119, english: "thanks", word: "gracias", example: "" }
   ,
-  { rank: Rank 120, english: "good", word: "bueno" }
+  { rank: Rank 120, english: "good", word: "bueno", example: "" }
   ,
-  { rank: Rank 121, english: "one", word: "uno" }
+  { rank: Rank 121, english: "one", word: "uno", example: "" }
   ,
-  { rank: Rank 122, english: "you (formal)", word: "usted" }
+  { rank: Rank 122, english: "you (formal)", word: "usted", example: "" }
   ,
-  { rank: Rank 123, english: "so many, so much", word: "tanto" }
+  { rank: Rank 123, english: "so many, so much", word: "tanto", example: "" }
   ,
-  { rank: Rank 124, english: "Mr.", word: "señor" }
+  { rank: Rank 124, english: "Mr.", word: "señor", example: "" }
   ,
-  { rank: Rank 125, english: "such, as, so", word: "tan" }
+  { rank: Rank 125, english: "such, as, so", word: "tan", example: "" }
   ,
-  { rank: Rank 126, english: "who", word: "quién" }
+  { rank: Rank 126, english: "who", word: "quién", example: "" }
   ,
-  { rank: Rank 127, english: "part", word: "parte" }
+  { rank: Rank 127, english: "part", word: "parte", example: "" }
   ,
-  { rank: Rank 128, english: "is remaining to (to stay)", word: "quedar" }
+  { rank: Rank 128, english: "is remaining to (to stay)", word: "quedar", example: "" }
   ,
-  { rank: Rank 129, english: "please", word: "por favor" }
+  { rank: Rank 129, english: "please", word: "por favor", example: "" }
   ,
-  { rank: Rank 130, english: "where? (asking)", word: "dónde" }
+  { rank: Rank 130, english: "where? (asking)", word: "dónde", example: "" }
   ,
-  { rank: Rank 131, english: "never", word: "nunca" }
+  { rank: Rank 131, english: "never", word: "nunca", example: "" }
   ,
-  { rank: Rank 132, english: "to lead", word: "llevar" }
+  { rank: Rank 132, english: "to lead", word: "llevar", example: "" }
   ,
-  { rank: Rank 133, english: "to leave behind, to let", word: "dejar" }
+  { rank: Rank 133, english: "to leave behind, to let", word: "dejar", example: "" }
   ,
-  { rank: Rank 134, english: "truth", word: "verdad" }
+  { rank: Rank 134, english: "truth", word: "verdad", example: "" }
   ,
-  { rank: Rank 135, english: "to follow", word: "seguir" }
+  { rank: Rank 135, english: "to follow", word: "seguir", example: "" }
   ,
-  { rank: Rank 136, english: "new", word: "nuevo" }
+  { rank: Rank 136, english: "new", word: "nuevo", example: "" }
   ,
-  { rank: Rank 137, english: "so, then", word: "pues" }
+  { rank: Rank 137, english: "so, then", word: "pues", example: "" }
   ,
-  { rank: Rank 138, english: "to call (be called/name)", word: "llamar(se)" }
+  { rank: Rank 138, english: "to call (be called/name)", word: "llamar(se)", example: "" }
   ,
-  { rank: Rank 139, english: "best", word: "mejor" }
+  { rank: Rank 139, english: "best", word: "mejor", example: "" }
   ,
-  { rank: Rank 140, english: "to think", word: "pensar" }
+  { rank: Rank 140, english: "to think", word: "pensar", example: "" }
   ,
-  { rank: Rank 141, english: "that (over there)", word: "aquel" }
+  { rank: Rank 141, english: "that (over there)", word: "aquel", example: "" }
   ,
-  { rank: Rank 142, english: "moment", word: "momento" }
+  { rank: Rank 142, english: "moment", word: "momento", example: "" }
   ,
-  { rank: Rank 143, english: "god", word: "dios" }
+  { rank: Rank 143, english: "god", word: "dios", example: "" }
   ,
-  { rank: Rank 144, english: "but, rather", word: "sino" }
+  { rank: Rank 144, english: "but, rather", word: "sino", example: "" }
   ,
-  { rank: Rank 145, english: "to go out, to leave", word: "salir" }
+  { rank: Rank 145, english: "to go out, to leave", word: "salir", example: "" }
   ,
-  { rank: Rank 146, english: "to return", word: "volver" }
+  { rank: Rank 146, english: "to return", word: "volver", example: "" }
   ,
-  { rank: Rank 147, english: "form", word: "forma" }
+  { rank: Rank 147, english: "form", word: "forma", example: "" }
   ,
-  { rank: Rank 148, english: "before (in time)", word: "antes" }
+  { rank: Rank 148, english: "before (in time)", word: "antes", example: "" }
   ,
-  { rank: Rank 149, english: "although", word: "aunque" }
+  { rank: Rank 149, english: "although", word: "aunque", example: "" }
   ,
-  { rank: Rank 150, english: "world", word: "mundo" }
+  { rank: Rank 150, english: "world", word: "mundo", example: "" }
   ,
-  { rank: Rank 151, english: "three", word: "tres" }
+  { rank: Rank 151, english: "three", word: "tres", example: "" }
   ,
-  { rank: Rank 152, english: "such", word: "tal" }
+  { rank: Rank 152, english: "such", word: "tal", example: "" }
   ,
-  { rank: Rank 153, english: "there", word: "ahí" }
+  { rank: Rank 153, english: "there", word: "ahí", example: "" }
   ,
-  { rank: Rank 154, english: "to take, to drink", word: "tomar" }
+  { rank: Rank 154, english: "to take, to drink", word: "tomar", example: "" }
   ,
-  { rank: Rank 155, english: "certain", word: "cierto" }
+  { rank: Rank 155, english: "certain", word: "cierto", example: "" }
   ,
-  { rank: Rank 156, english: "to, towards", word: "hacia" }
+  { rank: Rank 156, english: "to, towards", word: "hacia", example: "" }
   ,
-  { rank: Rank 157, english: "case", word: "caso" }
+  { rank: Rank 157, english: "case", word: "caso", example: "" }
   ,
-  { rank: Rank 158, english: "night", word: "noche" }
+  { rank: Rank 158, english: "night", word: "noche", example: "" }
   ,
-  { rank: Rank 159, english: "to feel", word: "sentir" }
+  { rank: Rank 159, english: "to feel", word: "sentir", example: "" }
   ,
-  { rank: Rank 160, english: "then, later", word: "luego" }
+  { rank: Rank 160, english: "then, later", word: "luego", example: "" }
   ,
-  { rank: Rank 161, english: "someone", word: "alguien" }
+  { rank: Rank 161, english: "someone", word: "alguien", example: "" }
   ,
-  { rank: Rank 162, english: "to treat, deal with", word: "tratar" }
+  { rank: Rank 162, english: "to treat, deal with", word: "tratar", example: "" }
   ,
-  { rank: Rank 163, english: "person", word: "persona" }
+  { rank: Rank 163, english: "person", word: "persona", example: "" }
   ,
-  { rank: Rank 164, english: "higher", word: "mayor" }
+  { rank: Rank 164, english: "higher", word: "mayor", example: "" }
   ,
-  { rank: Rank 165, english: "last", word: "último" }
+  { rank: Rank 165, english: "last", word: "último", example: "" }
   ,
-  { rank: Rank 166, english: "single", word: "solo" }
+  { rank: Rank 166, english: "single", word: "solo", example: "" }
   ,
-  { rank: Rank 167, english: "own", word: "propio" }
+  { rank: Rank 167, english: "own", word: "propio", example: "" }
   ,
-  { rank: Rank 168, english: "no one", word: "nadie" }
+  { rank: Rank 168, english: "no one", word: "nadie", example: "" }
   ,
-  { rank: Rank 169, english: "whoever", word: "quien" }
+  { rank: Rank 169, english: "whoever", word: "quien", example: "" }
   ,
-  { rank: Rank 170, english: "we", word: "nosotros" }
+  { rank: Rank 170, english: "we", word: "nosotros", example: "" }
   ,
-  { rank: Rank 171, english: "to look", word: "mirar" }
+  { rank: Rank 171, english: "to look", word: "mirar", example: "" }
   ,
-  { rank: Rank 172, english: "father", word: "padre" }
+  { rank: Rank 172, english: "father", word: "padre", example: "" }
   ,
-  { rank: Rank 173, english: "time, hour", word: "hora" }
+  { rank: Rank 173, english: "time, hour", word: "hora", example: "" }
   ,
-  { rank: Rank 174, english: "people", word: "gente" }
+  { rank: Rank 174, english: "people", word: "gente", example: "" }
   ,
-  { rank: Rank 175, english: "none", word: "ninguno" }
+  { rank: Rank 175, english: "none", word: "ninguno", example: "" }
   ,
-  { rank: Rank 176, english: "money", word: "dinero" }
+  { rank: Rank 176, english: "money", word: "dinero", example: "" }
   ,
-  { rank: Rank 177, english: "almost", word: "casi" }
+  { rank: Rank 177, english: "almost", word: "casi", example: "" }
   ,
-  { rank: Rank 178, english: "point", word: "punto" }
+  { rank: Rank 178, english: "point", word: "punto", example: "" }
   ,
-  { rank: Rank 179, english: "done", word: "hecho" }
+  { rank: Rank 179, english: "done", word: "hecho", example: "" }
   ,
-  { rank: Rank 180, english: "during", word: "durante" }
+  { rank: Rank 180, english: "during", word: "durante", example: "" }
   ,
-  { rank: Rank 181, english: "any", word: "cualquier" }
+  { rank: Rank 181, english: "any", word: "cualquier", example: "" }
   ,
-  { rank: Rank 182, english: "hand", word: "mano" }
+  { rank: Rank 182, english: "hand", word: "mano", example: "" }
   ,
-  { rank: Rank 183, english: "way", word: "manera" }
+  { rank: Rank 183, english: "way", word: "manera", example: "" }
   ,
-  { rank: Rank 184, english: "which", word: "cual" }
+  { rank: Rank 184, english: "which", word: "cual", example: "" }
   ,
-  { rank: Rank 185, english: "while", word: "mientras" }
+  { rank: Rank 185, english: "while", word: "mientras", example: "" }
   ,
-  { rank: Rank 186, english: "to count", word: "contar" }
+  { rank: Rank 186, english: "to count", word: "contar", example: "" }
   ,
-  { rank: Rank 187, english: "end", word: "fin" }
+  { rank: Rank 187, english: "end", word: "fin", example: "" }
   ,
-  { rank: Rank 188, english: "type", word: "tipo" }
+  { rank: Rank 188, english: "type", word: "tipo", example: "" }
   ,
-  { rank: Rank 189, english: "clear", word: "claro" }
+  { rank: Rank 189, english: "clear", word: "claro", example: "" }
   ,
-  { rank: Rank 190, english: "also, besides", word: "además" }
+  { rank: Rank 190, english: "also, besides", word: "además", example: "" }
   ,
-  { rank: Rank 191, english: "to start", word: "empezar" }
+  { rank: Rank 191, english: "to start", word: "empezar", example: "" }
   ,
-  { rank: Rank 192, english: "to wait", word: "esperar" }
+  { rank: Rank 192, english: "to wait", word: "esperar", example: "" }
   ,
-  { rank: Rank 193, english: "today", word: "hoy" }
+  { rank: Rank 193, english: "today", word: "hoy", example: "" }
   ,
-  { rank: Rank 194, english: "side", word: "lado" }
+  { rank: Rank 194, english: "side", word: "lado", example: "" }
   ,
-  { rank: Rank 195, english: "son", word: "hijo" }
+  { rank: Rank 195, english: "son", word: "hijo", example: "" }
   ,
-  { rank: Rank 196, english: "there", word: "allí" }
+  { rank: Rank 196, english: "there", word: "allí", example: "" }
   ,
-  { rank: Rank 197, english: "this one (pre-2010 spelling)", word: "éste" }
+  { rank: Rank 197, english: "this one (pre-2010 spelling)", word: "éste", example: "" }
   ,
-  { rank: Rank 198, english: "problem", word: "problema" }
+  { rank: Rank 198, english: "problem", word: "problema", example: "" }
   ,
-  { rank: Rank 199, english: "agreement", word: "acuerdo" }
+  { rank: Rank 199, english: "agreement", word: "acuerdo", example: "" }
   ,
-  { rank: Rank 200, english: "account", word: "cuenta" }
+  { rank: Rank 200, english: "account", word: "cuenta", example: "" }
   ,
-  { rank: Rank 201, english: "medium", word: "medio" }
+  { rank: Rank 201, english: "medium", word: "medio", example: "" }
   ,
-  { rank: Rank 202, english: "against", word: "contra" }
+  { rank: Rank 202, english: "against", word: "contra", example: "" }
   ,
-  { rank: Rank 203, english: "out", word: "fuera" }
+  { rank: Rank 203, english: "out", word: "fuera", example: "" }
   ,
-  { rank: Rank 204, english: "to search", word: "buscar" }
+  { rank: Rank 204, english: "to search", word: "buscar", example: "" }
   ,
-  { rank: Rank 205, english: "within", word: "dentro" }
+  { rank: Rank 205, english: "within", word: "dentro", example: "" }
   ,
-  { rank: Rank 206, english: "long", word: "largo" }
+  { rank: Rank 206, english: "long", word: "largo", example: "" }
   ,
-  { rank: Rank 207, english: "safe, secure", word: "seguro" }
+  { rank: Rank 207, english: "safe, secure", word: "seguro", example: "" }
   ,
-  { rank: Rank 208, english: "to exist", word: "existir" }
+  { rank: Rank 208, english: "to exist", word: "existir", example: "" }
   ,
-  { rank: Rank 209, english: "child", word: "niño" }
+  { rank: Rank 209, english: "child", word: "niño", example: "" }
   ,
-  { rank: Rank 210, english: "to enter", word: "entrar" }
+  { rank: Rank 210, english: "to enter", word: "entrar", example: "" }
   ,
-  { rank: Rank 211, english: "mother", word: "madre" }
+  { rank: Rank 211, english: "mother", word: "madre", example: "" }
   ,
-  { rank: Rank 212, english: "however", word: "sin embargo" }
+  { rank: Rank 212, english: "however", word: "sin embargo", example: "" }
   ,
-  { rank: Rank 213, english: "only one, unique", word: "único" }
+  { rank: Rank 213, english: "only one, unique", word: "único", example: "" }
   ,
-  { rank: Rank 214, english: "to work", word: "trabajar" }
+  { rank: Rank 214, english: "to work", word: "trabajar", example: "" }
   ,
-  { rank: Rank 215, english: "small", word: "pequeño" }
+  { rank: Rank 215, english: "small", word: "pequeño", example: "" }
   ,
-  { rank: Rank 216, english: "high", word: "alto" }
+  { rank: Rank 216, english: "high", word: "alto", example: "" }
   ,
-  { rank: Rank 217, english: "change", word: "cambio" }
+  { rank: Rank 217, english: "change", word: "cambio", example: "" }
   ,
-  { rank: Rank 218, english: "to write", word: "escribir" }
+  { rank: Rank 218, english: "to write", word: "escribir", example: "" }
   ,
-  { rank: Rank 219, english: "four", word: "cuatro" }
+  { rank: Rank 219, english: "four", word: "cuatro", example: "" }
   ,
-  { rank: Rank 220, english: "to lose", word: "perder" }
+  { rank: Rank 220, english: "to lose", word: "perder", example: "" }
   ,
-  { rank: Rank 221, english: "history", word: "historia" }
+  { rank: Rank 221, english: "history", word: "historia", example: "" }
   ,
-  { rank: Rank 222, english: "wait", word: "espera" }
+  { rank: Rank 222, english: "wait", word: "espera", example: "" }
   ,
-  { rank: Rank 223, english: "idea", word: "idea" }
+  { rank: Rank 223, english: "idea", word: "idea", example: "" }
   ,
-  { rank: Rank 224, english: "water", word: "agua" }
+  { rank: Rank 224, english: "water", word: "agua", example: "" }
   ,
-  { rank: Rank 225, english: "to produce", word: "producir" }
+  { rank: Rank 225, english: "to produce", word: "producir", example: "" }
   ,
-  { rank: Rank 226, english: "city", word: "ciudad" }
+  { rank: Rank 226, english: "city", word: "ciudad", example: "" }
   ,
-  { rank: Rank 227, english: "state", word: "estado" }
+  { rank: Rank 227, english: "state", word: "estado", example: "" }
   ,
-  { rank: Rank 228, english: "mode", word: "modo" }
+  { rank: Rank 228, english: "mode", word: "modo", example: "" }
   ,
-  { rank: Rank 229, english: "name", word: "nombre" }
+  { rank: Rank 229, english: "name", word: "nombre", example: "" }
   ,
-  { rank: Rank 230, english: "to occur", word: "ocurrir" }
+  { rank: Rank 230, english: "to occur", word: "ocurrir", example: "" }
   ,
-  { rank: Rank 231, english: "family", word: "familia" }
+  { rank: Rank 231, english: "family", word: "familia", example: "" }
   ,
-  { rank: Rank 232, english: "reality", word: "realidad" }
+  { rank: Rank 232, english: "reality", word: "realidad", example: "" }
   ,
-  { rank: Rank 233, english: "to understand", word: "entender" }
+  { rank: Rank 233, english: "to understand", word: "entender", example: "" }
   ,
-  { rank: Rank 234, english: "to receive", word: "recibir" }
+  { rank: Rank 234, english: "to receive", word: "recibir", example: "" }
   ,
-  { rank: Rank 235, english: "work (of art)", word: "obra" }
+  { rank: Rank 235, english: "work (of art)", word: "obra", example: "" }
   ,
-  { rank: Rank 236, english: "important", word: "importante" }
+  { rank: Rank 236, english: "important", word: "importante", example: "" }
   ,
-  { rank: Rank 237, english: "with me", word: "conmigo" }
+  { rank: Rank 237, english: "with me", word: "conmigo", example: "" }
   ,
-  { rank: Rank 238, english: "wrong", word: "mal" }
+  { rank: Rank 238, english: "wrong", word: "mal", example: "" }
   ,
-  { rank: Rank 239, english: "yet", word: "todavía" }
+  { rank: Rank 239, english: "yet", word: "todavía", example: "" }
   ,
-  { rank: Rank 240, english: "reason", word: "razón" }
+  { rank: Rank 240, english: "reason", word: "razón", example: "" }
   ,
-  { rank: Rank 241, english: "as much as", word: "cuanto" }
+  { rank: Rank 241, english: "as much as", word: "cuanto", example: "" }
   ,
-  { rank: Rank 242, english: "low; under", word: "bajo" }
+  { rank: Rank 242, english: "low; under", word: "bajo", example: "" }
   ,
-  { rank: Rank 243, english: "to remember", word: "recordar" }
+  { rank: Rank 243, english: "to remember", word: "recordar", example: "" }
   ,
-  { rank: Rank 244, english: "group", word: "grupo" }
+  { rank: Rank 244, english: "group", word: "grupo", example: "" }
   ,
-  { rank: Rank 245, english: "love", word: "amor" }
+  { rank: Rank 245, english: "love", word: "amor", example: "" }
   ,
-  { rank: Rank 246, english: "thousand", word: "mil" }
+  { rank: Rank 246, english: "thousand", word: "mil", example: "" }
   ,
-  { rank: Rank 247, english: "mine", word: "mío" }
+  { rank: Rank 247, english: "mine", word: "mío", example: "" }
   ,
-  { rank: Rank 248, english: "human", word: "humano" }
+  { rank: Rank 248, english: "human", word: "humano", example: "" }
   ,
-  { rank: Rank 249, english: "to finish, to end", word: "terminar" }
+  { rank: Rank 249, english: "to finish, to end", word: "terminar", example: "" }
   ,
-  { rank: Rank 250, english: "to allow", word: "permitir" }
+  { rank: Rank 250, english: "to allow", word: "permitir", example: "" }
   ,
-  { rank: Rank 251, english: "to appear", word: "aparecer" }
+  { rank: Rank 251, english: "to appear", word: "aparecer", example: "" }
   ,
-  { rank: Rank 252, english: "to get", word: "conseguir" }
+  { rank: Rank 252, english: "to get", word: "conseguir", example: "" }
   ,
-  { rank: Rank 253, english: "afternoon", word: "tarde" }
+  { rank: Rank 253, english: "afternoon", word: "tarde", example: "" }
   ,
-  { rank: Rank 254, english: "to start", word: "comenzar" }
+  { rank: Rank 254, english: "to start", word: "comenzar", example: "" }
   ,
-  { rank: Rank 255, english: "several", word: "varios" }
+  { rank: Rank 255, english: "several", word: "varios", example: "" }
   ,
-  { rank: Rank 256, english: "possible", word: "posible" }
+  { rank: Rank 256, english: "possible", word: "posible", example: "" }
   ,
-  { rank: Rank 257, english: "yet", word: "aún" }
+  { rank: Rank 257, english: "yet", word: "aún", example: "" }
   ,
-  { rank: Rank 258, english: "to serve", word: "servir" }
+  { rank: Rank 258, english: "to serve", word: "servir", example: "" }
   ,
-  { rank: Rank 259, english: "general", word: "general" }
+  { rank: Rank 259, english: "general", word: "general", example: "" }
   ,
-  { rank: Rank 260, english: "to take out", word: "sacar" }
+  { rank: Rank 260, english: "to take out", word: "sacar", example: "" }
   ,
-  { rank: Rank 261, english: "relationship", word: "relación" }
+  { rank: Rank 261, english: "relationship", word: "relación", example: "" }
   ,
-  { rank: Rank 262, english: "five", word: "cinco" }
+  { rank: Rank 262, english: "five", word: "cinco", example: "" }
   ,
-  { rank: Rank 263, english: "body", word: "cuerpo" }
+  { rank: Rank 263, english: "body", word: "cuerpo", example: "" }
   ,
-  { rank: Rank 264, english: "with you", word: "contigo" }
+  { rank: Rank 264, english: "with you", word: "contigo", example: "" }
   ,
-  { rank: Rank 265, english: "to maintain", word: "mantener" }
+  { rank: Rank 265, english: "to maintain", word: "mantener", example: "" }
   ,
-  { rank: Rank 266, english: "faced with", word: "ante" }
+  { rank: Rank 266, english: "faced with", word: "ante", example: "" }
   ,
-  { rank: Rank 267, english: "principle", word: "principio" }
+  { rank: Rank 267, english: "principle", word: "principio", example: "" }
   ,
-  { rank: Rank 268, english: "to result", word: "resultar" }
+  { rank: Rank 268, english: "to result", word: "resultar", example: "" }
   ,
-  { rank: Rank 269, english: "equal", word: "igual" }
+  { rank: Rank 269, english: "equal", word: "igual", example: "" }
   ,
-  { rank: Rank 270, english: "too", word: "demasiado" }
+  { rank: Rank 270, english: "too", word: "demasiado", example: "" }
   ,
-  { rank: Rank 271, english: "town", word: "pueblo" }
+  { rank: Rank 271, english: "town", word: "pueblo", example: "" }
   ,
-  { rank: Rank 272, english: "second", word: "segundo" }
+  { rank: Rank 272, english: "second", word: "segundo", example: "" }
   ,
-  { rank: Rank 273, english: "to read", word: "leer" }
+  { rank: Rank 273, english: "to read", word: "leer", example: "" }
   ,
-  { rank: Rank 274, english: "to fall", word: "caer" }
+  { rank: Rank 274, english: "to fall", word: "caer", example: "" }
   ,
-  { rank: Rank 275, english: "to change", word: "cambiar" }
+  { rank: Rank 275, english: "to change", word: "cambiar", example: "" }
   ,
-  { rank: Rank 276, english: "eye", word: "ojo" }
+  { rank: Rank 276, english: "eye", word: "ojo", example: "" }
   ,
-  { rank: Rank 277, english: "goodbye", word: "adiós" }
+  { rank: Rank 277, english: "goodbye", word: "adiós", example: "" }
   ,
-  { rank: Rank 278, english: "street", word: "calle" }
+  { rank: Rank 278, english: "street", word: "calle", example: "" }
   ,
-  { rank: Rank 279, english: "to present", word: "presentar" }
+  { rank: Rank 279, english: "to present", word: "presentar", example: "" }
   ,
-  { rank: Rank 280, english: "white", word: "blanco" }
+  { rank: Rank 280, english: "white", word: "blanco", example: "" }
   ,
-  { rank: Rank 281, english: "to create", word: "crear" }
+  { rank: Rank 281, english: "to create", word: "crear", example: "" }
   ,
-  { rank: Rank 282, english: "to open", word: "abrir" }
+  { rank: Rank 282, english: "to open", word: "abrir", example: "" }
   ,
-  { rank: Rank 283, english: "book", word: "libro" }
+  { rank: Rank 283, english: "book", word: "libro", example: "" }
   ,
-  { rank: Rank 284, english: "different", word: "distinto" }
+  { rank: Rank 284, english: "different", word: "distinto", example: "" }
   ,
-  { rank: Rank 285, english: "force", word: "fuerza" }
+  { rank: Rank 285, english: "force", word: "fuerza", example: "" }
   ,
-  { rank: Rank 286, english: "light", word: "luz" }
+  { rank: Rank 286, english: "light", word: "luz", example: "" }
   ,
-  { rank: Rank 287, english: "according to", word: "según" }
+  { rank: Rank 287, english: "according to", word: "según", example: "" }
   ,
-  { rank: Rank 288, english: "saint", word: "santo" }
+  { rank: Rank 288, english: "saint", word: "santo", example: "" }
   ,
-  { rank: Rank 289, english: "front", word: "frente" }
+  { rank: Rank 289, english: "front", word: "frente", example: "" }
   ,
-  { rank: Rank 290, english: "to consider", word: "considerar" }
+  { rank: Rank 290, english: "to consider", word: "considerar", example: "" }
   ,
-  { rank: Rank 291, english: "really", word: "realmente" }
+  { rank: Rank 291, english: "really", word: "realmente", example: "" }
   ,
-  { rank: Rank 292, english: "police", word: "policía" }
+  { rank: Rank 292, english: "police", word: "policía", example: "" }
   ,
-  { rank: Rank 293, english: "to hear", word: "oír" }
+  { rank: Rank 293, english: "to hear", word: "oír", example: "" }
   ,
-  { rank: Rank 294, english: "whose", word: "cuyo" }
+  { rank: Rank 294, english: "whose", word: "cuyo", example: "" }
   ,
-  { rank: Rank 295, english: "sense", word: "sentido" }
+  { rank: Rank 295, english: "sense", word: "sentido", example: "" }
   ,
-  { rank: Rank 296, english: "to have just done; to finish", word: "acabar" }
+  { rank: Rank 296, english: "to have just done; to finish", word: "acabar", example: "" }
   ,
-  { rank: Rank 297, english: "step", word: "paso" }
+  { rank: Rank 297, english: "step", word: "paso", example: "" }
   ,
-  { rank: Rank 298, english: "situation", word: "situación" }
+  { rank: Rank 298, english: "situation", word: "situación", example: "" }
   ,
-  { rank: Rank 299, english: "serious (person)", word: "serio" }
+  { rank: Rank 299, english: "serious (person)", word: "serio", example: "" }
   ,
-  { rank: Rank 300, english: "head", word: "cabeza" }
+  { rank: Rank 300, english: "head", word: "cabeza", example: "" }
   ,
-  { rank: Rank 301, english: "quite", word: "bastante" }
+  { rank: Rank 301, english: "quite", word: "bastante", example: "" }
   ,
-  { rank: Rank 302, english: "brother", word: "hermano" }
+  { rank: Rank 302, english: "brother", word: "hermano", example: "" }
   ,
-  { rank: Rank 303, english: "to convert", word: "convertir" }
+  { rank: Rank 303, english: "to convert", word: "convertir", example: "" }
   ,
-  { rank: Rank 304, english: "grace", word: "gracia" }
+  { rank: Rank 304, english: "grace", word: "gracia", example: "" }
   ,
-  { rank: Rank 305, english: "century", word: "siglo" }
+  { rank: Rank 305, english: "century", word: "siglo", example: "" }
   ,
-  { rank: Rank 306, english: "last, past", word: "pasado" }
+  { rank: Rank 306, english: "last, past", word: "pasado", example: "" }
   ,
-  { rank: Rank 307, english: "bad", word: "malo" }
+  { rank: Rank 307, english: "bad", word: "malo", example: "" }
   ,
-  { rank: Rank 308, english: "land", word: "tierra" }
+  { rank: Rank 308, english: "land", word: "tierra", example: "" }
   ,
-  { rank: Rank 309, english: "paper", word: "papel" }
+  { rank: Rank 309, english: "paper", word: "papel", example: "" }
   ,
-  { rank: Rank 310, english: "affection", word: "cariño" }
+  { rank: Rank 310, english: "affection", word: "cariño", example: "" }
   ,
-  { rank: Rank 311, english: "valid, voucher", word: "vale" }
+  { rank: Rank 311, english: "valid, voucher", word: "vale", example: "" }
   ,
-  { rank: Rank 312, english: "neither", word: "tampoco" }
+  { rank: Rank 312, english: "neither", word: "tampoco", example: "" }
   ,
-  { rank: Rank 313, english: "social", word: "social" }
+  { rank: Rank 313, english: "social", word: "social", example: "" }
   ,
-  { rank: Rank 314, english: "old (aged)", word: "viejo" }
+  { rank: Rank 314, english: "old (aged)", word: "viejo", example: "" }
   ,
-  { rank: Rank 315, english: "Mrs.", word: "señora" }
+  { rank: Rank 315, english: "Mrs.", word: "señora", example: "" }
   ,
-  { rank: Rank 316, english: "topic", word: "tema" }
+  { rank: Rank 316, english: "topic", word: "tema", example: "" }
   ,
-  { rank: Rank 317, english: "political", word: "político" }
+  { rank: Rank 317, english: "political", word: "político", example: "" }
   ,
-  { rank: Rank 318, english: "Spanish", word: "Español" }
+  { rank: Rank 318, english: "Spanish", word: "Español", example: "" }
   ,
-  { rank: Rank 319, english: "dead", word: "muerto" }
+  { rank: Rank 319, english: "dead", word: "muerto", example: "" }
   ,
-  { rank: Rank 320, english: "to win", word: "ganar" }
+  { rank: Rank 320, english: "to win", word: "ganar", example: "" }
   ,
-  { rank: Rank 321, english: "to form", word: "formar" }
+  { rank: Rank 321, english: "to form", word: "formar", example: "" }
   ,
-  { rank: Rank 322, english: "class", word: "clase" }
+  { rank: Rank 322, english: "class", word: "clase", example: "" }
   ,
-  { rank: Rank 323, english: "fast", word: "rápido" }
+  { rank: Rank 323, english: "fast", word: "rápido", example: "" }
   ,
-  { rank: Rank 324, english: "to bring", word: "traer" }
+  { rank: Rank 324, english: "to bring", word: "traer", example: "" }
   ,
-  { rank: Rank 325, english: "to start from, to divide", word: "partir" }
+  { rank: Rank 325, english: "to start from, to divide", word: "partir", example: "" }
   ,
-  { rank: Rank 326, english: "to die", word: "morir" }
+  { rank: Rank 326, english: "to die", word: "morir", example: "" }
   ,
-  { rank: Rank 327, english: "even", word: "incluso" }
+  { rank: Rank 327, english: "even", word: "incluso", example: "" }
   ,
-  { rank: Rank 328, english: "luck", word: "suerte" }
+  { rank: Rank 328, english: "luck", word: "suerte", example: "" }
   ,
-  { rank: Rank 329, english: "field, country", word: "campo" }
+  { rank: Rank 329, english: "field, country", word: "campo", example: "" }
   ,
-  { rank: Rank 330, english: "care", word: "cuidado" }
+  { rank: Rank 330, english: "care", word: "cuidado", example: "" }
   ,
-  { rank: Rank 331, english: "to accept", word: "aceptar" }
+  { rank: Rank 331, english: "to accept", word: "aceptar", example: "" }
   ,
-  { rank: Rank 332, english: "perhaps", word: "quizás" }
+  { rank: Rank 332, english: "perhaps", word: "quizás", example: "" }
   ,
-  { rank: Rank 333, english: "to perform", word: "realizar" }
+  { rank: Rank 333, english: "to perform", word: "realizar", example: "" }
   ,
-  { rank: Rank 334, english: "hundred", word: "ciento" }
+  { rank: Rank 334, english: "hundred", word: "ciento", example: "" }
   ,
-  { rank: Rank 335, english: "fear", word: "miedo" }
+  { rank: Rank 335, english: "fear", word: "miedo", example: "" }
   ,
-  { rank: Rank 336, english: "order", word: "orden" }
+  { rank: Rank 336, english: "order", word: "orden", example: "" }
   ,
-  { rank: Rank 337, english: "door", word: "puerta" }
+  { rank: Rank 337, english: "door", word: "puerta", example: "" }
   ,
-  { rank: Rank 338, english: "soon", word: "pronto" }
+  { rank: Rank 338, english: "soon", word: "pronto", example: "" }
   ,
-  { rank: Rank 339, english: "to suppose", word: "suponer" }
+  { rank: Rank 339, english: "to suppose", word: "suponer", example: "" }
   ,
-  { rank: Rank 340, english: "to understand", word: "comprender" }
+  { rank: Rank 340, english: "to understand", word: "comprender", example: "" }
   ,
-  { rank: Rank 341, english: "final", word: "final" }
+  { rank: Rank 341, english: "final", word: "final", example: "" }
   ,
-  { rank: Rank 342, english: "interest", word: "interés" }
+  { rank: Rank 342, english: "interest", word: "interés", example: "" }
   ,
-  { rank: Rank 343, english: "following", word: "siguiente" }
+  { rank: Rank 343, english: "following", word: "siguiente", example: "" }
   ,
-  { rank: Rank 344, english: "view", word: "vista" }
+  { rank: Rank 344, english: "view", word: "vista", example: "" }
   ,
-  { rank: Rank 345, english: "to achieve", word: "lograr" }
+  { rank: Rank 345, english: "to achieve", word: "lograr", example: "" }
   ,
-  { rank: Rank 346, english: "other, the rest", word: "demás" }
+  { rank: Rank 346, english: "other, the rest", word: "demás", example: "" }
   ,
-  { rank: Rank 347, english: "you (several people, object)", word: "os" }
+  { rank: Rank 347, english: "you (several people, object)", word: "os", example: "" }
   ,
-  { rank: Rank 348, english: "boy", word: "chico" }
+  { rank: Rank 348, english: "boy", word: "chico", example: "" }
   ,
-  { rank: Rank 349, english: "difficult", word: "difícil" }
+  { rank: Rank 349, english: "difficult", word: "difícil", example: "" }
   ,
-  { rank: Rank 350, english: "how much", word: "cuánto" }
+  { rank: Rank 350, english: "how much", word: "cuánto", example: "" }
   ,
-  { rank: Rank 351, english: "number", word: "número" }
+  { rank: Rank 351, english: "number", word: "número", example: "" }
   ,
-  { rank: Rank 352, english: "to explain", word: "explicar" }
+  { rank: Rank 352, english: "to explain", word: "explicar", example: "" }
   ,
-  { rank: Rank 353, english: "come", word: "venga" }
+  { rank: Rank 353, english: "come", word: "venga", example: "" }
   ,
-  { rank: Rank 354, english: "black", word: "negro" }
+  { rank: Rank 354, english: "black", word: "negro", example: "" }
   ,
-  { rank: Rank 355, english: "road", word: "camino" }
+  { rank: Rank 355, english: "road", word: "camino", example: "" }
   ,
-  { rank: Rank 356, english: "background", word: "fondo" }
+  { rank: Rank 356, english: "background", word: "fondo", example: "" }
   ,
-  { rank: Rank 357, english: "voice", word: "voz" }
+  { rank: Rank 357, english: "voice", word: "voz", example: "" }
   ,
-  { rank: Rank 358, english: "study", word: "estudio" }
+  { rank: Rank 358, english: "study", word: "estudio", example: "" }
   ,
-  { rank: Rank 359, english: "necessary", word: "necesario" }
+  { rank: Rank 359, english: "necessary", word: "necesario", example: "" }
   ,
-  { rank: Rank 360, english: "there", word: "allá" }
+  { rank: Rank 360, english: "there", word: "allá", example: "" }
   ,
-  { rank: Rank 361, english: "to touch", word: "tocar" }
+  { rank: Rank 361, english: "to touch", word: "tocar", example: "" }
   ,
-  { rank: Rank 362, english: "value", word: "valor" }
+  { rank: Rank 362, english: "value", word: "valor", example: "" }
   ,
-  { rank: Rank 363, english: "to recognize", word: "reconocer" }
+  { rank: Rank 363, english: "to recognize", word: "reconocer", example: "" }
   ,
-  { rank: Rank 364, english: "to study", word: "estudiar" }
+  { rank: Rank 364, english: "to study", word: "estudiar", example: "" }
   ,
-  { rank: Rank 365, english: "to reach", word: "alcanzar" }
+  { rank: Rank 365, english: "to reach", word: "alcanzar", example: "" }
   ,
-  { rank: Rank 366, english: "to be born", word: "nacer" }
+  { rank: Rank 366, english: "to be born", word: "nacer", example: "" }
   ,
-  { rank: Rank 367, english: "to direct", word: "dirigir" }
+  { rank: Rank 367, english: "to direct", word: "dirigir", example: "" }
   ,
-  { rank: Rank 368, english: "to run", word: "correr" }
+  { rank: Rank 368, english: "to run", word: "correr", example: "" }
   ,
-  { rank: Rank 369, english: "happy", word: "feliz" }
+  { rank: Rank 369, english: "happy", word: "feliz", example: "" }
   ,
-  { rank: Rank 370, english: "measure", word: "medida" }
+  { rank: Rank 370, english: "measure", word: "medida", example: "" }
   ,
-  { rank: Rank 371, english: "lesser, younger", word: "menor" }
+  { rank: Rank 371, english: "lesser, younger", word: "menor", example: "" }
   ,
-  { rank: Rank 372, english: "war", word: "guerra" }
+  { rank: Rank 372, english: "war", word: "guerra", example: "" }
   ,
-  { rank: Rank 373, english: "only", word: "solamente" }
+  { rank: Rank 373, english: "only", word: "solamente", example: "" }
   ,
-  { rank: Rank 374, english: "wife", word: "esposa" }
+  { rank: Rank 374, english: "wife", word: "esposa", example: "" }
   ,
-  { rank: Rank 375, english: "to use", word: "utilizar" }
+  { rank: Rank 375, english: "to use", word: "utilizar", example: "" }
   ,
-  { rank: Rank 376, english: "forward", word: "adelante" }
+  { rank: Rank 376, english: "forward", word: "adelante", example: "" }
   ,
-  { rank: Rank 377, english: "center", word: "centro" }
+  { rank: Rank 377, english: "center", word: "centro", example: "" }
   ,
-  { rank: Rank 378, english: "which one", word: "cuál" }
+  { rank: Rank 378, english: "which one", word: "cuál", example: "" }
   ,
-  { rank: Rank 379, english: "need", word: "necesidad" }
+  { rank: Rank 379, english: "need", word: "necesidad", example: "" }
   ,
-  { rank: Rank 380, english: "condition", word: "condición" }
+  { rank: Rank 380, english: "condition", word: "condición", example: "" }
   ,
-  { rank: Rank 381, english: "to pay", word: "pagar" }
+  { rank: Rank 381, english: "to pay", word: "pagar", example: "" }
   ,
-  { rank: Rank 382, english: "it", word: "ello" }
+  { rank: Rank 382, english: "it", word: "ello", example: "" }
   ,
-  { rank: Rank 383, english: "lack", word: "falta" }
+  { rank: Rank 383, english: "lack", word: "falta", example: "" }
   ,
-  { rank: Rank 384, english: "death", word: "muerte" }
+  { rank: Rank 384, english: "death", word: "muerte", example: "" }
   ,
-  { rank: Rank 385, english: "ten", word: "diez" }
+  { rank: Rank 385, english: "ten", word: "diez", example: "" }
   ,
-  { rank: Rank 386, english: "through, across", word: "través" }
+  { rank: Rank 386, english: "through, across", word: "través", example: "" }
   ,
-  { rank: Rank 387, english: "ancient, former", word: "antiguo" }
+  { rank: Rank 387, english: "ancient, former", word: "antiguo", example: "" }
   ,
-  { rank: Rank 388, english: "supposed", word: "supuesto" }
+  { rank: Rank 388, english: "supposed", word: "supuesto", example: "" }
   ,
-  { rank: Rank 389, english: "age", word: "edad" }
+  { rank: Rank 389, english: "age", word: "edad", example: "" }
   ,
-  { rank: Rank 390, english: "to play", word: "jugar" }
+  { rank: Rank 390, english: "to play", word: "jugar", example: "" }
   ,
-  { rank: Rank 391, english: "heart", word: "corazón" }
+  { rank: Rank 391, english: "heart", word: "corazón", example: "" }
   ,
-  { rank: Rank 392, english: "face", word: "cara" }
+  { rank: Rank 392, english: "face", word: "cara", example: "" }
   ,
-  { rank: Rank 393, english: "boss, chief", word: "jefe" }
+  { rank: Rank 393, english: "boss, chief", word: "jefe", example: "" }
   ,
-  { rank: Rank 394, english: "era, time", word: "época" }
+  { rank: Rank 394, english: "era, time", word: "época", example: "" }
   ,
-  { rank: Rank 395, english: "color", word: "color" }
+  { rank: Rank 395, english: "color", word: "color", example: "" }
   ,
-  { rank: Rank 396, english: "to listen", word: "escuchar" }
+  { rank: Rank 396, english: "to listen", word: "escuchar", example: "" }
   ,
-  { rank: Rank 397, english: "help", word: "ayuda" }
+  { rank: Rank 397, english: "help", word: "ayuda", example: "" }
   ,
-  { rank: Rank 398, english: "experience", word: "experiencia" }
+  { rank: Rank 398, english: "experience", word: "experiencia", example: "" }
   ,
-  { rank: Rank 399, english: "movement", word: "movimiento" }
+  { rank: Rank 399, english: "movement", word: "movimiento", example: "" }
   ,
-  { rank: Rank 400, english: "to fulfill", word: "cumplir" }
+  { rank: Rank 400, english: "to fulfill", word: "cumplir", example: "" }
   ,
-  { rank: Rank 401, english: "special", word: "especial" }
+  { rank: Rank 401, english: "special", word: "especial", example: "" }
   ,
-  { rank: Rank 402, english: "different", word: "diferente" }
+  { rank: Rank 402, english: "different", word: "diferente", example: "" }
   ,
-  { rank: Rank 403, english: "to weigh", word: "pesar" }
+  { rank: Rank 403, english: "to weigh", word: "pesar", example: "" }
   ,
-  { rank: Rank 404, english: "possibility", word: "posibilidad" }
+  { rank: Rank 404, english: "possibility", word: "posibilidad", example: "" }
   ,
-  { rank: Rank 405, english: "to offer", word: "ofrecer" }
+  { rank: Rank 405, english: "to offer", word: "ofrecer", example: "" }
   ,
-  { rank: Rank 406, english: "up", word: "arriba" }
+  { rank: Rank 406, english: "up", word: "arriba", example: "" }
   ,
-  { rank: Rank 407, english: "to discover", word: "descubrir" }
+  { rank: Rank 407, english: "to discover", word: "descubrir", example: "" }
   ,
-  { rank: Rank 408, english: "daughter", word: "hija" }
+  { rank: Rank 408, english: "daughter", word: "hija", example: "" }
   ,
-  { rank: Rank 409, english: "previous", word: "anterior" }
+  { rank: Rank 409, english: "previous", word: "anterior", example: "" }
   ,
-  { rank: Rank 410, english: "game", word: "juego" }
+  { rank: Rank 410, english: "game", word: "juego", example: "" }
   ,
-  { rank: Rank 411, english: "to lift (to get up)", word: "levantar(se)" }
+  { rank: Rank 411, english: "to lift (to get up)", word: "levantar(se)", example: "" }
   ,
-  { rank: Rank 412, english: "poor", word: "pobre" }
+  { rank: Rank 412, english: "poor", word: "pobre", example: "" }
   ,
-  { rank: Rank 413, english: "air", word: "aire" }
+  { rank: Rank 413, english: "air", word: "aire", example: "" }
   ,
-  { rank: Rank 414, english: "six", word: "seis" }
+  { rank: Rank 414, english: "six", word: "seis", example: "" }
   ,
-  { rank: Rank 415, english: "to try", word: "intentar" }
+  { rank: Rank 415, english: "to try", word: "intentar", example: "" }
   ,
-  { rank: Rank 416, english: "together", word: "junto" }
+  { rank: Rank 416, english: "together", word: "junto", example: "" }
   ,
-  { rank: Rank 417, english: "result", word: "resultado" }
+  { rank: Rank 417, english: "result", word: "resultado", example: "" }
   ,
-  { rank: Rank 418, english: "to use", word: "usar" }
+  { rank: Rank 418, english: "to use", word: "usar", example: "" }
   ,
-  { rank: Rank 419, english: "to decide", word: "decidir" }
+  { rank: Rank 419, english: "to decide", word: "decidir", example: "" }
   ,
-  { rank: Rank 420, english: "to repeat", word: "repetir" }
+  { rank: Rank 420, english: "to repeat", word: "repetir", example: "" }
   ,
-  { rank: Rank 421, english: "to forget", word: "olvidar" }
+  { rank: Rank 421, english: "to forget", word: "olvidar", example: "" }
   ,
-  { rank: Rank 422, english: "law", word: "ley" }
+  { rank: Rank 422, english: "law", word: "ley", example: "" }
   ,
-  { rank: Rank 423, english: "appearance", word: "aspecto" }
+  { rank: Rank 423, english: "appearance", word: "aspecto", example: "" }
   ,
-  { rank: Rank 424, english: "foot", word: "pie" }
+  { rank: Rank 424, english: "foot", word: "pie", example: "" }
   ,
-  { rank: Rank 425, english: "to be worth", word: "valer" }
+  { rank: Rank 425, english: "to be worth", word: "valer", example: "" }
   ,
-  { rank: Rank 426, english: "species", word: "especie" }
+  { rank: Rank 426, english: "species", word: "especie", example: "" }
   ,
-  { rank: Rank 427, english: "to eat", word: "comer" }
+  { rank: Rank 427, english: "to eat", word: "comer", example: "" }
   ,
-  { rank: Rank 428, english: "service", word: "servicio" }
+  { rank: Rank 428, english: "service", word: "servicio", example: "" }
   ,
-  { rank: Rank 429, english: "close", word: "cerca" }
+  { rank: Rank 429, english: "close", word: "cerca", example: "" }
   ,
-  { rank: Rank 430, english: "to show", word: "mostrar" }
+  { rank: Rank 430, english: "to show", word: "mostrar", example: "" }
   ,
-  { rank: Rank 431, english: "activity", word: "actividad" }
+  { rank: Rank 431, english: "activity", word: "actividad", example: "" }
   ,
-  { rank: Rank 432, english: "third", word: "tercero" }
+  { rank: Rank 432, english: "third", word: "tercero", example: "" }
   ,
-  { rank: Rank 433, english: "uncle", word: "tío" }
+  { rank: Rank 433, english: "uncle", word: "tío", example: "" }
   ,
-  { rank: Rank 434, english: "to occupy", word: "ocupar" }
+  { rank: Rank 434, english: "to occupy", word: "ocupar", example: "" }
   ,
-  { rank: Rank 435, english: "matter, issue", word: "cuestión" }
+  { rank: Rank 435, english: "matter, issue", word: "cuestión", example: "" }
   ,
-  { rank: Rank 436, english: "doubt", word: "duda" }
+  { rank: Rank 436, english: "doubt", word: "duda", example: "" }
   ,
-  { rank: Rank 437, english: "at least", word: "siquiera" }
+  { rank: Rank 437, english: "at least", word: "siquiera", example: "" }
   ,
-  { rank: Rank 438, english: "difference", word: "diferencia" }
+  { rank: Rank 438, english: "difference", word: "diferencia", example: "" }
   ,
-  { rank: Rank 439, english: "to move", word: "mover" }
+  { rank: Rank 439, english: "to move", word: "mover", example: "" }
   ,
-  { rank: Rank 440, english: "to continue", word: "continuar" }
+  { rank: Rank 440, english: "to continue", word: "continuar", example: "" }
   ,
-  { rank: Rank 441, english: "amount", word: "cantidad" }
+  { rank: Rank 441, english: "amount", word: "cantidad", example: "" }
   ,
-  { rank: Rank 442, english: "action", word: "acción" }
+  { rank: Rank 442, english: "action", word: "acción", example: "" }
   ,
-  { rank: Rank 443, english: "to happen", word: "suceder" }
+  { rank: Rank 443, english: "to happen", word: "suceder", example: "" }
   ,
-  { rank: Rank 444, english: "to set", word: "fijar" }
+  { rank: Rank 444, english: "to set", word: "fijar", example: "" }
   ,
-  { rank: Rank 445, english: "society", word: "sociedad" }
+  { rank: Rank 445, english: "society", word: "sociedad", example: "" }
   ,
-  { rank: Rank 446, english: "to refer", word: "referir" }
+  { rank: Rank 446, english: "to refer", word: "referir", example: "" }
   ,
-  { rank: Rank 447, english: "to bring closer", word: "acercar" }
+  { rank: Rank 447, english: "to bring closer", word: "acercar", example: "" }
   ,
-  { rank: Rank 448, english: "able", word: "capaz" }
+  { rank: Rank 448, english: "able", word: "capaz", example: "" }
   ,
-  { rank: Rank 449, english: "free", word: "libre" }
+  { rank: Rank 449, english: "free", word: "libre", example: "" }
   ,
-  { rank: Rank 450, english: "natural", word: "natural" }
+  { rank: Rank 450, english: "natural", word: "natural", example: "" }
   ,
-  { rank: Rank 451, english: "to devote", word: "dedicar" }
+  { rank: Rank 451, english: "to devote", word: "dedicar", example: "" }
   ,
-  { rank: Rank 452, english: "weight", word: "peso" }
+  { rank: Rank 452, english: "weight", word: "peso", example: "" }
   ,
-  { rank: Rank 453, english: "effect", word: "efecto" }
+  { rank: Rank 453, english: "effect", word: "efecto", example: "" }
   ,
-  { rank: Rank 454, english: "object", word: "objeto" }
+  { rank: Rank 454, english: "object", word: "objeto", example: "" }
   ,
-  { rank: Rank 455, english: "doctor", word: "doctor" }
+  { rank: Rank 455, english: "doctor", word: "doctor", example: "" }
   ,
-  { rank: Rank 456, english: "true", word: "verdadero" }
+  { rank: Rank 456, english: "true", word: "verdadero", example: "" }
   ,
-  { rank: Rank 457, english: "enough", word: "suficiente" }
+  { rank: Rank 457, english: "enough", word: "suficiente", example: "" }
   ,
-  { rank: Rank 458, english: "young", word: "joven" }
+  { rank: Rank 458, english: "young", word: "joven", example: "" }
   ,
-  { rank: Rank 459, english: "political party, match", word: "partido" }
+  { rank: Rank 459, english: "political party, match", word: "partido", example: "" }
   ,
-  { rank: Rank 460, english: "economic", word: "económico" }
+  { rank: Rank 460, english: "economic", word: "económico", example: "" }
   ,
-  { rank: Rank 461, english: "below, downstairs", word: "abajo" }
+  { rank: Rank 461, english: "below, downstairs", word: "abajo", example: "" }
   ,
-  { rank: Rank 462, english: "right", word: "derecho" }
+  { rank: Rank 462, english: "right", word: "derecho", example: "" }
   ,
-  { rank: Rank 463, english: "first (before a noun)", word: "primer" }
+  { rank: Rank 463, english: "first (before a noun)", word: "primer", example: "" }
   ,
-  { rank: Rank 464, english: "importance", word: "importancia" }
+  { rank: Rank 464, english: "importance", word: "importancia", example: "" }
   ,
-  { rank: Rank 465, english: "brilliant", word: "genial" }
+  { rank: Rank 465, english: "brilliant", word: "genial", example: "" }
   ,
-  { rank: Rank 466, english: "system", word: "sistema" }
+  { rank: Rank 466, english: "system", word: "sistema", example: "" }
   ,
-  { rank: Rank 467, english: "just", word: "justo" }
+  { rank: Rank 467, english: "just", word: "justo", example: "" }
   ,
-  { rank: Rank 468, english: "trip", word: "viaje" }
+  { rank: Rank 468, english: "trip", word: "viaje", example: "" }
   ,
-  { rank: Rank 469, english: "soil", word: "suelo" }
+  { rank: Rank 469, english: "soil", word: "suelo", example: "" }
   ,
-  { rank: Rank 470, english: "respect, in regards to", word: "respecto" }
+  { rank: Rank 470, english: "respect, in regards to", word: "respecto", example: "" }
   ,
-  { rank: Rank 471, english: "knowledge", word: "conocimiento" }
+  { rank: Rank 471, english: "knowledge", word: "conocimiento", example: "" }
   ,
-  { rank: Rank 472, english: "freedom", word: "libertad" }
+  { rank: Rank 472, english: "freedom", word: "libertad", example: "" }
   ,
-  { rank: Rank 473, english: "above", word: "encima" }
+  { rank: Rank 473, english: "above", word: "encima", example: "" }
   ,
-  { rank: Rank 474, english: "to buy", word: "comprar" }
+  { rank: Rank 474, english: "to buy", word: "comprar", example: "" }
   ,
-  { rank: Rank 475, english: "common", word: "común" }
+  { rank: Rank 475, english: "common", word: "común", example: "" }
   ,
-  { rank: Rank 476, english: "open", word: "abierto" }
+  { rank: Rank 476, english: "open", word: "abierto", example: "" }
   ,
-  { rank: Rank 477, english: "next", word: "próximo" }
+  { rank: Rank 477, english: "next", word: "próximo", example: "" }
   ,
-  { rank: Rank 478, english: "strong", word: "fuerte" }
+  { rank: Rank 478, english: "strong", word: "fuerte", example: "" }
   ,
-  { rank: Rank 479, english: "attention", word: "atención" }
+  { rank: Rank 479, english: "attention", word: "atención", example: "" }
   ,
-  { rank: Rank 480, english: "to rise", word: "subir" }
+  { rank: Rank 480, english: "to rise", word: "subir", example: "" }
   ,
-  { rank: Rank 481, english: "effort", word: "esfuerzo" }
+  { rank: Rank 481, english: "effort", word: "esfuerzo", example: "" }
   ,
-  { rank: Rank 482, english: "to avoid", word: "evitar" }
+  { rank: Rank 482, english: "to avoid", word: "evitar", example: "" }
   ,
-  { rank: Rank 483, english: "rest", word: "resto" }
+  { rank: Rank 483, english: "rest", word: "resto", example: "" }
   ,
-  { rank: Rank 484, english: "is interesting to (to interest)", word: "interesar" }
+  { rank: Rank 484, english: "is interesting to (to interest)", word: "interesar", example: "" }
   ,
-  { rank: Rank 485, english: "back, backwards", word: "atrás" }
+  { rank: Rank 485, english: "back, backwards", word: "atrás", example: "" }
   ,
-  { rank: Rank 486, english: "area", word: "zona" }
+  { rank: Rank 486, english: "area", word: "zona", example: "" }
   ,
-  { rank: Rank 487, english: "process", word: "proceso" }
+  { rank: Rank 487, english: "process", word: "proceso", example: "" }
   ,
-  { rank: Rank 488, english: "alive", word: "vivo" }
+  { rank: Rank 488, english: "alive", word: "vivo", example: "" }
   ,
-  { rank: Rank 489, english: "to close, shut", word: "cerrar" }
+  { rank: Rank 489, english: "to close, shut", word: "cerrar", example: "" }
   ,
-  { rank: Rank 490, english: "wine", word: "vino" }
+  { rank: Rank 490, english: "wine", word: "vino", example: "" }
   ,
-  { rank: Rank 491, english: "to throw, cast", word: "echar" }
+  { rank: Rank 491, english: "to throw, cast", word: "echar", example: "" }
   ,
-  { rank: Rank 492, english: "to reply", word: "responder" }
+  { rank: Rank 492, english: "to reply", word: "responder", example: "" }
   ,
-  { rank: Rank 493, english: "to suffer", word: "sufrir" }
+  { rank: Rank 493, english: "to suffer", word: "sufrir", example: "" }
   ,
-  { rank: Rank 494, english: "complete", word: "completo" }
+  { rank: Rank 494, english: "complete", word: "completo", example: "" }
   ,
-  { rank: Rank 495, english: "minute", word: "minuto" }
+  { rank: Rank 495, english: "minute", word: "minuto", example: "" }
   ,
-  { rank: Rank 496, english: "school", word: "escuela" }
+  { rank: Rank 496, english: "school", word: "escuela", example: "" }
   ,
-  { rank: Rank 497, english: "contrary", word: "contrario" }
+  { rank: Rank 497, english: "contrary", word: "contrario", example: "" }
   ,
-  { rank: Rank 498, english: "table (furniture)", word: "mesa" }
+  { rank: Rank 498, english: "table (furniture)", word: "mesa", example: "" }
   ,
-  { rank: Rank 499, english: "real", word: "real" }
+  { rank: Rank 499, english: "real", word: "real", example: "" }
   ,
-  { rank: Rank 500, english: "occasion", word: "ocasión" }
+  { rank: Rank 500, english: "occasion", word: "ocasión", example: "" }
   ,
-  { rank: Rank 501, english: "blood", word: "sangre" }
+  { rank: Rank 501, english: "blood", word: "sangre", example: "" }
   ,
-  { rank: Rank 502, english: "is important to (to matter)", word: "importar" }
+  { rank: Rank 502, english: "is important to (to matter)", word: "importar", example: "" }
   ,
-  { rank: Rank 503, english: "public", word: "público" }
+  { rank: Rank 503, english: "public", word: "público", example: "" }
   ,
-  { rank: Rank 504, english: "car", word: "coche" }
+  { rank: Rank 504, english: "car", word: "coche", example: "" }
   ,
-  { rank: Rank 505, english: "to obtain", word: "obtener" }
+  { rank: Rank 505, english: "to obtain", word: "obtener", example: "" }
   ,
-  { rank: Rank 506, english: "program", word: "programa" }
+  { rank: Rank 506, english: "program", word: "programa", example: "" }
   ,
-  { rank: Rank 507, english: "away", word: "lejos" }
+  { rank: Rank 507, english: "away", word: "lejos", example: "" }
   ,
-  { rank: Rank 508, english: "seven", word: "siete" }
+  { rank: Rank 508, english: "seven", word: "siete", example: "" }
   ,
-  { rank: Rank 509, english: "huge", word: "enorme" }
+  { rank: Rank 509, english: "huge", word: "enorme", example: "" }
   ,
-  { rank: Rank 510, english: "response", word: "respuesta" }
+  { rank: Rank 510, english: "response", word: "respuesta", example: "" }
   ,
-  { rank: Rank 511, english: "line", word: "línea" }
+  { rank: Rank 511, english: "line", word: "línea", example: "" }
   ,
-  { rank: Rank 512, english: "space", word: "espacio" }
+  { rank: Rank 512, english: "space", word: "espacio", example: "" }
   ,
-  { rank: Rank 513, english: "level", word: "nivel" }
+  { rank: Rank 513, english: "level", word: "nivel", example: "" }
   ,
-  { rank: Rank 514, english: "peace", word: "paz" }
+  { rank: Rank 514, english: "peace", word: "paz", example: "" }
   ,
-  { rank: Rank 515, english: "government", word: "gobierno" }
+  { rank: Rank 515, english: "government", word: "gobierno", example: "" }
   ,
-  { rank: Rank 516, english: "end, cape", word: "cabo" }
+  { rank: Rank 516, english: "end, cape", word: "cabo", example: "" }
   ,
-  { rank: Rank 517, english: "return", word: "vuelta" }
+  { rank: Rank 517, english: "return", word: "vuelta", example: "" }
   ,
-  { rank: Rank 518, english: "to observe", word: "observar" }
+  { rank: Rank 518, english: "to observe", word: "observar", example: "" }
   ,
-  { rank: Rank 519, english: "to indicate", word: "indicar" }
+  { rank: Rank 519, english: "to indicate", word: "indicar", example: "" }
   ,
-  { rank: Rank 520, english: "question", word: "pregunta" }
+  { rank: Rank 520, english: "question", word: "pregunta", example: "" }
   ,
-  { rank: Rank 521, english: "image", word: "imagen" }
+  { rank: Rank 521, english: "image", word: "imagen", example: "" }
   ,
-  { rank: Rank 522, english: "career", word: "carrera" }
+  { rank: Rank 522, english: "career", word: "carrera", example: "" }
   ,
-  { rank: Rank 523, english: "fault", word: "culpa" }
+  { rank: Rank 523, english: "fault", word: "culpa", example: "" }
   ,
-  { rank: Rank 524, english: "to imagine", word: "imaginar" }
+  { rank: Rank 524, english: "to imagine", word: "imaginar", example: "" }
   ,
-  { rank: Rank 525, english: "to be in the habit of", word: "soler" }
+  { rank: Rank 525, english: "to be in the habit of", word: "soler", example: "" }
   ,
-  { rank: Rank 526, english: "both", word: "ambos" }
+  { rank: Rank 526, english: "both", word: "ambos", example: "" }
   ,
-  { rank: Rank 527, english: "to accompany", word: "acompañar" }
+  { rank: Rank 527, english: "to accompany", word: "acompañar", example: "" }
   ,
-  { rank: Rank 528, english: "deep", word: "profundo" }
+  { rank: Rank 528, english: "deep", word: "profundo", example: "" }
   ,
-  { rank: Rank 529, english: "to stop", word: "detener" }
+  { rank: Rank 529, english: "to stop", word: "detener", example: "" }
   ,
-  { rank: Rank 530, english: "to develop", word: "desarrollar" }
+  { rank: Rank 530, english: "to develop", word: "desarrollar", example: "" }
   ,
-  { rank: Rank 531, english: "eight", word: "ocho" }
+  { rank: Rank 531, english: "eight", word: "ocho", example: "" }
   ,
-  { rank: Rank 532, english: "easy", word: "fácil" }
+  { rank: Rank 532, english: "easy", word: "fácil", example: "" }
   ,
-  { rank: Rank 533, english: "to signal", word: "señalar" }
+  { rank: Rank 533, english: "to signal", word: "señalar", example: "" }
   ,
-  { rank: Rank 534, english: "to choose", word: "elegir" }
+  { rank: Rank 534, english: "to choose", word: "elegir", example: "" }
   ,
-  { rank: Rank 535, english: "figure", word: "figura" }
+  { rank: Rank 535, english: "figure", word: "figura", example: "" }
   ,
-  { rank: Rank 536, english: "main", word: "principal" }
+  { rank: Rank 536, english: "main", word: "principal", example: "" }
   ,
-  { rank: Rank 537, english: "to sleep", word: "dormir" }
+  { rank: Rank 537, english: "to sleep", word: "dormir", example: "" }
   ,
-  { rank: Rank 538, english: "animal", word: "animal" }
+  { rank: Rank 538, english: "animal", word: "animal", example: "" }
   ,
-  { rank: Rank 539, english: "base", word: "base" }
+  { rank: Rank 539, english: "base", word: "base", example: "" }
   ,
-  { rank: Rank 540, english: "to prepare", word: "preparar" }
+  { rank: Rank 540, english: "to prepare", word: "preparar", example: "" }
   ,
-  { rank: Rank 541, english: "to propose", word: "proponer" }
+  { rank: Rank 541, english: "to propose", word: "proponer", example: "" }
   ,
-  { rank: Rank 542, english: "to demonstrate, prove", word: "demostrar" }
+  { rank: Rank 542, english: "to demonstrate, prove", word: "demostrar", example: "" }
   ,
-  { rank: Rank 543, english: "party, celebration", word: "fiesta" }
+  { rank: Rank 543, english: "party, celebration", word: "fiesta", example: "" }
   ,
-  { rank: Rank 544, english: "to mean", word: "significar" }
+  { rank: Rank 544, english: "to mean", word: "significar", example: "" }
   ,
-  { rank: Rank 545, english: "position", word: "posición" }
+  { rank: Rank 545, english: "position", word: "posición", example: "" }
   ,
-  { rank: Rank 546, english: "bed", word: "cama" }
+  { rank: Rank 546, english: "bed", word: "cama", example: "" }
   ,
-  { rank: Rank 547, english: "motive", word: "motivo" }
+  { rank: Rank 547, english: "motive", word: "motivo", example: "" }
   ,
-  { rank: Rank 548, english: "test", word: "prueba" }
+  { rank: Rank 548, english: "test", word: "prueba", example: "" }
   ,
-  { rank: Rank 549, english: "policy", word: "politica" }
+  { rank: Rank 549, english: "policy", word: "politica", example: "" }
   ,
-  { rank: Rank 550, english: "national", word: "nacional" }
+  { rank: Rank 550, english: "national", word: "nacional", example: "" }
   ,
-  { rank: Rank 551, english: "full (filled up)", word: "lleno" }
+  { rank: Rank 551, english: "full (filled up)", word: "lleno", example: "" }
   ,
-  { rank: Rank 552, english: "phone", word: "teléfono" }
+  { rank: Rank 552, english: "phone", word: "teléfono", example: "" }
   ,
-  { rank: Rank 553, english: "to gather", word: "reunir" }
+  { rank: Rank 553, english: "to gather", word: "reunir", example: "" }
   ,
-  { rank: Rank 554, english: "is missing to (to lack)", word: "faltar" }
+  { rank: Rank 554, english: "is missing to (to lack)", word: "faltar", example: "" }
   ,
-  { rank: Rank 555, english: "team", word: "equipo" }
+  { rank: Rank 555, english: "team", word: "equipo", example: "" }
   ,
-  { rank: Rank 556, english: "datum", word: "dato" }
+  { rank: Rank 556, english: "datum", word: "dato", example: "" }
   ,
-  { rank: Rank 557, english: "to wish", word: "desear" }
+  { rank: Rank 557, english: "to wish", word: "desear", example: "" }
   ,
-  { rank: Rank 558, english: "company, firm", word: "empresa" }
+  { rank: Rank 558, english: "company, firm", word: "empresa", example: "" }
   ,
-  { rank: Rank 559, english: "issue", word: "asunto" }
+  { rank: Rank 559, english: "issue", word: "asunto", example: "" }
   ,
-  { rank: Rank 560, english: "presence", word: "presencia" }
+  { rank: Rank 560, english: "presence", word: "presencia", example: "" }
   ,
-  { rank: Rank 561, english: "his, hers, theirs", word: "suyo" }
+  { rank: Rank 561, english: "his, hers, theirs", word: "suyo", example: "" }
   ,
-  { rank: Rank 562, english: "culture", word: "cultura" }
+  { rank: Rank 562, english: "culture", word: "cultura", example: "" }
   ,
-  { rank: Rank 563, english: "series", word: "serie" }
+  { rank: Rank 563, english: "series", word: "serie", example: "" }
   ,
-  { rank: Rank 564, english: "million", word: "millón" }
+  { rank: Rank 564, english: "million", word: "millón", example: "" }
   ,
-  { rank: Rank 565, english: "to teach", word: "enseñar" }
+  { rank: Rank 565, english: "to teach", word: "enseñar", example: "" }
   ,
-  { rank: Rank 566, english: "to build", word: "construir" }
+  { rank: Rank 566, english: "to build", word: "construir", example: "" }
   ,
-  { rank: Rank 567, english: "opportunity", word: "oportunidad" }
+  { rank: Rank 567, english: "opportunity", word: "oportunidad", example: "" }
   ,
-  { rank: Rank 568, english: "to sell", word: "vender" }
+  { rank: Rank 568, english: "to sell", word: "vender", example: "" }
   ,
-  { rank: Rank 569, english: "to kill", word: "matar" }
+  { rank: Rank 569, english: "to kill", word: "matar", example: "" }
   ,
-  { rank: Rank 570, english: "to represent", word: "representar" }
+  { rank: Rank 570, english: "to represent", word: "representar", example: "" }
   ,
-  { rank: Rank 571, english: "to disappear", word: "desaparecer" }
+  { rank: Rank 571, english: "to disappear", word: "desaparecer", example: "" }
   ,
-  { rank: Rank 572, english: "to send, to order", word: "mandar" }
+  { rank: Rank 572, english: "to send, to order", word: "mandar", example: "" }
   ,
-  { rank: Rank 573, english: "character (nature)", word: "carácter" }
+  { rank: Rank 573, english: "character (nature)", word: "carácter", example: "" }
   ,
-  { rank: Rank 574, english: "where to? (asking)", word: "adónde" }
+  { rank: Rank 574, english: "where to? (asking)", word: "adónde", example: "" }
   ,
-  { rank: Rank 575, english: "most", word: "mayoría" }
+  { rank: Rank 575, english: "most", word: "mayoría", example: "" }
   ,
-  { rank: Rank 576, english: "red", word: "rojo" }
+  { rank: Rank 576, english: "red", word: "rojo", example: "" }
   ,
-  { rank: Rank 577, english: "after, behind (formal)", word: "tras" }
+  { rank: Rank 577, english: "after, behind (formal)", word: "tras", example: "" }
   ,
-  { rank: Rank 578, english: "top", word: "superior" }
+  { rank: Rank 578, english: "top", word: "superior", example: "" }
   ,
-  { rank: Rank 579, english: "to walk", word: "andar" }
+  { rank: Rank 579, english: "to walk", word: "andar", example: "" }
   ,
-  { rank: Rank 580, english: "short", word: "corto" }
+  { rank: Rank 580, english: "short", word: "corto", example: "" }
   ,
-  { rank: Rank 581, english: "author", word: "autor" }
+  { rank: Rank 581, english: "author", word: "autor", example: "" }
   ,
-  { rank: Rank 582, english: "fourth", word: "cuarto" }
+  { rank: Rank 582, english: "fourth", word: "cuarto", example: "" }
   ,
-  { rank: Rank 583, english: "sky", word: "cielo" }
+  { rank: Rank 583, english: "sky", word: "cielo", example: "" }
   ,
-  { rank: Rank 584, english: "known", word: "conocido" }
+  { rank: Rank 584, english: "known", word: "conocido", example: "" }
   ,
-  { rank: Rank 585, english: "to prefer", word: "preferir" }
+  { rank: Rank 585, english: "to prefer", word: "preferir", example: "" }
   ,
-  { rank: Rank 586, english: "memory (a recollection)", word: "recuerdo" }
+  { rank: Rank 586, english: "memory (a recollection)", word: "recuerdo", example: "" }
   ,
-  { rank: Rank 587, english: "to ensure", word: "asegurar" }
+  { rank: Rank 587, english: "to ensure", word: "asegurar", example: "" }
   ,
-  { rank: Rank 588, english: "forgiveness", word: "perdón" }
+  { rank: Rank 588, english: "forgiveness", word: "perdón", example: "" }
   ,
-  { rank: Rank 589, english: "function", word: "función" }
+  { rank: Rank 589, english: "function", word: "función", example: "" }
   ,
-  { rank: Rank 590, english: "cause", word: "causa" }
+  { rank: Rank 590, english: "cause", word: "causa", example: "" }
   ,
-  { rank: Rank 591, english: "severe", word: "grave" }
+  { rank: Rank 591, english: "severe", word: "grave", example: "" }
   ,
-  { rank: Rank 592, english: "decision", word: "decisión" }
+  { rank: Rank 592, english: "decision", word: "decisión", example: "" }
   ,
-  { rank: Rank 593, english: "music", word: "música" }
+  { rank: Rank 593, english: "music", word: "música", example: "" }
   ,
-  { rank: Rank 594, english: "strange", word: "extraño" }
+  { rank: Rank 594, english: "strange", word: "extraño", example: "" }
   ,
-  { rank: Rank 595, english: "to grow", word: "crecer" }
+  { rank: Rank 595, english: "to grow", word: "crecer", example: "" }
   ,
-  { rank: Rank 596, english: "to emerge", word: "surgir" }
+  { rank: Rank 596, english: "to emerge", word: "surgir", example: "" }
   ,
-  { rank: Rank 597, english: "movie", word: "película" }
+  { rank: Rank 597, english: "movie", word: "película", example: "" }
   ,
-  { rank: Rank 598, english: "expression", word: "expresión" }
+  { rank: Rank 598, english: "expression", word: "expresión", example: "" }
   ,
-  { rank: Rank 599, english: "husband", word: "marido" }
+  { rank: Rank 599, english: "husband", word: "marido", example: "" }
   ,
-  { rank: Rank 600, english: "around", word: "alrededor" }
+  { rank: Rank 600, english: "around", word: "alrededor", example: "" }
   ,
-  { rank: Rank 601, english: "dog", word: "perro" }
+  { rank: Rank 601, english: "dog", word: "perro", example: "" }
   ,
-  { rank: Rank 602, english: "to deliver", word: "entregar" }
+  { rank: Rank 602, english: "to deliver", word: "entregar", example: "" }
   ,
-  { rank: Rank 603, english: "river", word: "río" }
+  { rank: Rank 603, english: "river", word: "río", example: "" }
   ,
-  { rank: Rank 604, english: "exactly", word: "exactamente" }
+  { rank: Rank 604, english: "exactly", word: "exactamente", example: "" }
   ,
-  { rank: Rank 605, english: "security", word: "seguridad" }
+  { rank: Rank 605, english: "security", word: "seguridad", example: "" }
   ,
-  { rank: Rank 606, english: "king", word: "rey" }
+  { rank: Rank 606, english: "king", word: "rey", example: "" }
   ,
-  { rank: Rank 607, english: "term", word: "término" }
+  { rank: Rank 607, english: "term", word: "término", example: "" }
   ,
-  { rank: Rank 608, english: "to place", word: "colocar" }
+  { rank: Rank 608, english: "to place", word: "colocar", example: "" }
   ,
-  { rank: Rank 609, english: "metro", word: "metro" }
+  { rank: Rank 609, english: "metro", word: "metro", example: "" }
   ,
-  { rank: Rank 610, english: "doctor", word: "médico" }
+  { rank: Rank 610, english: "doctor", word: "médico", example: "" }
   ,
-  { rank: Rank 611, english: "room (bedroom)", word: "habitación" }
+  { rank: Rank 611, english: "room (bedroom)", word: "habitación", example: "" }
   ,
-  { rank: Rank 612, english: "to establish", word: "establecer" }
+  { rank: Rank 612, english: "to establish", word: "establecer", example: "" }
   ,
-  { rank: Rank 613, english: "to keep, to store", word: "guardar" }
+  { rank: Rank 613, english: "to keep, to store", word: "guardar", example: "" }
   ,
-  { rank: Rank 614, english: "art", word: "arte" }
+  { rank: Rank 614, english: "art", word: "arte", example: "" }
   ,
-  { rank: Rank 615, english: "pair", word: "par" }
+  { rank: Rank 615, english: "pair", word: "par", example: "" }
   ,
-  { rank: Rank 616, english: "to start", word: "iniciar" }
+  { rank: Rank 616, english: "to start", word: "iniciar", example: "" }
   ,
-  { rank: Rank 617, english: "fire", word: "fuego" }
+  { rank: Rank 617, english: "fire", word: "fuego", example: "" }
   ,
-  { rank: Rank 618, english: "to go down, to lower", word: "bajar" }
+  { rank: Rank 618, english: "to go down, to lower", word: "bajar", example: "" }
   ,
-  { rank: Rank 619, english: "consequence", word: "consecuencia" }
+  { rank: Rank 619, english: "consequence", word: "consecuencia", example: "" }
   ,
-  { rank: Rank 620, english: "to note", word: "notar" }
+  { rank: Rank 620, english: "to note", word: "notar", example: "" }
   ,
-  { rank: Rank 621, english: "act", word: "acto" }
+  { rank: Rank 621, english: "act", word: "acto", example: "" }
   ,
-  { rank: Rank 622, english: "to put inside", word: "meter" }
+  { rank: Rank 622, english: "to put inside", word: "meter", example: "" }
   ,
-  { rank: Rank 623, english: "absolute", word: "absoluto" }
+  { rank: Rank 623, english: "absolute", word: "absoluto", example: "" }
   ,
-  { rank: Rank 624, english: "penalty", word: "pena" }
+  { rank: Rank 624, english: "penalty", word: "pena", example: "" }
   ,
-  { rank: Rank 625, english: "to act", word: "actuar" }
+  { rank: Rank 625, english: "to act", word: "actuar", example: "" }
   ,
-  { rank: Rank 626, english: "height", word: "altura" }
+  { rank: Rank 626, english: "height", word: "altura", example: "" }
   ,
-  { rank: Rank 627, english: "desire", word: "deseo" }
+  { rank: Rank 627, english: "desire", word: "deseo", example: "" }
   ,
-  { rank: Rank 628, english: "out, outside", word: "afuera" }
+  { rank: Rank 628, english: "out, outside", word: "afuera", example: "" }
   ,
-  { rank: Rank 629, english: "precisely", word: "precisamente" }
+  { rank: Rank 629, english: "precisely", word: "precisamente", example: "" }
   ,
-  { rank: Rank 630, english: "twenty", word: "veinte" }
+  { rank: Rank 630, english: "twenty", word: "veinte", example: "" }
   ,
-  { rank: Rank 631, english: "dream", word: "sueño" }
+  { rank: Rank 631, english: "dream", word: "sueño", example: "" }
   ,
-  { rank: Rank 632, english: "to intend, to claim", word: "pretender" }
+  { rank: Rank 632, english: "to intend, to claim", word: "pretender", example: "" }
   ,
-  { rank: Rank 633, english: "task", word: "tarea" }
+  { rank: Rank 633, english: "task", word: "tarea", example: "" }
   ,
-  { rank: Rank 634, english: "coffee", word: "café" }
+  { rank: Rank 634, english: "coffee", word: "café", example: "" }
   ,
-  { rank: Rank 635, english: "letter (you send)", word: "carta" }
+  { rank: Rank 635, english: "letter (you send)", word: "carta", example: "" }
   ,
-  { rank: Rank 636, english: "barely, just", word: "apenas" }
+  { rank: Rank 636, english: "barely, just", word: "apenas", example: "" }
   ,
-  { rank: Rank 637, english: "property", word: "propiedad" }
+  { rank: Rank 637, english: "property", word: "propiedad", example: "" }
   ,
-  { rank: Rank 638, english: "product", word: "producto" }
+  { rank: Rank 638, english: "product", word: "producto", example: "" }
   ,
-  { rank: Rank 639, english: "personal", word: "personal" }
+  { rank: Rank 639, english: "personal", word: "personal", example: "" }
   ,
-  { rank: Rank 640, english: "simply", word: "simplemente" }
+  { rank: Rank 640, english: "simply", word: "simplemente", example: "" }
   ,
-  { rank: Rank 641, english: "impossible", word: "imposible" }
+  { rank: Rank 641, english: "impossible", word: "imposible", example: "" }
   ,
-  { rank: Rank 642, english: "taste", word: "gusto" }
+  { rank: Rank 642, english: "taste", word: "gusto", example: "" }
   ,
-  { rank: Rank 643, english: "to agree (remember)", word: "acordar(se)" }
+  { rank: Rank 643, english: "to agree (remember)", word: "acordar(se)", example: "" }
   ,
-  { rank: Rank 644, english: "site", word: "sitio" }
+  { rank: Rank 644, english: "site", word: "sitio", example: "" }
   ,
-  { rank: Rank 645, english: "language, tongue", word: "lengua" }
+  { rank: Rank 645, english: "language, tongue", word: "lengua", example: "" }
   ,
-  { rank: Rank 646, english: "to cut", word: "cortar" }
+  { rank: Rank 646, english: "to cut", word: "cortar", example: "" }
   ,
-  { rank: Rank 647, english: "plan", word: "plan" }
+  { rank: Rank 647, english: "plan", word: "plan", example: "" }
   ,
-  { rank: Rank 648, english: "baby", word: "bebé" }
+  { rank: Rank 648, english: "baby", word: "bebé", example: "" }
   ,
-  { rank: Rank 649, english: "to correspond", word: "corresponder" }
+  { rank: Rank 649, english: "to correspond", word: "corresponder", example: "" }
   ,
-  { rank: Rank 650, english: "to break", word: "romper" }
+  { rank: Rank 650, english: "to break", word: "romper", example: "" }
   ,
-  { rank: Rank 651, english: "never", word: "jamás" }
+  { rank: Rank 651, english: "never", word: "jamás", example: "" }
   ,
-  { rank: Rank 652, english: "to acquire", word: "adquirir" }
+  { rank: Rank 652, english: "to acquire", word: "adquirir", example: "" }
   ,
-  { rank: Rank 653, english: "weapon", word: "arma" }
+  { rank: Rank 653, english: "weapon", word: "arma", example: "" }
   ,
-  { rank: Rank 654, english: "project", word: "proyecto" }
+  { rank: Rank 654, english: "project", word: "proyecto", example: "" }
   ,
-  { rank: Rank 655, english: "memory (the faculty)", word: "memoria" }
+  { rank: Rank 655, english: "memory (the faculty)", word: "memoria", example: "" }
   ,
-  { rank: Rank 656, english: "origin", word: "origen" }
+  { rank: Rank 656, english: "origin", word: "origen", example: "" }
   ,
-  { rank: Rank 657, english: "element", word: "elemento" }
+  { rank: Rank 657, english: "element", word: "elemento", example: "" }
   ,
-  { rank: Rank 658, english: "lost", word: "perdido" }
+  { rank: Rank 658, english: "lost", word: "perdido", example: "" }
   ,
-  { rank: Rank 659, english: "English", word: "inglés" }
+  { rank: Rank 659, english: "English", word: "inglés", example: "" }
   ,
-  { rank: Rank 660, english: "market", word: "mercado" }
+  { rank: Rank 660, english: "market", word: "mercado", example: "" }
   ,
-  { rank: Rank 661, english: "course", word: "curso" }
+  { rank: Rank 661, english: "course", word: "curso", example: "" }
   ,
-  { rank: Rank 662, english: "to launch", word: "lanzar" }
+  { rank: Rank 662, english: "to launch", word: "lanzar", example: "" }
   ,
-  { rank: Rank 663, english: "given", word: "dado" }
+  { rank: Rank 663, english: "given", word: "dado", example: "" }
   ,
-  { rank: Rank 664, english: "to take advantage of", word: "aprovechar" }
+  { rank: Rank 664, english: "to take advantage of", word: "aprovechar", example: "" }
   ,
-  { rank: Rank 665, english: "interior", word: "interior" }
+  { rank: Rank 665, english: "interior", word: "interior", example: "" }
   ,
-  { rank: Rank 666, english: "hard", word: "duro" }
+  { rank: Rank 666, english: "hard", word: "duro", example: "" }
   ,
-  { rank: Rank 667, english: "to support", word: "apoyar" }
+  { rank: Rank 667, english: "to support", word: "apoyar", example: "" }
   ,
-  { rank: Rank 668, english: "worse", word: "peor" }
+  { rank: Rank 668, english: "worse", word: "peor", example: "" }
   ,
-  { rank: Rank 669, english: "to deny", word: "negar" }
+  { rank: Rank 669, english: "to deny", word: "negar", example: "" }
   ,
-  { rank: Rank 670, english: "to advance", word: "avanzar" }
+  { rank: Rank 670, english: "to advance", word: "avanzar", example: "" }
   ,
-  { rank: Rank 671, english: "usage", word: "uso" }
+  { rank: Rank 671, english: "usage", word: "uso", example: "" }
   ,
-  { rank: Rank 672, english: "arm", word: "brazo" }
+  { rank: Rank 672, english: "arm", word: "brazo", example: "" }
   ,
-  { rank: Rank 673, english: "teacher, professor", word: "profesor" }
+  { rank: Rank 673, english: "teacher, professor", word: "profesor", example: "" }
   ,
-  { rank: Rank 674, english: "to resolve", word: "resolver" }
+  { rank: Rank 674, english: "to resolve", word: "resolver", example: "" }
   ,
-  { rank: Rank 675, english: "future", word: "futuro" }
+  { rank: Rank 675, english: "future", word: "futuro", example: "" }
   ,
-  { rank: Rank 676, english: "half", word: "mitad" }
+  { rank: Rank 676, english: "half", word: "mitad", example: "" }
   ,
-  { rank: Rank 677, english: "clothing", word: "ropa" }
+  { rank: Rank 677, english: "clothing", word: "ropa", example: "" }
   ,
-  { rank: Rank 678, english: "is costly to (to cost)", word: "costar" }
+  { rank: Rank 678, english: "is costly to (to cost)", word: "costar", example: "" }
   ,
-  { rank: Rank 679, english: "rich", word: "rico" }
+  { rank: Rank 679, english: "rich", word: "rico", example: "" }
   ,
-  { rank: Rank 680, english: "total", word: "total" }
+  { rank: Rank 680, english: "total", word: "total", example: "" }
   ,
-  { rank: Rank 681, english: "to require", word: "exigir" }
+  { rank: Rank 681, english: "to require", word: "exigir", example: "" }
   ,
-  { rank: Rank 682, english: "opinion", word: "opinión" }
+  { rank: Rank 682, english: "opinion", word: "opinión", example: "" }
   ,
-  { rank: Rank 683, english: "to increase", word: "aumentar" }
+  { rank: Rank 683, english: "to increase", word: "aumentar", example: "" }
   ,
-  { rank: Rank 684, english: "to collect", word: "recoger" }
+  { rank: Rank 684, english: "to collect", word: "recoger", example: "" }
   ,
-  { rank: Rank 685, english: "mouth", word: "boca" }
+  { rank: Rank 685, english: "mouth", word: "boca", example: "" }
   ,
-  { rank: Rank 686, english: "address", word: "dirección" }
+  { rank: Rank 686, english: "address", word: "dirección", example: "" }
   ,
-  { rank: Rank 687, english: "pure", word: "puro" }
+  { rank: Rank 687, english: "pure", word: "puro", example: "" }
   ,
-  { rank: Rank 688, english: "president", word: "presidente" }
+  { rank: Rank 688, english: "president", word: "presidente", example: "" }
   ,
-  { rank: Rank 689, english: "to abandon", word: "abandonar" }
+  { rank: Rank 689, english: "to abandon", word: "abandonar", example: "" }
   ,
-  { rank: Rank 690, english: "piece", word: "pieza" }
+  { rank: Rank 690, english: "piece", word: "pieza", example: "" }
   ,
-  { rank: Rank 691, english: "last night", word: "anoche" }
+  { rank: Rank 691, english: "last night", word: "anoche", example: "" }
   ,
-  { rank: Rank 692, english: "professional", word: "profesional" }
+  { rank: Rank 692, english: "professional", word: "profesional", example: "" }
   ,
-  { rank: Rank 693, english: "to impose", word: "imponer" }
+  { rank: Rank 693, english: "to impose", word: "imponer", example: "" }
   ,
-  { rank: Rank 694, english: "concerning", word: "acerca" }
+  { rank: Rank 694, english: "concerning", word: "acerca", example: "" }
   ,
-  { rank: Rank 695, english: "to force", word: "obligar" }
+  { rank: Rank 695, english: "to force", word: "obligar", example: "" }
   ,
-  { rank: Rank 696, english: "physical", word: "físico" }
+  { rank: Rank 696, english: "physical", word: "físico", example: "" }
   ,
-  { rank: Rank 697, english: "attitude", word: "actitud" }
+  { rank: Rank 697, english: "attitude", word: "actitud", example: "" }
   ,
-  { rank: Rank 698, english: "sea", word: "mar" }
+  { rank: Rank 698, english: "sea", word: "mar", example: "" }
   ,
-  { rank: Rank 699, english: "entry", word: "entrada" }
+  { rank: Rank 699, english: "entry", word: "entrada", example: "" }
   ,
-  { rank: Rank 700, english: "contact", word: "contacto" }
+  { rank: Rank 700, english: "contact", word: "contacto", example: "" }
   ,
-  { rank: Rank 701, english: "to apply", word: "aplicar" }
+  { rank: Rank 701, english: "to apply", word: "aplicar", example: "" }
   ,
-  { rank: Rank 702, english: "correct", word: "correcto" }
+  { rank: Rank 702, english: "correct", word: "correcto", example: "" }
   ,
-  { rank: Rank 703, english: "capital", word: "capital" }
+  { rank: Rank 703, english: "capital", word: "capital", example: "" }
   ,
-  { rank: Rank 704, english: "title", word: "título" }
+  { rank: Rank 704, english: "title", word: "título", example: "" }
   ,
-  { rank: Rank 705, english: "behind", word: "detrás" }
+  { rank: Rank 705, english: "behind", word: "detrás", example: "" }
   ,
-  { rank: Rank 706, english: "post", word: "puesto" }
+  { rank: Rank 706, english: "post", word: "puesto", example: "" }
   ,
-  { rank: Rank 707, english: "material", word: "material" }
+  { rank: Rank 707, english: "material", word: "material", example: "" }
   ,
-  { rank: Rank 708, english: "blow", word: "golpe" }
+  { rank: Rank 708, english: "blow", word: "golpe", example: "" }
   ,
-  { rank: Rank 709, english: "to dispose", word: "disponer" }
+  { rank: Rank 709, english: "to dispose", word: "disponer", example: "" }
   ,
-  { rank: Rank 710, english: "communication", word: "comunicación" }
+  { rank: Rank 710, english: "communication", word: "comunicación", example: "" }
   ,
-  { rank: Rank 711, english: "to express", word: "expresar" }
+  { rank: Rank 711, english: "to express", word: "expresar", example: "" }
   ,
-  { rank: Rank 712, english: "sorry", word: "disculpe" }
+  { rank: Rank 712, english: "sorry", word: "disculpe", example: "" }
   ,
-  { rank: Rank 713, english: "simple", word: "simple" }
+  { rank: Rank 713, english: "simple", word: "simple", example: "" }
   ,
-  { rank: Rank 714, english: "completely", word: "totalmente" }
+  { rank: Rank 714, english: "completely", word: "totalmente", example: "" }
   ,
-  { rank: Rank 715, english: "to provoke", word: "provocar" }
+  { rank: Rank 715, english: "to provoke", word: "provocar", example: "" }
   ,
-  { rank: Rank 716, english: "normal", word: "normal" }
+  { rank: Rank 716, english: "normal", word: "normal", example: "" }
   ,
-  { rank: Rank 717, english: "to defend", word: "defender" }
+  { rank: Rank 717, english: "to defend", word: "defender", example: "" }
   ,
-  { rank: Rank 718, english: "disease", word: "enfermedad" }
+  { rank: Rank 718, english: "disease", word: "enfermedad", example: "" }
   ,
-  { rank: Rank 719, english: "matter", word: "materia" }
+  { rank: Rank 719, english: "matter", word: "materia", example: "" }
   ,
-  { rank: Rank 720, english: "to take away", word: "quitar" }
+  { rank: Rank 720, english: "to take away", word: "quitar", example: "" }
   ,
-  { rank: Rank 721, english: "to conserve", word: "conservar" }
+  { rank: Rank 721, english: "to conserve", word: "conservar", example: "" }
   ,
-  { rank: Rank 722, english: "modern", word: "moderno" }
+  { rank: Rank 722, english: "modern", word: "moderno", example: "" }
   ,
-  { rank: Rank 723, english: "hospital", word: "hospital" }
+  { rank: Rank 723, english: "hospital", word: "hospital", example: "" }
   ,
-  { rank: Rank 724, english: "to depend", word: "depender" }
+  { rank: Rank 724, english: "to depend", word: "depender", example: "" }
   ,
-  { rank: Rank 725, english: "nature", word: "naturaleza" }
+  { rank: Rank 725, english: "nature", word: "naturaleza", example: "" }
   ,
-  { rank: Rank 726, english: "capacity", word: "capacidad" }
+  { rank: Rank 726, english: "capacity", word: "capacidad", example: "" }
   ,
-  { rank: Rank 727, english: "current, present-day", word: "actual" }
+  { rank: Rank 727, english: "current, present-day", word: "actual", example: "" }
   ,
-  { rank: Rank 728, english: "to mark", word: "marcar" }
+  { rank: Rank 728, english: "to mark", word: "marcar", example: "" }
   ,
-  { rank: Rank 729, english: "distance", word: "distancia" }
+  { rank: Rank 729, english: "distance", word: "distancia", example: "" }
   ,
-  { rank: Rank 730, english: "full, in the middle of", word: "pleno" }
+  { rank: Rank 730, english: "full, in the middle of", word: "pleno", example: "" }
   ,
-  { rank: Rank 731, english: "perfect", word: "perfecto" }
+  { rank: Rank 731, english: "perfect", word: "perfecto", example: "" }
   ,
-  { rank: Rank 732, english: "closed", word: "cerrado" }
+  { rank: Rank 732, english: "closed", word: "cerrado", example: "" }
   ,
-  { rank: Rank 733, english: "to share", word: "compartir" }
+  { rank: Rank 733, english: "to share", word: "compartir", example: "" }
   ,
-  { rank: Rank 734, english: "quiet", word: "tranquilo" }
+  { rank: Rank 734, english: "quiet", word: "tranquilo", example: "" }
   ,
-  { rank: Rank 735, english: "information", word: "información" }
+  { rank: Rank 735, english: "information", word: "información", example: "" }
   ,
-  { rank: Rank 736, english: "environment", word: "ambiente" }
+  { rank: Rank 736, english: "environment", word: "ambiente", example: "" }
   ,
-  { rank: Rank 737, english: "especially", word: "especialmente" }
+  { rank: Rank 737, english: "especially", word: "especialmente", example: "" }
   ,
-  { rank: Rank 738, english: "development", word: "desarrollo" }
+  { rank: Rank 738, english: "development", word: "desarrollo", example: "" }
   ,
-  { rank: Rank 739, english: "sun", word: "sol" }
+  { rank: Rank 739, english: "sun", word: "sol", example: "" }
   ,
-  { rank: Rank 740, english: "to consist", word: "consistir" }
+  { rank: Rank 740, english: "to consist", word: "consistir", example: "" }
   ,
-  { rank: Rank 741, english: "probably", word: "probablemente" }
+  { rank: Rank 741, english: "probably", word: "probablemente", example: "" }
   ,
-  { rank: Rank 742, english: "to constitute", word: "constituir" }
+  { rank: Rank 742, english: "to constitute", word: "constituir", example: "" }
   ,
-  { rank: Rank 743, english: "yesterday", word: "ayer" }
+  { rank: Rank 743, english: "yesterday", word: "ayer", example: "" }
   ,
-  { rank: Rank 744, english: "ready", word: "dispuesto" }
+  { rank: Rank 744, english: "ready", word: "dispuesto", example: "" }
   ,
-  { rank: Rank 745, english: "to cover", word: "cubrir" }
+  { rank: Rank 745, english: "to cover", word: "cubrir", example: "" }
   ,
-  { rank: Rank 746, english: "to function", word: "funcionar" }
+  { rank: Rank 746, english: "to function", word: "funcionar", example: "" }
   ,
-  { rank: Rank 747, english: "partner", word: "compañero" }
+  { rank: Rank 747, english: "partner", word: "compañero", example: "" }
   ,
-  { rank: Rank 748, english: "nice", word: "bonito" }
+  { rank: Rank 748, english: "nice", word: "bonito", example: "" }
   ,
-  { rank: Rank 749, english: "output", word: "salida" }
+  { rank: Rank 749, english: "output", word: "salida", example: "" }
   ,
-  { rank: Rank 750, english: "to fit", word: "caber" }
+  { rank: Rank 750, english: "to fit", word: "caber", example: "" }
   ,
-  { rank: Rank 751, english: "awareness", word: "conciencia" }
+  { rank: Rank 751, english: "awareness", word: "conciencia", example: "" }
   ,
-  { rank: Rank 752, english: "to meet", word: "atender" }
+  { rank: Rank 752, english: "to meet", word: "atender", example: "" }
   ,
-  { rank: Rank 753, english: "sick", word: "enfermo" }
+  { rank: Rank 753, english: "sick", word: "enfermo", example: "" }
   ,
-  { rank: Rank 754, english: "incredible", word: "increíble" }
+  { rank: Rank 754, english: "incredible", word: "increíble", example: "" }
   ,
-  { rank: Rank 755, english: "to insist", word: "insistir" }
+  { rank: Rank 755, english: "to insist", word: "insistir", example: "" }
   ,
-  { rank: Rank 756, english: "custom", word: "costumbre" }
+  { rank: Rank 756, english: "custom", word: "costumbre", example: "" }
   ,
-  { rank: Rank 757, english: "silly", word: "tonto" }
+  { rank: Rank 757, english: "silly", word: "tonto", example: "" }
   ,
-  { rank: Rank 758, english: "news", word: "noticia" }
+  { rank: Rank 758, english: "news", word: "noticia", example: "" }
   ,
-  { rank: Rank 759, english: "circumstance", word: "circunstancia" }
+  { rank: Rank 759, english: "circumstance", word: "circunstancia", example: "" }
   ,
-  { rank: Rank 760, english: "is painful to (to hurt)", word: "doler" }
+  { rank: Rank 760, english: "is painful to (to hurt)", word: "doler", example: "" }
   ,
-  { rank: Rank 761, english: "private", word: "privado" }
+  { rank: Rank 761, english: "private", word: "privado", example: "" }
   ,
-  { rank: Rank 762, english: "style", word: "estilo" }
+  { rank: Rank 762, english: "style", word: "estilo", example: "" }
   ,
-  { rank: Rank 763, english: "price", word: "precio" }
+  { rank: Rank 763, english: "price", word: "precio", example: "" }
   ,
-  { rank: Rank 764, english: "popular", word: "popular" }
+  { rank: Rank 764, english: "popular", word: "popular", example: "" }
   ,
-  { rank: Rank 765, english: "to sit", word: "sentar" }
+  { rank: Rank 765, english: "to sit", word: "sentar", example: "" }
   ,
-  { rank: Rank 766, english: "plant", word: "planta" }
+  { rank: Rank 766, english: "plant", word: "planta", example: "" }
   ,
-  { rank: Rank 767, english: "that one (pre-2010 spelling)", word: "ése" }
+  { rank: Rank 767, english: "that one (pre-2010 spelling)", word: "ése", example: "" }
   ,
-  { rank: Rank 768, english: "character (in a story)", word: "personaje" }
+  { rank: Rank 768, english: "character (in a story)", word: "personaje", example: "" }
   ,
-  { rank: Rank 769, english: "famous", word: "famoso" }
+  { rank: Rank 769, english: "famous", word: "famoso", example: "" }
   ,
-  { rank: Rank 770, english: "hunger", word: "hambre" }
+  { rank: Rank 770, english: "hunger", word: "hambre", example: "" }
   ,
-  { rank: Rank 771, english: "success", word: "éxito" }
+  { rank: Rank 771, english: "success", word: "éxito", example: "" }
   ,
-  { rank: Rank 772, english: "to merit", word: "merecer" }
+  { rank: Rank 772, english: "to merit", word: "merecer", example: "" }
   ,
-  { rank: Rank 773, english: "building", word: "edificio" }
+  { rank: Rank 773, english: "building", word: "edificio", example: "" }
   ,
-  { rank: Rank 774, english: "authority", word: "autoridad" }
+  { rank: Rank 774, english: "authority", word: "autoridad", example: "" }
   ,
-  { rank: Rank 775, english: "stone", word: "piedra" }
+  { rank: Rank 775, english: "stone", word: "piedra", example: "" }
   ,
-  { rank: Rank 776, english: "to include", word: "incluir" }
+  { rank: Rank 776, english: "to include", word: "incluir", example: "" }
   ,
-  { rank: Rank 777, english: "boat", word: "barco" }
+  { rank: Rank 777, english: "boat", word: "barco", example: "" }
   ,
-  { rank: Rank 778, english: "set", word: "conjunto" }
+  { rank: Rank 778, english: "set", word: "conjunto", example: "" }
   ,
-  { rank: Rank 779, english: "hotel", word: "hotel" }
+  { rank: Rank 779, english: "hotel", word: "hotel", example: "" }
   ,
-  { rank: Rank 780, english: "thirty", word: "treinta" }
+  { rank: Rank 780, english: "thirty", word: "treinta", example: "" }
   ,
-  { rank: Rank 781, english: "immediate", word: "inmediato" }
+  { rank: Rank 781, english: "immediate", word: "inmediato", example: "" }
   ,
-  { rank: Rank 782, english: "to cross", word: "cruzar" }
+  { rank: Rank 782, english: "to cross", word: "cruzar", example: "" }
   ,
-  { rank: Rank 783, english: "yours", word: "tuyo" }
+  { rank: Rank 783, english: "yours", word: "tuyo", example: "" }
   ,
-  { rank: Rank 784, english: "to tend", word: "tender" }
+  { rank: Rank 784, english: "to tend", word: "tender", example: "" }
   ,
-  { rank: Rank 785, english: "finally", word: "finalmente" }
+  { rank: Rank 785, english: "finally", word: "finalmente", example: "" }
   ,
-  { rank: Rank 786, english: "to advertise", word: "anunciar" }
+  { rank: Rank 786, english: "to advertise", word: "anunciar", example: "" }
   ,
-  { rank: Rank 787, english: "bath", word: "baño" }
+  { rank: Rank 787, english: "bath", word: "baño", example: "" }
   ,
-  { rank: Rank 788, english: "spirit", word: "espíritu" }
+  { rank: Rank 788, english: "spirit", word: "espíritu", example: "" }
   ,
-  { rank: Rank 789, english: "member", word: "miembro" }
+  { rank: Rank 789, english: "member", word: "miembro", example: "" }
   ,
-  { rank: Rank 790, english: "direct", word: "directo" }
+  { rank: Rank 790, english: "direct", word: "directo", example: "" }
   ,
-  { rank: Rank 791, english: "pleasure", word: "placer" }
+  { rank: Rank 791, english: "pleasure", word: "placer", example: "" }
   ,
-  { rank: Rank 792, english: "to wake", word: "despertar" }
+  { rank: Rank 792, english: "to wake", word: "despertar", example: "" }
   ,
-  { rank: Rank 793, english: "resource", word: "recurso" }
+  { rank: Rank 793, english: "resource", word: "recurso", example: "" }
   ,
-  { rank: Rank 794, english: "wall", word: "pared" }
+  { rank: Rank 794, english: "wall", word: "pared", example: "" }
   ,
-  { rank: Rank 795, english: "error", word: "error" }
+  { rank: Rank 795, english: "error", word: "error", example: "" }
   ,
-  { rank: Rank 796, english: "accurate", word: "preciso" }
+  { rank: Rank 796, english: "accurate", word: "preciso", example: "" }
   ,
-  { rank: Rank 797, english: "miscellaneous", word: "diverso" }
+  { rank: Rank 797, english: "miscellaneous", word: "diverso", example: "" }
   ,
-  { rank: Rank 798, english: "difficulty", word: "dificultad" }
+  { rank: Rank 798, english: "difficulty", word: "dificultad", example: "" }
   ,
-  { rank: Rank 799, english: "to comment", word: "comentar" }
+  { rank: Rank 799, english: "to comment", word: "comentar", example: "" }
   ,
-  { rank: Rank 800, english: "to publish", word: "publicar" }
+  { rank: Rank 800, english: "to publish", word: "publicar", example: "" }
   ,
-  { rank: Rank 801, english: "relating to family, a relative", word: "familiar" }
+  { rank: Rank 801, english: "relating to family, a relative", word: "familiar", example: "" }
   ,
-  { rank: Rank 802, english: "will", word: "voluntad" }
+  { rank: Rank 802, english: "will", word: "voluntad", example: "" }
   ,
-  { rank: Rank 803, english: "meeting", word: "reunión" }
+  { rank: Rank 803, english: "meeting", word: "reunión", example: "" }
   ,
-  { rank: Rank 804, english: "model", word: "modelo" }
+  { rank: Rank 804, english: "model", word: "modelo", example: "" }
   ,
-  { rank: Rank 805, english: "secret", word: "secreto" }
+  { rank: Rank 805, english: "secret", word: "secreto", example: "" }
   ,
-  { rank: Rank 806, english: "to load", word: "cargar" }
+  { rank: Rank 806, english: "to load", word: "cargar", example: "" }
   ,
-  { rank: Rank 807, english: "date", word: "fecha" }
+  { rank: Rank 807, english: "date", word: "fecha", example: "" }
   ,
-  { rank: Rank 808, english: "to participate", word: "participar" }
+  { rank: Rank 808, english: "to participate", word: "participar", example: "" }
   ,
-  { rank: Rank 809, english: "train", word: "tren" }
+  { rank: Rank 809, english: "train", word: "tren", example: "" }
   ,
-  { rank: Rank 810, english: "to prevent", word: "impedir" }
+  { rank: Rank 810, english: "to prevent", word: "impedir", example: "" }
   ,
-  { rank: Rank 811, english: "purpose", word: "propósito" }
+  { rank: Rank 811, english: "purpose", word: "propósito", example: "" }
   ,
-  { rank: Rank 812, english: "to rescue", word: "salvar" }
+  { rank: Rank 812, english: "to rescue", word: "salvar", example: "" }
   ,
-  { rank: Rank 813, english: "hurry", word: "prisa" }
+  { rank: Rank 813, english: "hurry", word: "prisa", example: "" }
   ,
-  { rank: Rank 814, english: "degree", word: "grado" }
+  { rank: Rank 814, english: "degree", word: "grado", example: "" }
   ,
-  { rank: Rank 815, english: "to escape", word: "escapar" }
+  { rank: Rank 815, english: "to escape", word: "escapar", example: "" }
   ,
-  { rank: Rank 816, english: "deal", word: "negocio" }
+  { rank: Rank 816, english: "deal", word: "negocio", example: "" }
   ,
-  { rank: Rank 817, english: "fight", word: "lucha" }
+  { rank: Rank 817, english: "fight", word: "lucha", example: "" }
   ,
-  { rank: Rank 818, english: "to throw", word: "tirar" }
+  { rank: Rank 818, english: "to throw", word: "tirar", example: "" }
   ,
-  { rank: Rank 819, english: "whole", word: "entero" }
+  { rank: Rank 819, english: "whole", word: "entero", example: "" }
   ,
-  { rank: Rank 820, english: "interesting", word: "interesante" }
+  { rank: Rank 820, english: "interesting", word: "interesante", example: "" }
   ,
-  { rank: Rank 821, english: "wide", word: "amplio" }
+  { rank: Rank 821, english: "wide", word: "amplio", example: "" }
   ,
-  { rank: Rank 822, english: "silence", word: "silencio" }
+  { rank: Rank 822, english: "silence", word: "silencio", example: "" }
   ,
-  { rank: Rank 823, english: "to answer", word: "contestar" }
+  { rank: Rank 823, english: "to answer", word: "contestar", example: "" }
   ,
-  { rank: Rank 824, english: "newspaper", word: "periódico" }
+  { rank: Rank 824, english: "newspaper", word: "periódico", example: "" }
   ,
-  { rank: Rank 825, english: "is worrying to (to worry)", word: "preocupar" }
+  { rank: Rank 825, english: "is worrying to (to worry)", word: "preocupar", example: "" }
   ,
-  { rank: Rank 826, english: "schoolteacher, master", word: "maestro" }
+  { rank: Rank 826, english: "schoolteacher, master", word: "maestro", example: "" }
   ,
-  { rank: Rank 827, english: "to lend", word: "prestar" }
+  { rank: Rank 827, english: "to lend", word: "prestar", example: "" }
   ,
-  { rank: Rank 828, english: "quality", word: "calidad" }
+  { rank: Rank 828, english: "quality", word: "calidad", example: "" }
   ,
-  { rank: Rank 829, english: "salt", word: "sal" }
+  { rank: Rank 829, english: "salt", word: "sal", example: "" }
   ,
-  { rank: Rank 830, english: "to exhibit", word: "exponer" }
+  { rank: Rank 830, english: "to exhibit", word: "exponer", example: "" }
   ,
-  { rank: Rank 831, english: "control", word: "control" }
+  { rank: Rank 831, english: "control", word: "control", example: "" }
   ,
-  { rank: Rank 832, english: "civil", word: "civil" }
+  { rank: Rank 832, english: "civil", word: "civil", example: "" }
   ,
-  { rank: Rank 833, english: "rare", word: "raro" }
+  { rank: Rank 833, english: "rare", word: "raro", example: "" }
   ,
-  { rank: Rank 834, english: "science", word: "ciencia" }
+  { rank: Rank 834, english: "science", word: "ciencia", example: "" }
   ,
-  { rank: Rank 835, english: "size", word: "tamaño" }
+  { rank: Rank 835, english: "size", word: "tamaño", example: "" }
   ,
-  { rank: Rank 836, english: "chart, painting", word: "cuadro" }
+  { rank: Rank 836, english: "chart, painting", word: "cuadro", example: "" }
   ,
-  { rank: Rank 837, english: "horse", word: "caballo" }
+  { rank: Rank 837, english: "horse", word: "caballo", example: "" }
   ,
-  { rank: Rank 838, english: "responsibility", word: "responsabilidad" }
+  { rank: Rank 838, english: "responsibility", word: "responsabilidad", example: "" }
   ,
-  { rank: Rank 839, english: "fifty", word: "cincuenta" }
+  { rank: Rank 839, english: "fifty", word: "cincuenta", example: "" }
   ,
-  { rank: Rank 840, english: "internal", word: "interno" }
+  { rank: Rank 840, english: "internal", word: "interno", example: "" }
   ,
-  { rank: Rank 841, english: "detail", word: "detalle" }
+  { rank: Rank 841, english: "detail", word: "detalle", example: "" }
   ,
-  { rank: Rank 842, english: "march", word: "marcha" }
+  { rank: Rank 842, english: "march", word: "marcha", example: "" }
   ,
-  { rank: Rank 843, english: "nine", word: "nueve" }
+  { rank: Rank 843, english: "nine", word: "nueve", example: "" }
   ,
-  { rank: Rank 844, english: "meat", word: "carne" }
+  { rank: Rank 844, english: "meat", word: "carne", example: "" }
   ,
-  { rank: Rank 845, english: "plane", word: "avión" }
+  { rank: Rank 845, english: "plane", word: "avión", example: "" }
   ,
-  { rank: Rank 846, english: "hair", word: "pelo" }
+  { rank: Rank 846, english: "hair", word: "pelo", example: "" }
   ,
-  { rank: Rank 847, english: "thought", word: "pensamiento" }
+  { rank: Rank 847, english: "thought", word: "pensamiento", example: "" }
   ,
-  { rank: Rank 848, english: "to travel", word: "viajar" }
+  { rank: Rank 848, english: "to travel", word: "viajar", example: "" }
   ,
-  { rank: Rank 849, english: "charge", word: "cargo" }
+  { rank: Rank 849, english: "charge", word: "cargo", example: "" }
   ,
-  { rank: Rank 850, english: "to separate", word: "separar" }
+  { rank: Rank 850, english: "to separate", word: "separar", example: "" }
   ,
-  { rank: Rank 851, english: "construction", word: "construcción" }
+  { rank: Rank 851, english: "construction", word: "construcción", example: "" }
   ,
-  { rank: Rank 852, english: "trial", word: "juicio" }
+  { rank: Rank 852, english: "trial", word: "juicio", example: "" }
   ,
-  { rank: Rank 853, english: "ground", word: "terreno" }
+  { rank: Rank 853, english: "ground", word: "terreno", example: "" }
   ,
-  { rank: Rank 854, english: "floor", word: "piso" }
+  { rank: Rank 854, english: "floor", word: "piso", example: "" }
   ,
-  { rank: Rank 855, english: "companionship, company", word: "compañia" }
+  { rank: Rank 855, english: "companionship, company", word: "compañia", example: "" }
   ,
-  { rank: Rank 856, english: "gold", word: "oro" }
+  { rank: Rank 856, english: "gold", word: "oro", example: "" }
   ,
-  { rank: Rank 857, english: "to return", word: "regresar" }
+  { rank: Rank 857, english: "to return", word: "regresar", example: "" }
   ,
-  { rank: Rank 858, english: "text", word: "texto" }
+  { rank: Rank 858, english: "text", word: "texto", example: "" }
   ,
-  { rank: Rank 859, english: "source", word: "fuente" }
+  { rank: Rank 859, english: "source", word: "fuente", example: "" }
   ,
-  { rank: Rank 860, english: "present", word: "presente" }
+  { rank: Rank 860, english: "present", word: "presente", example: "" }
   ,
-  { rank: Rank 861, english: "official", word: "oficial" }
+  { rank: Rank 861, english: "official", word: "oficial", example: "" }
   ,
-  { rank: Rank 862, english: "difinitive", word: "difinitivo" }
+  { rank: Rank 862, english: "difinitive", word: "difinitivo", example: "" }
   ,
-  { rank: Rank 863, english: "magazine", word: "revista" }
+  { rank: Rank 863, english: "magazine", word: "revista", example: "" }
   ,
-  { rank: Rank 864, english: "damage", word: "daño" }
+  { rank: Rank 864, english: "damage", word: "daño", example: "" }
   ,
-  { rank: Rank 865, english: "hope", word: "esperanza" }
+  { rank: Rank 865, english: "hope", word: "esperanza", example: "" }
   ,
-  { rank: Rank 866, english: "machine", word: "máquina" }
+  { rank: Rank 866, english: "machine", word: "máquina", example: "" }
   ,
-  { rank: Rank 867, english: "to contemplate", word: "contemplar" }
+  { rank: Rank 867, english: "to contemplate", word: "contemplar", example: "" }
   ,
-  { rank: Rank 868, english: "to travel through, cover", word: "recorrer" }
+  { rank: Rank 868, english: "to travel through, cover", word: "recorrer", example: "" }
   ,
-  { rank: Rank 869, english: "mind", word: "mente" }
+  { rank: Rank 869, english: "mind", word: "mente", example: "" }
   ,
-  { rank: Rank 870, english: "phrase", word: "frase" }
+  { rank: Rank 870, english: "phrase", word: "frase", example: "" }
   ,
-  { rank: Rank 871, english: "exercise", word: "ejercicio" }
+  { rank: Rank 871, english: "exercise", word: "ejercicio", example: "" }
   ,
-  { rank: Rank 872, english: "hall, living room", word: "sala" }
+  { rank: Rank 872, english: "hall, living room", word: "sala", example: "" }
   ,
-  { rank: Rank 873, english: "to last", word: "durar" }
+  { rank: Rank 873, english: "to last", word: "durar", example: "" }
   ,
-  { rank: Rank 874, english: "instrument", word: "instrumento" }
+  { rank: Rank 874, english: "instrument", word: "instrumento", example: "" }
   ,
-  { rank: Rank 875, english: "that thing", word: "aquello" }
+  { rank: Rank 875, english: "that thing", word: "aquello", example: "" }
   ,
-  { rank: Rank 876, english: "defense", word: "defensa" }
+  { rank: Rank 876, english: "defense", word: "defensa", example: "" }
   ,
-  { rank: Rank 877, english: "director", word: "director" }
+  { rank: Rank 877, english: "director", word: "director", example: "" }
   ,
-  { rank: Rank 878, english: "to withdraw", word: "retirar" }
+  { rank: Rank 878, english: "to withdraw", word: "retirar", example: "" }
   ,
-  { rank: Rank 879, english: "explanation", word: "explicación" }
+  { rank: Rank 879, english: "explanation", word: "explicación", example: "" }
   ,
-  { rank: Rank 880, english: "article", word: "artículo" }
+  { rank: Rank 880, english: "article", word: "artículo", example: "" }
   ,
-  { rank: Rank 881, english: "underneath", word: "debajo" }
+  { rank: Rank 881, english: "underneath", word: "debajo", example: "" }
   ,
-  { rank: Rank 882, english: "to remain", word: "permanecer" }
+  { rank: Rank 882, english: "to remain", word: "permanecer", example: "" }
   ,
-  { rank: Rank 883, english: "to attend", word: "asistir" }
+  { rank: Rank 883, english: "to attend", word: "asistir", example: "" }
   ,
-  { rank: Rank 884, english: "twelve", word: "doce" }
+  { rank: Rank 884, english: "twelve", word: "doce", example: "" }
   ,
-  { rank: Rank 885, english: "permission", word: "permiso" }
+  { rank: Rank 885, english: "permission", word: "permiso", example: "" }
   ,
-  { rank: Rank 886, english: "radio", word: "radio" }
+  { rank: Rank 886, english: "radio", word: "radio", example: "" }
   ,
-  { rank: Rank 887, english: "to organize", word: "organizar" }
+  { rank: Rank 887, english: "to organize", word: "organizar", example: "" }
   ,
-  { rank: Rank 888, english: "choice", word: "elección" }
+  { rank: Rank 888, english: "choice", word: "elección", example: "" }
   ,
-  { rank: Rank 889, english: "visit", word: "visita" }
+  { rank: Rank 889, english: "visit", word: "visita", example: "" }
   ,
-  { rank: Rank 890, english: "funny", word: "divertido" }
+  { rank: Rank 890, english: "funny", word: "divertido", example: "" }
   ,
-  { rank: Rank 891, english: "to contain", word: "contener" }
+  { rank: Rank 891, english: "to contain", word: "contener", example: "" }
   ,
-  { rank: Rank 892, english: "support", word: "apoyo" }
+  { rank: Rank 892, english: "support", word: "apoyo", example: "" }
   ,
-  { rank: Rank 893, english: "tree", word: "árbol" }
+  { rank: Rank 893, english: "tree", word: "árbol", example: "" }
   ,
-  { rank: Rank 894, english: "to visit", word: "visitar" }
+  { rank: Rank 894, english: "to visit", word: "visitar", example: "" }
   ,
-  { rank: Rank 895, english: "to report", word: "informar" }
+  { rank: Rank 895, english: "to report", word: "informar", example: "" }
   ,
-  { rank: Rank 896, english: "encounter", word: "encuentro" }
+  { rank: Rank 896, english: "encounter", word: "encuentro", example: "" }
   ,
-  { rank: Rank 897, english: "sex", word: "sexo" }
+  { rank: Rank 897, english: "sex", word: "sexo", example: "" }
   ,
-  { rank: Rank 898, english: "like", word: "parecido" }
+  { rank: Rank 898, english: "like", word: "parecido", example: "" }
   ,
-  { rank: Rank 899, english: "ordinary, current (of water)", word: "corriente" }
+  { rank: Rank 899, english: "ordinary, current (of water)", word: "corriente", example: "" }
   ,
-  { rank: Rank 900, english: "friendly", word: "amable" }
+  { rank: Rank 900, english: "friendly", word: "amable", example: "" }
   ,
-  { rank: Rank 901, english: "reading", word: "lectura" }
+  { rank: Rank 901, english: "reading", word: "lectura", example: "" }
   ,
-  { rank: Rank 902, english: "message", word: "mensaje" }
+  { rank: Rank 902, english: "message", word: "mensaje", example: "" }
   ,
-  { rank: Rank 903, english: "existence", word: "existencia" }
+  { rank: Rank 903, english: "existence", word: "existencia", example: "" }
   ,
-  { rank: Rank 904, english: "language (speech, style)", word: "lenguaje" }
+  { rank: Rank 904, english: "language (speech, style)", word: "lenguaje", example: "" }
   ,
-  { rank: Rank 905, english: "costume", word: "traje" }
+  { rank: Rank 905, english: "costume", word: "traje", example: "" }
   ,
-  { rank: Rank 906, english: "to send", word: "enviar" }
+  { rank: Rank 906, english: "to send", word: "enviar", example: "" }
   ,
-  { rank: Rank 907, english: "soul", word: "alma" }
+  { rank: Rank 907, english: "soul", word: "alma", example: "" }
   ,
-  { rank: Rank 908, english: "even, yet, still", word: "aun" }
+  { rank: Rank 908, english: "even, yet, still", word: "aun", example: "" }
   ,
-  { rank: Rank 909, english: "destination", word: "destino" }
+  { rank: Rank 909, english: "destination", word: "destino", example: "" }
   ,
-  { rank: Rank 910, english: "education", word: "educación" }
+  { rank: Rank 910, english: "education", word: "educación", example: "" }
   ,
-  { rank: Rank 911, english: "to care", word: "cuidar" }
+  { rank: Rank 911, english: "to care", word: "cuidar", example: "" }
   ,
-  { rank: Rank 912, english: "to intervene", word: "intervenir" }
+  { rank: Rank 912, english: "to intervene", word: "intervenir", example: "" }
   ,
-  { rank: Rank 913, english: "dinner", word: "cena" }
+  { rank: Rank 913, english: "dinner", word: "cena", example: "" }
   ,
-  { rank: Rank 914, english: "operation", word: "operación" }
+  { rank: Rank 914, english: "operation", word: "operación", example: "" }
   ,
-  { rank: Rank 915, english: "perfectly", word: "perfectamente" }
+  { rank: Rank 915, english: "perfectly", word: "perfectamente", example: "" }
   ,
-  { rank: Rank 916, english: "to extend", word: "extender" }
+  { rank: Rank 916, english: "to extend", word: "extender", example: "" }
   ,
-  { rank: Rank 917, english: "to check", word: "comprobar" }
+  { rank: Rank 917, english: "to check", word: "comprobar", example: "" }
   ,
-  { rank: Rank 918, english: "note", word: "nota" }
+  { rank: Rank 918, english: "note", word: "nota", example: "" }
   ,
-  { rank: Rank 919, english: "particular", word: "particular" }
+  { rank: Rank 919, english: "particular", word: "particular", example: "" }
   ,
-  { rank: Rank 920, english: "to delay", word: "tardar" }
+  { rank: Rank 920, english: "to delay", word: "tardar", example: "" }
   ,
-  { rank: Rank 921, english: "in, inside", word: "adentro" }
+  { rank: Rank 921, english: "in, inside", word: "adentro", example: "" }
   ,
-  { rank: Rank 922, english: "military", word: "militar" }
+  { rank: Rank 922, english: "military", word: "militar", example: "" }
   ,
-  { rank: Rank 923, english: "song", word: "canción" }
+  { rank: Rank 923, english: "song", word: "canción", example: "" }
   ,
-  { rank: Rank 924, english: "attached", word: "unido" }
+  { rank: Rank 924, english: "attached", word: "unido", example: "" }
   ,
-  { rank: Rank 925, english: "to discuss", word: "discutir" }
+  { rank: Rank 925, english: "to discuss", word: "discutir", example: "" }
   ,
-  { rank: Rank 926, english: "to fear", word: "temer" }
+  { rank: Rank 926, english: "to fear", word: "temer", example: "" }
   ,
-  { rank: Rank 927, english: "extraordinary", word: "extraordinario" }
+  { rank: Rank 927, english: "extraordinary", word: "extraordinario", example: "" }
   ,
-  { rank: Rank 928, english: "theater", word: "teatro" }
+  { rank: Rank 928, english: "theater", word: "teatro", example: "" }
   ,
-  { rank: Rank 929, english: "to face", word: "enfrentar" }
+  { rank: Rank 929, english: "to face", word: "enfrentar", example: "" }
   ,
-  { rank: Rank 930, english: "newly, freshly", word: "recién" }
+  { rank: Rank 930, english: "newly, freshly", word: "recién", example: "" }
   ,
-  { rank: Rank 931, english: "average", word: "media" }
+  { rank: Rank 931, english: "average", word: "media", example: "" }
   ,
-  { rank: Rank 932, english: "letter (of the alphabet)", word: "letra" }
+  { rank: Rank 932, english: "letter (of the alphabet)", word: "letra", example: "" }
   ,
-  { rank: Rank 933, english: "feeling", word: "sentimiento" }
+  { rank: Rank 933, english: "feeling", word: "sentimiento", example: "" }
   ,
-  { rank: Rank 934, english: "to drive", word: "conducir" }
+  { rank: Rank 934, english: "to drive", word: "conducir", example: "" }
   ,
-  { rank: Rank 935, english: "completely", word: "completamente" }
+  { rank: Rank 935, english: "completely", word: "completamente", example: "" }
   ,
-  { rank: Rank 936, english: "cold", word: "frío" }
+  { rank: Rank 936, english: "cold", word: "frío", example: "" }
   ,
-  { rank: Rank 937, english: "to sign", word: "firmar" }
+  { rank: Rank 937, english: "to sign", word: "firmar", example: "" }
   ,
-  { rank: Rank 938, english: "solution", word: "solución" }
+  { rank: Rank 938, english: "solution", word: "solución", example: "" }
   ,
-  { rank: Rank 939, english: "health", word: "salud" }
+  { rank: Rank 939, english: "health", word: "salud", example: "" }
   ,
-  { rank: Rank 940, english: "it works", word: "funciona" }
+  { rank: Rank 940, english: "it works", word: "funciona", example: "" }
   ,
-  { rank: Rank 941, english: "print", word: "impresión" }
+  { rank: Rank 941, english: "print", word: "impresión", example: "" }
   ,
-  { rank: Rank 942, english: "to complain", word: "quejarse" }
+  { rank: Rank 942, english: "to complain", word: "quejarse", example: "" }
   ,
-  { rank: Rank 943, english: "intention", word: "intención" }
+  { rank: Rank 943, english: "intention", word: "intención", example: "" }
   ,
-  { rank: Rank 944, english: "rate", word: "ritmo" }
+  { rank: Rank 944, english: "rate", word: "ritmo", example: "" }
   ,
-  { rank: Rank 945, english: "green", word: "verde" }
+  { rank: Rank 945, english: "green", word: "verde", example: "" }
   ,
-  { rank: Rank 946, english: "exact", word: "exacto" }
+  { rank: Rank 946, english: "exact", word: "exacto", example: "" }
   ,
-  { rank: Rank 947, english: "to respect", word: "respetar" }
+  { rank: Rank 947, english: "to respect", word: "respetar", example: "" }
   ,
-  { rank: Rank 948, english: "terrible", word: "terrible" }
+  { rank: Rank 948, english: "terrible", word: "terrible", example: "" }
   ,
-  { rank: Rank 949, english: "bank", word: "banco" }
+  { rank: Rank 949, english: "bank", word: "banco", example: "" }
   ,
-  { rank: Rank 950, english: "via", word: "vía" }
+  { rank: Rank 950, english: "via", word: "vía", example: "" }
   ,
-  { rank: Rank 951, english: "to hold", word: "sostener" }
+  { rank: Rank 951, english: "to hold", word: "sostener", example: "" }
   ,
-  { rank: Rank 952, english: "moon", word: "luna" }
+  { rank: Rank 952, english: "moon", word: "luna", example: "" }
   ,
-  { rank: Rank 953, english: "skin", word: "piel" }
+  { rank: Rank 953, english: "skin", word: "piel", example: "" }
   ,
-  { rank: Rank 954, english: "left (direction)", word: "izquierda" }
+  { rank: Rank 954, english: "left (direction)", word: "izquierda", example: "" }
   ,
-  { rank: Rank 955, english: "in front", word: "delante" }
+  { rank: Rank 955, english: "in front", word: "delante", example: "" }
   ,
-  { rank: Rank 956, english: "religious", word: "religioso" }
+  { rank: Rank 956, english: "religious", word: "religioso", example: "" }
   ,
-  { rank: Rank 957, english: "to warn", word: "advertir" }
+  { rank: Rank 957, english: "to warn", word: "advertir", example: "" }
   ,
-  { rank: Rank 958, english: "dark", word: "oscuro" }
+  { rank: Rank 958, english: "dark", word: "oscuro", example: "" }
   ,
-  { rank: Rank 959, english: "research", word: "investigación" }
+  { rank: Rank 959, english: "research", word: "investigación", example: "" }
   ,
-  { rank: Rank 960, english: "heat", word: "calor" }
+  { rank: Rank 960, english: "heat", word: "calor", example: "" }
   ,
-  { rank: Rank 961, english: "shop", word: "tienda" }
+  { rank: Rank 961, english: "shop", word: "tienda", example: "" }
   ,
-  { rank: Rank 962, english: "conversation", word: "conversación" }
+  { rank: Rank 962, english: "conversation", word: "conversación", example: "" }
   ,
-  { rank: Rank 963, english: "Christmas", word: "navidad" }
+  { rank: Rank 963, english: "Christmas", word: "navidad", example: "" }
   ,
-  { rank: Rank 964, english: "summer", word: "verano" }
+  { rank: Rank 964, english: "summer", word: "verano", example: "" }
   ,
-  { rank: Rank 965, english: "respect", word: "respeto" }
+  { rank: Rank 965, english: "respect", word: "respeto", example: "" }
   ,
-  { rank: Rank 966, english: "grandfather", word: "abuelo" }
+  { rank: Rank 966, english: "grandfather", word: "abuelo", example: "" }
   ,
-  { rank: Rank 967, english: "north", word: "norte" }
+  { rank: Rank 967, english: "north", word: "norte", example: "" }
   ,
-  { rank: Rank 968, english: "by means of", word: "mediante" }
+  { rank: Rank 968, english: "by means of", word: "mediante", example: "" }
   ,
-  { rank: Rank 969, english: "tradition", word: "tradición" }
+  { rank: Rank 969, english: "tradition", word: "tradición", example: "" }
   ,
-  { rank: Rank 970, english: "is sufficient to (to be enough)", word: "bastar" }
+  { rank: Rank 970, english: "is sufficient to (to be enough)", word: "bastar", example: "" }
   ,
-  { rank: Rank 971, english: "couple", word: "pareja" }
+  { rank: Rank 971, english: "couple", word: "pareja", example: "" }
   ,
-  { rank: Rank 972, english: "population", word: "población" }
+  { rank: Rank 972, english: "population", word: "población", example: "" }
   ,
-  { rank: Rank 973, english: "lawyer", word: "abogado" }
+  { rank: Rank 973, english: "lawyer", word: "abogado", example: "" }
   ,
-  { rank: Rank 974, english: "daily", word: "diario" }
+  { rank: Rank 974, english: "daily", word: "diario", example: "" }
   ,
-  { rank: Rank 975, english: "honor", word: "honor" }
+  { rank: Rank 975, english: "honor", word: "honor", example: "" }
   ,
-  { rank: Rank 976, english: "blue", word: "azul" }
+  { rank: Rank 976, english: "blue", word: "azul", example: "" }
   ,
-  { rank: Rank 977, english: "to mention", word: "mencionar" }
+  { rank: Rank 977, english: "to mention", word: "mencionar", example: "" }
   ,
-  { rank: Rank 978, english: "generation", word: "generación" }
+  { rank: Rank 978, english: "generation", word: "generación", example: "" }
   ,
-  { rank: Rank 979, english: "vision", word: "visión" }
+  { rank: Rank 979, english: "vision", word: "visión", example: "" }
   ,
-  { rank: Rank 980, english: "concrete", word: "concreto" }
+  { rank: Rank 980, english: "concrete", word: "concreto", example: "" }
   ,
-  { rank: Rank 981, english: "completed", word: "terminado" }
+  { rank: Rank 981, english: "completed", word: "terminado", example: "" }
   ,
-  { rank: Rank 982, english: "to raise (an issue)", word: "plantear" }
+  { rank: Rank 982, english: "to raise (an issue)", word: "plantear", example: "" }
   ,
-  { rank: Rank 983, english: "left behind", word: "dejado" }
+  { rank: Rank 983, english: "left behind", word: "dejado", example: "" }
   ,
-  { rank: Rank 984, english: "to test", word: "probar" }
+  { rank: Rank 984, english: "to test", word: "probar", example: "" }
   ,
-  { rank: Rank 985, english: "to swear, pledge", word: "jurar" }
+  { rank: Rank 985, english: "to swear, pledge", word: "jurar", example: "" }
   ,
-  { rank: Rank 986, english: "beautiful", word: "hermoso" }
+  { rank: Rank 986, english: "beautiful", word: "hermoso", example: "" }
   ,
-  { rank: Rank 987, english: "danger", word: "peligro" }
+  { rank: Rank 987, english: "danger", word: "peligro", example: "" }
   ,
-  { rank: Rank 988, english: "confidence", word: "confianza" }
+  { rank: Rank 988, english: "confidence", word: "confianza", example: "" }
   ,
-  { rank: Rank 989, english: "to fill", word: "llenar" }
+  { rank: Rank 989, english: "to fill", word: "llenar", example: "" }
   ,
-  { rank: Rank 990, english: "simple", word: "sencillo" }
+  { rank: Rank 990, english: "simple", word: "sencillo", example: "" }
   ,
-  { rank: Rank 991, english: "to improve", word: "mejorar" }
+  { rank: Rank 991, english: "to improve", word: "mejorar", example: "" }
   ,
-  { rank: Rank 992, english: "concept", word: "concepto" }
+  { rank: Rank 992, english: "concept", word: "concepto", example: "" }
   ,
-  { rank: Rank 993, english: "to highlight", word: "destacar" }
+  { rank: Rank 993, english: "to highlight", word: "destacar", example: "" }
   ,
-  { rank: Rank 994, english: "wood", word: "madera" }
+  { rank: Rank 994, english: "wood", word: "madera", example: "" }
   ,
-  { rank: Rank 995, english: "to walk", word: "caminar" }
+  { rank: Rank 995, english: "to walk", word: "caminar", example: "" }
   ,
-  { rank: Rank 996, english: "to employ", word: "emplear" }
+  { rank: Rank 996, english: "to employ", word: "emplear", example: "" }
   ,
-  { rank: Rank 997, english: "to agree", word: "convenir" }
+  { rank: Rank 997, english: "to agree", word: "convenir", example: "" }
   ,
-  { rank: Rank 998, english: "energy", word: "energía" }
+  { rank: Rank 998, english: "energy", word: "energía", example: "" }
   ,
-  { rank: Rank 999, english: "to admit", word: "admitir" }
+  { rank: Rank 999, english: "to admit", word: "admitir", example: "" }
   ,
-  { rank: Rank 1000, english: "is delightful to (to love)", word: "encantar" }
+  { rank: Rank 1000, english: "is delightful to (to love)", word: "encantar", example: "" }
   ]

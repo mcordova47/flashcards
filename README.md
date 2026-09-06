@@ -106,6 +106,15 @@ there is something to divide.
 brand-new word is just learning; forgetting one you had already earned is a
 leech. A word missed eight times on the way in but never since does not appear.
 
+## Example sentences
+
+The German source ships a sentence for every word, and the card shows it under
+the rank once flipped. Never before: 853 of the 1005 examples contain the word
+itself, so on a production card an early reveal would hand over the answer.
+
+Spanish has none, so its cards are unchanged. Generating them is what #3 is
+about.
+
 ## Backup and transfer
 
 The `•••` control opens a panel to save your progress to a file and load it

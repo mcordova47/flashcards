@@ -29,7 +29,7 @@ now = at $ 100.0 * day
 
 deck :: Array Card
 deck = Array.range 1 20 <#> \n ->
-  { rank: Rank n, english: "en" <> show n, word: "es" <> show n }
+  { rank: Rank n, english: "en" <> show n, word: "es" <> show n, example: "" }
 
 -- | rank, box, seen, missed, lapses, days until due
 card :: Int -> Int -> Int -> Int -> Int -> Number -> Progress -> Progress

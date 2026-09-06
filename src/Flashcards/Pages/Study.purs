@@ -431,6 +431,12 @@ studyingView state session dispatch =
               , speaker producing
               ]
           , H.div "rank" $ "#" <> show (rankToInt card.rank)
+          -- Only after the reveal: most examples contain the word, so before
+          -- it they would give the answer away.
+          , if session.flipped && card.example /= "" then
+              H.div "example" card.example
+            else
+              H.empty
           ]
 
     -- Sits beside whichever side is showing the Spanish. Clicks bubble to the

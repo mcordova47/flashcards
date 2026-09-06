@@ -39,7 +39,10 @@ export default async ({ check, open }) => {
   check("with a German voice picked", await page.text(".panel-voice-name"), "Anna")
   await page.tap(".backdrop")
 
+  check("no example before the flip - most contain the word", await page.$(".example"), null)
   await page.tap(".card")
+  check("the German card shows its example sentence",
+    await page.text(".example"), "Wir treffen uns am Dienstag.")
   await page.tap(".got-it")
   const de = await page.evaluate(() => JSON.parse(localStorage.getItem("flashcards.de.v1")))
   const es = await page.evaluate(() => JSON.parse(localStorage.getItem("flashcards.es.v1")))

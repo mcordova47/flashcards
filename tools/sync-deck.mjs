@@ -99,14 +99,18 @@ for (const lang of chosen) {
     fail(`expected the first columns to be ${want.join(", ")}, got ${header.slice(0, 3).join(", ")}`)
   }
 
+  // Optional, and found by name: the decks do not agree on column count.
+  const exampleAt = header.indexOf("Example")
+
   const cards = body.map((cells, i) => {
     const rank = Number((cells[0] ?? "").trim())
     const english = (cells[1] ?? "").trim()
     const foreign = (cells[2] ?? "").trim()
+    const example = exampleAt < 0 ? "" : (cells[exampleAt] ?? "").trim()
     if (!Number.isInteger(rank)) fail(`row ${i + 2} has a non-integer Order: ${cells[0]}`)
     if (!english) fail(`row ${i + 2} has an empty English side`)
     if (!foreign) fail(`row ${i + 2} has an empty ${lang.column} side`)
-    return { rank, english, foreign }
+    return { rank, english, foreign, example }
   })
 
   cards.forEach((c, i) => {
@@ -162,7 +166,8 @@ for (const lang of chosen) {
 
   const escape = s => s.replace(/\\/g, "\\\\").replace(/"/g, '\\"')
   const entries = cards
-    .map(c => `  { rank: Rank ${c.rank}, english: "${escape(c.english)}", word: "${escape(c.foreign)}" }`)
+    .map(c => `  { rank: Rank ${c.rank}, english: "${escape(c.english)}"`
+             + `, word: "${escape(c.foreign)}", example: "${escape(c.example)}" }`)
     .join("\n  ,\n")
 
   const out = `src/Flashcards/Data/Deck/${lang.module}.purs`

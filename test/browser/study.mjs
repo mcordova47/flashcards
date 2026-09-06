@@ -14,6 +14,7 @@ export default async ({ check, open }) => {
 
   await page.tap(".card")
   check("flipping reveals the English", await page.text(".answer"), "I")
+  check("and Spanish has no examples to show", await page.$(".example"), null)
   check("the prompt stays, shrunk", await page.text(".prompt.small"), "yo")
   check("two grades appear", (await page.$$(".grade")).length, 2)
 

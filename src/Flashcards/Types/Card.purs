@@ -22,6 +22,10 @@ type Card =
   { rank :: Rank
   , english :: String
   , word :: String
+  -- | A sentence using the word, or empty where the deck has none. Shown only
+  -- | after the reveal: most examples contain the word, so before it they
+  -- | would hand over the answer.
+  , example :: String
   }
 
 rankToInt :: Rank -> Int

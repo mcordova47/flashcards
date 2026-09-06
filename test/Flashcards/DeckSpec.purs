@@ -23,10 +23,10 @@ import Test.Spec.Assertions (shouldEqual)
 -- | Two English sides deliberately collide, as they do in the real deck.
 deck :: Array Card
 deck =
-  [ { rank: Rank 1, english: "that", word: "que" }
-  , { rank: Rank 2, english: "to find", word: "encontrar" }
-  , { rank: Rank 3, english: "that", word: "ese" }
-  , { rank: Rank 4, english: "that", word: "aquel" }
+  [ { rank: Rank 1, english: "that", word: "que", example: "" }
+  , { rank: Rank 2, english: "to find", word: "encontrar", example: "" }
+  , { rank: Rank 3, english: "that", word: "ese", example: "" }
+  , { rank: Rank 4, english: "that", word: "aquel", example: "" }
   ]
 
 epoch :: Instant
@@ -56,17 +56,17 @@ spec = do
 
   describe "which card carries the production question" do
     it "the most frequent member of a colliding group" do
-      Deck.isCanonical { rank: Rank 1, english: "that", word: "que" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 1, english: "that", word: "que", example: "" } (Deck.index deck)
         `shouldEqual` true
 
     it "and not its rarer siblings, which would be the same prompt again" do
-      Deck.isCanonical { rank: Rank 3, english: "that", word: "ese" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 3, english: "that", word: "ese", example: "" } (Deck.index deck)
         `shouldEqual` false
-      Deck.isCanonical { rank: Rank 4, english: "that", word: "aquel" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 4, english: "that", word: "aquel", example: "" } (Deck.index deck)
         `shouldEqual` false
 
     it "a word that collides with nothing always carries its own" do
-      Deck.isCanonical { rank: Rank 2, english: "to find", word: "encontrar" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 2, english: "to find", word: "encontrar", example: "" } (Deck.index deck)
         `shouldEqual` true
 
     it "exactly one member of every real group carries it" do

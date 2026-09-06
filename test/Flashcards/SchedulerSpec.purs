@@ -32,7 +32,7 @@ now = at $ 100.0 * day
 -- | The English and Spanish sides are irrelevant to scheduling.
 deck :: Array Card
 deck = Array.range 1 50 <#> \n ->
-  { rank: Rank n, english: "en" <> show n, word: "es" <> show n }
+  { rank: Rank n, english: "en" <> show n, word: "es" <> show n, example: "" }
 
 reviewed :: Int -> Int -> Number -> Progress -> Progress
 reviewed rank box due = Progress.insert (Rank rank) { box, due: at due, seen: 1, lapses: 0, missed: 0, direction: Recognition }

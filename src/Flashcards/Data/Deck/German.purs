@@ -20,2013 +20,2013 @@ fingerprint = "8e5a5452be8f"
 deck :: Array Card
 deck =
   [
-  { rank: Rank 1, english: "on (days/times)", word: "am" }
+  { rank: Rank 1, english: "on (days/times)", word: "am", example: "Wir treffen uns am Dienstag." }
   ,
-  { rank: Rank 2, english: "article", word: "der Artikel" }
+  { rank: Rank 2, english: "article", word: "der Artikel", example: "Ich lese einen interessanten Artikel online." }
   ,
-  { rank: Rank 3, english: "Goodbye!", word: "Auf Wiedersehen!" }
+  { rank: Rank 3, english: "Goodbye!", word: "Auf Wiedersehen!", example: "Auf Wiedersehen! Bis nächste Woche!" }
   ,
-  { rank: Rank 4, english: "from, out of", word: "aus" }
+  { rank: Rank 4, english: "from, out of", word: "aus", example: "Ich komme aus der Schweiz." }
   ,
-  { rank: Rank 5, english: "machine, vending machine", word: "der Automat" }
+  { rank: Rank 5, english: "machine, vending machine", word: "der Automat", example: "Der Automat nimmt keine Zehn-Euro-Scheine an." }
   ,
-  { rank: Rank 6, english: "ATM", word: "der Bankautomat" }
+  { rank: Rank 6, english: "ATM", word: "der Bankautomat", example: "Wo ist der nächste Bankautomat hier bitte?" }
   ,
-  { rank: Rank 7, english: "picture, image", word: "das Bild" }
+  { rank: Rank 7, english: "picture, image", word: "das Bild", example: "Das ist ein schönes Bild." }
   ,
-  { rank: Rank 8, english: "book", word: "das Buch" }
+  { rank: Rank 8, english: "book", word: "das Buch", example: "Ich lese ein Buch." }
   ,
-  { rank: Rank 9, english: "letter (of the alphabet)", word: "der Buchstabe" }
+  { rank: Rank 9, english: "letter (of the alphabet)", word: "der Buchstabe", example: "Wie viele Buchstaben hat das Wort?" }
   ,
-  { rank: Rank 10, english: "to spell", word: "buchstabieren" }
+  { rank: Rank 10, english: "to spell", word: "buchstabieren", example: "Können Sie bitte Ihren Namen buchstabieren?" }
   ,
-  { rank: Rank 11, english: "computer", word: "der Computer" }
+  { rank: Rank 11, english: "computer", word: "der Computer", example: "Ich brauche einen neuen Computer." }
   ,
-  { rank: Rank 12, english: "German", word: "deutsch" }
+  { rank: Rank 12, english: "German", word: "deutsch", example: "Er ist ein deutscher Lehrer." }
   ,
-  { rank: Rank 13, english: "Germany", word: "Deutschland" }
+  { rank: Rank 13, english: "Germany", word: "Deutschland", example: "Ich komme aus Deutschland." }
   ,
-  { rank: Rank 14, english: "Tuesday", word: "der Dienstag" }
+  { rank: Rank 14, english: "Tuesday", word: "der Dienstag", example: "Am Dienstag habe ich frei." }
   ,
-  { rank: Rank 15, english: "Thursday", word: "der Donnerstag" }
+  { rank: Rank 15, english: "Thursday", word: "der Donnerstag", example: "Donnerstag ist unser Sporttag." }
   ,
-  { rank: Rank 16, english: "family", word: "die Familie" }
+  { rank: Rank 16, english: "family", word: "die Familie", example: "Meine Familie ist klein." }
   ,
-  { rank: Rank 17, english: "feminine", word: "feminin" }
+  { rank: Rank 17, english: "feminine", word: "feminin", example: "Sie hat einen femininen Stil." }
   ,
-  { rank: Rank 18, english: "question", word: "die Frage" }
+  { rank: Rank 18, english: "question", word: "die Frage", example: "Ich habe eine Frage." }
   ,
-  { rank: Rank 19, english: "to ask", word: "fragen" }
+  { rank: Rank 19, english: "to ask", word: "fragen", example: "Ich frage den Lehrer." }
   ,
-  { rank: Rank 20, english: "Friday", word: "der Freitag" }
+  { rank: Rank 20, english: "Friday", word: "der Freitag", example: "Freitag ist der letzte Arbeitstag." }
   ,
-  { rank: Rank 21, english: "to believe", word: "glauben" }
+  { rank: Rank 21, english: "to believe", word: "glauben", example: "Ich glaube, du schaffst das." }
   ,
-  { rank: Rank 22, english: "Good day!", word: "Guten Tag!" }
+  { rank: Rank 22, english: "Good day!", word: "Guten Tag!", example: "Guten Tag! Wie geht es Ihnen?" }
   ,
-  { rank: Rank 23, english: "Hello!", word: "Hallo!" }
+  { rank: Rank 23, english: "Hello!", word: "Hallo!", example: "Hallo! Wie geht's dir?" }
   ,
-  { rank: Rank 24, english: "notebook, exercise book", word: "das Heft" }
+  { rank: Rank 24, english: "notebook, exercise book", word: "das Heft", example: "Schreibe es in dein Heft." }
   ,
-  { rank: Rank 25, english: "to be called", word: "heißen" }
+  { rank: Rank 25, english: "to be called", word: "heißen", example: "Ich heiße Anna und komme aus Berlin." }
   ,
-  { rank: Rank 26, english: "conjugation", word: "die Konjugation" }
+  { rank: Rank 26, english: "conjugation", word: "die Konjugation", example: "Die Konjugation der Verben ist wichtig." }
   ,
-  { rank: Rank 27, english: "ballpoint pen", word: "der Kuli" }
+  { rank: Rank 27, english: "ballpoint pen", word: "der Kuli", example: "Wo ist mein Kuli?" }
   ,
-  { rank: Rank 28, english: "easy, light", word: "leicht" }
+  { rank: Rank 28, english: "easy, light", word: "leicht", example: "Diese Übung ist sehr leicht." }
   ,
-  { rank: Rank 29, english: "to learn", word: "lernen" }
+  { rank: Rank 29, english: "to learn", word: "lernen", example: "Wir lernen jeden Tag Deutsch." }
   ,
-  { rank: Rank 30, english: "masculine", word: "maskulin" }
+  { rank: Rank 30, english: "masculine", word: "maskulin", example: "Das Wort „Mann“ ist maskulin." }
   ,
-  { rank: Rank 31, english: "person, human being", word: "der Mensch" }
+  { rank: Rank 31, english: "person, human being", word: "der Mensch", example: "Jeder Mensch braucht Wasser." }
   ,
-  { rank: Rank 32, english: "Wednesday", word: "der Mittwoch" }
+  { rank: Rank 32, english: "Wednesday", word: "der Mittwoch", example: "Am Mittwoch habe ich frei." }
   ,
-  { rank: Rank 33, english: "Monday", word: "der Montag" }
+  { rank: Rank 33, english: "Monday", word: "der Montag", example: "Der Montag ist der erste Wochentag." }
   ,
-  { rank: Rank 34, english: "no", word: "nein" }
+  { rank: Rank 34, english: "no", word: "nein", example: "Nein, das ist leider nicht die richtige Antwort." }
   ,
-  { rank: Rank 35, english: "neuter", word: "neutral" }
+  { rank: Rank 35, english: "neuter", word: "neutral", example: "Das Wort „Kind“ ist neutral." }
   ,
-  { rank: Rank 36, english: "still, yet", word: "noch" }
+  { rank: Rank 36, english: "still, yet", word: "noch", example: "Ich wohne noch bei meinen Eltern in München." }
   ,
-  { rank: Rank 37, english: "noun", word: "das Nomen" }
+  { rank: Rank 37, english: "noun", word: "das Nomen", example: "Ein Nomen hat immer einen Artikel." }
   ,
-  { rank: Rank 38, english: "paper", word: "das Papier" }
+  { rank: Rank 38, english: "paper", word: "das Papier", example: "Ich brauche ein Blatt Papier." }
   ,
-  { rank: Rank 39, english: "person", word: "die Person" }
+  { rank: Rank 39, english: "person", word: "die Person", example: "Er ist eine nette Person." }
   ,
-  { rank: Rank 40, english: "radio", word: "das Radio" }
+  { rank: Rank 40, english: "radio", word: "das Radio", example: "Das Radio spielt meine Lieblingsmusik." }
   ,
-  { rank: Rank 41, english: "Saturday", word: "der Samstag" }
+  { rank: Rank 41, english: "Saturday", word: "der Samstag", example: "Am Samstag habe ich frei." }
   ,
-  { rank: Rank 42, english: "sentence", word: "der Satz" }
+  { rank: Rank 42, english: "sentence", word: "der Satz", example: "Bitte bilden Sie einen Satz." }
   ,
-  { rank: Rank 43, english: "to write", word: "schreiben" }
+  { rank: Rank 43, english: "to write", word: "schreiben", example: "Ich schreibe einen Brief." }
   ,
-  { rank: Rank 44, english: "Sunday", word: "der Sonntag" }
+  { rank: Rank 44, english: "Sunday", word: "der Sonntag", example: "Am Sonntag schlafe ich lange." }
   ,
-  { rank: Rank 45, english: "to speak", word: "sprechen" }
+  { rank: Rank 45, english: "to speak", word: "sprechen", example: "Ich spreche Deutsch." }
   ,
-  { rank: Rank 46, english: "pen, pencil", word: "der Stift" }
+  { rank: Rank 46, english: "pen, pencil", word: "der Stift", example: "Hast du einen Stift für mich?" }
   ,
-  { rank: Rank 47, english: "super, great", word: "super" }
+  { rank: Rank 47, english: "super, great", word: "super", example: "Dein neues Hemd sieht super aus!" }
   ,
-  { rank: Rank 48, english: "blackboard", word: "die Tafel" }
+  { rank: Rank 48, english: "blackboard", word: "die Tafel", example: "Der Lehrer schreibt an die Tafel." }
   ,
-  { rank: Rank 49, english: "bag", word: "die Tasche" }
+  { rank: Rank 49, english: "bag", word: "die Tasche", example: "Meine Tasche ist sehr schwer." }
   ,
-  { rank: Rank 50, english: "clock, watch", word: "die Uhr" }
+  { rank: Rank 50, english: "clock, watch", word: "die Uhr", example: "Meine Uhr geht fünf Minuten vor." }
   ,
-  { rank: Rank 51, english: "verb", word: "das Verb" }
+  { rank: Rank 51, english: "verb", word: "das Verb", example: "Ich lerne ein neues deutsches Verb heute." }
   ,
-  { rank: Rank 52, english: "late morning", word: "der Vormittag" }
+  { rank: Rank 52, english: "late morning", word: "der Vormittag", example: "Am Vormittag habe ich Zeit." }
   ,
-  { rank: Rank 53, english: "when", word: "wann" }
+  { rank: Rank 53, english: "when", word: "wann", example: "Wann fährt der nächste Zug nach Berlin ab?" }
   ,
-  { rank: Rank 54, english: "who", word: "wer" }
+  { rank: Rank 54, english: "who", word: "wer", example: "Wer ist der nette Mann dort drüben an der Tür?" }
   ,
-  { rank: Rank 55, english: "how", word: "wie" }
+  { rank: Rank 55, english: "how", word: "wie", example: "Wie lange dauert die Fahrt zum Flughafen von hier?" }
   ,
-  { rank: Rank 56, english: "welcome", word: "willkommen" }
+  { rank: Rank 56, english: "welcome", word: "willkommen", example: "Herzlich willkommen in unserem neuen Haus!" }
   ,
-  { rank: Rank 57, english: "where from", word: "woher" }
+  { rank: Rank 57, english: "where from", word: "woher", example: "Woher kommen Sie?" }
   ,
-  { rank: Rank 58, english: "word order", word: "die Wortstellung" }
+  { rank: Rank 58, english: "word order", word: "die Wortstellung", example: "Die deutsche Wortstellung ist manchmal schwierig." }
   ,
-  { rank: Rank 59, english: "alone", word: "allein" }
+  { rank: Rank 59, english: "alone", word: "allein", example: "Sie ist heute allein." }
   ,
-  { rank: Rank 60, english: "answer", word: "die Antwort" }
+  { rank: Rank 60, english: "answer", word: "die Antwort", example: "Ich warte auf deine Antwort." }
   ,
-  { rank: Rank 61, english: "to work", word: "arbeiten" }
+  { rank: Rank 61, english: "to work", word: "arbeiten", example: "Ich arbeite in einem Büro." }
   ,
-  { rank: Rank 62, english: "architect (male)", word: "der Architekt" }
+  { rank: Rank 62, english: "architect (male)", word: "der Architekt", example: "Der Architekt plant ein modernes Haus." }
   ,
-  { rank: Rank 63, english: "architect (female)", word: "die Architektin" }
+  { rank: Rank 63, english: "architect (female)", word: "die Architektin", example: "Sie ist eine gute Architektin." }
   ,
-  { rank: Rank 64, english: "also, too", word: "auch" }
+  { rank: Rank 64, english: "also, too", word: "auch", example: "Ich komme auch aus Deutschland." }
   ,
-  { rank: Rank 65, english: "abroad, foreign country", word: "das Ausland" }
+  { rank: Rank 65, english: "abroad, foreign country", word: "das Ausland", example: "Er arbeitet im Ausland." }
   ,
-  { rank: Rank 66, english: "brother", word: "der Bruder" }
+  { rank: Rank 66, english: "brother", word: "der Bruder", example: "Mein Bruder spielt gern Fußball im Park." }
   ,
-  { rank: Rank 67, english: "cousin (male)", word: "der Cousin" }
+  { rank: Rank 67, english: "cousin (male)", word: "der Cousin", example: "Mein Cousin wohnt in Hamburg." }
   ,
-  { rank: Rank 68, english: "cousin (female)", word: "die Cousine" }
+  { rank: Rank 68, english: "cousin (female)", word: "die Cousine", example: "Meine Cousine ist sehr nett." }
   ,
-  { rank: Rank 69, english: "then", word: "dann" }
+  { rank: Rank 69, english: "then", word: "dann", example: "Zuerst essen wir, dann gehen wir nach Hause." }
   ,
-  { rank: Rank 70, english: "your (informal)", word: "dein" }
+  { rank: Rank 70, english: "your (informal)", word: "dein", example: "Ist das dein neues Buch?" }
   ,
-  { rank: Rank 71, english: "designer (male)", word: "der Designer" }
+  { rank: Rank 71, english: "designer (male)", word: "der Designer", example: "Der Designer entwirft schöne Kleidung." }
   ,
-  { rank: Rank 72, english: "designer (female)", word: "die Designerin" }
+  { rank: Rank 72, english: "designer (female)", word: "die Designerin", example: "Sie ist eine gute Designerin." }
   ,
-  { rank: Rank 73, english: "yes (contradicting), but", word: "doch" }
+  { rank: Rank 73, english: "yes (contradicting), but", word: "doch", example: "Du bist nicht müde? Doch, ich bin müde!" }
   ,
-  { rank: Rank 74, english: "thirty", word: "dreißig" }
+  { rank: Rank 74, english: "thirty", word: "dreißig", example: "Ich bin dreißig Jahre alt." }
   ,
-  { rank: Rank 75, english: "one", word: "eins / ein" }
+  { rank: Rank 75, english: "one", word: "eins / ein", example: "Ich nehme ein Bier, bitte." }
   ,
-  { rank: Rank 76, english: "only child", word: "das Einzelkind" }
+  { rank: Rank 76, english: "only child", word: "das Einzelkind", example: "Ich bin ein Einzelkind." }
   ,
-  { rank: Rank 77, english: "parents", word: "die Eltern" }
+  { rank: Rank 77, english: "parents", word: "die Eltern", example: "Meine Eltern sind zu Hause." }
   ,
-  { rank: Rank 78, english: "your (plural informal)", word: "euer" }
+  { rank: Rank 78, english: "your (plural informal)", word: "euer", example: "Ist das euer Auto?" }
   ,
-  { rank: Rank 79, english: "photo", word: "das Foto" }
+  { rank: Rank 79, english: "photo", word: "das Foto", example: "Ich mache ein Foto." }
   ,
-  { rank: Rank 80, english: "photographer", word: "der Fotograf" }
+  { rank: Rank 80, english: "photographer", word: "der Fotograf", example: "Der Fotograf macht schöne Fotos." }
   ,
-  { rank: Rank 81, english: "woman", word: "die Frau" }
+  { rank: Rank 81, english: "woman", word: "die Frau", example: "Die Frau liest ein Buch." }
   ,
-  { rank: Rank 82, english: "friend", word: "der Freund" }
+  { rank: Rank 82, english: "friend", word: "der Freund", example: "Das ist mein bester Freund." }
   ,
-  { rank: Rank 83, english: "friend (female)", word: "die Freundin" }
+  { rank: Rank 83, english: "friend (female)", word: "die Freundin", example: "Meine Freundin heißt Anna." }
   ,
-  { rank: Rank 84, english: "to play football", word: "Fußball (spielen)" }
+  { rank: Rank 84, english: "to play football", word: "Fußball (spielen)", example: "Wir spielen gern Fußball." }
   ,
-  { rank: Rank 85, english: "gladly, with pleasure", word: "gern" }
+  { rank: Rank 85, english: "gladly, with pleasure", word: "gern", example: "Ich esse gern Pizza." }
   ,
-  { rank: Rank 86, english: "divorced", word: "geschieden" }
+  { rank: Rank 86, english: "divorced", word: "geschieden", example: "Sie ist leider schon geschieden." }
   ,
-  { rank: Rank 87, english: "siblings", word: "die Geschwister" }
+  { rank: Rank 87, english: "siblings", word: "die Geschwister", example: "Ich habe zwei Geschwister." }
   ,
-  { rank: Rank 88, english: "grandparents", word: "die Großeltern" }
+  { rank: Rank 88, english: "grandparents", word: "die Großeltern", example: "Meine Großeltern wohnen hier." }
   ,
-  { rank: Rank 89, english: "grandmother", word: "die Großmutter" }
+  { rank: Rank 89, english: "grandmother", word: "die Großmutter", example: "Meine Großmutter backt Kuchen." }
   ,
-  { rank: Rank 90, english: "grandfather", word: "der Großvater" }
+  { rank: Rank 90, english: "grandfather", word: "der Großvater", example: "Mein Großvater erzählt Geschichten." }
   ,
-  { rank: Rank 91, english: "good", word: "gut" }
+  { rank: Rank 91, english: "good", word: "gut", example: "Dieses Essen ist sehr gut." }
   ,
-  { rank: Rank 92, english: "to hear", word: "hören" }
+  { rank: Rank 92, english: "to hear", word: "hören", example: "Hörst du die laute Musik?" }
   ,
-  { rank: Rank 93, english: "hundred", word: "hundert" }
+  { rank: Rank 93, english: "hundred", word: "hundert", example: "Das Buch kostet hundert Euro." }
   ,
-  { rank: Rank 94, english: "their", word: "ihr (Pl.)" }
+  { rank: Rank 94, english: "their", word: "ihr (Pl.)", example: "Das sind ihre Kinder." }
   ,
-  { rank: Rank 95, english: "IT specialist (male)", word: "der Informatiker" }
+  { rank: Rank 95, english: "IT specialist (male)", word: "der Informatiker", example: "Mein Bruder ist Informatiker." }
   ,
-  { rank: Rank 96, english: "IT specialist (female)", word: "die Informatikerin" }
+  { rank: Rank 96, english: "IT specialist (female)", word: "die Informatikerin", example: "Sie ist eine gute Informatikerin." }
   ,
-  { rank: Rank 97, english: "engineer (male)", word: "der Ingenieur" }
+  { rank: Rank 97, english: "engineer (male)", word: "der Ingenieur", example: "Mein Vater ist Ingenieur." }
   ,
-  { rank: Rank 98, english: "engineer (female)", word: "die Ingenieurin" }
+  { rank: Rank 98, english: "engineer (female)", word: "die Ingenieurin", example: "Meine Schwester ist Ingenieurin." }
   ,
-  { rank: Rank 99, english: "international", word: "international" }
+  { rank: Rank 99, english: "international", word: "international", example: "Die Firma ist international." }
   ,
-  { rank: Rank 100, english: "yes", word: "ja" }
+  { rank: Rank 100, english: "yes", word: "ja", example: "Ja, das stimmt." }
   ,
-  { rank: Rank 101, english: "now", word: "jetzt" }
+  { rank: Rank 101, english: "now", word: "jetzt", example: "Ich gehe jetzt nach Hause." }
   ,
-  { rank: Rank 102, english: "child", word: "das Kind" }
+  { rank: Rank 102, english: "child", word: "das Kind", example: "Das Kind spielt im Garten." }
   ,
-  { rank: Rank 103, english: "small", word: "klein" }
+  { rank: Rank 103, english: "small", word: "klein", example: "Meine Katze ist sehr klein." }
   ,
-  { rank: Rank 104, english: "cook, chef (male)", word: "der Koch" }
+  { rank: Rank 104, english: "cook, chef (male)", word: "der Koch", example: "Der Koch macht gutes Essen." }
   ,
-  { rank: Rank 105, english: "to cook", word: "kochen" }
+  { rank: Rank 105, english: "to cook", word: "kochen", example: "Ich koche heute Abend Suppe." }
   ,
-  { rank: Rank 106, english: "cook, chef (female)", word: "die Köchin" }
+  { rank: Rank 106, english: "cook, chef (female)", word: "die Köchin", example: "Die Köchin macht gutes Essen." }
   ,
-  { rank: Rank 107, english: "colleague (male)", word: "der Kollege" }
+  { rank: Rank 107, english: "colleague (male)", word: "der Kollege", example: "Mein Kollege kommt aus Berlin." }
   ,
-  { rank: Rank 108, english: "colleague (female)", word: "die Kollegin" }
+  { rank: Rank 108, english: "colleague (female)", word: "die Kollegin", example: "Das ist meine neue Kollegin." }
   ,
-  { rank: Rank 109, english: "country, land", word: "das Land" }
+  { rank: Rank 109, english: "country, land", word: "das Land", example: "Deutschland ist ein schönes Land." }
   ,
-  { rank: Rank 110, english: "life", word: "das Leben" }
+  { rank: Rank 110, english: "life", word: "das Leben", example: "Mein Leben ist sehr schön." }
   ,
-  { rank: Rank 111, english: "single (unmarried)", word: "ledig" }
+  { rank: Rank 111, english: "single (unmarried)", word: "ledig", example: "Bist du verheiratet oder ledig?" }
   ,
-  { rank: Rank 112, english: "teacher", word: "der Lehrer" }
+  { rank: Rank 112, english: "teacher", word: "der Lehrer", example: "Der Lehrer erklärt die Aufgabe." }
   ,
-  { rank: Rank 113, english: "love", word: "die Liebe" }
+  { rank: Rank 113, english: "love", word: "die Liebe", example: "Die Liebe ist ein schönes Gefühl." }
   ,
-  { rank: Rank 114, english: "favorite topic", word: "das Lieblingsthema" }
+  { rank: Rank 114, english: "favorite topic", word: "das Lieblingsthema", example: "Politik ist nicht mein Lieblingsthema." }
   ,
-  { rank: Rank 115, english: "mom", word: "das Mam" }
+  { rank: Rank 115, english: "mom", word: "das Mam", example: "Meine Mam kocht heute Spaghetti." }
   ,
-  { rank: Rank 116, english: "one (impersonal pronoun)", word: "man" }
+  { rank: Rank 116, english: "one (impersonal pronoun)", word: "man", example: "Hier spricht man Englisch." }
   ,
-  { rank: Rank 117, english: "manager (male)", word: "der Manager" }
+  { rank: Rank 117, english: "manager (male)", word: "der Manager", example: "Der Manager leitet das Team." }
   ,
-  { rank: Rank 118, english: "manager (female)", word: "die Managerin" }
+  { rank: Rank 118, english: "manager (female)", word: "die Managerin", example: "Unsere Managerin ist sehr nett." }
   ,
-  { rank: Rank 119, english: "man", word: "der Mann" }
+  { rank: Rank 119, english: "man", word: "der Mann", example: "Der Mann liest ein Buch." }
   ,
-  { rank: Rank 120, english: "my", word: "mein" }
+  { rank: Rank 120, english: "my", word: "mein", example: "Das ist mein Auto." }
   ,
-  { rank: Rank 121, english: "to mean/think", word: "meinen" }
+  { rank: Rank 121, english: "to mean/think", word: "meinen", example: "Was meinst du zu diesem Thema?" }
   ,
-  { rank: Rank 122, english: "musician (male)", word: "der Musiker" }
+  { rank: Rank 122, english: "musician (male)", word: "der Musiker", example: "Mein Bruder ist Musiker." }
   ,
-  { rank: Rank 123, english: "musician (female)", word: "die Musikerin" }
+  { rank: Rank 123, english: "musician (female)", word: "die Musikerin", example: "Sie ist eine bekannte Musikerin." }
   ,
-  { rank: Rank 124, english: "mother", word: "die Mutter" }
+  { rank: Rank 124, english: "mother", word: "die Mutter", example: "Meine Mutter wohnt in Berlin." }
   ,
-  { rank: Rank 125, english: "not", word: "nicht" }
+  { rank: Rank 125, english: "not", word: "nicht", example: "Ich verstehe diese komplizierte Aufgabe leider nicht." }
   ,
-  { rank: Rank 126, english: "the Netherlands", word: "die Niederlande" }
+  { rank: Rank 126, english: "the Netherlands", word: "die Niederlande", example: "Sie reisen in die Niederlande." }
   ,
-  { rank: Rank 127, english: "zero", word: "null" }
+  { rank: Rank 127, english: "zero", word: "null", example: "Die Temperatur ist null Grad." }
   ,
-  { rank: Rank 128, english: "opera", word: "die Oper" }
+  { rank: Rank 128, english: "opera", word: "die Oper", example: "Gehen wir heute Abend in die Oper?" }
   ,
-  { rank: Rank 129, english: "Austria", word: "Österreich" }
+  { rank: Rank 129, english: "Austria", word: "Österreich", example: "Ich fahre diesen Sommer nach Österreich." }
   ,
-  { rank: Rank 130, english: "partner", word: "der Partner" }
+  { rank: Rank 130, english: "partner", word: "der Partner", example: "Das ist mein Partner, Julian." }
   ,
-  { rank: Rank 131, english: "plural", word: "der Plural" }
+  { rank: Rank 131, english: "plural", word: "der Plural", example: "Was ist der Plural von „Buch“?" }
   ,
-  { rank: Rank 132, english: "puzzle", word: "das Puzzle" }
+  { rank: Rank 132, english: "puzzle", word: "das Puzzle", example: "Wir machen ein großes Puzzle zusammen." }
   ,
-  { rank: Rank 133, english: "ship", word: "das Schiff" }
+  { rank: Rank 133, english: "ship", word: "das Schiff", example: "Das große Schiff fährt auf dem Meer." }
   ,
-  { rank: Rank 134, english: "beautiful", word: "schön" }
+  { rank: Rank 134, english: "beautiful", word: "schön", example: "Der Park ist im Frühling sehr schön." }
   ,
-  { rank: Rank 135, english: "sister", word: "die Schwester" }
+  { rank: Rank 135, english: "sister", word: "die Schwester", example: "Das ist meine ältere Schwester." }
   ,
-  { rank: Rank 136, english: "to swim", word: "schwimmen" }
+  { rank: Rank 136, english: "to swim", word: "schwimmen", example: "Ich schwimme gern im See." }
   ,
-  { rank: Rank 137, english: "very", word: "sehr" }
+  { rank: Rank 137, english: "very", word: "sehr", example: "Das Wetter ist heute sehr schön und warm in Berlin." }
   ,
-  { rank: Rank 138, english: "to be", word: "sein" }
+  { rank: Rank 138, english: "to be", word: "sein", example: "Ich bin müde." }
   ,
-  { rank: Rank 139, english: "independent, self-employed", word: "selbständig" }
+  { rank: Rank 139, english: "independent, self-employed", word: "selbständig", example: "Meine Schwester ist sehr selbständig im Leben." }
   ,
-  { rank: Rank 140, english: "singular", word: "der Singular" }
+  { rank: Rank 140, english: "singular", word: "der Singular", example: "Was ist der Singular von „Häuser“?" }
   ,
-  { rank: Rank 141, english: "son", word: "der Sohn" }
+  { rank: Rank 141, english: "son", word: "der Sohn", example: "Mein Sohn ist fünf Jahre alt." }
   ,
-  { rank: Rank 142, english: "to play", word: "spielen" }
+  { rank: Rank 142, english: "to play", word: "spielen", example: "Er spielt Fußball." }
   ,
-  { rank: Rank 143, english: "flight attendant (male)", word: "der Steward" }
+  { rank: Rank 143, english: "flight attendant (male)", word: "der Steward", example: "Der Steward bringt uns Getränke." }
   ,
-  { rank: Rank 144, english: "flight attendant (female)", word: "die Stewardess" }
+  { rank: Rank 144, english: "flight attendant (female)", word: "die Stewardess", example: "Die Stewardess ist sehr freundlich." }
   ,
-  { rank: Rank 145, english: "day", word: "der Tag" }
+  { rank: Rank 145, english: "day", word: "der Tag", example: "Guten Tag! Wie geht es Ihnen?" }
   ,
-  { rank: Rank 146, english: "dance", word: "der Tanz" }
+  { rank: Rank 146, english: "dance", word: "der Tanz", example: "Wir lieben den Tanz sehr." }
   ,
-  { rank: Rank 147, english: "to dance", word: "tanzen" }
+  { rank: Rank 147, english: "to dance", word: "tanzen", example: "Wir tanzen gerne am Wochenende." }
   ,
-  { rank: Rank 148, english: "to play tennis", word: "Tennis (spielen)" }
+  { rank: Rank 148, english: "to play tennis", word: "Tennis (spielen)", example: "Ich spiele gern Tennis am Samstag." }
   ,
-  { rank: Rank 149, english: "topic, subject", word: "das Thema" }
+  { rank: Rank 149, english: "topic, subject", word: "das Thema", example: "Das ist ein sehr interessantes Thema." }
   ,
-  { rank: Rank 150, english: "daughter", word: "die Tochter" }
+  { rank: Rank 150, english: "daughter", word: "die Tochter", example: "Meine Tochter ist noch klein." }
   ,
-  { rank: Rank 151, english: "great, awesome", word: "toll" }
+  { rank: Rank 151, english: "great, awesome", word: "toll", example: "Das Konzert war gestern wirklich toll." }
   ,
-  { rank: Rank 152, english: "Turkey", word: "die Türkei" }
+  { rank: Rank 152, english: "Turkey", word: "die Türkei", example: "Wir fliegen in die Türkei." }
   ,
-  { rank: Rank 153, english: "Ukraine", word: "die Ukraine" }
+  { rank: Rank 153, english: "Ukraine", word: "die Ukraine", example: "Die Ukraine ist ein Land in Osteuropa." }
   ,
-  { rank: Rank 154, english: "our", word: "unser" }
+  { rank: Rank 154, english: "our", word: "unser", example: "Das ist unser Haus hier." }
   ,
-  { rank: Rank 155, english: "father", word: "der Vater" }
+  { rank: Rank 155, english: "father", word: "der Vater", example: "Mein Vater arbeitet sehr viel." }
   ,
-  { rank: Rank 156, english: "married", word: "verheiratet" }
+  { rank: Rank 156, english: "married", word: "verheiratet", example: "Sind Sie verheiratet oder ledig?" }
   ,
-  { rank: Rank 157, english: "because", word: "weil" }
+  { rank: Rank 157, english: "because", word: "weil", example: "Ich bleibe zu Hause, weil ich müde bin." }
   ,
-  { rank: Rank 158, english: "week", word: "die Woche" }
+  { rank: Rank 158, english: "week", word: "die Woche", example: "Ich arbeite fünf Tage pro Woche." }
   ,
-  { rank: Rank 159, english: "number", word: "die Zahl" }
+  { rank: Rank 159, english: "number", word: "die Zahl", example: "Welche Zahl ist deine Lieblingszahl?" }
   ,
-  { rank: Rank 160, english: "to draw", word: "zeichnen" }
+  { rank: Rank 160, english: "to draw", word: "zeichnen", example: "Sie zeichnet sehr schöne Bilder." }
   ,
-  { rank: Rank 161, english: "twenty", word: "zwanzig" }
+  { rank: Rank 161, english: "twenty", word: "zwanzig", example: "Meine Schwester ist zwanzig Jahre alt." }
   ,
-  { rank: Rank 162, english: "evening", word: "der Abend" }
+  { rank: Rank 162, english: "evening", word: "der Abend", example: "Guten Abend, wie geht es Ihnen heute?" }
   ,
-  { rank: Rank 163, english: "apple", word: "der Apfel" }
+  { rank: Rank 163, english: "apple", word: "der Apfel", example: "Ich esse jeden Tag einen Apfel." }
   ,
-  { rank: Rank 164, english: "to order", word: "bestellen" }
+  { rank: Rank 164, english: "to order", word: "bestellen", example: "Ich möchte einen Kaffee bestellen." }
   ,
-  { rank: Rank 165, english: "beer", word: "das Bier" }
+  { rank: Rank 165, english: "beer", word: "das Bier", example: "Möchten Sie ein Bier?" }
   ,
-  { rank: Rank 166, english: "organic", word: "bio" }
+  { rank: Rank 166, english: "organic", word: "bio", example: "Ich kaufe gern Bio-Gemüse." }
   ,
-  { rank: Rank 167, english: "bread", word: "das Brot" }
+  { rank: Rank 167, english: "bread", word: "das Brot", example: "Ich esse gern Brot." }
   ,
-  { rank: Rank 168, english: "butter", word: "die Butter" }
+  { rank: Rank 168, english: "butter", word: "die Butter", example: "Ich mag Butter auf dem Brot." }
   ,
-  { rank: Rank 169, english: "thirst", word: "der Durst" }
+  { rank: Rank 169, english: "thirst", word: "der Durst", example: "Ich habe großen Durst." }
   ,
-  { rank: Rank 170, english: "to be thirsty", word: "Durst haben" }
+  { rank: Rank 170, english: "to be thirsty", word: "Durst haben", example: "Ich habe Durst." }
   ,
-  { rank: Rank 171, english: "egg", word: "das Ei" }
+  { rank: Rank 171, english: "egg", word: "das Ei", example: "Ich esse ein Ei zum Frühstück." }
   ,
-  { rank: Rank 172, english: "a/an (indefinite article)", word: "ein / eine / einen" }
+  { rank: Rank 172, english: "a/an (indefinite article)", word: "ein / eine / einen", example: "Ich habe einen Hund." }
   ,
-  { rank: Rank 173, english: "to eat", word: "essen" }
+  { rank: Rank 173, english: "to eat", word: "essen", example: "Ich esse einen Apfel." }
   ,
-  { rank: Rank 174, english: "fish", word: "der Fisch" }
+  { rank: Rank 174, english: "fish", word: "der Fisch", example: "Ich esse gerne Fisch zum Abendessen." }
   ,
-  { rank: Rank 175, english: "meat", word: "das Fleisch" }
+  { rank: Rank 175, english: "meat", word: "das Fleisch", example: "Ich esse kein Fleisch." }
   ,
-  { rank: Rank 176, english: "vegetables", word: "das Gemüse" }
+  { rank: Rank 176, english: "vegetables", word: "das Gemüse", example: "Ich esse viel Gemüse." }
   ,
-  { rank: Rank 177, english: "open (of a shop/restaurant)", word: "geöffnet" }
+  { rank: Rank 177, english: "open (of a shop/restaurant)", word: "geöffnet", example: "Der Laden ist jetzt geöffnet." }
   ,
-  { rank: Rank 178, english: "closed", word: "geschlossen" }
+  { rank: Rank 178, english: "closed", word: "geschlossen", example: "Die Bank ist heute geschlossen." }
   ,
-  { rank: Rank 179, english: "drink, beverage", word: "das Getränk" }
+  { rank: Rank 179, english: "drink, beverage", word: "das Getränk", example: "Möchtest du ein kaltes Getränk?" }
   ,
-  { rank: Rank 180, english: "separately (paying)", word: "getrennt" }
+  { rank: Rank 180, english: "separately (paying)", word: "getrennt", example: "Wir möchten bitte getrennt zahlen." }
   ,
-  { rank: Rank 181, english: "main course", word: "die Hauptspeise" }
+  { rank: Rank 181, english: "main course", word: "die Hauptspeise", example: "Die Hauptspeise ist sehr lecker." }
   ,
-  { rank: Rank 182, english: "hunger", word: "der Hunger" }
+  { rank: Rank 182, english: "hunger", word: "der Hunger", example: "Ich habe großen Hunger." }
   ,
-  { rank: Rank 183, english: "to be hungry", word: "Hunger haben" }
+  { rank: Rank 183, english: "to be hungry", word: "Hunger haben", example: "Ich habe Hunger. Lass uns essen!" }
   ,
-  { rank: Rank 184, english: "potato", word: "die Kartoffel" }
+  { rank: Rank 184, english: "potato", word: "die Kartoffel", example: "Ich esse gerne Kartoffeln." }
   ,
-  { rank: Rank 185, english: "cheese", word: "der Käse" }
+  { rank: Rank 185, english: "cheese", word: "der Käse", example: "Ich esse gern Käse." }
   ,
-  { rank: Rank 186, english: "to buy", word: "kaufen" }
+  { rank: Rank 186, english: "to buy", word: "kaufen", example: "Ich kaufe Brot im Supermarkt." }
   ,
-  { rank: Rank 187, english: "no, not a", word: "kein / keine" }
+  { rank: Rank 187, english: "no, not a", word: "kein / keine", example: "Ich habe kein Geld." }
   ,
-  { rank: Rank 188, english: "delicious, tasty", word: "lecker" }
+  { rank: Rank 188, english: "delicious, tasty", word: "lecker", example: "Das Abendessen ist sehr lecker." }
   ,
-  { rank: Rank 189, english: "to read", word: "lesen" }
+  { rank: Rank 189, english: "to read", word: "lesen", example: "Ich lese gern interessante Bücher." }
   ,
-  { rank: Rank 190, english: "set menu / menu", word: "das Menü" }
+  { rank: Rank 190, english: "set menu / menu", word: "das Menü", example: "Wir bestellen das Tagesmenü." }
   ,
-  { rank: Rank 191, english: "minute", word: "die Minute" }
+  { rank: Rank 191, english: "minute", word: "die Minute", example: "Warte bitte eine Minute hier." }
   ,
-  { rank: Rank 192, english: "noon, midday", word: "der Mittag" }
+  { rank: Rank 192, english: "noon, midday", word: "der Mittag", example: "Wir essen zu Mittag." }
   ,
-  { rank: Rank 193, english: "at midday, at lunchtime", word: "mittags" }
+  { rank: Rank 193, english: "at midday, at lunchtime", word: "mittags", example: "Wir essen mittags immer zusammen in der Kantine." }
   ,
-  { rank: Rank 194, english: "to like (general preference)", word: "mögen" }
+  { rank: Rank 194, english: "to like (general preference)", word: "mögen", example: "Ich mag Pizza mit viel Käse." }
   ,
-  { rank: Rank 195, english: "morning", word: "der Morgen" }
+  { rank: Rank 195, english: "morning", word: "der Morgen", example: "Ich stehe jeden Morgen früh auf." }
   ,
-  { rank: Rank 196, english: "dessert", word: "der Nachtisch" }
+  { rank: Rank 196, english: "dessert", word: "der Nachtisch", example: "Was gibt es zum Nachtisch?" }
   ,
-  { rank: Rank 197, english: "to take", word: "nehmen" }
+  { rank: Rank 197, english: "to take", word: "nehmen", example: "Ich nehme oft den Bus zur Arbeit." }
   ,
-  { rank: Rank 198, english: "not really (like)", word: "nicht so gern" }
+  { rank: Rank 198, english: "not really (like)", word: "nicht so gern", example: "Ich esse nicht so gern Fisch." }
   ,
-  { rank: Rank 199, english: "fruit", word: "das Obst" }
+  { rank: Rank 199, english: "fruit", word: "das Obst", example: "Ich esse gern frisches Obst." }
   ,
-  { rank: Rank 200, english: "pasta", word: "die Pasta" }
+  { rank: Rank 200, english: "pasta", word: "die Pasta", example: "Ich koche heute Abend Pasta." }
   ,
-  { rank: Rank 201, english: "pizza", word: "die Pizza" }
+  { rank: Rank 201, english: "pizza", word: "die Pizza", example: "Wir bestellen eine große Pizza." }
   ,
-  { rank: Rank 202, english: "juice", word: "der Saft" }
+  { rank: Rank 202, english: "juice", word: "der Saft", example: "Möchtest du Orangensaft oder Apfelsaft?" }
   ,
-  { rank: Rank 203, english: "salad / lettuce", word: "der Salat" }
+  { rank: Rank 203, english: "salad / lettuce", word: "der Salat", example: "Ich esse gerne Salat zum Abendessen." }
   ,
-  { rank: Rank 204, english: "schnitzel (breaded meat cutlet)", word: "das Schnitzel" }
+  { rank: Rank 204, english: "schnitzel (breaded meat cutlet)", word: "das Schnitzel", example: "Ich esse gern Wiener Schnitzel mit Pommes." }
   ,
-  { rank: Rank 205, english: "dish, food item", word: "die Speise" }
+  { rank: Rank 205, english: "dish, food item", word: "die Speise", example: "Das ist eine gute Speise." }
   ,
-  { rank: Rank 206, english: "hour", word: "die Stunde" }
+  { rank: Rank 206, english: "hour", word: "die Stunde", example: "Der Kurs dauert eine Stunde." }
   ,
-  { rank: Rank 207, english: "soup", word: "die Suppe" }
+  { rank: Rank 207, english: "soup", word: "die Suppe", example: "Ich mag Gemüsesuppe sehr." }
   ,
-  { rank: Rank 208, english: "tea", word: "der Tee" }
+  { rank: Rank 208, english: "tea", word: "der Tee", example: "Ich trinke gern heißen Tee." }
   ,
-  { rank: Rank 209, english: "tomato", word: "die Tomate" }
+  { rank: Rank 209, english: "tomato", word: "die Tomate", example: "Ich esse eine frische Tomate." }
   ,
-  { rank: Rank 210, english: "to meet", word: "treffen" }
+  { rank: Rank 210, english: "to meet", word: "treffen", example: "Ich treffe meine Freunde im Café." }
   ,
-  { rank: Rank 211, english: "to drink", word: "trinken" }
+  { rank: Rank 211, english: "to drink", word: "trinken", example: "Ich trinke Wasser jeden Tag." }
   ,
-  { rank: Rank 212, english: "time (clock time)", word: "die Uhrzeit" }
+  { rank: Rank 212, english: "time (clock time)", word: "die Uhrzeit", example: "Ich frage nach der Uhrzeit." }
   ,
-  { rank: Rank 213, english: "at (clock time)", word: "um" }
+  { rank: Rank 213, english: "at (clock time)", word: "um", example: "Der Unterricht beginnt um neun Uhr." }
   ,
-  { rank: Rank 214, english: "from ... to", word: "von ... bis" }
+  { rank: Rank 214, english: "from ... to", word: "von ... bis", example: "Der Laden ist von neun bis achtzehn Uhr geöffnet." }
   ,
-  { rank: Rank 215, english: "water", word: "das Wasser" }
+  { rank: Rank 215, english: "water", word: "das Wasser", example: "Ich trinke gern kaltes Wasser im Sommer." }
   ,
-  { rank: Rank 216, english: "wine", word: "der Wein" }
+  { rank: Rank 216, english: "wine", word: "der Wein", example: "Ich trinke gern roten Wein." }
   ,
-  { rank: Rank 217, english: "important", word: "wichtig" }
+  { rank: Rank 217, english: "important", word: "wichtig", example: "Diese Information ist sehr wichtig für uns." }
   ,
-  { rank: Rank 218, english: "sausage / cold cuts", word: "die Wurst" }
+  { rank: Rank 218, english: "sausage / cold cuts", word: "die Wurst", example: "Ich esse gerne eine Wurst mit Brot." }
   ,
-  { rank: Rank 219, english: "together", word: "zusammen" }
+  { rank: Rank 219, english: "together", word: "zusammen", example: "Wir essen zusammen zu Abend." }
   ,
-  { rank: Rank 220, english: "battery (device)", word: "der Akku" }
+  { rank: Rank 220, english: "battery (device)", word: "der Akku", example: "Der Akku von meinem Handy ist leer." }
   ,
-  { rank: Rank 221, english: "to get dressed, to put on", word: "anziehen" }
+  { rank: Rank 221, english: "to get dressed, to put on", word: "anziehen", example: "Ich ziehe mir schnell die Jacke an." }
   ,
-  { rank: Rank 222, english: "work", word: "die Arbeit" }
+  { rank: Rank 222, english: "work", word: "die Arbeit", example: "Ich gehe jetzt zur Arbeit." }
   ,
-  { rank: Rank 223, english: "to open", word: "aufmachen" }
+  { rank: Rank 223, english: "to open", word: "aufmachen", example: "Kannst du das Fenster aufmachen?" }
   ,
-  { rank: Rank 224, english: "to tidy up", word: "aufräumen" }
+  { rank: Rank 224, english: "to tidy up", word: "aufräumen", example: "Ich muss mein Zimmer aufräumen." }
   ,
-  { rank: Rank 225, english: "to get up", word: "aufstehen" }
+  { rank: Rank 225, english: "to get up", word: "aufstehen", example: "Ich stehe jeden Morgen um sechs Uhr auf." }
   ,
-  { rank: Rank 226, english: "meeting", word: "die Besprechung" }
+  { rank: Rank 226, english: "meeting", word: "die Besprechung", example: "Wir haben eine wichtige Besprechung." }
   ,
-  { rank: Rank 227, english: "office", word: "das Büro" }
+  { rank: Rank 227, english: "office", word: "das Büro", example: "Ich arbeite im Büro." }
   ,
-  { rank: Rank 228, english: "boss, manager (male)", word: "der Chef" }
+  { rank: Rank 228, english: "boss, manager (male)", word: "der Chef", example: "Mein Chef ist sehr freundlich." }
   ,
-  { rank: Rank 229, english: "boss, manager (female)", word: "die Chefin" }
+  { rank: Rank 229, english: "boss, manager (female)", word: "die Chefin", example: "Meine Chefin ist sehr nett." }
   ,
-  { rank: Rank 230, english: "to download", word: "downloaden" }
+  { rank: Rank 230, english: "to download", word: "downloaden", example: "Ich downloade die App." }
   ,
-  { rank: Rank 231, english: "to go shopping", word: "einkaufen" }
+  { rank: Rank 231, english: "to go shopping", word: "einkaufen", example: "Ich kaufe heute ein." }
   ,
-  { rank: Rank 232, english: "allowed, permitted", word: "erlaubt" }
+  { rank: Rank 232, english: "allowed, permitted", word: "erlaubt", example: "Rauchen ist hier nicht erlaubt." }
   ,
-  { rank: Rank 233, english: "early", word: "früh" }
+  { rank: Rank 233, english: "early", word: "früh", example: "Der Bus kommt immer sehr früh." }
   ,
-  { rank: Rank 234, english: "frustrated", word: "frustriert" }
+  { rank: Rank 234, english: "frustrated", word: "frustriert", example: "Er ist momentan sehr frustriert." }
   ,
-  { rank: Rank 235, english: "to work, to function", word: "funktionieren" }
+  { rank: Rank 235, english: "to work, to function", word: "funktionieren", example: "Das Handy funktioniert." }
   ,
-  { rank: Rank 236, english: "house rules", word: "die Hausordnung" }
+  { rank: Rank 236, english: "house rules", word: "die Hausordnung", example: "Bitte lesen Sie die Hausordnung." }
   ,
-  { rank: Rank 237, english: "pet", word: "das Haustier" }
+  { rank: Rank 237, english: "pet", word: "das Haustier", example: "Hast du ein Haustier?" }
   ,
-  { rank: Rank 238, english: "to help", word: "helfen" }
+  { rank: Rank 238, english: "to help", word: "helfen", example: "Kann ich Ihnen bitte helfen?" }
   ,
-  { rank: Rank 239, english: "today", word: "heute" }
+  { rank: Rank 239, english: "today", word: "heute", example: "Heute ist Dienstag." }
   ,
-  { rank: Rank 240, english: "always", word: "immer" }
+  { rank: Rank 240, english: "always", word: "immer", example: "Ich trinke immer Wasser." }
   ,
-  { rank: Rank 241, english: "can/be able to", word: "können" }
+  { rank: Rank 241, english: "can/be able to", word: "können", example: "Ich kann Deutsch sprechen." }
   ,
-  { rank: Rank 242, english: "to charge / to load", word: "laden" }
+  { rank: Rank 242, english: "to charge / to load", word: "laden", example: "Er lädt die Taschen in den Kofferraum." }
   ,
-  { rank: Rank 243, english: "laptop", word: "das Laptop" }
+  { rank: Rank 243, english: "laptop", word: "das Laptop", example: "Mein Laptop ist sehr schnell." }
   ,
-  { rank: Rank 244, english: "loud, noisy", word: "laut" }
+  { rank: Rank 244, english: "loud, noisy", word: "laut", example: "Die Musik ist zu laut." }
   ,
-  { rank: Rank 245, english: "would like (polite request)", word: "möchten" }
+  { rank: Rank 245, english: "would like (polite request)", word: "möchten", example: "Ich möchte einen großen Kaffee, bitte." }
   ,
-  { rank: Rank 246, english: "tomorrow", word: "morgen" }
+  { rank: Rank 246, english: "tomorrow", word: "morgen", example: "Ich habe morgen einen wichtigen Termin beim Arzt." }
   ,
-  { rank: Rank 247, english: "tired", word: "müde" }
+  { rank: Rank 247, english: "tired", word: "müde", example: "Ich bin heute sehr müde." }
   ,
-  { rank: Rank 248, english: "must/have to", word: "müssen" }
+  { rank: Rank 248, english: "must/have to", word: "müssen", example: "Ich muss jetzt wirklich gehen." }
   ,
-  { rank: Rank 249, english: "nervous", word: "nervös" }
+  { rank: Rank 249, english: "nervous", word: "nervös", example: "Bist du vor der Prüfung nervös?" }
   ,
-  { rank: Rank 250, english: "normally, usually", word: "normalerweise" }
+  { rank: Rank 250, english: "normally, usually", word: "normalerweise", example: "Normalerweise stehe ich früh am Morgen um sechs Uhr auf." }
   ,
-  { rank: Rank 251, english: "to park", word: "parken" }
+  { rank: Rank 251, english: "to park", word: "parken", example: "Ich parke hier mein Auto nicht." }
   ,
-  { rank: Rank 252, english: "password", word: "das Passwort" }
+  { rank: Rank 252, english: "password", word: "das Passwort", example: "Bitte gib dein Passwort ein." }
   ,
-  { rank: Rank 253, english: "problem", word: "das Problem" }
+  { rank: Rank 253, english: "problem", word: "das Problem", example: "Ich habe ein Problem mit meinem Computer." }
   ,
-  { rank: Rank 254, english: "to smoke", word: "rauchen" }
+  { rank: Rank 254, english: "to smoke", word: "rauchen", example: "Er raucht keine Zigaretten mehr." }
   ,
-  { rank: Rank 255, english: "rule", word: "die Regel" }
+  { rank: Rank 255, english: "rule", word: "die Regel", example: "Du musst dich an die Regel halten." }
   ,
-  { rank: Rank 256, english: "sentence bracket (grammar term)", word: "die Satzklammer" }
+  { rank: Rank 256, english: "sentence bracket (grammar term)", word: "die Satzklammer", example: "Im Deutschen bildet das konjugierte Verb oft die erste Satzklammer." }
   ,
-  { rank: Rank 257, english: "late", word: "spät" }
+  { rank: Rank 257, english: "late", word: "spät", example: "Es ist schon sehr spät für mich." }
   ,
-  { rank: Rank 258, english: "to surf (internet)", word: "surfen" }
+  { rank: Rank 258, english: "to surf (internet)", word: "surfen", example: "Ich surfe oft im Internet." }
   ,
-  { rank: Rank 259, english: "tablet", word: "das Tablet" }
+  { rank: Rank 259, english: "tablet", word: "das Tablet", example: "Ich habe ein neues Tablet zum Lesen." }
   ,
-  { rank: Rank 260, english: "daily routine", word: "der Tagesablauf" }
+  { rank: Rank 260, english: "daily routine", word: "der Tagesablauf", example: "Mein Tagesablauf ist immer gleich." }
   ,
-  { rank: Rank 261, english: "forbidden, not allowed", word: "verboten" }
+  { rank: Rank 261, english: "forbidden, not allowed", word: "verboten", example: "Parken ist hier streng verboten." }
   ,
-  { rank: Rank 262, english: "laundry, washing", word: "die Wäsche" }
+  { rank: Rank 262, english: "laundry, washing", word: "die Wäsche", example: "Ich hänge die nasse Wäsche auf." }
   ,
-  { rank: Rank 263, english: "to wash", word: "waschen" }
+  { rank: Rank 263, english: "to wash", word: "waschen", example: "Ich wasche meine Hände oft." }
   ,
-  { rank: Rank 264, english: "WiFi connection", word: "die WLAN-Verbindung" }
+  { rank: Rank 264, english: "WiFi connection", word: "die WLAN-Verbindung", example: "Die WLAN-Verbindung ist sehr langsam hier." }
   ,
-  { rank: Rank 265, english: "to want", word: "wollen" }
+  { rank: Rank 265, english: "to want", word: "wollen", example: "Ich will ein Eis essen." }
   ,
-  { rank: Rank 266, english: "angry", word: "wütend" }
+  { rank: Rank 266, english: "angry", word: "wütend", example: "Warum bist du so wütend heute?" }
   ,
-  { rank: Rank 267, english: "content, satisfied", word: "zufrieden" }
+  { rank: Rank 267, english: "content, satisfied", word: "zufrieden", example: "Bist du mit der Arbeit zufrieden?" }
   ,
-  { rank: Rank 268, english: "to close", word: "zumachen" }
+  { rank: Rank 268, english: "to close", word: "zumachen", example: "Machst du bitte das Fenster zu?" }
   ,
-  { rank: Rank 269, english: "to turn (direction)", word: "abbiegen" }
+  { rank: Rank 269, english: "to turn (direction)", word: "abbiegen", example: "Ich biege an der nächsten Ampel links ab." }
   ,
-  { rank: Rank 270, english: "bank", word: "die Bank" }
+  { rank: Rank 270, english: "bank", word: "die Bank", example: "Ich gehe heute zur Bank." }
   ,
-  { rank: Rank 271, english: "bed", word: "das Bett" }
+  { rank: Rank 271, english: "bed", word: "das Bett", example: "Ich gehe jetzt ins Bett." }
   ,
-  { rank: Rank 272, english: "library", word: "die Bibliothek" }
+  { rank: Rank 272, english: "library", word: "die Bibliothek", example: "Ich lerne am liebsten in der Bibliothek." }
   ,
-  { rank: Rank 273, english: "to need", word: "brauchen" }
+  { rank: Rank 273, english: "to need", word: "brauchen", example: "Ich brauche deine Hilfe jetzt." }
   ,
-  { rank: Rank 274, english: "café", word: "das Café" }
+  { rank: Rank 274, english: "café", word: "das Café", example: "Wir gehen ins Café." }
   ,
-  { rank: Rank 275, english: "because (coord. conjunction)", word: "denn" }
+  { rank: Rank 275, english: "because (coord. conjunction)", word: "denn", example: "Ich bleibe zu Hause, denn ich bin müde." }
   ,
-  { rank: Rank 276, english: "you (accusative, informal)", word: "dich" }
+  { rank: Rank 276, english: "you (accusative, informal)", word: "dich", example: "Ich sehe dich im Park." }
   ,
-  { rank: Rank 277, english: "there", word: "dort" }
+  { rank: Rank 277, english: "there", word: "dort", example: "Das Auto steht dort." }
   ,
-  { rank: Rank 278, english: "corner", word: "die Ecke" }
+  { rank: Rank 278, english: "corner", word: "die Ecke", example: "Das Buch liegt in der Ecke." }
   ,
-  { rank: Rank 279, english: "along", word: "entlang" }
+  { rank: Rank 279, english: "along", word: "entlang", example: "Gehen Sie diese Straße entlang." }
   ,
-  { rank: Rank 280, english: "it", word: "es" }
+  { rank: Rank 280, english: "it", word: "es", example: "Es ist kalt heute." }
   ,
-  { rank: Rank 281, english: "window", word: "das Fenster" }
+  { rank: Rank 281, english: "window", word: "das Fenster", example: "Das Fenster ist offen." }
   ,
-  { rank: Rank 282, english: "to find", word: "finden" }
+  { rank: Rank 282, english: "to find", word: "finden", example: "Ich finde den Schlüssel." }
   ,
-  { rank: Rank 283, english: "for", word: "für" }
+  { rank: Rank 283, english: "for", word: "für", example: "Dieses Geschenk ist für dich." }
   ,
-  { rank: Rank 284, english: "opposite, across from", word: "gegenüber" }
+  { rank: Rank 284, english: "opposite, across from", word: "gegenüber", example: "Die Post ist gegenüber dem Park." }
   ,
-  { rank: Rank 285, english: "straight ahead", word: "geradeaus" }
+  { rank: Rank 285, english: "straight ahead", word: "geradeaus", example: "Gehen Sie geradeaus bis zur Post." }
   ,
-  { rank: Rank 286, english: "gift, present", word: "das Geschenk" }
+  { rank: Rank 286, english: "gift, present", word: "das Geschenk", example: "Ich habe ein Geschenk für dich." }
   ,
-  { rank: Rank 287, english: "here", word: "hier" }
+  { rank: Rank 287, english: "here", word: "hier", example: "Komm bitte hierher." }
   ,
-  { rank: Rank 288, english: "him (accusative)", word: "ihn" }
+  { rank: Rank 288, english: "him (accusative)", word: "ihn", example: "Ich sehe ihn jeden Tag." }
   ,
-  { rank: Rank 289, english: "nearby, in the vicinity", word: "in der Nähe" }
+  { rank: Rank 289, english: "nearby, in the vicinity", word: "in der Nähe", example: "Der Park ist in der Nähe." }
   ,
-  { rank: Rank 290, english: "hospital", word: "das Krankenhaus" }
+  { rank: Rank 290, english: "hospital", word: "das Krankenhaus", example: "Er arbeitet im Krankenhaus." }
   ,
-  { rank: Rank 291, english: "to lie (position)", word: "liegen" }
+  { rank: Rank 291, english: "to lie (position)", word: "liegen", example: "Das Buch liegt auf dem Tisch." }
   ,
-  { rank: Rank 292, english: "left", word: "links" }
+  { rank: Rank 292, english: "left", word: "links", example: "Gehen Sie hier links." }
   ,
-  { rank: Rank 293, english: "me (accusative)", word: "mich" }
+  { rank: Rank 293, english: "me (accusative)", word: "mich", example: "Er sieht mich oft in der Stadt." }
   ,
-  { rank: Rank 294, english: "not far", word: "nicht weit" }
+  { rank: Rank 294, english: "not far", word: "nicht weit", example: "Das Kino ist nicht weit von hier." }
   ,
-  { rank: Rank 295, english: "park", word: "der Park" }
+  { rank: Rank 295, english: "park", word: "der Park", example: "Ich gehe gern in den Park." }
   ,
-  { rank: Rank 296, english: "square, plaza", word: "der Platz" }
+  { rank: Rank 296, english: "square, plaza", word: "der Platz", example: "Wir treffen uns am Platz." }
   ,
-  { rank: Rank 297, english: "post office", word: "die Post" }
+  { rank: Rank 297, english: "post office", word: "die Post", example: "Ich gehe jetzt zur Post." }
   ,
-  { rank: Rank 298, english: "city hall", word: "das Rathaus" }
+  { rank: Rank 298, english: "city hall", word: "das Rathaus", example: "Das Rathaus ist im Zentrum der Stadt." }
   ,
-  { rank: Rank 299, english: "right", word: "rechts" }
+  { rank: Rank 299, english: "right", word: "rechts", example: "Nach der Ampel müssen Sie rechts in die Hauptstraße fahren." }
   ,
-  { rank: Rank 300, english: "she", word: "sie" }
+  { rank: Rank 300, english: "she", word: "sie", example: "Sie ist meine neue Kollegin." }
   ,
-  { rank: Rank 301, english: "city map", word: "der Stadtplan" }
+  { rank: Rank 301, english: "city map", word: "der Stadtplan", example: "Haben Sie einen Stadtplan für Berlin?" }
   ,
-  { rank: Rank 302, english: "street", word: "die Straße" }
+  { rank: Rank 302, english: "street", word: "die Straße", example: "Das Auto fährt auf der Straße." }
   ,
-  { rank: Rank 303, english: "chair", word: "der Stuhl" }
+  { rank: Rank 303, english: "chair", word: "der Stuhl", example: "Nimm bitte auf diesem Stuhl Platz." }
   ,
-  { rank: Rank 304, english: "to search", word: "suchen" }
+  { rank: Rank 304, english: "to search", word: "suchen", example: "Ich suche meinen Schlüssel." }
   ,
-  { rank: Rank 305, english: "supermarket", word: "der Supermarkt" }
+  { rank: Rank 305, english: "supermarket", word: "der Supermarkt", example: "Ich gehe zum Supermarkt einkaufen." }
   ,
-  { rank: Rank 306, english: "table", word: "der Tisch" }
+  { rank: Rank 306, english: "table", word: "der Tisch", example: "Der Tisch ist wirklich groß." }
   ,
-  { rank: Rank 307, english: "door", word: "die Tür" }
+  { rank: Rank 307, english: "door", word: "die Tür", example: "Mach bitte die Tür zu." }
   ,
-  { rank: Rank 308, english: "to know (fact)", word: "wissen" }
+  { rank: Rank 308, english: "to know (fact)", word: "wissen", example: "Ich weiß die Antwort nicht." }
   ,
-  { rank: Rank 309, english: "where (location)", word: "wo" }
+  { rank: Rank 309, english: "where (location)", word: "wo", example: "Wo ist die nächste Bushaltestelle hier bitte schön?" }
   ,
-  { rank: Rank 310, english: "eye", word: "das Auge" }
+  { rank: Rank 310, english: "eye", word: "das Auge", example: "Das Baby hat große Augen." }
   ,
-  { rank: Rank 311, english: "better", word: "besser" }
+  { rank: Rank 311, english: "better", word: "besser", example: "Mir geht es heute besser." }
   ,
-  { rank: Rank 312, english: "blue", word: "blau" }
+  { rank: Rank 312, english: "blue", word: "blau", example: "Der Himmel ist heute blau." }
   ,
-  { rank: Rank 313, english: "brown", word: "braun" }
+  { rank: Rank 313, english: "brown", word: "braun", example: "Ihre Augen sind sehr braun." }
   ,
-  { rank: Rank 314, english: "doctor (informal title)", word: "der Doktor" }
+  { rank: Rank 314, english: "doctor (informal title)", word: "der Doktor", example: "Ich gehe zum Doktor." }
   ,
-  { rank: Rank 315, english: "a/an (dative, masc./neut.)", word: "einem" }
+  { rank: Rank 315, english: "a/an (dative, masc./neut.)", word: "einem", example: "Ich helfe einem Mann." }
   ,
-  { rank: Rank 316, english: "having a cold", word: "erkältet" }
+  { rank: Rank 316, english: "having a cold", word: "erkältet", example: "Meine Kollegin ist heute erkältet." }
   ,
-  { rank: Rank 317, english: "the first (ordinal)", word: "erste" }
+  { rank: Rank 317, english: "the first (ordinal)", word: "erste", example: "Heute ist der erste Mai." }
   ,
-  { rank: Rank 318, english: "yellow", word: "gelb" }
+  { rank: Rank 318, english: "yellow", word: "gelb", example: "Die Sonne ist heute sehr gelb." }
   ,
-  { rank: Rank 319, english: "yesterday", word: "gestern" }
+  { rank: Rank 319, english: "yesterday", word: "gestern", example: "Ich war gestern im Kino." }
   ,
-  { rank: Rank 320, english: "grey", word: "grau" }
+  { rank: Rank 320, english: "grey", word: "grau", example: "Der Himmel ist heute grau." }
   ,
-  { rank: Rank 321, english: "green", word: "grün" }
+  { rank: Rank 321, english: "green", word: "grün", example: "Der Apfel ist grün." }
   ,
-  { rank: Rank 322, english: "hand", word: "die Hand" }
+  { rank: Rank 322, english: "hand", word: "die Hand", example: "Sie hält ihre Hand in den warmen Regen." }
   ,
-  { rank: Rank 323, english: "cough", word: "der Husten" }
+  { rank: Rank 323, english: "cough", word: "der Husten", example: "Ich habe starken Husten." }
   ,
-  { rank: Rank 324, english: "no (dative, masc./neut.)", word: "keinem" }
+  { rank: Rank 324, english: "no (dative, masc./neut.)", word: "keinem", example: "Ich helfe keinem Freund." }
   ,
-  { rank: Rank 325, english: "head", word: "der Kopf" }
+  { rank: Rank 325, english: "head", word: "der Kopf", example: "Mein Kopf tut weh." }
   ,
-  { rank: Rank 326, english: "headache", word: "Kopfschmerzen (Pl.)" }
+  { rank: Rank 326, english: "headache", word: "Kopfschmerzen (Pl.)", example: "Ich habe starke Kopfschmerzen heute." }
   ,
-  { rank: Rank 327, english: "last week", word: "letzte Woche" }
+  { rank: Rank 327, english: "last week", word: "letzte Woche", example: "Letzte Woche war ich krank." }
   ,
-  { rank: Rank 328, english: "last month", word: "letzten Monat" }
+  { rank: Rank 328, english: "last month", word: "letzten Monat", example: "Letzten Monat war es sehr kalt." }
   ,
-  { rank: Rank 329, english: "purple / lilac", word: "lila" }
+  { rank: Rank 329, english: "purple / lilac", word: "lila", example: "Ihre neue Bluse ist lila." }
   ,
-  { rank: Rank 330, english: "my (dative, masc./neut.)", word: "meinem" }
+  { rank: Rank 330, english: "my (dative, masc./neut.)", word: "meinem", example: "Ich helfe meinem kleinen Bruder sehr gerne." }
   ,
-  { rank: Rank 331, english: "orange", word: "orange" }
+  { rank: Rank 331, english: "orange", word: "orange", example: "Der Ball ist orange." }
   ,
-  { rank: Rank 332, english: "doctor's office / practice", word: "die Praxis" }
+  { rank: Rank 332, english: "doctor's office / practice", word: "die Praxis", example: "Die Praxis öffnet um neun Uhr." }
   ,
-  { rank: Rank 333, english: "red", word: "rot" }
+  { rank: Rank 333, english: "red", word: "rot", example: "Die Rose ist rot." }
   ,
-  { rank: Rank 334, english: "rest, quiet", word: "die Ruhe" }
+  { rank: Rank 334, english: "rest, quiet", word: "die Ruhe", example: "Ich brauche etwas Ruhe." }
   ,
-  { rank: Rank 335, english: "bad, terrible", word: "schlimm" }
+  { rank: Rank 335, english: "bad, terrible", word: "schlimm", example: "Die Situation ist wirklich schlimm." }
   ,
-  { rank: Rank 336, english: "pain", word: "Schmerzen (Pl.)" }
+  { rank: Rank 336, english: "pain", word: "Schmerzen (Pl.)", example: "Ich habe starke Schmerzen im Bein." }
   ,
-  { rank: Rank 337, english: "black", word: "schwarz" }
+  { rank: Rank 337, english: "black", word: "schwarz", example: "Ihr neues Fahrrad ist schwarz und modern." }
   ,
-  { rank: Rank 338, english: "bandage", word: "der Verband" }
+  { rank: Rank 338, english: "bandage", word: "der Verband", example: "Er braucht einen neuen Verband." }
   ,
-  { rank: Rank 339, english: "from, of (+ dative)", word: "von + Dativ" }
+  { rank: Rank 339, english: "from, of (+ dative)", word: "von + Dativ", example: "Das Auto ist von meinem Vater." }
   ,
-  { rank: Rank 340, english: "the day before yesterday", word: "vorgestern" }
+  { rank: Rank 340, english: "the day before yesterday", word: "vorgestern", example: "Vorgestern war ein sehr regnerischer Tag mit viel Wind." }
   ,
-  { rank: Rank 341, english: "white", word: "weiß" }
+  { rank: Rank 341, english: "white", word: "weiß", example: "Der Schnee ist im Winter sehr weiß." }
   ,
-  { rank: Rank 342, english: "tooth", word: "der Zahn" }
+  { rank: Rank 342, english: "tooth", word: "der Zahn", example: "Mein Zahn tut heute weh." }
   ,
-  { rank: Rank 343, english: "old town", word: "die Altstadt" }
+  { rank: Rank 343, english: "old town", word: "die Altstadt", example: "Wir wohnen in der Altstadt." }
   ,
-  { rank: Rank 344, english: "to the (lake/sea/river)", word: "an den" }
+  { rank: Rank 344, english: "to the (lake/sea/river)", word: "an den", example: "Wir fahren an den See." }
   ,
-  { rank: Rank 345, english: "to the (mountain)", word: "auf den" }
+  { rank: Rank 345, english: "to the (mountain)", word: "auf den", example: "Ich steige auf den Berg." }
   ,
-  { rank: Rank 346, english: "train station", word: "der Bahnhof" }
+  { rank: Rank 346, english: "train station", word: "der Bahnhof", example: "Ich gehe zum Bahnhof, um den Zug zu nehmen." }
   ,
-  { rank: Rank 347, english: "fantastic", word: "fantastisch" }
+  { rank: Rank 347, english: "fantastic", word: "fantastisch", example: "Das Essen ist wirklich fantastisch!" }
   ,
-  { rank: Rank 348, english: "degree", word: "der Grad" }
+  { rank: Rank 348, english: "degree", word: "der Grad", example: "Es sind zwanzig Grad Celsius." }
   ,
-  { rank: Rank 349, english: "to have", word: "haben" }
+  { rank: Rank 349, english: "to have", word: "haben", example: "Ich habe heute keine Zeit." }
   ,
-  { rank: Rank 350, english: "to the (feminine countries)", word: "in die" }
+  { rank: Rank 350, english: "to the (feminine countries)", word: "in die", example: "Ich fliege in die Schweiz." }
   ,
-  { rank: Rank 351, english: "into the", word: "ins" }
+  { rank: Rank 351, english: "into the", word: "ins", example: "Wir gehen jetzt ins Kino." }
   ,
-  { rank: Rank 352, english: "coffee", word: "der Kaffee" }
+  { rank: Rank 352, english: "coffee", word: "der Kaffee", example: "Ich trinke gern Kaffee." }
   ,
-  { rank: Rank 353, english: "cool", word: "kühl" }
+  { rank: Rank 353, english: "cool", word: "kühl", example: "Es ist heute kühl draußen." }
   ,
-  { rank: Rank 354, english: "kind regards, love from", word: "liebe Grüße" }
+  { rank: Rank 354, english: "kind regards, love from", word: "liebe Grüße", example: "Liebe Grüße aus Berlin!" }
   ,
-  { rank: Rank 355, english: "to (cities, most countries)", word: "nach" }
+  { rank: Rank 355, english: "to (cities, most countries)", word: "nach", example: "Wir fahren heute nach Berlin." }
   ,
-  { rank: Rank 356, english: "night", word: "die Nacht" }
+  { rank: Rank 356, english: "night", word: "die Nacht", example: "Wir schlafen gut in der Nacht." }
   ,
-  { rank: Rank 357, english: "to reserve", word: "reservieren" }
+  { rank: Rank 357, english: "to reserve", word: "reservieren", example: "Ich reserviere einen Tisch für zwei Personen." }
   ,
-  { rank: Rank 358, english: "reception, front desk", word: "die Rezeption" }
+  { rank: Rank 358, english: "reception, front desk", word: "die Rezeption", example: "Wo ist die Rezeption?" }
   ,
-  { rank: Rank 359, english: "castle, palace", word: "das Schloss" }
+  { rank: Rank 359, english: "castle, palace", word: "das Schloss", example: "Das alte Schloss ist ein Museum." }
   ,
-  { rank: Rank 360, english: "key", word: "der Schlüssel" }
+  { rank: Rank 360, english: "key", word: "der Schlüssel", example: "Ich suche meinen Schlüssel." }
   ,
-  { rank: Rank 361, english: "sun", word: "die Sonne" }
+  { rank: Rank 361, english: "sun", word: "die Sonne", example: "Die Sonne scheint heute sehr hell." }
   ,
-  { rank: Rank 362, english: "many greetings from", word: "viele Grüße" }
+  { rank: Rank 362, english: "many greetings from", word: "viele Grüße", example: "Viele Grüße aus Deutschland!" }
   ,
-  { rank: Rank 363, english: "wonderful, gorgeous", word: "wunderschön" }
+  { rank: Rank 363, english: "wonderful, gorgeous", word: "wunderschön", example: "Der Garten sieht im Sommer wunderschön aus." }
   ,
-  { rank: Rank 364, english: "train", word: "der Zug" }
+  { rank: Rank 364, english: "train", word: "der Zug", example: "Der Zug fährt sehr schnell." }
   ,
-  { rank: Rank 365, english: "to wake up", word: "aufwachen" }
+  { rank: Rank 365, english: "to wake up", word: "aufwachen", example: "Ich wache immer um sieben Uhr auf." }
   ,
-  { rank: Rank 366, english: "to stay/remain", word: "bleiben" }
+  { rank: Rank 366, english: "to stay/remain", word: "bleiben", example: "Ich bleibe heute Abend zu Hause." }
   ,
-  { rank: Rank 367, english: "this (demonstrative article)", word: "dieser" }
+  { rank: Rank 367, english: "this (demonstrative article)", word: "dieser", example: "Dieser Tisch ist wirklich groß." }
   ,
-  { rank: Rank 368, english: "you (dative, informal)", word: "dir" }
+  { rank: Rank 368, english: "you (dative, informal)", word: "dir", example: "Wie geht es dir?" }
   ,
-  { rank: Rank 369, english: "to fall asleep", word: "einschlafen" }
+  { rank: Rank 369, english: "to fall asleep", word: "einschlafen", example: "Ich schlafe schnell ein." }
   ,
-  { rank: Rank 370, english: "you all (accusative)", word: "euch" }
+  { rank: Rank 370, english: "you all (accusative)", word: "euch", example: "Ich sehe euch alle." }
   ,
-  { rank: Rank 371, english: "to drive/travel", word: "fahren" }
+  { rank: Rank 371, english: "to drive/travel", word: "fahren", example: "Ich fahre nach Berlin." }
   ,
-  { rank: Rank 372, english: "film, movie", word: "der Film" }
+  { rank: Rank 372, english: "film, movie", word: "der Film", example: "Wir sehen heute Abend einen Film." }
   ,
-  { rank: Rank 373, english: "to fly", word: "fliegen" }
+  { rank: Rank 373, english: "to fly", word: "fliegen", example: "Der Vogel fliegt hoch." }
   ,
-  { rank: Rank 374, english: "to please/like", word: "gefallen" }
+  { rank: Rank 374, english: "to please/like", word: "gefallen", example: "Das Haus gefällt mir." }
   ,
-  { rank: Rank 375, english: "to go/walk", word: "gehen" }
+  { rank: Rank 375, english: "to go/walk", word: "gehen", example: "Ich gehe nach Hause." }
   ,
-  { rank: Rank 376, english: "gloves (plural)", word: "die Handschuhe" }
+  { rank: Rank 376, english: "gloves (plural)", word: "die Handschuhe", example: "Ich trage warme Handschuhe." }
   ,
-  { rank: Rank 377, english: "him (dative)", word: "ihm" }
+  { rank: Rank 377, english: "him (dative)", word: "ihm", example: "Ich gebe ihm einen Apfel." }
   ,
-  { rank: Rank 378, english: "them (dative)", word: "ihnen" }
+  { rank: Rank 378, english: "them (dative)", word: "ihnen", example: "Ich gebe ihnen das Geld." }
   ,
-  { rank: Rank 379, english: "you (plural)", word: "ihr" }
+  { rank: Rank 379, english: "you (plural)", word: "ihr", example: "Was macht ihr am Wochenende?" }
   ,
-  { rank: Rank 380, english: "Carnival / Mardi Gras", word: "der Karneval" }
+  { rank: Rank 380, english: "Carnival / Mardi Gras", word: "der Karneval", example: "Ich mag Karneval sehr." }
   ,
-  { rank: Rank 381, english: "to come", word: "kommen" }
+  { rank: Rank 381, english: "to come", word: "kommen", example: "Ich komme heute Abend nach Hause." }
   ,
-  { rank: Rank 382, english: "to run", word: "laufen" }
+  { rank: Rank 382, english: "to run", word: "laufen", example: "Ich laufe jeden Morgen im Park." }
   ,
-  { rank: Rank 383, english: "me (dative)", word: "mir" }
+  { rank: Rank 383, english: "me (dative)", word: "mir", example: "Meine Mutter gibt mir einen Apfel." }
   ,
-  { rank: Rank 384, english: "hat, woolly hat", word: "die Mütze" }
+  { rank: Rank 384, english: "hat, woolly hat", word: "die Mütze", example: "Er trägt eine warme Mütze." }
   ,
-  { rank: Rank 385, english: "news (always plural)", word: "die Nachrichten" }
+  { rank: Rank 385, english: "news (always plural)", word: "die Nachrichten", example: "Ich sehe die Nachrichten jeden Abend." }
   ,
-  { rank: Rank 386, english: "Oktoberfest", word: "das Oktoberfest" }
+  { rank: Rank 386, english: "Oktoberfest", word: "das Oktoberfest", example: "Das Oktoberfest findet in München statt." }
   ,
-  { rank: Rank 387, english: "online", word: "online" }
+  { rank: Rank 387, english: "online", word: "online", example: "Ich kaufe meine Kleidung oft online bei diesem Shop ein." }
   ,
-  { rank: Rank 388, english: "to happen", word: "passieren" }
+  { rank: Rank 388, english: "to happen", word: "passieren", example: "Das passiert manchmal im Leben." }
   ,
-  { rank: Rank 389, english: "podcast", word: "der Podcast" }
+  { rank: Rank 389, english: "podcast", word: "der Podcast", example: "Ich höre jeden Morgen einen Podcast." }
   ,
-  { rank: Rank 390, english: "scarf", word: "der Schal" }
+  { rank: Rank 390, english: "scarf", word: "der Schal", example: "Sie trägt einen warmen Schal." }
   ,
-  { rank: Rank 391, english: "to taste (good/bad)", word: "schmecken" }
+  { rank: Rank 391, english: "to taste (good/bad)", word: "schmecken", example: "Das Essen schmeckt mir sehr gut." }
   ,
-  { rank: Rank 392, english: "already", word: "schon" }
+  { rank: Rank 392, english: "already", word: "schon", example: "Es ist schon zehn Uhr am Abend und ich bin müde." }
   ,
-  { rank: Rank 393, english: "TV series", word: "die Serie" }
+  { rank: Rank 393, english: "TV series", word: "die Serie", example: "Ich mag diese neue Serie sehr." }
   ,
-  { rank: Rank 394, english: "to stand", word: "stehen" }
+  { rank: Rank 394, english: "to stand", word: "stehen", example: "Ich stehe am Fenster." }
   ,
-  { rank: Rank 395, english: "us (accusative)", word: "uns" }
+  { rank: Rank 395, english: "us (accusative)", word: "uns", example: "Unsere Freunde besuchen uns nächstes Wochenende in Köln." }
   ,
-  { rank: Rank 396, english: "why", word: "warum" }
+  { rank: Rank 396, english: "why", word: "warum", example: "Warum lernst du Deutsch für deinen neuen Job?" }
   ,
-  { rank: Rank 397, english: "Christmas market", word: "der Weihnachtsmarkt" }
+  { rank: Rank 397, english: "Christmas market", word: "der Weihnachtsmarkt", example: "Wir gehen zum Weihnachtsmarkt heute." }
   ,
-  { rank: Rank 398, english: "which (question word for nouns)", word: "welcher" }
+  { rank: Rank 398, english: "which (question word for nouns)", word: "welcher", example: "Welcher Zug fährt nach Berlin?" }
   ,
-  { rank: Rank 399, english: "magazine", word: "die Zeitschrift" }
+  { rank: Rank 399, english: "magazine", word: "die Zeitschrift", example: "Ich lese eine interessante Zeitschrift." }
   ,
-  { rank: Rank 400, english: "newspaper", word: "die Zeitung" }
+  { rank: Rank 400, english: "newspaper", word: "die Zeitung", example: "Mein Vater liest jeden Morgen die Zeitung." }
   ,
-  { rank: Rank 401, english: "abbreviation", word: "die Abkürzung" }
+  { rank: Rank 401, english: "abbreviation", word: "die Abkürzung", example: "Was bedeutet diese Abkürzung?" }
   ,
-  { rank: Rank 402, english: "cancellation, decline", word: "die Absage" }
+  { rank: Rank 402, english: "cancellation, decline", word: "die Absage", example: "Ich habe eine Absage für das Treffen bekommen." }
   ,
-  { rank: Rank 403, english: "to cancel, decline", word: "absagen" }
+  { rank: Rank 403, english: "to cancel, decline", word: "absagen", example: "Ich muss unseren Termin absagen." }
   ,
-  { rank: Rank 404, english: "to begin, to start", word: "anfangen" }
+  { rank: Rank 404, english: "to begin, to start", word: "anfangen", example: "Der Kurs fängt um neun Uhr an." }
   ,
-  { rank: Rank 405, english: "to call (phone)", word: "anrufen" }
+  { rank: Rank 405, english: "to call (phone)", word: "anrufen", example: "Ich muss meine Mutter anrufen." }
   ,
-  { rank: Rank 406, english: "announcement, outgoing message", word: "die Ansage" }
+  { rank: Rank 406, english: "announcement, outgoing message", word: "die Ansage", example: "Ich habe die Ansage am Telefon nicht verstanden." }
   ,
-  { rank: Rank 407, english: "app", word: "die App" }
+  { rank: Rank 407, english: "app", word: "die App", example: "Ich lade die neue App auf mein Handy herunter." }
   ,
-  { rank: Rank 408, english: "to stop, to cease", word: "aufhören" }
+  { rank: Rank 408, english: "to stop, to cease", word: "aufhören", example: "Hör bitte auf zu reden!" }
   ,
-  { rank: Rank 409, english: "to receive, to get", word: "bekommen" }
+  { rank: Rank 409, english: "to receive, to get", word: "bekommen", example: "Ich bekomme oft Post von dir." }
   ,
-  { rank: Rank 410, english: "to insult", word: "beleidigen" }
+  { rank: Rank 410, english: "to insult", word: "beleidigen", example: "Man sollte niemals jemanden beleidigen." }
   ,
-  { rank: Rank 411, english: "to use", word: "benutzen" }
+  { rank: Rank 411, english: "to use", word: "benutzen", example: "Kann ich dein Handy benutzen?" }
   ,
-  { rank: Rank 412, english: "letter", word: "der Brief" }
+  { rank: Rank 412, english: "letter", word: "der Brief", example: "Ich schrieb einen Brief an meinen Freund." }
   ,
-  { rank: Rank 413, english: "chat", word: "der Chat" }
+  { rank: Rank 413, english: "chat", word: "der Chat", example: "Ich habe gestern Abend im Chat geschrieben." }
   ,
-  { rank: Rank 414, english: "to chat", word: "chatten" }
+  { rank: Rank 414, english: "to chat", word: "chatten", example: "Sie chatten jeden Abend mit Freunden." }
   ,
-  { rank: Rank 415, english: "cyberbullying", word: "das Cybermobbing" }
+  { rank: Rank 415, english: "cyberbullying", word: "das Cybermobbing", example: "Cybermobbing ist ein ernstes Problem für Jugendliche." }
   ,
-  { rank: Rank 416, english: "that (conjunction)", word: "dass" }
+  { rank: Rank 416, english: "that (conjunction)", word: "dass", example: "Ich hoffe, dass du kommst." }
   ,
-  { rank: Rank 417, english: "to discuss", word: "diskutieren" }
+  { rank: Rank 417, english: "to discuss", word: "diskutieren", example: "Sie diskutieren oft über Politik." }
   ,
-  { rank: Rank 418, english: "urgent", word: "dringend" }
+  { rank: Rank 418, english: "urgent", word: "dringend", example: "Ich habe eine dringende Frage an dich." }
   ,
-  { rank: Rank 419, english: "email", word: "die E-Mail" }
+  { rank: Rank 419, english: "email", word: "die E-Mail", example: "Ich habe heute eine wichtige E-Mail bekommen." }
   ,
-  { rank: Rank 420, english: "to invite", word: "einladen" }
+  { rank: Rank 420, english: "to invite", word: "einladen", example: "Ich möchte dich zum Essen einladen." }
   ,
-  { rank: Rank 421, english: "to develop", word: "entwickeln" }
+  { rank: Rank 421, english: "to develop", word: "entwickeln", example: "Das Kind entwickelt sich gut." }
   ,
-  { rank: Rank 422, english: "to invent", word: "erfinden" }
+  { rank: Rank 422, english: "to invent", word: "erfinden", example: "Wer hat das Telefon erfunden?" }
   ,
-  { rank: Rank 423, english: "invention", word: "die Erfindung" }
+  { rank: Rank 423, english: "invention", word: "die Erfindung", example: "Das Telefon war eine wichtige Erfindung." }
   ,
-  { rank: Rank 424, english: "celebration, party", word: "die Feier" }
+  { rank: Rank 424, english: "celebration, party", word: "die Feier", example: "Wir gehen heute Abend zu einer Feier." }
   ,
-  { rank: Rank 425, english: "to celebrate", word: "feiern" }
+  { rank: Rank 425, english: "to celebrate", word: "feiern", example: "Wir haben seinen Geburtstag gefeiert." }
   ,
-  { rank: Rank 426, english: "celebration, party, festival", word: "das Fest" }
+  { rank: Rank 426, english: "celebration, party, festival", word: "das Fest", example: "Das Fest war sehr lustig." }
   ,
-  { rank: Rank 427, english: "formal", word: "formell" }
+  { rank: Rank 427, english: "formal", word: "formell", example: "Das war ein sehr formelles Treffen." }
   ,
-  { rank: Rank 428, english: "in the past, formerly", word: "früher" }
+  { rank: Rank 428, english: "in the past, formerly", word: "früher", example: "Früher wohnte ich in Berlin." }
   ,
-  { rank: Rank 429, english: "history / story", word: "die Geschichte" }
+  { rank: Rank 429, english: "history / story", word: "die Geschichte", example: "Ich lese gerne alte Geschichten vor dem Schlafengehen." }
   ,
-  { rank: Rank 430, english: "mobile phone", word: "das Handy" }
+  { rank: Rank 430, english: "mobile phone", word: "das Handy", example: "Ich habe mein Handy zu Hause vergessen." }
   ,
-  { rank: Rank 431, english: "main clause", word: "der Hauptsatz" }
+  { rank: Rank 431, english: "main clause", word: "der Hauptsatz", example: "Ein Hauptsatz kann alleine stehen." }
   ,
-  { rank: Rank 432, english: "heartfelt, warm", word: "herzlich" }
+  { rank: Rank 432, english: "heartfelt, warm", word: "herzlich", example: "Wir senden Ihnen herzliche Grüße aus Berlin." }
   ,
-  { rank: Rank 433, english: "nowadays", word: "heutzutage" }
+  { rank: Rank 433, english: "nowadays", word: "heutzutage", example: "Heutzutage ist alles teurer als früher." }
   ,
-  { rank: Rank 434, english: "to stay in contact", word: "in Kontakt bleiben" }
+  { rank: Rank 434, english: "to stay in contact", word: "in Kontakt bleiben", example: "Lasst uns nach dem Kurs in Kontakt bleiben." }
   ,
-  { rank: Rank 435, english: "indirect", word: "indirekt" }
+  { rank: Rank 435, english: "indirect", word: "indirekt", example: "Seine Antwort war sehr indirekt." }
   ,
-  { rank: Rank 436, english: "informal", word: "informell" }
+  { rank: Rank 436, english: "informal", word: "informell", example: "Die Besprechung war ziemlich informell." }
   ,
-  { rank: Rank 437, english: "internet", word: "das Internet" }
+  { rank: Rank 437, english: "internet", word: "das Internet", example: "Das Internet funktioniert heute sehr langsam." }
   ,
-  { rank: Rank 438, english: "century", word: "das Jahrhundert" }
+  { rank: Rank 438, english: "century", word: "das Jahrhundert", example: "Diese Kirche wurde im 15. Jahrhundert gebaut." }
   ,
-  { rank: Rank 439, english: "every day", word: "jeden Tag" }
+  { rank: Rank 439, english: "every day", word: "jeden Tag", example: "Ich gehe jeden Tag spazieren." }
   ,
-  { rank: Rank 440, english: "communication", word: "die Kommunikation" }
+  { rank: Rank 440, english: "communication", word: "die Kommunikation", example: "Gute Kommunikation ist wichtig für ein Team." }
   ,
-  { rank: Rank 441, english: "voicemail / mailbox", word: "die Mailbox" }
+  { rank: Rank 441, english: "voicemail / mailbox", word: "die Mailbox", example: "Sie haben eine Nachricht auf Ihrer Mailbox." }
   ,
-  { rank: Rank 442, english: "sometimes", word: "manchmal" }
+  { rank: Rank 442, english: "sometimes", word: "manchmal", example: "Manchmal regnet es im Sommer viel." }
   ,
-  { rank: Rank 443, english: "to bring along", word: "mitbringen" }
+  { rank: Rank 443, english: "to bring along", word: "mitbringen", example: "Soll ich etwas zum Essen mitbringen?" }
   ,
-  { rank: Rank 444, english: "to inform, communicate", word: "mitteilen" }
+  { rank: Rank 444, english: "to inform, communicate", word: "mitteilen", example: "Bitte teilen Sie mir das Datum mit." }
   ,
-  { rank: Rank 445, english: "message", word: "die Nachricht" }
+  { rank: Rank 445, english: "message", word: "die Nachricht", example: "Ich habe eine wichtige Nachricht für dich." }
   ,
-  { rank: Rank 446, english: "subordinate clause", word: "der Nebensatz" }
+  { rank: Rank 446, english: "subordinate clause", word: "der Nebensatz", example: "Ein Nebensatz beginnt oft mit einer Konjunktion." }
   ,
-  { rank: Rank 447, english: "never", word: "nie" }
+  { rank: Rank 447, english: "never", word: "nie", example: "Er hat das noch nie gemacht." }
   ,
-  { rank: Rank 448, english: "whether, if", word: "ob" }
+  { rank: Rank 448, english: "whether, if", word: "ob", example: "Ich frage mich, ob er kommt." }
   ,
-  { rank: Rank 449, english: "often", word: "oft" }
+  { rank: Rank 449, english: "often", word: "oft", example: "Wir sehen uns oft am Wochenende." }
   ,
-  { rank: Rank 450, english: "past participle", word: "das Partizip II" }
+  { rank: Rank 450, english: "past participle", word: "das Partizip II", example: "Wir lernen heute das Partizip II der starken Verben." }
   ,
-  { rank: Rank 451, english: "since, for (time)", word: "seit" }
+  { rank: Rank 451, english: "since, for (time)", word: "seit", example: "Ich lerne seit drei Monaten Deutsch." }
   ,
-  { rank: Rank 452, english: "rarely", word: "selten" }
+  { rank: Rank 452, english: "rarely", word: "selten", example: "Sie geht selten ins Kino." }
   ,
-  { rank: Rank 453, english: "smartphone", word: "das Smartphone" }
+  { rank: Rank 453, english: "smartphone", word: "das Smartphone", example: "Ich habe mein Smartphone verloren." }
   ,
-  { rank: Rank 454, english: "smiley, emoji", word: "der Smiley" }
+  { rank: Rank 454, english: "smiley, emoji", word: "der Smiley", example: "Er schickte mir einen lustigen Smiley." }
   ,
-  { rank: Rank 455, english: "text message", word: "die SMS" }
+  { rank: Rank 455, english: "text message", word: "die SMS", example: "Ich habe dir eine SMS geschickt." }
   ,
-  { rank: Rank 456, english: "technology", word: "die Technologie" }
+  { rank: Rank 456, english: "technology", word: "die Technologie", example: "Neue Technologie verändert unser Leben stark." }
   ,
-  { rank: Rank 457, english: "telephone", word: "das Telefon" }
+  { rank: Rank 457, english: "telephone", word: "das Telefon", example: "Mein Telefon klingelt, aber ich habe keine Zeit." }
   ,
-  { rank: Rank 458, english: "separable (prefix)", word: "trennbar" }
+  { rank: Rank 458, english: "separable (prefix)", word: "trennbar", example: "Das Verb 'anrufen' ist trennbar." }
   ,
-  { rank: Rank 459, english: "approximately", word: "ungefähr" }
+  { rank: Rank 459, english: "approximately", word: "ungefähr", example: "Das dauert ungefähr zehn Minuten." }
   ,
-  { rank: Rank 460, english: "impolite, rude", word: "unhöflich" }
+  { rank: Rank 460, english: "impolite, rude", word: "unhöflich", example: "Das war sehr unhöflich von ihm." }
   ,
-  { rank: Rank 461, english: "inseparable (prefix)", word: "untrennbar" }
+  { rank: Rank 461, english: "inseparable (prefix)", word: "untrennbar", example: "Glück und Liebe sind untrennbar verbunden." }
   ,
-  { rank: Rank 462, english: "video", word: "das Video" }
+  { rank: Rank 462, english: "video", word: "das Video", example: "Hast du das neue Video schon gesehen?" }
   ,
-  { rank: Rank 463, english: "to call back", word: "zurückrufen" }
+  { rank: Rank 463, english: "to call back", word: "zurückrufen", example: "Ich rufe dich später zurück." }
   ,
-  { rank: Rank 464, english: "acceptance (of an invitation)", word: "die Zusage" }
+  { rank: Rank 464, english: "acceptance (of an invitation)", word: "die Zusage", example: "Wir warten noch auf die Zusage." }
   ,
-  { rank: Rank 465, english: "to accept (invitation)", word: "zusagen" }
+  { rank: Rank 465, english: "to accept (invitation)", word: "zusagen", example: "Ich werde die Einladung zusagen." }
   ,
-  { rank: Rank 466, english: "suit", word: "der Anzug" }
+  { rank: Rank 466, english: "suit", word: "der Anzug", example: "Er kaufte einen neuen Anzug für die Hochzeit." }
   ,
-  { rank: Rank 467, english: "to look, to appear", word: "aussehen" }
+  { rank: Rank 467, english: "to look, to appear", word: "aussehen", example: "Das Wetter sieht heute gut aus." }
   ,
-  { rank: Rank 468, english: "appearance / looks", word: "das Aussehen" }
+  { rank: Rank 468, english: "appearance / looks", word: "das Aussehen", example: "Sein Aussehen war ihm sehr wichtig." }
   ,
-  { rank: Rank 469, english: "blog", word: "der Blog" }
+  { rank: Rank 469, english: "blog", word: "der Blog", example: "Ich lese oft seinen Reise-Blog." }
   ,
-  { rank: Rank 470, english: "blouse", word: "die Bluse" }
+  { rank: Rank 470, english: "blouse", word: "die Bluse", example: "Ich habe eine neue weiße Bluse gekauft." }
   ,
-  { rank: Rank 471, english: "to be in favour", word: "dafür sein" }
+  { rank: Rank 471, english: "to be in favour", word: "dafür sein", example: "Ich bin dafür, dass wir das Projekt bald starten." }
   ,
-  { rank: Rank 472, english: "to be against", word: "dagegen sein" }
+  { rank: Rank 472, english: "to be against", word: "dagegen sein", example: "Er ist dagegen, am Sonntag lange zu arbeiten." }
   ,
-  { rank: Rank 473, english: "demonstrative pronoun", word: "das Demonstrativpronomen" }
+  { rank: Rank 473, english: "demonstrative pronoun", word: "das Demonstrativpronomen", example: "Dieses Demonstrativpronomen zeigt auf den Mann." }
   ,
-  { rank: Rank 474, english: "energetic", word: "energisch" }
+  { rank: Rank 474, english: "energetic", word: "energisch", example: "Sie hat energisch an dem Projekt gearbeitet." }
   ,
-  { rank: Rank 475, english: "tight / narrow", word: "eng" }
+  { rank: Rank 475, english: "tight / narrow", word: "eng", example: "Diese Hose ist mir zu eng." }
   ,
-  { rank: Rank 476, english: "first impression", word: "erste Eindruck" }
+  { rank: Rank 476, english: "first impression", word: "erste Eindruck", example: "Der erste Eindruck ist oft sehr wichtig im Leben." }
   ,
-  { rank: Rank 477, english: "gladly → preferably → most", word: "gern → lieber → am liebsten" }
+  { rank: Rank 477, english: "gladly → preferably → most", word: "gern → lieber → am liebsten", example: "Ich schwimme gern, aber ich tanze lieber." }
   ,
-  { rank: Rank 478, english: "size", word: "die Größe" }
+  { rank: Rank 478, english: "size", word: "die Größe", example: "Welche Größe hat dieses Hemd?" }
   ,
-  { rank: Rank 479, english: "good → better → best", word: "gut → besser → am besten" }
+  { rank: Rank 479, english: "good → better → best", word: "gut → besser → am besten", example: "Dein Kaffee ist gut, aber mein Tee ist besser." }
   ,
-  { rank: Rank 480, english: "handbag", word: "die Handtasche" }
+  { rank: Rank 480, english: "handbag", word: "die Handtasche", example: "Sie hat ihre Schlüssel in der Handtasche vergessen." }
   ,
-  { rank: Rank 481, english: "shirt", word: "das Hemd" }
+  { rank: Rank 481, english: "shirt", word: "das Hemd", example: "Er trug ein blaues Hemd zur Hose." }
   ,
-  { rank: Rank 482, english: "trousers / pants", word: "die Hose" }
+  { rank: Rank 482, english: "trousers / pants", word: "die Hose", example: "Ich brauche eine neue Hose für die Arbeit." }
   ,
-  { rank: Rank 483, english: "pretty / good-looking", word: "hübsch" }
+  { rank: Rank 483, english: "pretty / good-looking", word: "hübsch", example: "Das neue Kleid ist wirklich hübsch." }
   ,
-  { rank: Rank 484, english: "hat", word: "der Hut" }
+  { rank: Rank 484, english: "hat", word: "der Hut", example: "Er setzte sich einen eleganten Hut auf." }
   ,
-  { rank: Rank 485, english: "intelligent", word: "intelligent" }
+  { rank: Rank 485, english: "intelligent", word: "intelligent", example: "Mein Hund ist sehr intelligent und lernt schnell." }
   ,
-  { rank: Rank 486, english: "jacket", word: "die Jacke" }
+  { rank: Rank 486, english: "jacket", word: "die Jacke", example: "Zieh deine Jacke an, es ist kalt draußen." }
   ,
-  { rank: Rank 487, english: "jeans", word: "die Jeans" }
+  { rank: Rank 487, english: "jeans", word: "die Jeans", example: "Ich trage am liebsten bequeme Jeans." }
   ,
-  { rank: Rank 488, english: "young", word: "jung" }
+  { rank: Rank 488, english: "young", word: "jung", example: "Meine Schwester ist noch sehr jung." }
   ,
-  { rank: Rank 489, english: "dress", word: "das Kleid" }
+  { rank: Rank 489, english: "dress", word: "das Kleid", example: "Sie hat ein schönes rotes Kleid getragen." }
   ,
-  { rank: Rank 490, english: "comparative", word: "der Komparativ" }
+  { rank: Rank 490, english: "comparative", word: "der Komparativ", example: "„Schneller“ ist der Komparativ von „schnell“." }
   ,
-  { rank: Rank 491, english: "subjunctive II (polite)", word: "der Konjunktiv II" }
+  { rank: Rank 491, english: "subjunctive II (polite)", word: "der Konjunktiv II", example: "Für höfliche Bitten nutzt man den Konjunktiv II." }
   ,
-  { rank: Rank 492, english: "short", word: "kurz" }
+  { rank: Rank 492, english: "short", word: "kurz", example: "Der Weg zum Bahnhof ist sehr kurz." }
   ,
-  { rank: Rank 493, english: "long", word: "lang" }
+  { rank: Rank 493, english: "long", word: "lang", example: "Dieser Film ist mir zu lang." }
   ,
-  { rank: Rank 494, english: "coat", word: "der Mantel" }
+  { rank: Rank 494, english: "coat", word: "der Mantel", example: "Es ist kalt, zieh deinen Mantel an." }
   ,
-  { rank: Rank 495, english: "opinion", word: "die Meinung" }
+  { rank: Rank 495, english: "opinion", word: "die Meinung", example: "Was ist deine Meinung dazu?" }
   ,
-  { rank: Rank 496, english: "operation", word: "die Operation" }
+  { rank: Rank 496, english: "operation", word: "die Operation", example: "Die Operation verlief ohne Probleme." }
   ,
-  { rank: Rank 497, english: "optimistic", word: "optimistisch" }
+  { rank: Rank 497, english: "optimistic", word: "optimistisch", example: "Trotz der Probleme blieb sie optimistisch." }
   ,
-  { rank: Rank 498, english: "to fit", word: "passen" }
+  { rank: Rank 498, english: "to fit", word: "passen", example: "Die Schuhe passen mir nicht." }
   ,
-  { rank: Rank 499, english: "pessimistic", word: "pessimistisch" }
+  { rank: Rank 499, english: "pessimistic", word: "pessimistisch", example: "Sei nicht so pessimistisch!" }
   ,
-  { rank: Rank 500, english: "to try (on)", word: "probieren" }
+  { rank: Rank 500, english: "to try (on)", word: "probieren", example: "Kann ich dieses Hemd mal probieren?" }
   ,
-  { rank: Rank 501, english: "pullover / jumper", word: "der Pullover" }
+  { rank: Rank 501, english: "pullover / jumper", word: "der Pullover", example: "Ich brauche einen warmen Pullover für den Winter." }
   ,
-  { rank: Rank 502, english: "discount", word: "der Rabatt" }
+  { rank: Rank 502, english: "discount", word: "der Rabatt", example: "Wir haben einen Rabatt auf die Schuhe bekommen." }
   ,
-  { rank: Rank 503, english: "smoking ban", word: "das Rauchverbot" }
+  { rank: Rank 503, english: "smoking ban", word: "das Rauchverbot", example: "In diesem Gebäude gibt es ein striktes Rauchverbot." }
   ,
-  { rank: Rank 504, english: "to be right", word: "recht haben" }
+  { rank: Rank 504, english: "to be right", word: "recht haben", example: "Du hast recht, wir sollten jetzt gehen." }
   ,
-  { rank: Rank 505, english: "skirt", word: "der Rock" }
+  { rank: Rank 505, english: "skirt", word: "der Rock", example: "Sie trägt heute einen neuen Rock." }
   ,
-  { rank: Rank 506, english: "calm / quiet", word: "ruhig" }
+  { rank: Rank 506, english: "calm / quiet", word: "ruhig", example: "Bitte sei ruhig!" }
   ,
-  { rank: Rank 507, english: "seamstress / tailor (female)", word: "die Schneiderin" }
+  { rank: Rank 507, english: "seamstress / tailor (female)", word: "die Schneiderin", example: "Ich bringe mein Kleid zur Schneiderin zum Ändern." }
   ,
-  { rank: Rank 508, english: "cosmetic surgeon", word: "der Schönheitschirurg" }
+  { rank: Rank 508, english: "cosmetic surgeon", word: "der Schönheitschirurg", example: "Der Schönheitschirurg ist sehr bekannt." }
   ,
-  { rank: Rank 509, english: "cosmetic surgery", word: "die Schönheitsoperation" }
+  { rank: Rank 509, english: "cosmetic surgery", word: "die Schönheitsoperation", example: "Sie dachte über eine Schönheitsoperation im Gesicht nach." }
   ,
-  { rank: Rank 510, english: "shoes", word: "die Schuhe" }
+  { rank: Rank 510, english: "shoes", word: "die Schuhe", example: "Ich brauche neue Schuhe für den Winter." }
   ,
-  { rank: Rank 511, english: "as ... as", word: "so ... wie" }
+  { rank: Rank 511, english: "as ... as", word: "so ... wie", example: "Er ist so schnell wie ein Blitz." }
   ,
-  { rank: Rank 512, english: "immediately / right away", word: "sofort" }
+  { rank: Rank 512, english: "immediately / right away", word: "sofort", example: "Bitte schick mir die E-Mail sofort." }
   ,
-  { rank: Rank 513, english: "special offer", word: "das Sonderangebot" }
+  { rank: Rank 513, english: "special offer", word: "das Sonderangebot", example: "Dieses Sonderangebot ist sehr günstig." }
   ,
-  { rank: Rank 514, english: "sporty / athletic", word: "sportlich" }
+  { rank: Rank 514, english: "sporty / athletic", word: "sportlich", example: "Sie ist sehr sportlich und fit." }
   ,
-  { rank: Rank 515, english: "boots", word: "die Stiefel" }
+  { rank: Rank 515, english: "boots", word: "die Stiefel", example: "Ich brauche neue warme Stiefel für den Winter." }
   ,
-  { rank: Rank 516, english: "voice", word: "die Stimme" }
+  { rank: Rank 516, english: "voice", word: "die Stimme", example: "Sie hat eine sehr schöne Stimme." }
   ,
-  { rank: Rank 517, english: "superlative", word: "der Superlativ" }
+  { rank: Rank 517, english: "superlative", word: "der Superlativ", example: "Der Superlativ ist die höchste Form." }
   ,
-  { rank: Rank 518, english: "T-shirt", word: "das T-Shirt" }
+  { rank: Rank 518, english: "T-shirt", word: "das T-Shirt", example: "Ich trage oft ein T-Shirt im Sommer." }
   ,
-  { rank: Rank 519, english: "changing room / fitting room", word: "die Umkleidekabine" }
+  { rank: Rank 519, english: "changing room / fitting room", word: "die Umkleidekabine", example: "Die Umkleidekabine ist dort drüben." }
   ,
-  { rank: Rank 520, english: "not dangerous / safe", word: "ungefährlich" }
+  { rank: Rank 520, english: "not dangerous / safe", word: "ungefährlich", example: "Der kleine Hund ist völlig ungefährlich." }
   ,
-  { rank: Rank 521, english: "unpleasant / unlikeable", word: "unsympathisch" }
+  { rank: Rank 521, english: "unpleasant / unlikeable", word: "unsympathisch", example: "Ihr neuer Chef ist mir leider unsympathisch." }
   ,
-  { rank: Rank 522, english: "salesman", word: "der Verkäufer" }
+  { rank: Rank 522, english: "salesman", word: "der Verkäufer", example: "Der Verkäufer war sehr freundlich." }
   ,
-  { rank: Rank 523, english: "much → more → most", word: "viel → mehr → am meisten" }
+  { rank: Rank 523, english: "much → more → most", word: "viel → mehr → am meisten", example: "Ich habe viel Geld, aber er hat mehr." }
   ,
-  { rank: Rank 524, english: "wide / loose", word: "weit" }
+  { rank: Rank 524, english: "wide / loose", word: "weit", example: "Sie trägt eine weite Hose." }
   ,
-  { rank: Rank 525, english: "too big / too small", word: "zu groß / zu klein" }
+  { rank: Rank 525, english: "too big / too small", word: "zu groß / zu klein", example: "Das Hemd ist mir leider zu groß." }
   ,
-  { rank: Rank 526, english: "to depart", word: "abfahren" }
+  { rank: Rank 526, english: "to depart", word: "abfahren", example: "Der Zug fährt pünktlich ab." }
   ,
-  { rank: Rank 527, english: "to arrive", word: "ankommen" }
+  { rank: Rank 527, english: "to arrive", word: "ankommen", example: "Wann kommt der Bus an?" }
   ,
-  { rank: Rank 528, english: "day trip, excursion", word: "der Ausflug" }
+  { rank: Rank 528, english: "day trip, excursion", word: "der Ausflug", example: "Wir machten einen schönen Ausflug zum See." }
   ,
-  { rank: Rank 529, english: "mountain", word: "der Berg" }
+  { rank: Rank 529, english: "mountain", word: "der Berg", example: "Wir wanderten auf den Berg." }
   ,
-  { rank: Rank 530, english: "to visit, to sightsee", word: "besichtigen" }
+  { rank: Rank 530, english: "to visit, to sightsee", word: "besichtigen", example: "Wir wollen die Stadt besichtigen." }
   ,
-  { rank: Rank 531, english: "cloudy", word: "bewölkt" }
+  { rank: Rank 531, english: "cloudy", word: "bewölkt", example: "Heute ist der Himmel bewölkt." }
   ,
-  { rank: Rank 532, english: "flight", word: "der Flug" }
+  { rank: Rank 532, english: "flight", word: "der Flug", example: "Unser Flug nach Berlin startet um acht Uhr." }
   ,
-  { rank: Rank 533, english: "to photograph", word: "fotografieren" }
+  { rank: Rank 533, english: "to photograph", word: "fotografieren", example: "Ich habe gestern viele Fotos fotografiert." }
   ,
-  { rank: Rank 534, english: "to enjoy", word: "genießen" }
+  { rank: Rank 534, english: "to enjoy", word: "genießen", example: "Ich genieße die Sonne sehr." }
   ,
-  { rank: Rank 535, english: "thunderstorm", word: "das Gewitter" }
+  { rank: Rank 535, english: "thunderstorm", word: "das Gewitter", example: "Letzte Nacht gab es ein starkes Gewitter." }
   ,
-  { rank: Rank 536, english: "hot", word: "heiß" }
+  { rank: Rank 536, english: "hot", word: "heiß", example: "Es war ein sehr heißer Sommer letztes Jahr." }
   ,
-  { rank: Rank 537, english: "hostel", word: "das Hostel" }
+  { rank: Rank 537, english: "hostel", word: "das Hostel", example: "Wir haben in einem günstigen Hostel übernachtet." }
   ,
-  { rank: Rank 538, english: "cold", word: "kalt" }
+  { rank: Rank 538, english: "cold", word: "kalt", example: "Mir ist heute sehr kalt." }
   ,
-  { rank: Rank 539, english: "camera", word: "die Kamera" }
+  { rank: Rank 539, english: "camera", word: "die Kamera", example: "Hast du deine Kamera mitgebracht?" }
   ,
-  { rank: Rank 540, english: "church", word: "die Kirche" }
+  { rank: Rank 540, english: "church", word: "die Kirche", example: "Wir haben am Sonntag die alte Kirche besucht." }
   ,
-  { rank: Rank 541, english: "last summer", word: "letzten Sommer" }
+  { rank: Rank 541, english: "last summer", word: "letzten Sommer", example: "Letzten Sommer waren wir in Italien." }
   ,
-  { rank: Rank 542, english: "market", word: "der Markt" }
+  { rank: Rank 542, english: "market", word: "der Markt", example: "Wir gehen jeden Samstag auf den Markt." }
   ,
-  { rank: Rank 543, english: "fog", word: "der Nebel" }
+  { rank: Rank 543, english: "fog", word: "der Nebel", example: "Heute Morgen gab es starken Nebel." }
   ,
-  { rank: Rank 544, english: "to pack", word: "packen" }
+  { rank: Rank 544, english: "to pack", word: "packen", example: "Ich muss meinen Koffer packen." }
   ,
-  { rank: Rank 545, english: "passport", word: "der Pass" }
+  { rank: Rank 545, english: "passport", word: "der Pass", example: "Haben Sie Ihren Pass dabei?" }
   ,
-  { rank: Rank 546, english: "postcard", word: "die Postkarte" }
+  { rank: Rank 546, english: "postcard", word: "die Postkarte", example: "Ich schicke dir eine Postkarte aus dem Urlaub." }
   ,
-  { rank: Rank 547, english: "rain", word: "der Regen" }
+  { rank: Rank 547, english: "rain", word: "der Regen", example: "Der Regen fällt seit Stunden." }
   ,
-  { rank: Rank 548, english: "rainy", word: "regnerisch" }
+  { rank: Rank 548, english: "rainy", word: "regnerisch", example: "Das Wetter war gestern sehr regnerisch." }
   ,
-  { rank: Rank 549, english: "to travel", word: "reisen" }
+  { rank: Rank 549, english: "to travel", word: "reisen", example: "Sie reisen oft in andere Länder." }
   ,
-  { rank: Rank 550, english: "reservation", word: "die Reservierung" }
+  { rank: Rank 550, english: "reservation", word: "die Reservierung", example: "Haben Sie eine Reservierung auf meinen Namen?" }
   ,
-  { rank: Rank 551, english: "snow", word: "der Schnee" }
+  { rank: Rank 551, english: "snow", word: "der Schnee", example: "Der Schnee bedeckt die ganze Landschaft." }
   ,
-  { rank: Rank 552, english: "to have nice weather", word: "schönes Wetter haben" }
+  { rank: Rank 552, english: "to have nice weather", word: "schönes Wetter haben", example: "Wir haben heute endlich schönes Wetter." }
   ,
-  { rank: Rank 553, english: "sight, tourist attraction", word: "die Sehenswürdigkeit" }
+  { rank: Rank 553, english: "sight, tourist attraction", word: "die Sehenswürdigkeit", example: "Berlin hat viele interessante Sehenswürdigkeiten." }
   ,
-  { rank: Rank 554, english: "sunny", word: "sonnig" }
+  { rank: Rank 554, english: "sunny", word: "sonnig", example: "Heute ist es sehr sonnig." }
   ,
-  { rank: Rank 555, english: "souvenir", word: "das Souvenir" }
+  { rank: Rank 555, english: "souvenir", word: "das Souvenir", example: "Ich möchte ein Souvenir für meine Mutter kaufen." }
   ,
-  { rank: Rank 556, english: "stem (of a verb)", word: "der Stamm" }
+  { rank: Rank 556, english: "stem (of a verb)", word: "der Stamm", example: "Der Stamm ist der feste Teil eines Verbs." }
   ,
-  { rank: Rank 557, english: "taxi", word: "das Taxi" }
+  { rank: Rank 557, english: "taxi", word: "das Taxi", example: "Wir nehmen ein Taxi zum Flughafen." }
   ,
-  { rank: Rank 558, english: "ticket", word: "das Ticket" }
+  { rank: Rank 558, english: "ticket", word: "das Ticket", example: "Ich habe mein Ticket online gekauft." }
   ,
-  { rank: Rank 559, english: "tourist", word: "der Tourist" }
+  { rank: Rank 559, english: "tourist", word: "der Tourist", example: "Viele Touristen besuchen diese Stadt." }
   ,
-  { rank: Rank 560, english: "tourist information office", word: "die Touristeninformation" }
+  { rank: Rank 560, english: "tourist information office", word: "die Touristeninformation", example: "Wir fragten in der Touristeninformation nach einem Stadtplan." }
   ,
-  { rank: Rank 561, english: "to stay overnight", word: "übernachten" }
+  { rank: Rank 561, english: "to stay overnight", word: "übernachten", example: "Wir übernachteten in einem kleinen Hotel." }
   ,
-  { rank: Rank 562, english: "irregular", word: "unregelmäßig" }
+  { rank: Rank 562, english: "irregular", word: "unregelmäßig", example: "Ihre Arbeitszeiten sind unregelmäßig." }
   ,
-  { rank: Rank 563, english: "a year ago", word: "vor einem Jahr" }
+  { rank: Rank 563, english: "a year ago", word: "vor einem Jahr", example: "Wir sind vor einem Jahr umgezogen." }
   ,
-  { rank: Rank 564, english: "narrative past", word: "die Vorvergangenheit" }
+  { rank: Rank 564, english: "narrative past", word: "die Vorvergangenheit", example: "Die Vorvergangenheit ist eine Zeitform im Deutschen." }
   ,
-  { rank: Rank 565, english: "forest", word: "der Wald" }
+  { rank: Rank 565, english: "forest", word: "der Wald", example: "Wir gehen oft im Wald spazieren." }
   ,
-  { rank: Rank 566, english: "to hike", word: "wandern" }
+  { rank: Rank 566, english: "to hike", word: "wandern", example: "Wir wandern gern in den Bergen." }
   ,
-  { rank: Rank 567, english: "warm", word: "warm" }
+  { rank: Rank 567, english: "warm", word: "warm", example: "Heute ist es draußen sehr warm." }
   ,
-  { rank: Rank 568, english: "weather", word: "das Wetter" }
+  { rank: Rank 568, english: "weather", word: "das Wetter", example: "Das Wetter wird morgen wahrscheinlich besser sein." }
   ,
-  { rank: Rank 569, english: "wind", word: "der Wind" }
+  { rank: Rank 569, english: "wind", word: "der Wind", example: "Der Wind weht heute stark." }
   ,
-  { rank: Rank 570, english: "for the first time", word: "zum ersten Mal" }
+  { rank: Rank 570, english: "for the first time", word: "zum ersten Mal", example: "Ich bin zum ersten Mal in Deutschland." }
   ,
-  { rank: Rank 571, english: "allergy", word: "die Allergie" }
+  { rank: Rank 571, english: "allergy", word: "die Allergie", example: "Ich habe eine Allergie gegen Nüsse." }
   ,
-  { rank: Rank 572, english: "arm", word: "der Arm" }
+  { rank: Rank 572, english: "arm", word: "der Arm", example: "Mein Arm tut nach dem Sturz weh." }
   ,
-  { rank: Rank 573, english: "aspirin", word: "das Aspirin" }
+  { rank: Rank 573, english: "aspirin", word: "das Aspirin", example: "Ich habe ein Aspirin gegen meine Kopfschmerzen genommen." }
   ,
-  { rank: Rank 574, english: "sufficiently", word: "ausreichend" }
+  { rank: Rank 574, english: "sufficiently", word: "ausreichend", example: "Du hast nicht ausreichend geschlafen." }
   ,
-  { rank: Rank 575, english: "belly, stomach", word: "der Bauch" }
+  { rank: Rank 575, english: "belly, stomach", word: "der Bauch", example: "Mein Bauch tut nach zu viel Essen weh." }
   ,
-  { rank: Rank 576, english: "leg", word: "das Bein" }
+  { rank: Rank 576, english: "leg", word: "das Bein", example: "Er hat sich bei einem Unfall das Bein gebrochen." }
   ,
-  { rank: Rank 577, english: "please", word: "Bitte" }
+  { rank: Rank 577, english: "please", word: "Bitte", example: "Kannst du mir bitte helfen?" }
   ,
-  { rank: Rank 578, english: "chest, breast", word: "die Brust" }
+  { rank: Rank 578, english: "chest, breast", word: "die Brust", example: "Er hatte leichte Schmerzen in der Brust." }
   ,
-  { rank: Rank 579, english: "may, to be allowed to", word: "dürfen" }
+  { rank: Rank 579, english: "may, to be allowed to", word: "dürfen", example: "Dürfen wir hier parken?" }
   ,
-  { rank: Rank 580, english: "Get well!", word: "Erhol dich!" }
+  { rank: Rank 580, english: "Get well!", word: "Erhol dich!", example: "Du bist müde. Erhol dich gut!" }
   ,
-  { rank: Rank 581, english: "fever", word: "das Fieber" }
+  { rank: Rank 581, english: "fever", word: "das Fieber", example: "Ich hatte gestern hohes Fieber." }
   ,
-  { rank: Rank 582, english: "finger", word: "der Finger" }
+  { rank: Rank 582, english: "finger", word: "der Finger", example: "Er zeigte mit dem Finger auf die Karte." }
   ,
-  { rank: Rank 583, english: "foot", word: "der Fuß" }
+  { rank: Rank 583, english: "foot", word: "der Fuß", example: "Er spürte Schmerzen in seinem linken Fuß." }
   ,
-  { rank: Rank 584, english: "flu", word: "die Grippe" }
+  { rank: Rank 584, english: "flu", word: "die Grippe", example: "Letzte Woche hatte ich die Grippe." }
   ,
-  { rank: Rank 585, english: "neck, throat", word: "der Hals" }
+  { rank: Rank 585, english: "neck, throat", word: "der Hals", example: "Mein Hals tut seit gestern weh." }
   ,
-  { rank: Rank 586, english: "sore throat", word: "Halsschmerzen (Pl.)" }
+  { rank: Rank 586, english: "sore throat", word: "Halsschmerzen (Pl.)", example: "Ich habe starke Halsschmerzen und Fieber." }
   ,
-  { rank: Rank 587, english: "imperative (grammar)", word: "der Imperativ" }
+  { rank: Rank 587, english: "imperative (grammar)", word: "der Imperativ", example: "Der Imperativ wird für Befehle benutzt." }
   ,
-  { rank: Rank 588, english: "knee", word: "das Knie" }
+  { rank: Rank 588, english: "knee", word: "das Knie", example: "Mein rechtes Knie tut seit gestern weh." }
   ,
-  { rank: Rank 589, english: "headache", word: "der Kopfschmerz" }
+  { rank: Rank 589, english: "headache", word: "der Kopfschmerz", example: "Ich habe heute Morgen starke Kopfschmerzen." }
   ,
-  { rank: Rank 590, english: "sick, ill", word: "krank" }
+  { rank: Rank 590, english: "sick, ill", word: "krank", example: "Ich bin leider krank und kann nicht kommen." }
   ,
-  { rank: Rank 591, english: "health insurance", word: "die Krankenkasse" }
+  { rank: Rank 591, english: "health insurance", word: "die Krankenkasse", example: "Ich muss meine Krankenkasse kontaktieren." }
   ,
-  { rank: Rank 592, english: "health insurance", word: "die Krankenversicherung" }
+  { rank: Rank 592, english: "health insurance", word: "die Krankenversicherung", example: "Jeder braucht eine gute Krankenversicherung." }
   ,
-  { rank: Rank 593, english: "mouth", word: "der Mund" }
+  { rank: Rank 593, english: "mouth", word: "der Mund", example: "Mach deinen Mund auf, bitte." }
   ,
-  { rank: Rank 594, english: "nose", word: "die Nase" }
+  { rank: Rank 594, english: "nose", word: "die Nase", example: "Er hat eine kleine Nase." }
   ,
-  { rank: Rank 595, english: "ear", word: "das Ohr" }
+  { rank: Rank 595, english: "ear", word: "das Ohr", example: "Er hat sich sein linkes Ohr beim Sport verletzt." }
   ,
-  { rank: Rank 596, english: "patient (male)", word: "der Patient" }
+  { rank: Rank 596, english: "patient (male)", word: "der Patient", example: "Der Patient wartet im Wartezimmer." }
   ,
-  { rank: Rank 597, english: "patient (female)", word: "die Patientin" }
+  { rank: Rank 597, english: "patient (female)", word: "die Patientin", example: "Die Patientin wartet schon lange auf den Arzt." }
   ,
-  { rank: Rank 598, english: "advice", word: "der Rat" }
+  { rank: Rank 598, english: "advice", word: "der Rat", example: "Dein Rat war sehr hilfreich für mich." }
   ,
-  { rank: Rank 599, english: "reflexive pronoun", word: "das Reflexivpronomen" }
+  { rank: Rank 599, english: "reflexive pronoun", word: "das Reflexivpronomen", example: "Heute üben wir die deutschen Reflexivpronomen im Akkusativ." }
   ,
-  { rank: Rank 600, english: "back", word: "der Rücken" }
+  { rank: Rank 600, english: "back", word: "der Rücken", example: "Mein Rücken tut mir weh vom Sport." }
   ,
-  { rank: Rank 601, english: "Get some rest!", word: "Ruh dich aus!" }
+  { rank: Rank 601, english: "Get some rest!", word: "Ruh dich aus!", example: "Du siehst müde aus. Ruh dich aus!" }
   ,
-  { rank: Rank 602, english: "to rest", word: "ruhen" }
+  { rank: Rank 602, english: "to rest", word: "ruhen", example: "Du solltest dich nach der Arbeit ruhen." }
   ,
-  { rank: Rank 603, english: "to swallow", word: "schlucken" }
+  { rank: Rank 603, english: "to swallow", word: "schlucken", example: "Bitte schlucke die Tablette mit Wasser." }
   ,
-  { rank: Rank 604, english: "to have pain", word: "Schmerzen haben" }
+  { rank: Rank 604, english: "to have pain", word: "Schmerzen haben", example: "Ich habe starke Schmerzen im Rücken." }
   ,
-  { rank: Rank 605, english: "shoulder", word: "die Schulter" }
+  { rank: Rank 605, english: "shoulder", word: "die Schulter", example: "Sie hat Schmerzen in der rechten Schulter." }
   ,
-  { rank: Rank 606, english: "to rest, to relax", word: "sich ausruhen" }
+  { rank: Rank 606, english: "to rest, to relax", word: "sich ausruhen", example: "Ich muss mich nach der Wanderung ausruhen." }
   ,
-  { rank: Rank 607, english: "to move, to exercise", word: "sich bewegen" }
+  { rank: Rank 607, english: "to move, to exercise", word: "sich bewegen", example: "Wir sollten uns jeden Tag bewegen." }
   ,
-  { rank: Rank 608, english: "to recover", word: "sich erholen" }
+  { rank: Rank 608, english: "to recover", word: "sich erholen", example: "Er muss sich von der Krankheit erholen." }
   ,
-  { rank: Rank 609, english: "to catch a cold", word: "sich erkälten" }
+  { rank: Rank 609, english: "to catch a cold", word: "sich erkälten", example: "Ich will mich nicht erkälten." }
   ,
-  { rank: Rank 610, english: "to eat, to nourish oneself", word: "sich ernähren" }
+  { rank: Rank 610, english: "to eat, to nourish oneself", word: "sich ernähren", example: "Man sollte sich gesund ernähren." }
   ,
-  { rank: Rank 611, english: "to feel", word: "sich fühlen" }
+  { rank: Rank 611, english: "to feel", word: "sich fühlen", example: "Wie fühlst du dich heute?" }
   ,
-  { rank: Rank 612, english: "to worry", word: "sich Sorgen machen" }
+  { rank: Rank 612, english: "to worry", word: "sich Sorgen machen", example: "Mach dir keine Sorgen, alles wird gut!" }
   ,
-  { rank: Rank 613, english: "should, ought to", word: "sollen" }
+  { rank: Rank 613, english: "should, ought to", word: "sollen", example: "Wir sollen jetzt wirklich gehen." }
   ,
-  { rank: Rank 614, english: "consultation hours", word: "die Sprechstunde" }
+  { rank: Rank 614, english: "consultation hours", word: "die Sprechstunde", example: "Die Ärztin hat heute Nachmittag Sprechstunde." }
   ,
-  { rank: Rank 615, english: "symptom", word: "das Symptom" }
+  { rank: Rank 615, english: "symptom", word: "das Symptom", example: "Husten ist ein häufiges Symptom einer Erkältung." }
   ,
-  { rank: Rank 616, english: "daily", word: "täglich" }
+  { rank: Rank 616, english: "daily", word: "täglich", example: "Sie liest täglich die Nachrichten." }
   ,
-  { rank: Rank 617, english: "appointment", word: "der Termin" }
+  { rank: Rank 617, english: "appointment", word: "der Termin", example: "Ich habe heute einen wichtigen Termin." }
   ,
-  { rank: Rank 618, english: "to examine", word: "untersuchen" }
+  { rank: Rank 618, english: "to examine", word: "untersuchen", example: "Der Arzt untersuchte den jungen Patienten." }
   ,
-  { rank: Rank 619, english: "to hurt", word: "wehtun" }
+  { rank: Rank 619, english: "to hurt", word: "wehtun", example: "Mein Kopf tut mir weh." }
   ,
-  { rank: Rank 620, english: "when / whenever", word: "wenn" }
+  { rank: Rank 620, english: "when / whenever", word: "wenn", example: "Wenn ich Zeit habe, lese ich." }
   ,
-  { rank: Rank 621, english: "most of all / best of all", word: "am liebsten" }
+  { rank: Rank 621, english: "most of all / best of all", word: "am liebsten", example: "Ich trinke am liebsten Kaffee." }
   ,
-  { rank: Rank 622, english: "at, on (vertical)", word: "an" }
+  { rank: Rank 622, english: "at, on (vertical)", word: "an", example: "Das Bild hängt an der Wand." }
   ,
-  { rank: Rank 623, english: "apartment", word: "das Apartment" }
+  { rank: Rank 623, english: "apartment", word: "das Apartment", example: "Wir haben ein kleines Apartment in der Stadt gemietet." }
   ,
-  { rank: Rank 624, english: "on (horizontal)", word: "auf" }
+  { rank: Rank 624, english: "on (horizontal)", word: "auf", example: "Die Katze schläft auf dem Sofa." }
   ,
-  { rank: Rank 625, english: "bathroom", word: "das Badezimmer" }
+  { rank: Rank 625, english: "bathroom", word: "das Badezimmer", example: "Das Badezimmer war nach der Party schmutzig." }
   ,
-  { rank: Rank 626, english: "to build", word: "bauen" }
+  { rank: Rank 626, english: "to build", word: "bauen", example: "Sie bauen ein neues Haus hier." }
   ,
-  { rank: Rank 627, english: "floor", word: "der Boden" }
+  { rank: Rank 627, english: "floor", word: "der Boden", example: "Der Boden ist sehr sauber." }
   ,
-  { rank: Rank 628, english: "bookshelf", word: "das Bücherregal" }
+  { rank: Rank 628, english: "bookshelf", word: "das Bücherregal", example: "Wir haben ein neues Bücherregal gekauft." }
   ,
-  { rank: Rank 629, english: "dark", word: "dunkel" }
+  { rank: Rank 629, english: "dark", word: "dunkel", example: "Es wird schnell dunkel am Abend." }
   ,
-  { rank: Rank 630, english: "to move in", word: "einziehen" }
+  { rank: Rank 630, english: "to move in", word: "einziehen", example: "Wir wollen bald in die neue Wohnung einziehen." }
   ,
-  { rank: Rank 631, english: "colour / paint", word: "die Farbe" }
+  { rank: Rank 631, english: "colour / paint", word: "die Farbe", example: "Welche Farbe hat dein neues Auto?" }
   ,
-  { rank: Rank 632, english: "finished / ready", word: "fertig" }
+  { rank: Rank 632, english: "finished / ready", word: "fertig", example: "Bist du schon mit der Arbeit fertig?" }
   ,
-  { rank: Rank 633, english: "hallway", word: "der Flur" }
+  { rank: Rank 633, english: "hallway", word: "der Flur", example: "Hängen Sie Ihren Mantel im Flur auf." }
   ,
-  { rank: Rank 634, english: "dish / meal", word: "das Gericht" }
+  { rank: Rank 634, english: "dish / meal", word: "das Gericht", example: "Dieses Gericht schmeckt sehr gut, was ist das?" }
   ,
-  { rank: Rank 635, english: "cheap / good value", word: "günstig" }
+  { rank: Rank 635, english: "cheap / good value", word: "günstig", example: "Das neue Auto war sehr günstig." }
   ,
-  { rank: Rank 636, english: "craftsman / tradesman", word: "der Handwerker" }
+  { rank: Rank 636, english: "craftsman / tradesman", word: "der Handwerker", example: "Der Handwerker hat unsere Küche repariert." }
   ,
-  { rank: Rank 637, english: "to hang", word: "hängen" }
+  { rank: Rank 637, english: "to hang", word: "hängen", example: "Die Jacke hängt im Schrank." }
   ,
-  { rank: Rank 638, english: "main course", word: "das Hauptgericht" }
+  { rank: Rank 638, english: "main course", word: "das Hauptgericht", example: "Als Hauptgericht wähle ich den Fisch mit Reis." }
   ,
-  { rank: Rank 639, english: "bright / light", word: "hell" }
+  { rank: Rank 639, english: "bright / light", word: "hell", example: "Das Zimmer ist sehr hell und freundlich." }
   ,
-  { rank: Rank 640, english: "behind", word: "hinter" }
+  { rank: Rank 640, english: "behind", word: "hinter", example: "Das Auto steht hinter dem Haus." }
   ,
-  { rank: Rank 641, english: "ideal", word: "ideal" }
+  { rank: Rank 641, english: "ideal", word: "ideal", example: "Das Wetter ist ideal für einen Spaziergang." }
   ,
-  { rank: Rank 642, english: "in, into", word: "in" }
+  { rank: Rank 642, english: "in, into", word: "in", example: "Wir leben in einer kleinen Stadt." }
   ,
-  { rank: Rank 643, english: "broken", word: "kaputt" }
+  { rank: Rank 643, english: "broken", word: "kaputt", example: "Mein Handy ist leider kaputt." }
   ,
-  { rank: Rank 644, english: "waiter", word: "der Kellner" }
+  { rank: Rank 644, english: "waiter", word: "der Kellner", example: "Der Kellner bringt uns bald das Essen." }
   ,
-  { rank: Rank 645, english: "waitress", word: "die Kellnerin" }
+  { rank: Rank 645, english: "waitress", word: "die Kellnerin", example: "Die Kellnerin brachte uns das Essen." }
   ,
-  { rank: Rank 646, english: "cushion / pillow", word: "das Kissen" }
+  { rank: Rank 646, english: "cushion / pillow", word: "das Kissen", example: "Ich brauche ein weiches Kissen für meinen Nacken." }
   ,
-  { rank: Rank 647, english: "kitchen", word: "die Küche" }
+  { rank: Rank 647, english: "kitchen", word: "die Küche", example: "Wir haben in der Küche zu Abend gegessen." }
   ,
-  { rank: Rank 648, english: "lamp", word: "die Lampe" }
+  { rank: Rank 648, english: "lamp", word: "die Lampe", example: "Kannst du bitte die Lampe anmachen?" }
   ,
-  { rank: Rank 649, english: "to lay, to put (flat)", word: "legen" }
+  { rank: Rank 649, english: "to lay, to put (flat)", word: "legen", example: "Sie legt das Buch auf den Tisch." }
   ,
-  { rank: Rank 650, english: "rather / preferably", word: "lieber" }
+  { rank: Rank 650, english: "rather / preferably", word: "lieber", example: "Ich trinke lieber Kaffee als Tee." }
   ,
-  { rank: Rank 651, english: "painter (decorator)", word: "der Maler" }
+  { rank: Rank 651, english: "painter (decorator)", word: "der Maler", example: "Der Maler streicht unser Wohnzimmer nächste Woche." }
   ,
-  { rank: Rank 652, english: "rent", word: "die Miete" }
+  { rank: Rank 652, english: "rent", word: "die Miete", example: "Die Miete für die Wohnung ist teuer." }
   ,
-  { rank: Rank 653, english: "furniture", word: "die Möbel" }
+  { rank: Rank 653, english: "furniture", word: "die Möbel", example: "Wir haben neue Möbel für das Schlafzimmer gekauft." }
   ,
-  { rank: Rank 654, english: "modern", word: "modern" }
+  { rank: Rank 654, english: "modern", word: "modern", example: "Unsere neue Wohnung ist sehr modern." }
   ,
-  { rank: Rank 655, english: "dessert", word: "die Nachspeise" }
+  { rank: Rank 655, english: "dessert", word: "die Nachspeise", example: "Als Nachspeise gab es Eis mit Früchten." }
   ,
-  { rank: Rank 656, english: "next to", word: "neben" }
+  { rank: Rank 656, english: "next to", word: "neben", example: "Er sitzt neben seiner Freundin." }
   ,
-  { rank: Rank 657, english: "parquet (flooring)", word: "das Parkett" }
+  { rank: Rank 657, english: "parquet (flooring)", word: "das Parkett", example: "Unser Wohnzimmer hat schönes, glänzendes Parkett." }
   ,
-  { rank: Rank 658, english: "square metre", word: "der Quadratmeter (m²)" }
+  { rank: Rank 658, english: "square metre", word: "der Quadratmeter (m²)", example: "Die Wohnung ist 70 Quadratmeter groß." }
   ,
-  { rank: Rank 659, english: "bill", word: "die Rechnung" }
+  { rank: Rank 659, english: "bill", word: "die Rechnung", example: "Können wir bitte die Rechnung für das Essen haben?" }
   ,
-  { rank: Rank 660, english: "shelf / bookcase", word: "das Regal" }
+  { rank: Rank 660, english: "shelf / bookcase", word: "das Regal", example: "Ich habe die Bücher ins Regal gestellt." }
   ,
-  { rank: Rank 661, english: "to renovate", word: "renovieren" }
+  { rank: Rank 661, english: "to renovate", word: "renovieren", example: "Wir müssen die Küche bald renovieren." }
   ,
-  { rank: Rank 662, english: "renovation", word: "die Renovierung" }
+  { rank: Rank 662, english: "renovation", word: "die Renovierung", example: "Die Renovierung unserer Küche beginnt nächste Woche." }
   ,
-  { rank: Rank 663, english: "to repair", word: "reparieren" }
+  { rank: Rank 663, english: "to repair", word: "reparieren", example: "Kannst du bitte mein Fahrrad reparieren?" }
   ,
-  { rank: Rank 664, english: "restaurant", word: "das Restaurant" }
+  { rank: Rank 664, english: "restaurant", word: "das Restaurant", example: "Wir gehen heute Abend in ein italienisches Restaurant." }
   ,
-  { rank: Rank 665, english: "bedroom", word: "das Schlafzimmer" }
+  { rank: Rank 665, english: "bedroom", word: "das Schlafzimmer", example: "Unser Schlafzimmer ist klein, aber sehr gemütlich." }
   ,
-  { rank: Rank 666, english: "wardrobe / cupboard", word: "der Schrank" }
+  { rank: Rank 666, english: "wardrobe / cupboard", word: "der Schrank", example: "Der Schrank ist voll mit Kleidung." }
   ,
-  { rank: Rank 667, english: "armchair", word: "der Sessel" }
+  { rank: Rank 667, english: "armchair", word: "der Sessel", example: "Ich sitze gern im bequemen Sessel." }
   ,
-  { rank: Rank 668, english: "sofa", word: "das Sofa" }
+  { rank: Rank 668, english: "sofa", word: "das Sofa", example: "Mein Hund schläft immer auf dem Sofa." }
   ,
-  { rank: Rank 669, english: "menu", word: "die Speisekarte" }
+  { rank: Rank 669, english: "menu", word: "die Speisekarte", example: "Könnten wir bitte die Speisekarte haben?" }
   ,
-  { rank: Rank 670, english: "to paint (walls)", word: "streichen" }
+  { rank: Rank 670, english: "to paint (walls)", word: "streichen", example: "Wir haben die Wand weiß gestrichen." }
   ,
-  { rank: Rank 671, english: "studio (flat)", word: "das Studio" }
+  { rank: Rank 671, english: "studio (flat)", word: "das Studio", example: "Ich miete ein kleines Studio in der Stadt." }
   ,
-  { rank: Rank 672, english: "rug / carpet", word: "der Teppich" }
+  { rank: Rank 672, english: "rug / carpet", word: "der Teppich", example: "Der neue Teppich ist sehr weich." }
   ,
-  { rank: Rank 673, english: "expensive", word: "teuer" }
+  { rank: Rank 673, english: "expensive", word: "teuer", example: "Das Auto war zu teuer." }
   ,
-  { rank: Rank 674, english: "over, above", word: "über" }
+  { rank: Rank 674, english: "over, above", word: "über", example: "Ein Vogel fliegt über dem Wald." }
   ,
-  { rank: Rank 675, english: "to move (house)", word: "umziehen" }
+  { rank: Rank 675, english: "to move (house)", word: "umziehen", example: "Wir wollen nächsten Monat umziehen." }
   ,
-  { rank: Rank 676, english: "under", word: "unter" }
+  { rank: Rank 676, english: "under", word: "unter", example: "Die Katze liegt unter dem Stuhl." }
   ,
-  { rank: Rank 677, english: "landlord", word: "der Vermieter" }
+  { rank: Rank 677, english: "landlord", word: "der Vermieter", example: "Unser Vermieter ist sehr nett." }
   ,
-  { rank: Rank 678, english: "landlady", word: "die Vermieterin" }
+  { rank: Rank 678, english: "landlady", word: "die Vermieterin", example: "Wir haben mit der Vermieterin über die Miete gesprochen." }
   ,
-  { rank: Rank 679, english: "in front of", word: "vor" }
+  { rank: Rank 679, english: "in front of", word: "vor", example: "Das Auto steht vor dem Haus." }
   ,
-  { rank: Rank 680, english: "starter", word: "die Vorspeise" }
+  { rank: Rank 680, english: "starter", word: "die Vorspeise", example: "Was möchten Sie als Vorspeise bestellen?" }
   ,
-  { rank: Rank 681, english: "wall", word: "die Wand" }
+  { rank: Rank 681, english: "wall", word: "die Wand", example: "Die Wand in meinem Zimmer ist blau gestrichen." }
   ,
-  { rank: Rank 682, english: "to become", word: "werden" }
+  { rank: Rank 682, english: "to become", word: "werden", example: "Er möchte Arzt werden." }
   ,
-  { rank: Rank 683, english: "flat / apartment", word: "die Wohnung" }
+  { rank: Rank 683, english: "flat / apartment", word: "die Wohnung", example: "Meine neue Wohnung hat drei Zimmer." }
   ,
-  { rank: Rank 684, english: "living room", word: "das Wohnzimmer" }
+  { rank: Rank 684, english: "living room", word: "das Wohnzimmer", example: "Wir haben im Wohnzimmer einen Film gesehen." }
   ,
-  { rank: Rank 685, english: "wish", word: "der Wunsch" }
+  { rank: Rank 685, english: "wish", word: "der Wunsch", example: "Ich habe einen Wunsch zum Geburtstag." }
   ,
-  { rank: Rank 686, english: "room", word: "das Zimmer" }
+  { rank: Rank 686, english: "room", word: "das Zimmer", example: "Mein Zimmer ist klein, aber hell." }
   ,
-  { rank: Rank 687, english: "between", word: "zwischen" }
+  { rank: Rank 687, english: "between", word: "zwischen", example: "Der Park liegt zwischen zwei Straßen." }
   ,
-  { rank: Rank 688, english: "school-leaving exam (D)", word: "das Abitur" }
+  { rank: Rank 688, english: "school-leaving exam (D)", word: "das Abitur", example: "Sie hat letztes Jahr ihr Abitur bestanden." }
   ,
-  { rank: Rank 689, english: "graduation, degree", word: "der Abschluss" }
+  { rank: Rank 689, english: "graduation, degree", word: "der Abschluss", example: "Er feierte letzte Woche seinen Abschluss." }
   ,
-  { rank: Rank 690, english: "than (in comparisons)", word: "als" }
+  { rank: Rank 690, english: "than (in comparisons)", word: "als", example: "Er ist größer als sein Bruder." }
   ,
-  { rank: Rank 691, english: "if I were you", word: "an deiner Stelle" }
+  { rank: Rank 691, english: "if I were you", word: "an deiner Stelle", example: "An deiner Stelle würde ich sofort zum Arzt gehen." }
   ,
-  { rank: Rank 692, english: "in your position (formal)", word: "an Ihrer Stelle" }
+  { rank: Rank 692, english: "in your position (formal)", word: "an Ihrer Stelle", example: "An Ihrer Stelle würde ich den Vertrag sorgfältig prüfen." }
   ,
-  { rank: Rank 693, english: "doctor (male)", word: "der Arzt" }
+  { rank: Rank 693, english: "doctor (male)", word: "der Arzt", example: "Ich habe heute einen Termin beim Arzt." }
   ,
-  { rank: Rank 694, english: "doctor (female)", word: "die Ärztin" }
+  { rank: Rank 694, english: "doctor (female)", word: "die Ärztin", example: "Meine Ärztin hat mir gut geholfen." }
   ,
-  { rank: Rank 695, english: "astronaut (male)", word: "der Astronaut" }
+  { rank: Rank 695, english: "astronaut (male)", word: "der Astronaut", example: "Er wollte immer ein Astronaut sein." }
   ,
-  { rank: Rank 696, english: "vocational training", word: "die Ausbildung" }
+  { rank: Rank 696, english: "vocational training", word: "die Ausbildung", example: "Sie macht gerade eine Ausbildung zur Mechanikerin." }
   ,
-  { rank: Rank 697, english: "profession, job", word: "der Beruf" }
+  { rank: Rank 697, english: "profession, job", word: "der Beruf", example: "Was haben Sie für einen Beruf?" }
   ,
-  { rank: Rank 698, english: "vocational school", word: "die Berufsschule" }
+  { rank: Rank 698, english: "vocational school", word: "die Berufsschule", example: "Ich besuche zweimal pro Woche die Berufsschule." }
   ,
-  { rank: Rank 699, english: "job application", word: "die Bewerbung" }
+  { rank: Rank 699, english: "job application", word: "die Bewerbung", example: "Ich habe meine Bewerbung letzte Woche abgeschickt." }
   ,
-  { rank: Rank 700, english: "therefore, that's why", word: "deshalb" }
+  { rank: Rank 700, english: "therefore, that's why", word: "deshalb", example: "Es regnet, deshalb bleiben wir drinnen." }
   ,
-  { rank: Rank 701, english: "mission, operation, deployment", word: "der Einsatz" }
+  { rank: Rank 701, english: "mission, operation, deployment", word: "der Einsatz", example: "Die Polizei hatte einen schwierigen Einsatz." }
   ,
-  { rank: Rank 702, english: "fire", word: "das Feuer" }
+  { rank: Rank 702, english: "fire", word: "das Feuer", example: "Bitte mach das Feuer im Garten aus!" }
   ,
-  { rank: Rank 703, english: "firefighter (female)", word: "die Feuerwehrfrau" }
+  { rank: Rank 703, english: "firefighter (female)", word: "die Feuerwehrfrau", example: "Die Feuerwehrfrau löschte das Feuer schnell." }
   ,
-  { rank: Rank 704, english: "firefighter (male)", word: "der Feuerwehrmann" }
+  { rank: Rank 704, english: "firefighter (male)", word: "der Feuerwehrmann", example: "Ein mutiger Feuerwehrmann rettete die Katze." }
   ,
-  { rank: Rank 705, english: "danger", word: "die Gefahr" }
+  { rank: Rank 705, english: "danger", word: "die Gefahr", example: "Es besteht keine Gefahr, der Weg ist sicher." }
   ,
-  { rank: Rank 706, english: "contrast, opposite", word: "der Gegensatz" }
+  { rank: Rank 706, english: "contrast, opposite", word: "der Gegensatz", example: "Im Gegensatz zu mir mag er Sport." }
   ,
-  { rank: Rank 707, english: "primary school", word: "die Grundschule" }
+  { rank: Rank 707, english: "primary school", word: "die Grundschule", example: "Meine Tochter geht jetzt in die Grundschule." }
   ,
-  { rank: Rank 708, english: "academic secondary school", word: "das Gymnasium" }
+  { rank: Rank 708, english: "academic secondary school", word: "das Gymnasium", example: "Meine Tochter geht auf das Gymnasium." }
   ,
-  { rank: Rank 709, english: "lower secondary school (D)", word: "die Hauptschule" }
+  { rank: Rank 709, english: "lower secondary school (D)", word: "die Hauptschule", example: "Mein Bruder ging nach der Grundschule auf die Hauptschule." }
   ,
-  { rank: Rank 710, english: "in (temporal, with dative)", word: "in + Dativ (zeitlich)" }
+  { rank: Rank 710, english: "in (temporal, with dative)", word: "in + Dativ (zeitlich)", example: "Ich bin in zwei Stunden wieder da." }
   ,
-  { rank: Rank 711, english: "in one year", word: "in einem Jahr" }
+  { rank: Rank 711, english: "in one year", word: "in einem Jahr", example: "In einem Jahr ziehen wir um." }
   ,
-  { rank: Rank 712, english: "in two weeks", word: "in zwei Wochen" }
+  { rank: Rank 712, english: "in two weeks", word: "in zwei Wochen", example: "Meine Prüfung ist in zwei Wochen." }
   ,
-  { rank: Rank 713, english: "every, each", word: "jeder / jedes / jede" }
+  { rank: Rank 713, english: "every, each", word: "jeder / jedes / jede", example: "Jeder Gast bekommt ein Getränk." }
   ,
-  { rank: Rank 714, english: "physical", word: "körperlich" }
+  { rank: Rank 714, english: "physical", word: "körperlich", example: "Er war körperlich sehr fit und stark." }
   ,
-  { rank: Rank 715, english: "CV, résumé", word: "der Lebenslauf" }
+  { rank: Rank 715, english: "CV, résumé", word: "der Lebenslauf", example: "Bitte schicken Sie Ihren Lebenslauf per E-Mail." }
   ,
-  { rank: Rank 716, english: "to extinguish", word: "löschen" }
+  { rank: Rank 716, english: "to extinguish", word: "löschen", example: "Die Feuerwehr löschte den Brand schnell." }
   ,
-  { rank: Rank 717, english: "school-leaving exam (A/CH)", word: "die Matura" }
+  { rank: Rank 717, english: "school-leaving exam (A/CH)", word: "die Matura", example: "Er hat die Matura letztes Jahr bestanden." }
   ,
-  { rank: Rank 718, english: "disadvantage", word: "der Nachteil" }
+  { rank: Rank 718, english: "disadvantage", word: "der Nachteil", example: "Der Nachteil ist der hohe Preis." }
   ,
-  { rank: Rank 719, english: "although, even though", word: "obwohl" }
+  { rank: Rank 719, english: "although, even though", word: "obwohl", example: "Obwohl es spät war, las ich weiter." }
   ,
-  { rank: Rank 720, english: "pilot (male)", word: "der Pilot" }
+  { rank: Rank 720, english: "pilot (male)", word: "der Pilot", example: "Mein Bruder ist ein erfahrener Pilot." }
   ,
-  { rank: Rank 721, english: "pilot (female)", word: "die Pilotin" }
+  { rank: Rank 721, english: "pilot (female)", word: "die Pilotin", example: "Die Pilotin flog das Flugzeug sicher zum Ziel." }
   ,
-  { rank: Rank 722, english: "police officer (male)", word: "der Polizist" }
+  { rank: Rank 722, english: "police officer (male)", word: "der Polizist", example: "Ein Polizist hat mir den Weg gezeigt." }
   ,
-  { rank: Rank 723, english: "police officer (female)", word: "die Polizistin" }
+  { rank: Rank 723, english: "police officer (female)", word: "die Polizistin", example: "Die Polizistin half uns bei dem Unfall." }
   ,
-  { rank: Rank 724, english: "psychological, mental", word: "psychisch" }
+  { rank: Rank 724, english: "psychological, mental", word: "psychisch", example: "Sie hatte psychische Probleme." }
   ,
-  { rank: Rank 725, english: "career change, lateral entry", word: "der Quereinstieg" }
+  { rank: Rank 725, english: "career change, lateral entry", word: "der Quereinstieg", example: "Ein Quereinstieg kann neue Möglichkeiten bieten." }
   ,
-  { rank: Rank 726, english: "piece of advice", word: "der Ratschlag" }
+  { rank: Rank 726, english: "piece of advice", word: "der Ratschlag", example: "Er gab mir einen wichtigen Ratschlag." }
   ,
-  { rank: Rank 727, english: "intermediate secondary school", word: "die Realschule" }
+  { rank: Rank 727, english: "intermediate secondary school", word: "die Realschule", example: "Meine Schwester besuchte die Realschule in der Stadt." }
   ,
-  { rank: Rank 728, english: "to save, to rescue", word: "retten" }
+  { rank: Rank 728, english: "to save, to rescue", word: "retten", example: "Die Feuerwehr konnte die Katze retten." }
   ,
-  { rank: Rank 729, english: "risky", word: "riskant" }
+  { rank: Rank 729, english: "risky", word: "riskant", example: "Der Plan war sehr riskant." }
   ,
-  { rank: Rank 730, english: "to apply (for a job)", word: "sich bewerben" }
+  { rank: Rank 730, english: "to apply (for a job)", word: "sich bewerben", example: "Ich möchte mich für diese Stelle bewerben." }
   ,
-  { rank: Rank 731, english: "exciting, thrilling", word: "spannend" }
+  { rank: Rank 731, english: "exciting, thrilling", word: "spannend", example: "Der Film war sehr spannend." }
   ,
-  { rank: Rank 732, english: "stress", word: "der Stress" }
+  { rank: Rank 732, english: "stress", word: "der Stress", example: "Ich habe viel Stress bei der Arbeit." }
   ,
-  { rank: Rank 733, english: "university studies", word: "das Studium" }
+  { rank: Rank 733, english: "university studies", word: "das Studium", example: "Mein Studium in Berlin war sehr interessant." }
   ,
-  { rank: Rank 734, english: "dream job", word: "der Traumberuf" }
+  { rank: Rank 734, english: "dream job", word: "der Traumberuf", example: "Mein Traumberuf ist Pilot." }
   ,
-  { rank: Rank 735, english: "nevertheless, still, anyway", word: "trotzdem" }
+  { rank: Rank 735, english: "nevertheless, still, anyway", word: "trotzdem", example: "Es regnete, trotzdem gingen wir spazieren." }
   ,
-  { rank: Rank 736, english: "to consider, to think about", word: "überlegen" }
+  { rank: Rank 736, english: "to consider, to think about", word: "überlegen", example: "Ich werde es mir gut überlegen." }
   ,
-  { rank: Rank 737, english: "around", word: "um ... herum" }
+  { rank: Rank 737, english: "around", word: "um ... herum", example: "Wir saßen um den Tisch herum." }
   ,
-  { rank: Rank 738, english: "university", word: "die Universität" }
+  { rank: Rank 738, english: "university", word: "die Universität", example: "Sie studiert an der Universität in Berlin." }
   ,
-  { rank: Rank 739, english: "advantage", word: "der Vorteil" }
+  { rank: Rank 739, english: "advantage", word: "der Vorteil", example: "Was sind die Vorteile davon?" }
   ,
-  { rank: Rank 740, english: "to change, to switch", word: "wechseln" }
+  { rank: Rank 740, english: "to change, to switch", word: "wechseln", example: "Wir müssen das Thema wechseln." }
   ,
-  { rank: Rank 741, english: "government office", word: "das Amt" }
+  { rank: Rank 741, english: "government office", word: "das Amt", example: "Ich hatte gestern einen Termin beim Amt." }
   ,
-  { rank: Rank 742, english: "exchange", word: "der Austausch" }
+  { rank: Rank 742, english: "exchange", word: "der Austausch", example: "Wir nahmen an einem Schüleraustausch teil." }
   ,
-  { rank: Rank 743, english: "ID card", word: "der Ausweis" }
+  { rank: Rank 743, english: "ID card", word: "der Ausweis", example: "Haben Sie Ihren Ausweis dabei?" }
   ,
-  { rank: Rank 744, english: "relationship", word: "die Beziehung" }
+  { rank: Rank 744, english: "relationship", word: "die Beziehung", example: "Ihre Beziehung ist sehr glücklich und stark." }
   ,
-  { rank: Rank 745, english: "blind date", word: "das Blind Date" }
+  { rank: Rank 745, english: "blind date", word: "das Blind Date", example: "Meine Schwester hatte gestern Abend ein Blind Date." }
   ,
-  { rank: Rank 746, english: "charm", word: "der Charme" }
+  { rank: Rank 746, english: "charm", word: "der Charme", example: "Er hat einen besonderen Charme." }
   ,
-  { rank: Rank 747, english: "dating show", word: "die Dating-Show" }
+  { rank: Rank 747, english: "dating show", word: "die Dating-Show", example: "Er schaut jede Woche eine Dating-Show im Fernsehen." }
   ,
-  { rank: Rank 748, english: "honest", word: "ehrlich" }
+  { rank: Rank 748, english: "honest", word: "ehrlich", example: "Er ist ein sehr ehrlicher Mensch." }
   ,
-  { rank: Rank 749, english: "honesty", word: "die Ehrlichkeit" }
+  { rank: Rank 749, english: "honesty", word: "die Ehrlichkeit", example: "Ehrlichkeit ist sehr wichtig in Freundschaften." }
   ,
-  { rank: Rank 750, english: "characteristic, quality", word: "die Eigenschaft" }
+  { rank: Rank 750, english: "characteristic, quality", word: "die Eigenschaft", example: "Ihre Ehrlichkeit ist eine wichtige Eigenschaft." }
   ,
-  { rank: Rank 751, english: "residents' registration office", word: "das Einwohnermeldeamt" }
+  { rank: Rank 751, english: "residents' registration office", word: "das Einwohnermeldeamt", example: "Ich muss zum Einwohnermeldeamt gehen." }
   ,
-  { rank: Rank 752, english: "form (document)", word: "das Formular" }
+  { rank: Rank 752, english: "form (document)", word: "das Formular", example: "Bitte füllen Sie das Formular vollständig aus." }
   ,
-  { rank: Rank 753, english: "free time, leisure", word: "die Freizeit" }
+  { rank: Rank 753, english: "free time, leisure", word: "die Freizeit", example: "Was machst du gern in deiner Freizeit?" }
   ,
-  { rank: Rank 754, english: "fresh", word: "frisch" }
+  { rank: Rank 754, english: "fresh", word: "frisch", example: "Der Fisch muss frisch sein, sonst kaufe ich ihn nicht." }
   ,
-  { rank: Rank 755, english: "patience", word: "die Geduld" }
+  { rank: Rank 755, english: "patience", word: "die Geduld", example: "Man braucht viel Geduld, um eine neue Sprache zu lernen." }
   ,
-  { rank: Rank 756, english: "patient", word: "geduldig" }
+  { rank: Rank 756, english: "patient", word: "geduldig", example: "Meine Lehrerin ist immer sehr geduldig." }
   ,
-  { rank: Rank 757, english: "stressed", word: "gestresst" }
+  { rank: Rank 757, english: "stressed", word: "gestresst", example: "Er war letzte Woche sehr gestresst von der Arbeit." }
   ,
-  { rank: Rank 758, english: "hobby", word: "das Hobby" }
+  { rank: Rank 758, english: "hobby", word: "das Hobby", example: "Mein Hobby ist es, Bücher zu lesen." }
   ,
-  { rank: Rank 759, english: "humour", word: "der Humor" }
+  { rank: Rank 759, english: "humour", word: "der Humor", example: "Sie hat einen großartigen Sinn für Humor." }
   ,
-  { rank: Rank 760, english: "boring", word: "langweilig" }
+  { rank: Rank 760, english: "boring", word: "langweilig", example: "Das Meeting war wirklich langweilig." }
   ,
-  { rank: Rank 761, english: "funny", word: "lustig" }
+  { rank: Rank 761, english: "funny", word: "lustig", example: "Der Witz war wirklich sehr lustig." }
   ,
-  { rank: Rank 762, english: "native speaker", word: "der Muttersprachler" }
+  { rank: Rank 762, english: "native speaker", word: "der Muttersprachler", example: "Ein Muttersprachler kann dir gut helfen." }
   ,
-  { rank: Rank 763, english: "nice, kind", word: "nett" }
+  { rank: Rank 763, english: "nice, kind", word: "nett", example: "Sie ist eine sehr nette Kollegin." }
   ,
-  { rank: Rank 764, english: "curious, inquisitive", word: "neugierig" }
+  { rank: Rank 764, english: "curious, inquisitive", word: "neugierig", example: "Kinder sind oft sehr neugierig." }
   ,
-  { rank: Rank 765, english: "open, open-minded", word: "offen" }
+  { rank: Rank 765, english: "open, open-minded", word: "offen", example: "Ich bin offen für neue Ideen." }
   ,
-  { rank: Rank 766, english: "personality", word: "die Persönlichkeit" }
+  { rank: Rank 766, english: "personality", word: "die Persönlichkeit", example: "Sie hat eine starke Persönlichkeit." }
   ,
-  { rank: Rank 767, english: "profile", word: "das Profil" }
+  { rank: Rank 767, english: "profile", word: "das Profil", example: "Ich muss mein Online-Profil auf der Webseite aktualisieren." }
   ,
-  { rank: Rank 768, english: "romantic", word: "romantisch" }
+  { rank: Rank 768, english: "romantic", word: "romantisch", example: "Wir hatten einen romantischen Abend." }
   ,
-  { rank: Rank 769, english: "queue / snake", word: "die Schlange" }
+  { rank: Rank 769, english: "queue / snake", word: "die Schlange", example: "Es gab eine lange Schlange vor dem Kino." }
   ,
-  { rank: Rank 770, english: "to register", word: "sich anmelden" }
+  { rank: Rank 770, english: "to register", word: "sich anmelden", example: "Wir müssen uns für den Kurs anmelden." }
   ,
-  { rank: Rank 771, english: "to hurry", word: "sich beeilen" }
+  { rank: Rank 771, english: "to hurry", word: "sich beeilen", example: "Beeil dich, sonst verpassen wir den Zug!" }
   ,
-  { rank: Rank 772, english: "to complain", word: "sich beschweren" }
+  { rank: Rank 772, english: "to complain", word: "sich beschweren", example: "Der Gast beschwert sich über das Essen." }
   ,
-  { rank: Rank 773, english: "to shower", word: "sich duschen" }
+  { rank: Rank 773, english: "to shower", word: "sich duschen", example: "Ich dusche mich jeden Morgen." }
   ,
-  { rank: Rank 774, english: "to relax", word: "sich entspannen" }
+  { rank: Rank 774, english: "to relax", word: "sich entspannen", example: "Ich möchte mich am Wochenende entspannen." }
   ,
-  { rank: Rank 775, english: "to comb (hair)", word: "sich kämmen" }
+  { rank: Rank 775, english: "to comb (hair)", word: "sich kämmen", example: "Sie kämmt sich jeden Morgen die Haare." }
   ,
-  { rank: Rank 776, english: "to get to know each other", word: "sich kennenlernen" }
+  { rank: Rank 776, english: "to get to know each other", word: "sich kennenlernen", example: "Wir wollen uns besser kennenlernen." }
   ,
-  { rank: Rank 777, english: "to sit down", word: "sich setzen" }
+  { rank: Rank 777, english: "to sit down", word: "sich setzen", example: "Bitte setzen Sie sich hierher." }
   ,
-  { rank: Rank 778, english: "to meet up", word: "sich treffen" }
+  { rank: Rank 778, english: "to meet up", word: "sich treffen", example: "Wir treffen uns um acht Uhr." }
   ,
-  { rank: Rank 779, english: "to fall in love with", word: "sich verlieben" }
+  { rank: Rank 779, english: "to fall in love with", word: "sich verlieben", example: "Sie hat sich in ihn verliebt." }
   ,
-  { rank: Rank 780, english: "to get along", word: "sich verstehen" }
+  { rank: Rank 780, english: "to get along", word: "sich verstehen", example: "Sie verstehen sich sehr gut." }
   ,
-  { rank: Rank 781, english: "to introduce oneself", word: "sich vorstellen" }
+  { rank: Rank 781, english: "to introduce oneself", word: "sich vorstellen", example: "Darf ich mich vorstellen?" }
   ,
-  { rank: Rank 782, english: "to feel comfortable", word: "sich wohlfühlen" }
+  { rank: Rank 782, english: "to feel comfortable", word: "sich wohlfühlen", example: "Ich fühle mich hier sehr wohl." }
   ,
-  { rank: Rank 783, english: "to wish for", word: "sich wünschen" }
+  { rank: Rank 783, english: "to wish for", word: "sich wünschen", example: "Was wünschst du dir zum Geburtstag?" }
   ,
-  { rank: Rank 784, english: "language", word: "die Sprache" }
+  { rank: Rank 784, english: "language", word: "die Sprache", example: "Ich lerne Deutsch als Fremdsprache." }
   ,
-  { rank: Rank 785, english: "likeable / pleasant", word: "sympathisch" }
+  { rank: Rank 785, english: "likeable / pleasant", word: "sympathisch", example: "Dein Kollege ist sehr sympathisch." }
   ,
-  { rank: Rank 786, english: "language exchange partner", word: "das Tandem" }
+  { rank: Rank 786, english: "language exchange partner", word: "das Tandem", example: "Wir bilden ein Tandem für den Sprachaustausch." }
   ,
-  { rank: Rank 787, english: "impatient", word: "ungeduldig" }
+  { rank: Rank 787, english: "impatient", word: "ungeduldig", example: "Warte bitte, sei nicht ungeduldig." }
   ,
-  { rank: Rank 788, english: "queue number", word: "die Wartenummer" }
+  { rank: Rank 788, english: "queue number", word: "die Wartenummer", example: "Wir haben eine Wartenummer gezogen." }
   ,
-  { rank: Rank 789, english: "reliable", word: "zuverlässig" }
+  { rank: Rank 789, english: "reliable", word: "zuverlässig", example: "Mein altes Auto ist immer noch sehr zuverlässig." }
   ,
-  { rank: Rank 790, english: "in the evenings", word: "abends" }
+  { rank: Rank 790, english: "in the evenings", word: "abends", example: "Abends sehe ich oft fern." }
   ,
-  { rank: Rank 791, english: "balcony", word: "der Balkon" }
+  { rank: Rank 791, english: "balcony", word: "der Balkon", example: "Wir frühstückten auf dem Balkon." }
   ,
-  { rank: Rank 792, english: "mountains", word: "die Berge" }
+  { rank: Rank 792, english: "mountains", word: "die Berge", example: "Wir fahren am Wochenende in die Berge." }
   ,
-  { rank: Rank 793, english: "to describe", word: "beschreiben" }
+  { rank: Rank 793, english: "to describe", word: "beschreiben", example: "Kannst du den Weg gut beschreiben?" }
   ,
-  { rank: Rank 794, english: "width", word: "die Breite" }
+  { rank: Rank 794, english: "width", word: "die Breite", example: "Die Breite des Tisches beträgt 80 Zentimeter." }
   ,
-  { rank: Rank 795, english: "to book", word: "buchen" }
+  { rank: Rank 795, english: "to book", word: "buchen", example: "Wir müssen das Hotel buchen." }
   ,
-  { rank: Rank 796, english: "camping", word: "das Camping" }
+  { rank: Rank 796, english: "camping", word: "das Camping", example: "Letzten Sommer waren wir oft beim Camping." }
   ,
-  { rank: Rank 797, english: "campsite", word: "der Campingplatz" }
+  { rank: Rank 797, english: "campsite", word: "der Campingplatz", example: "Wir haben einen schönen Platz auf dem Campingplatz gebucht." }
   ,
-  { rank: Rank 798, english: "of the father / of the mother", word: "des Vaters / der Mutter" }
+  { rank: Rank 798, english: "of the father / of the mother", word: "des Vaters / der Mutter", example: "Das neue Auto des Vaters steht vor dem Haus." }
   ,
-  { rank: Rank 799, english: "double room", word: "das Doppelzimmer" }
+  { rank: Rank 799, english: "double room", word: "das Doppelzimmer", example: "Wir möchten bitte ein Doppelzimmer für zwei Nächte." }
   ,
-  { rank: Rank 800, english: "single room", word: "das Einzelzimmer" }
+  { rank: Rank 800, english: "single room", word: "das Einzelzimmer", example: "Ich habe ein Einzelzimmer im Hotel gebucht." }
   ,
-  { rank: Rank 801, english: "memory, souvenir", word: "die Erinnerung" }
+  { rank: Rank 801, english: "memory, souvenir", word: "die Erinnerung", example: "Ich habe viele schöne Erinnerungen an meine Kindheit." }
   ,
-  { rank: Rank 802, english: "breakfast", word: "das Frühstück" }
+  { rank: Rank 802, english: "breakfast", word: "das Frühstück", example: "Wir haben ein leckeres Frühstück zusammen gegessen." }
   ,
-  { rank: Rank 803, english: "lost property office", word: "das Fundbüro" }
+  { rank: Rank 803, english: "lost property office", word: "das Fundbüro", example: "Ich habe meinen Schlüssel im Fundbüro abgegeben." }
   ,
-  { rank: Rank 804, english: "genitive case", word: "der Genitiv" }
+  { rank: Rank 804, english: "genitive case", word: "der Genitiv", example: "Im Deutschen ist der Genitiv oft schwierig." }
   ,
-  { rank: Rank 805, english: "here (motion toward speaker)", word: "her" }
+  { rank: Rank 805, english: "here (motion toward speaker)", word: "her", example: "Bring bitte die Bücher zu mir her." }
   ,
-  { rank: Rank 806, english: "to come from", word: "herkommen" }
+  { rank: Rank 806, english: "to come from", word: "herkommen", example: "Wo kommt dein Freund her?" }
   ,
-  { rank: Rank 807, english: "there (away from speaker)", word: "hin" }
+  { rank: Rank 807, english: "there (away from speaker)", word: "hin", example: "Gehen wir zum Park hin?" }
   ,
-  { rank: Rank 808, english: "to put down", word: "hinlegen" }
+  { rank: Rank 808, english: "to put down", word: "hinlegen", example: "Bitte leg das Buch dort hin." }
   ,
-  { rank: Rank 809, english: "height", word: "die Höhe" }
+  { rank: Rank 809, english: "height", word: "die Höhe", example: "Die Höhe des Berges ist beeindruckend." }
   ,
-  { rank: Rank 810, english: "hotel", word: "das Hotel" }
+  { rank: Rank 810, english: "hotel", word: "das Hotel", example: "Ich buche immer ein Hotel mit Frühstück." }
   ,
-  { rank: Rank 811, english: "inclusive, included", word: "inklusive" }
+  { rank: Rank 811, english: "inclusive, included", word: "inklusive", example: "Der Preis ist inklusive Frühstück." }
   ,
-  { rank: Rank 812, english: "island", word: "die Insel" }
+  { rank: Rank 812, english: "island", word: "die Insel", example: "Wir haben unseren Urlaub auf einer schönen Insel verbracht." }
   ,
-  { rank: Rank 813, english: "youth hostel", word: "die Jugendherberge" }
+  { rank: Rank 813, english: "youth hostel", word: "die Jugendherberge", example: "Wir übernachteten in einer Jugendherberge in München." }
   ,
-  { rank: Rank 814, english: "childhood", word: "die Kindheit" }
+  { rank: Rank 814, english: "childhood", word: "die Kindheit", example: "Meine Kindheit war sehr glücklich und schön." }
   ,
-  { rank: Rank 815, english: "suitcase", word: "der Koffer" }
+  { rank: Rank 815, english: "suitcase", word: "der Koffer", example: "Hast du deinen Koffer schon gepackt?" }
   ,
-  { rank: Rank 816, english: "coast", word: "die Küste" }
+  { rank: Rank 816, english: "coast", word: "die Küste", example: "Letzten Sommer waren wir an der Nordsee-Küste." }
   ,
-  { rank: Rank 817, english: "length", word: "die Länge" }
+  { rank: Rank 817, english: "length", word: "die Länge", example: "Was ist die Länge dieses Tisches?" }
   ,
-  { rank: Rank 818, english: "sea", word: "das Meer" }
+  { rank: Rank 818, english: "sea", word: "das Meer", example: "Wir fahren diesen Sommer ans Meer in Italien." }
   ,
-  { rank: Rank 819, english: "to measure", word: "messen" }
+  { rank: Rank 819, english: "to measure", word: "messen", example: "Wir müssen die Raumtemperatur messen." }
   ,
-  { rank: Rank 820, english: "on Mondays", word: "montags" }
+  { rank: Rank 820, english: "on Mondays", word: "montags", example: "Montags gehe ich immer ins Fitnessstudio." }
   ,
-  { rank: Rank 821, english: "in the mornings", word: "morgens" }
+  { rank: Rank 821, english: "in the mornings", word: "morgens", example: "Morgens trinkt sie gern einen großen Kaffee." }
   ,
-  { rank: Rank 822, english: "wallet, purse", word: "das Portemonnaie" }
+  { rank: Rank 822, english: "wallet, purse", word: "das Portemonnaie", example: "Ich habe mein Portemonnaie im Café vergessen." }
   ,
-  { rank: Rank 823, english: "umbrella", word: "der Regenschirm" }
+  { rank: Rank 823, english: "umbrella", word: "der Regenschirm", example: "Nimm deinen Regenschirm mit, es regnet." }
   ,
-  { rank: Rank 824, english: "trip, journey", word: "die Reise" }
+  { rank: Rank 824, english: "trip, journey", word: "die Reise", example: "Wir planen eine Reise nach Italien im Sommer." }
   ,
-  { rank: Rank 825, english: "record", word: "das Rekord" }
+  { rank: Rank 825, english: "record", word: "das Rekord", example: "Der Athlet hat einen neuen Weltrekord aufgestellt." }
   ,
-  { rank: Rank 826, english: "relative clause", word: "der Relativsatz" }
+  { rank: Rank 826, english: "relative clause", word: "der Relativsatz", example: "Wir lernen heute den Relativsatz in der Grammatik." }
   ,
-  { rank: Rank 827, english: "backpack", word: "der Rucksack" }
+  { rank: Rank 827, english: "backpack", word: "der Rucksack", example: "Dein Rucksack ist sehr schwer." }
   ,
-  { rank: Rank 828, english: "lake", word: "der See" }
+  { rank: Rank 828, english: "lake", word: "der See", example: "Wir fahren am Wochenende zum See." }
   ,
-  { rank: Rank 829, english: "sunglasses", word: "die Sonnenbrille" }
+  { rank: Rank 829, english: "sunglasses", word: "die Sonnenbrille", example: "Wo ist meine Sonnenbrille geblieben?" }
   ,
-  { rank: Rank 830, english: "beach", word: "der Strand" }
+  { rank: Rank 830, english: "beach", word: "der Strand", example: "Wir waren gestern am Strand." }
   ,
-  { rank: Rank 831, english: "overnight stay", word: "die Übernachtung" }
+  { rank: Rank 831, english: "overnight stay", word: "die Übernachtung", example: "Eine Übernachtung im Hotel ist teuer." }
   ,
-  { rank: Rank 832, english: "accommodation", word: "die Unterkunft" }
+  { rank: Rank 832, english: "accommodation", word: "die Unterkunft", example: "Wir suchen noch eine günstige Unterkunft." }
   ,
-  { rank: Rank 833, english: "unforgettable", word: "unvergesslich" }
+  { rank: Rank 833, english: "unforgettable", word: "unvergesslich", example: "Dieser Urlaub war einfach unvergesslich." }
   ,
-  { rank: Rank 834, english: "vacation, holiday", word: "der Urlaub" }
+  { rank: Rank 834, english: "vacation, holiday", word: "der Urlaub", example: "Wir wollen bald Urlaub machen." }
   ,
-  { rank: Rank 835, english: "to spend (time)", word: "verbringen" }
+  { rank: Rank 835, english: "to spend (time)", word: "verbringen", example: "Wir verbrachten das Wochenende zu Hause." }
   ,
-  { rank: Rank 836, english: "to lose", word: "verlieren" }
+  { rank: Rank 836, english: "to lose", word: "verlieren", example: "Ich habe meine Schlüssel leider verloren." }
   ,
-  { rank: Rank 837, english: "world record", word: "der Weltrekord" }
+  { rank: Rank 837, english: "world record", word: "der Weltrekord", example: "Er hat den Weltrekord gebrochen." }
   ,
-  { rank: Rank 838, english: "tent", word: "das Zelt" }
+  { rank: Rank 838, english: "tent", word: "das Zelt", example: "Wir haben das Zelt im Garten aufgebaut." }
   ,
-  { rank: Rank 839, english: "to write down", word: "aufschreiben" }
+  { rank: Rank 839, english: "to write down", word: "aufschreiben", example: "Schreib bitte deine Adresse auf." }
   ,
-  { rank: Rank 840, english: "impressive", word: "beeindruckend" }
+  { rank: Rank 840, english: "impressive", word: "beeindruckend", example: "Seine Präsentation war wirklich beeindruckend." }
   ,
-  { rank: Rank 841, english: "cache (hidden object)", word: "der Cache" }
+  { rank: Rank 841, english: "cache (hidden object)", word: "der Cache", example: "Wir haben den Cache im Wald gefunden." }
   ,
-  { rank: Rank 842, english: "for that / for what", word: "dafür / wofür" }
+  { rank: Rank 842, english: "for that / for what", word: "dafür / wofür", example: "Ich habe viel Geld dafür bezahlt." }
   ,
-  { rank: Rank 843, english: "about that / about what", word: "darüber / worüber" }
+  { rank: Rank 843, english: "about that / about what", word: "darüber / worüber", example: "Wir haben lange darüber gesprochen." }
   ,
-  { rank: Rank 844, english: "of/from that / of/from what", word: "davon / wovon" }
+  { rank: Rank 844, english: "of/from that / of/from what", word: "davon / wovon", example: "Er hat viel davon erzählt." }
   ,
-  { rank: Rank 845, english: "to agree, be in agreement", word: "einverstanden sein" }
+  { rank: Rank 845, english: "to agree, be in agreement", word: "einverstanden sein", example: "Ich bin mit deinem Vorschlag einverstanden." }
   ,
-  { rank: Rank 846, english: "festival", word: "das Festival" }
+  { rank: Rank 846, english: "festival", word: "das Festival", example: "Gehst du dieses Jahr zum Musikfestival?" }
   ,
-  { rank: Rank 847, english: "flash mob", word: "der Flash Mob" }
+  { rank: Rank 847, english: "flash mob", word: "der Flash Mob", example: "Wir haben einen Flash Mob in der Stadt gesehen." }
   ,
-  { rank: Rank 848, english: "geocaching", word: "das Geocaching" }
+  { rank: Rank 848, english: "geocaching", word: "das Geocaching", example: "Am Wochenende gehen wir Geocaching im Wald machen." }
   ,
-  { rank: Rank 849, english: "interesting", word: "interessant" }
+  { rank: Rank 849, english: "interesting", word: "interessant", example: "Das Buch, das ich lese, ist sehr interessant." }
   ,
-  { rank: Rank 850, english: "flashcard", word: "die Karteikarte" }
+  { rank: Rank 850, english: "flashcard", word: "die Karteikarte", example: "Ich lerne Vokabeln mit Karteikarten." }
   ,
-  { rank: Rank 851, english: "no problem", word: "kein Problem" }
+  { rank: Rank 851, english: "no problem", word: "kein Problem", example: "Kannst du mir helfen? Ja, kein Problem!" }
   ,
-  { rank: Rank 852, english: "cinema", word: "das Kino" }
+  { rank: Rank 852, english: "cinema", word: "das Kino", example: "Wir gehen heute Abend ins Kino." }
   ,
-  { rank: Rank 853, english: "to work out, to go as planned", word: "klappen" }
+  { rank: Rank 853, english: "to work out, to go as planned", word: "klappen", example: "Hoffentlich klappt unser Plan." }
   ,
-  { rank: Rank 854, english: "concert", word: "das Konzert" }
+  { rank: Rank 854, english: "concert", word: "das Konzert", example: "Wir gehen am Samstag zu einem Konzert." }
   ,
-  { rank: Rank 855, english: "culture", word: "die Kultur" }
+  { rank: Rank 855, english: "culture", word: "die Kultur", example: "Ich möchte mehr über die deutsche Kultur lernen." }
   ,
-  { rank: Rank 856, english: "cultural", word: "kulturell" }
+  { rank: Rank 856, english: "cultural", word: "kulturell", example: "Berlin ist eine sehr kulturell vielfältige Stadt." }
   ,
-  { rank: Rank 857, english: "art", word: "die Kunst" }
+  { rank: Rank 857, english: "art", word: "die Kunst", example: "Ich finde moderne Kunst sehr interessant." }
   ,
-  { rank: Rank 858, english: "unfortunately", word: "leider" }
+  { rank: Rank 858, english: "unfortunately", word: "leider", example: "Leider kann ich heute nicht kommen." }
   ,
-  { rank: Rank 859, english: "to participate", word: "mitmachen" }
+  { rank: Rank 859, english: "to participate", word: "mitmachen", example: "Willst du bei uns mitmachen?" }
   ,
-  { rank: Rank 860, english: "museum", word: "das Museum" }
+  { rank: Rank 860, english: "museum", word: "das Museum", example: "Am Wochenende besuchen wir ein interessantes Museum." }
   ,
-  { rank: Rank 861, english: "music", word: "die Musik" }
+  { rank: Rank 861, english: "music", word: "die Musik", example: "Ich höre gern klassische Musik." }
   ,
-  { rank: Rank 862, english: "to think about", word: "nachdenken" }
+  { rank: Rank 862, english: "to think about", word: "nachdenken", example: "Ich muss über dein Angebot nachdenken." }
   ,
-  { rank: Rank 863, english: "public", word: "öffentlich" }
+  { rank: Rank 863, english: "public", word: "öffentlich", example: "Das ist ein öffentliches Gebäude." }
   ,
-  { rank: Rank 864, english: "to organize", word: "organisieren" }
+  { rank: Rank 864, english: "to organize", word: "organisieren", example: "Wir müssen die Party gut organisieren." }
   ,
-  { rank: Rank 865, english: "regular", word: "regelmäßig" }
+  { rank: Rank 865, english: "regular", word: "regelmäßig", example: "Wir treffen uns regelmäßig am Mittwoch." }
   ,
-  { rank: Rank 866, english: "to be enthusiastic about", word: "sich begeistern" }
+  { rank: Rank 866, english: "to be enthusiastic about", word: "sich begeistern", example: "Sie begeistern sich sehr für Musik." }
   ,
-  { rank: Rank 867, english: "to look forward to", word: "sich freuen auf" }
+  { rank: Rank 867, english: "to look forward to", word: "sich freuen auf", example: "Ich freue mich auf den Urlaub." }
   ,
-  { rank: Rank 868, english: "to be happy about", word: "sich freuen über" }
+  { rank: Rank 868, english: "to be happy about", word: "sich freuen über", example: "Er freut sich über das Geschenk." }
   ,
-  { rank: Rank 869, english: "to be interested in", word: "sich interessieren" }
+  { rank: Rank 869, english: "to be interested in", word: "sich interessieren", example: "Ich interessiere mich für Geschichte." }
   ,
-  { rank: Rank 870, english: "to arrange to meet", word: "sich verabreden" }
+  { rank: Rank 870, english: "to arrange to meet", word: "sich verabreden", example: "Wir müssen uns bald verabreden." }
   ,
-  { rank: Rank 871, english: "language learning app", word: "das Sprachlernapp" }
+  { rank: Rank 871, english: "language learning app", word: "das Sprachlernapp", example: "Das Sprachlernapp hilft mir sehr." }
   ,
-  { rank: Rank 872, english: "strategy", word: "die Strategie" }
+  { rank: Rank 872, english: "strategy", word: "die Strategie", example: "Wir müssen eine neue Strategie entwickeln." }
   ,
-  { rank: Rank 873, english: "theatre", word: "das Theater" }
+  { rank: Rank 873, english: "theatre", word: "das Theater", example: "Gehen wir heute Abend ins Theater?" }
   ,
-  { rank: Rank 874, english: "tip, piece of advice", word: "der Tipp" }
+  { rank: Rank 874, english: "tip, piece of advice", word: "der Tipp", example: "Kannst du mir einen Tipp geben?" }
   ,
-  { rank: Rank 875, english: "to dream of", word: "träumen" }
+  { rank: Rank 875, english: "to dream of", word: "träumen", example: "Ich träume oft vom Fliegen." }
   ,
-  { rank: Rank 876, english: "meeting point", word: "der Treffpunkt" }
+  { rank: Rank 876, english: "meeting point", word: "der Treffpunkt", example: "Der Treffpunkt ist am Bahnhof." }
   ,
-  { rank: Rank 877, english: "date, appointment (informal)", word: "die Verabredung" }
+  { rank: Rank 877, english: "date, appointment (informal)", word: "die Verabredung", example: "Ich habe heute Abend eine Verabredung mit einem Freund." }
   ,
-  { rank: Rank 878, english: "vocabulary word", word: "die Vokabel" }
+  { rank: Rank 878, english: "vocabulary word", word: "die Vokabel", example: "Ich lerne jeden Tag zehn neue Vokabeln." }
   ,
-  { rank: Rank 879, english: "to intend, to plan", word: "vorhaben" }
+  { rank: Rank 879, english: "to intend, to plan", word: "vorhaben", example: "Was hast du heute noch vor?" }
   ,
-  { rank: Rank 880, english: "suggestion, proposal", word: "der Vorschlag" }
+  { rank: Rank 880, english: "suggestion, proposal", word: "der Vorschlag", example: "Wie findest du meinen Vorschlag?" }
   ,
-  { rank: Rank 881, english: "to suggest", word: "vorschlagen" }
+  { rank: Rank 881, english: "to suggest", word: "vorschlagen", example: "Ich schlage einen Spaziergang im Park vor." }
   ,
-  { rank: Rank 882, english: "to repeat", word: "wiederholen" }
+  { rank: Rank 882, english: "to repeat", word: "wiederholen", example: "Können Sie das bitte wiederholen?" }
   ,
-  { rank: Rank 883, english: "aggressive", word: "aggressiv" }
+  { rank: Rank 883, english: "aggressive", word: "aggressiv", example: "Der Hund ist manchmal aggressiv." }
   ,
-  { rank: Rank 884, english: "traffic light", word: "die Ampel" }
+  { rank: Rank 884, english: "traffic light", word: "die Ampel", example: "Die Ampel war rot, also musste ich warten." }
   ,
-  { rank: Rank 885, english: "pharmacy", word: "die Apotheke" }
+  { rank: Rank 885, english: "pharmacy", word: "die Apotheke", example: "Ich muss zur Apotheke gehen, um Medikamente zu kaufen." }
   ,
-  { rank: Rank 886, english: "annoyance, anger", word: "der Ärger" }
+  { rank: Rank 886, english: "annoyance, anger", word: "der Ärger", example: "Es gab viel Ärger wegen der Verspätung." }
   ,
-  { rank: Rank 887, english: "to annoy, to anger", word: "ärgern" }
+  { rank: Rank 887, english: "to annoy, to anger", word: "ärgern", example: "Es hat mich geärgert, dass er zu spät kam." }
   ,
-  { rank: Rank 888, english: "exciting", word: "aufregend" }
+  { rank: Rank 888, english: "exciting", word: "aufregend", example: "Der Film war sehr aufregend." }
   ,
-  { rank: Rank 889, english: "endurance, stamina", word: "die Ausdauer" }
+  { rank: Rank 889, english: "endurance, stamina", word: "die Ausdauer", example: "Für den Marathon braucht man viel Ausdauer." }
   ,
-  { rank: Rank 890, english: "car driver (male)", word: "der Autofahrer" }
+  { rank: Rank 890, english: "car driver (male)", word: "der Autofahrer", example: "Der Autofahrer hielt an der Ampel." }
   ,
-  { rank: Rank 891, english: "car driver (female)", word: "die Autofahrerin" }
+  { rank: Rank 891, english: "car driver (female)", word: "die Autofahrerin", example: "Die Autofahrerin parkte ihr Auto schnell ein." }
   ,
-  { rank: Rank 892, english: "to brake", word: "bremsen" }
+  { rank: Rank 892, english: "to brake", word: "bremsen", example: "Der Fahrer musste plötzlich bremsen." }
   ,
-  { rank: Rank 893, english: "dosage", word: "die Dosierung" }
+  { rank: Rank 893, english: "dosage", word: "die Dosierung", example: "Die richtige Dosierung ist wichtig für das Medikament." }
   ,
-  { rank: Rank 894, english: "one (of them)", word: "einer" }
+  { rank: Rank 894, english: "one (of them)", word: "einer", example: "Einer meiner Freunde kommt heute Abend bei mir vorbei." }
   ,
-  { rank: Rank 895, english: "invitation", word: "die Einladung" }
+  { rank: Rank 895, english: "invitation", word: "die Einladung", example: "Ich habe eine Einladung zur Hochzeit bekommen." }
   ,
-  { rank: Rank 896, english: "to recommend", word: "empfehlen" }
+  { rank: Rank 896, english: "to recommend", word: "empfehlen", example: "Wir können dieses Restaurant sehr empfehlen." }
   ,
-  { rank: Rank 897, english: "to relax", word: "entspannen" }
+  { rank: Rank 897, english: "to relax", word: "entspannen", example: "Ich möchte mich am Wochenende entspannen." }
   ,
-  { rank: Rank 898, english: "inflammation, infection", word: "die Entzündung" }
+  { rank: Rank 898, english: "inflammation, infection", word: "die Entzündung", example: "Die Ärztin sagte, ich habe eine Entzündung." }
   ,
-  { rank: Rank 899, english: "cold (illness)", word: "die Erkältung" }
+  { rank: Rank 899, english: "cold (illness)", word: "die Erkältung", example: "Ich kann heute nicht kommen, ich habe eine Erkältung." }
   ,
-  { rank: Rank 900, english: "to explain", word: "erklären" }
+  { rank: Rank 900, english: "to explain", word: "erklären", example: "Er hat mir die Regeln erklärt." }
   ,
-  { rank: Rank 901, english: "explanation", word: "die Erklärung" }
+  { rank: Rank 901, english: "explanation", word: "die Erklärung", example: "Kannst du mir bitte eine Erklärung geben?" }
   ,
-  { rank: Rank 902, english: "extreme sport", word: "das Extremsport" }
+  { rank: Rank 902, english: "extreme sport", word: "das Extremsport", example: "Das Extremsport ist gefährlich, aber spannend." }
   ,
-  { rank: Rank 903, english: "driver (male)", word: "der Fahrer" }
+  { rank: Rank 903, english: "driver (male)", word: "der Fahrer", example: "Der Fahrer hat uns sicher nach Hause gebracht." }
   ,
-  { rank: Rank 904, english: "driver (female)", word: "die Fahrerin" }
+  { rank: Rank 904, english: "driver (female)", word: "die Fahrerin", example: "Die Fahrerin hielt das Auto sofort an." }
   ,
-  { rank: Rank 905, english: "bicycle", word: "das Fahrrad" }
+  { rank: Rank 905, english: "bicycle", word: "das Fahrrad", example: "Mein neues Fahrrad ist rot." }
   ,
-  { rank: Rank 906, english: "fit, in shape", word: "fit" }
+  { rank: Rank 906, english: "fit, in shape", word: "fit", example: "Ich muss wieder fit werden für den Marathon." }
   ,
-  { rank: Rank 907, english: "gym, fitness studio", word: "das Fitnessstudio" }
+  { rank: Rank 907, english: "gym, fitness studio", word: "das Fitnessstudio", example: "Wir gehen dreimal pro Woche ins Fitnessstudio." }
   ,
-  { rank: Rank 908, english: "pedestrian (male)", word: "der Fußgänger" }
+  { rank: Rank 908, english: "pedestrian (male)", word: "der Fußgänger", example: "Der Fußgänger überquerte die Straße vorsichtig." }
   ,
-  { rank: Rank 909, english: "dangerous", word: "gefährlich" }
+  { rank: Rank 909, english: "dangerous", word: "gefährlich", example: "Diese Situation ist sehr gefährlich für uns." }
   ,
-  { rank: Rank 910, english: "pavement, sidewalk", word: "der Gehweg" }
+  { rank: Rank 910, english: "pavement, sidewalk", word: "der Gehweg", example: "Gehen Sie bitte auf dem Gehweg." }
   ,
-  { rank: Rank 911, english: "healthy", word: "gesund" }
+  { rank: Rank 911, english: "healthy", word: "gesund", example: "Es ist wichtig, gesund zu essen." }
   ,
-  { rank: Rank 912, english: "health", word: "die Gesundheit" }
+  { rank: Rank 912, english: "health", word: "die Gesundheit", example: "Meine Gesundheit ist mir sehr wichtig." }
   ,
-  { rank: Rank 913, english: "action, plot", word: "die Handlung" }
+  { rank: Rank 913, english: "action, plot", word: "die Handlung", example: "Die Handlung des Buches war sehr spannend." }
   ,
-  { rank: Rank 914, english: "helmet", word: "der Helm" }
+  { rank: Rank 914, english: "helmet", word: "der Helm", example: "Er trägt immer einen Helm beim Fahrradfahren." }
   ,
-  { rank: Rank 915, english: "to honk, to beep", word: "hupen" }
+  { rank: Rank 915, english: "to honk, to beep", word: "hupen", example: "Das Auto hat laut gehupt." }
   ,
-  { rank: Rank 916, english: "cough syrup", word: "der Hustensaft" }
+  { rank: Rank 916, english: "cough syrup", word: "der Hustensaft", example: "Ich muss Hustensaft in der Apotheke kaufen." }
   ,
-  { rank: Rank 917, english: "none, no one", word: "keiner" }
+  { rank: Rank 917, english: "none, no one", word: "keiner", example: "Keiner von uns hat die Antwort gewusst." }
   ,
-  { rank: Rank 918, english: "to climb", word: "klettern" }
+  { rank: Rank 918, english: "to climb", word: "klettern", example: "Die Kinder klettern auf Bäume." }
   ,
-  { rank: Rank 919, english: "climbing (as activity noun)", word: "das Klettern" }
+  { rank: Rank 919, english: "climbing (as activity noun)", word: "das Klettern", example: "Das Klettern macht mir viel Spaß." }
   ,
-  { rank: Rank 920, english: "intersection, crossroads", word: "die Kreuzung" }
+  { rank: Rank 920, english: "intersection, crossroads", word: "die Kreuzung", example: "Biegen Sie bitte an der nächsten Kreuzung links ab." }
   ,
-  { rank: Rank 921, english: "teacher (female)", word: "die Lehrerin" }
+  { rank: Rank 921, english: "teacher (female)", word: "die Lehrerin", example: "Unsere neue Lehrerin ist sehr nett." }
   ,
-  { rank: Rank 922, english: "to lend", word: "leihen" }
+  { rank: Rank 922, english: "to lend", word: "leihen", example: "Kannst du mir dein Fahrrad leihen?" }
   ,
-  { rank: Rank 923, english: "medication, medicine", word: "das Medikament" }
+  { rank: Rank 923, english: "medication, medicine", word: "das Medikament", example: "Sie muss dieses Medikament dreimal täglich nehmen." }
   ,
-  { rank: Rank 924, english: "mine", word: "meiner" }
+  { rank: Rank 924, english: "mine", word: "meiner", example: "Ist das dein Regenschirm? Nein, das ist meiner." }
   ,
-  { rank: Rank 925, english: "courage", word: "der Mut" }
+  { rank: Rank 925, english: "courage", word: "der Mut", example: "Er hatte den Mut, die Wahrheit zu sagen." }
   ,
-  { rank: Rank 926, english: "brave, courageous", word: "mutig" }
+  { rank: Rank 926, english: "brave, courageous", word: "mutig", example: "Das war eine sehr mutige Entscheidung von dir." }
   ,
-  { rank: Rank 927, english: "plaster, band-aid", word: "das Pflaster" }
+  { rank: Rank 927, english: "plaster, band-aid", word: "das Pflaster", example: "Sie klebte schnell ein Pflaster auf ihre Wunde." }
   ,
-  { rank: Rank 928, english: "suddenly", word: "plötzlich" }
+  { rank: Rank 928, english: "suddenly", word: "plötzlich", example: "Plötzlich wurde es sehr dunkel." }
   ,
-  { rank: Rank 929, english: "cyclist (male)", word: "der Radfahrer" }
+  { rank: Rank 929, english: "cyclist (male)", word: "der Radfahrer", example: "Der Radfahrer trägt immer einen Helm." }
   ,
-  { rank: Rank 930, english: "cyclist (female)", word: "die Radfahrerin" }
+  { rank: Rank 930, english: "cyclist (female)", word: "die Radfahrerin", example: "Die Radfahrerin trug einen Helm auf dem Kopf." }
   ,
-  { rank: Rank 931, english: "prescription", word: "das Rezept" }
+  { rank: Rank 931, english: "prescription", word: "das Rezept", example: "Der Arzt hat mir ein Rezept für Schmerzmittel gegeben." }
   ,
-  { rank: Rank 932, english: "prescription-only", word: "rezeptpflichtig" }
+  { rank: Rank 932, english: "prescription-only", word: "rezeptpflichtig", example: "Dieses Medikament ist rezeptpflichtig." }
   ,
-  { rank: Rank 933, english: "risk", word: "das Risiko" }
+  { rank: Rank 933, english: "risk", word: "das Risiko", example: "Er geht kein Risiko ein, er ist sehr vorsichtig." }
   ,
-  { rank: Rank 934, english: "ointment, cream", word: "die Salbe" }
+  { rank: Rank 934, english: "ointment, cream", word: "die Salbe", example: "Ich muss diese Salbe auf meine Wunde auftragen." }
   ,
-  { rank: Rank 935, english: "to be annoyed about", word: "sich ärgern" }
+  { rank: Rank 935, english: "to be annoyed about", word: "sich ärgern", example: "Sie ärgert sich über den Lärm." }
   ,
-  { rank: Rank 936, english: "situation", word: "die Situation" }
+  { rank: Rank 936, english: "situation", word: "die Situation", example: "Die Situation ist gerade etwas schwierig." }
   ,
-  { rank: Rank 937, english: "skydiving", word: "das Skydiving" }
+  { rank: Rank 937, english: "skydiving", word: "das Skydiving", example: "Das Skydiving ist mein größter Traum." }
   ,
-  { rank: Rank 938, english: "sport", word: "der Sport" }
+  { rank: Rank 938, english: "sport", word: "der Sport", example: "Ich mache gern Sport am Morgen." }
   ,
-  { rank: Rank 939, english: "athlete (male)", word: "der Sportler" }
+  { rank: Rank 939, english: "athlete (male)", word: "der Sportler", example: "Der Sportler trainiert jeden Tag hart." }
   ,
-  { rank: Rank 940, english: "athlete (female)", word: "die Sportlerin" }
+  { rank: Rank 940, english: "athlete (female)", word: "die Sportlerin", example: "Sie ist eine sehr erfolgreiche Sportlerin." }
   ,
-  { rank: Rank 941, english: "traffic jam", word: "der Stau" }
+  { rank: Rank 941, english: "traffic jam", word: "der Stau", example: "Ich stehe im Stau auf der Autobahn." }
   ,
-  { rank: Rank 942, english: "surfing (as activity noun)", word: "das Surfen" }
+  { rank: Rank 942, english: "surfing (as activity noun)", word: "das Surfen", example: "Das Surfen im Internet macht ihm Spaß." }
   ,
-  { rank: Rank 943, english: "tablet, pill", word: "die Tablette" }
+  { rank: Rank 943, english: "tablet, pill", word: "die Tablette", example: "Ich muss jeden Tag eine Tablette nehmen." }
   ,
-  { rank: Rank 944, english: "to train, to exercise", word: "trainieren" }
+  { rank: Rank 944, english: "to train, to exercise", word: "trainieren", example: "Ich trainiere dreimal pro Woche im Fitnessstudio." }
   ,
-  { rank: Rank 945, english: "to overtake", word: "überholen" }
+  { rank: Rank 945, english: "to overtake", word: "überholen", example: "Das Auto hat den LKW schnell überholt." }
   ,
-  { rank: Rank 946, english: "exercise, practice", word: "die Übung" }
+  { rank: Rank 946, english: "exercise, practice", word: "die Übung", example: "Diese Übung ist sehr gut für Anfänger." }
   ,
-  { rank: Rank 947, english: "unhealthy", word: "ungesund" }
+  { rank: Rank 947, english: "unhealthy", word: "ungesund", example: "Fast Food ist oft sehr ungesund." }
   ,
-  { rank: Rank 948, english: "examination, investigation", word: "die Untersuchung" }
+  { rank: Rank 948, english: "examination, investigation", word: "die Untersuchung", example: "Der Arzt hat eine gründliche Untersuchung gemacht." }
   ,
-  { rank: Rank 949, english: "injury", word: "die Verletzung" }
+  { rank: Rank 949, english: "injury", word: "die Verletzung", example: "Er hat sich eine leichte Verletzung beim Sport zugezogen." }
   ,
-  { rank: Rank 950, english: "to prescribe", word: "verschreiben" }
+  { rank: Rank 950, english: "to prescribe", word: "verschreiben", example: "Der Arzt verschrieb die nötigen Medikamente." }
   ,
-  { rank: Rank 951, english: "vitamin", word: "das Vitamin" }
+  { rank: Rank 951, english: "vitamin", word: "das Vitamin", example: "Obst enthält viele wichtige Vitamine." }
   ,
-  { rank: Rank 952, english: "word formation", word: "die Wortbildung" }
+  { rank: Rank 952, english: "word formation", word: "die Wortbildung", example: "Wortbildung ist ein wichtiger Teil der Grammatik." }
   ,
-  { rank: Rank 953, english: "to wish", word: "wünschen" }
+  { rank: Rank 953, english: "to wish", word: "wünschen", example: "Ich wünsche dir einen schönen Tag." }
   ,
-  { rank: Rank 954, english: "old", word: "alt" }
+  { rank: Rank 954, english: "old", word: "alt", example: "Das Haus ist sehr alt." }
   ,
-  { rank: Rank 955, english: "offered", word: "angeboten" }
+  { rank: Rank 955, english: "offered", word: "angeboten", example: "Er hat mir seine Hilfe angeboten." }
   ,
-  { rank: Rank 956, english: "stop", word: "anhalten" }
+  { rank: Rank 956, english: "stop", word: "anhalten", example: "Der Bus hält hier an." }
   ,
-  { rank: Rank 957, english: "turn on", word: "anmachen" }
+  { rank: Rank 957, english: "turn on", word: "anmachen", example: "Mach bitte das Licht an." }
   ,
-  { rank: Rank 958, english: "look at / regard", word: "ansehen" }
+  { rank: Rank 958, english: "look at / regard", word: "ansehen", example: "Ich sehe mir den Film an." }
   ,
-  { rank: Rank 959, english: "to answer", word: "antworten" }
+  { rank: Rank 959, english: "to answer", word: "antworten", example: "Bitte antworten Sie auf die Frage." }
   ,
-  { rank: Rank 960, english: "workplace", word: "der Arbeitsplatz" }
+  { rank: Rank 960, english: "workplace", word: "der Arbeitsplatz", example: "Mein Arbeitsplatz ist sehr ruhig." }
   ,
-  { rank: Rank 961, english: "exit", word: "der Ausgang" }
+  { rank: Rank 961, english: "exit", word: "der Ausgang", example: "Wo ist der Ausgang?" }
   ,
-  { rank: Rank 962, english: "spend / issue", word: "ausgeben" }
+  { rank: Rank 962, english: "spend / issue", word: "ausgeben", example: "Wir geben zu viel Geld aus." }
   ,
-  { rank: Rank 963, english: "go out / assume / run out", word: "ausgehen" }
+  { rank: Rank 963, english: "go out / assume / run out", word: "ausgehen", example: "Wir gehen heute Abend aus." }
   ,
-  { rank: Rank 964, english: "except", word: "ausgenommen" }
+  { rank: Rank 964, english: "except", word: "ausgenommen", example: "Alle waren eingeladen, ihn ausgenommen." }
   ,
-  { rank: Rank 965, english: "pronunciation", word: "die Aussprache" }
+  { rank: Rank 965, english: "pronunciation", word: "die Aussprache", example: "Ihre Aussprache ist sehr gut." }
   ,
-  { rank: Rank 966, english: "take off / move out", word: "ausziehen" }
+  { rank: Rank 966, english: "take off / move out", word: "ausziehen", example: "Ich ziehe die Jacke aus." }
   ,
-  { rank: Rank 967, english: "car", word: "das Auto" }
+  { rank: Rank 967, english: "car", word: "das Auto", example: "Ich habe ein neues Auto." }
   ,
-  { rank: Rank 968, english: "to mean", word: "bedeuten" }
+  { rank: Rank 968, english: "to mean", word: "bedeuten", example: "Was bedeutet dieses Wort auf Deutsch?" }
   ,
-  { rank: Rank 969, english: "to begin", word: "beginnen" }
+  { rank: Rank 969, english: "to begin", word: "beginnen", example: "Der Unterricht beginnt um neun Uhr." }
   ,
-  { rank: Rank 970, english: "to bite", word: "beißen" }
+  { rank: Rank 970, english: "to bite", word: "beißen", example: "Der Hund beißt nicht." }
   ,
-  { rank: Rank 971, english: "known / familiar", word: "bekannt" }
+  { rank: Rank 971, english: "known / familiar", word: "bekannt", example: "Der Sänger ist sehr bekannt." }
   ,
-  { rank: Rank 972, english: "to visit", word: "besuchen" }
+  { rank: Rank 972, english: "to visit", word: "besuchen", example: "Wir besuchen unsere Freunde am Wochenende." }
   ,
-  { rank: Rank 973, english: "to pay", word: "bezahlen" }
+  { rank: Rank 973, english: "to pay", word: "bezahlen", example: "Ich bezahle die Rechnung an der Kasse." }
   ,
-  { rank: Rank 974, english: "to offer", word: "bieten" }
+  { rank: Rank 974, english: "to offer", word: "bieten", example: "Ich biete dir 50 Euro dafür." }
   ,
-  { rank: Rank 975, english: "to ask, request", word: "bitten" }
+  { rank: Rank 975, english: "to ask, request", word: "bitten", example: "Ich bitte dich um Hilfe." }
   ,
-  { rank: Rank 976, english: "to blow", word: "blasen" }
+  { rank: Rank 976, english: "to blow", word: "blasen", example: "Der Wind bläst stark." }
   ,
-  { rank: Rank 977, english: "flower", word: "die Blume" }
+  { rank: Rank 977, english: "flower", word: "die Blume", example: "Ich kaufe eine schöne Blume." }
   ,
-  { rank: Rank 978, english: "to roast, fry", word: "braten" }
+  { rank: Rank 978, english: "to roast, fry", word: "braten", example: "Ich brate Hähnchen." }
   ,
-  { rank: Rank 979, english: "to break", word: "brechen" }
+  { rank: Rank 979, english: "to break", word: "brechen", example: "Du sollst das nicht brechen." }
   ,
-  { rank: Rank 980, english: "to burn", word: "brennen" }
+  { rank: Rank 980, english: "to burn", word: "brennen", example: "Das Holz brennt gut." }
   ,
-  { rank: Rank 981, english: "to bring", word: "bringen" }
+  { rank: Rank 981, english: "to bring", word: "bringen", example: "Kannst du mir bitte ein Glas Wasser bringen?" }
   ,
-  { rank: Rank 982, english: "to think", word: "denken" }
+  { rank: Rank 982, english: "to think", word: "denken", example: "Ich denke, das ist eine gute Idee." }
   ,
-  { rank: Rank 983, english: "you (informal)", word: "du" }
+  { rank: Rank 983, english: "you (informal)", word: "du", example: "Wie geht es dir, du?" }
   ,
-  { rank: Rank 984, english: "thirsty", word: "durstig" }
+  { rank: Rank 984, english: "thirsty", word: "durstig", example: "Ich bin jetzt sehr durstig." }
   ,
-  { rank: Rank 985, english: "entrance", word: "der Eingang" }
+  { rank: Rank 985, english: "entrance", word: "der Eingang", example: "Der Eingang ist links." }
   ,
-  { rank: Rank 986, english: "shopping / purchase", word: "der Einkauf" }
+  { rank: Rank 986, english: "shopping / purchase", word: "der Einkauf", example: "Ich mache den Einkauf für die Woche." }
   ,
-  { rank: Rank 987, english: "income", word: "das Einkommen" }
+  { rank: Rank 987, english: "income", word: "das Einkommen", example: "Sein Einkommen ist niedrig." }
   ,
-  { rank: Rank 988, english: "to excuse/apologize", word: "entschuldigen" }
+  { rank: Rank 988, english: "to excuse/apologize", word: "entschuldigen", example: "Ich entschuldige mich." }
   ,
-  { rank: Rank 989, english: "he", word: "er" }
+  { rank: Rank 989, english: "he", word: "er", example: "Er ist mein bester Freund." }
   ,
-  { rank: Rank 990, english: "to recognize", word: "erkennen" }
+  { rank: Rank 990, english: "to recognize", word: "erkennen", example: "Ich habe ihn sofort erkannt." }
   ,
-  { rank: Rank 991, english: "to allow", word: "erlauben" }
+  { rank: Rank 991, english: "to allow", word: "erlauben", example: "Meine Eltern erlauben mir das nicht." }
   ,
-  { rank: Rank 992, english: "to reach", word: "erreichen" }
+  { rank: Rank 992, english: "to reach", word: "erreichen", example: "Ich habe ihn telefonisch nicht erreicht." }
   ,
-  { rank: Rank 993, english: "to expect", word: "erwarten" }
+  { rank: Rank 993, english: "to expect", word: "erwarten", example: "Ich erwarte einen Anruf von ihr." }
   ,
-  { rank: Rank 994, english: "to tell/narrate", word: "erzählen" }
+  { rank: Rank 994, english: "to tell/narrate", word: "erzählen", example: "Ich erzähle eine Geschichte." }
   ,
-  { rank: Rank 995, english: "ticket", word: "die Fahrkarte" }
+  { rank: Rank 995, english: "ticket", word: "die Fahrkarte", example: "Ich kaufe eine Fahrkarte." }
   ,
-  { rank: Rank 996, english: "timetable", word: "der Fahrplan" }
+  { rank: Rank 996, english: "timetable", word: "der Fahrplan", example: "Der Fahrplan hängt am Bahnhof." }
   ,
-  { rank: Rank 997, english: "trip", word: "die Fahrt" }
+  { rank: Rank 997, english: "trip", word: "die Fahrt", example: "Die Fahrt dauert zwei Stunden." }
   ,
-  { rank: Rank 998, english: "vehicle", word: "das Fahrzeug" }
+  { rank: Rank 998, english: "vehicle", word: "das Fahrzeug", example: "Das Fahrzeug ist sehr alt." }
   ,
-  { rank: Rank 999, english: "to fall", word: "fallen" }
+  { rank: Rank 999, english: "to fall", word: "fallen", example: "Das Glas fällt herunter." }
   ,
-  { rank: Rank 1000, english: "to catch", word: "fangen" }
+  { rank: Rank 1000, english: "to catch", word: "fangen", example: "Ich fange den Ball." }
   ,
-  { rank: Rank 1001, english: "thanks, thank you", word: "danke" }
+  { rank: Rank 1001, english: "thanks, thank you", word: "danke", example: "Danke für deine Hilfe!" }
   ,
-  { rank: Rank 1002, english: "bye", word: "tschüss" }
+  { rank: Rank 1002, english: "bye", word: "tschüss", example: "Tschüss, bis morgen!" }
   ,
-  { rank: Rank 1003, english: "maybe, perhaps", word: "vielleicht" }
+  { rank: Rank 1003, english: "maybe, perhaps", word: "vielleicht", example: "Vielleicht komme ich später." }
   ,
-  { rank: Rank 1004, english: "of course, naturally", word: "natürlich" }
+  { rank: Rank 1004, english: "of course, naturally", word: "natürlich", example: "Natürlich helfe ich dir." }
   ,
-  { rank: Rank 1005, english: "once; softens a request", word: "mal" }
+  { rank: Rank 1005, english: "once; softens a request", word: "mal", example: "Komm mal her!" }
   ]

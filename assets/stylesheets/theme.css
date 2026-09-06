@@ -598,3 +598,11 @@ body {
   color: var(--faint);
   font-size: 0.875rem;
 }
+
+.example {
+  margin-top: 1.1rem;
+  max-width: 22rem;
+  color: var(--faint);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
