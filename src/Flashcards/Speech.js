@@ -1,19 +1,22 @@
 export const supported = () =>
   typeof window !== "undefined" && "speechSynthesis" in window
 
-// Voices for one language, by BCP-47 prefix: "es", "de".
-const voicesFor = prefix => {
+// Every voice the device has. Filtering to a language happens in PureScript,
+// so switching language does not need a second subscription here.
+const allVoices = () => {
   const synth = typeof window === "undefined" ? null : window.speechSynthesis
   if (!synth) return []
   return synth
     .getVoices()
     .map(v => ({ voice: v, name: v.name, locale: v.lang.replace("_", "-") }))
-    .filter(v => v.locale.toLowerCase().startsWith(prefix.toLowerCase()))
 }
 
-export const onVoices_ = (prefix, handler) => {
+const voicesFor = prefix =>
+  allVoices().filter(v => v.locale.toLowerCase().startsWith(prefix.toLowerCase()))
+
+export const onVoices_ = handler => {
   const emit = () => {
-    const found = voicesFor(prefix)
+    const found = allVoices()
     if (found.length) handler(found.map(v => ({ name: v.name, locale: v.locale })))
   }
   // Engines populate getVoices() asynchronously; during startup it is reliably

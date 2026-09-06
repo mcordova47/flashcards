@@ -69,6 +69,10 @@ type State =
   , panel :: Boolean
   , notice :: Maybe String
   , canSpeak :: Boolean
+  -- | Every voice the device has, and the slice belonging to the language
+  -- | being studied. Keeping both means switching re-filters rather than
+  -- | re-subscribing.
+  , allVoices :: Array Accent.Voice
   , voices :: Array Accent.Voice
   , accent :: Maybe String
   , voice :: Maybe String
@@ -102,6 +106,7 @@ data Message
   | DismissNotice
   | SpeakCurrent
   | ChooseAccent String
+  | ChooseLanguage String
   | VoicesAvailable (Array Accent.Voice)
   | CycleVoice
   | ShowStats
@@ -120,15 +125,15 @@ init = do
     pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language }
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
-  forks \{ dispatch } -> liftEffect do
-    language <- Language.resolve <$> Storage.loadLanguage
-    Speech.onVoices language.code $ dispatch <<< VoicesAvailable
+  forks \{ dispatch } ->
+    liftEffect $ Speech.onVoices $ dispatch <<< VoicesAvailable
   pure
     { progress: Progress.empty
     , screen: Loading
     , panel: false
     , notice: Nothing
     , canSpeak: false
+    , allVoices: []
     , voices: []
     , accent: Nothing
     , voice: Nothing
@@ -153,7 +158,7 @@ update state = case _ of
     when (repaired.demoted > 0) $
       forkVoid $ liftEffect $ Storage.save language.code language.fingerprint repaired.progress
     let
-      loaded = settle savedAccent savedVoice state.voices state
+      loaded = settle savedAccent savedVoice state.allVoices state
         { language = language
         , index = index
         , progress = repaired.progress
@@ -171,7 +176,7 @@ update state = case _ of
         <> (if repaired.demoted == 1 then "prompt" else "prompts")
 
   VoicesAvailable voices ->
-    pure $ settle state.savedAccent state.savedVoice voices state { voices = voices }
+    pure $ settle state.savedAccent state.savedVoice voices state
 
   CycleVoice -> case Accent.nextIn (accentOf state) state.voice state.voices of
     Nothing ->
@@ -287,6 +292,22 @@ update state = case _ of
   HideStats ->
     pure state { statsAt = Nothing }
 
+  -- Reuses the startup path: everything that has to be reloaded for a new
+  -- language is exactly what `Loaded` already reloads.
+  ChooseLanguage code -> case Language.byCode code of
+    Nothing ->
+      pure state
+    Just language -> do
+      forkVoid $ liftEffect $ Storage.saveLanguage language.code
+      fork do
+        progress <- liftEffect $ Storage.load language.code language.fingerprint
+        savedAccent <- liftEffect $ Storage.loadAccent language.code
+        savedVoice <- liftEffect $ Storage.loadVoice language.code
+        now <- liftEffect Now.now
+        pure $ Loaded
+          { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language }
+      pure state { panel = false, statsAt = Nothing }
+
   ChooseAccent accent -> do
     let voice = Accent.autoVoice accent state.voices
     forkVoid $ liftEffect $ Storage.saveAccent state.language.code accent
@@ -313,12 +334,15 @@ accentOf state = fromMaybe state.language.code state.accent
 -- | Re-derive both preferences from whatever the device currently reports.
 -- | Called from both racing startup messages, so neither ordering matters.
 settle :: Maybe String -> Maybe String -> Array Accent.Voice -> State -> State
-settle savedAccent savedVoice voices state =
+settle savedAccent savedVoice allVoices state =
   state
-    { accent = accent
+    { allVoices = allVoices
+    , voices = voices
+    , accent = accent
     , voice = Accent.resolveVoice (fromMaybe fallback accent) savedVoice voices
     }
   where
+    voices = Accent.forLanguage state.language.code allVoices
     accent = Accent.resolve state.language.accents savedAccent $ Accent.locales voices
     -- A bare language tag: even with no voice installed, most engines still
     -- pronounce the right language when told which one.
@@ -394,7 +418,8 @@ studyingView state session dispatch =
             else [ card.english ]
         in
           H.fragment
-          [ H.div "direction" $ if producing then "answer in Spanish" else "answer in English"
+          [ H.div "direction" $
+              if producing then "answer in " <> state.language.name else "answer in English"
           , H.div "prompt-row"
             [ H.div (if session.flipped then "prompt small" else "prompt") prompt
             , speaker $ session.flipped && not producing
@@ -449,7 +474,7 @@ completeView language progress summary dispatch =
     dueNow = (Stats.overview summary.at language.deck progress).dueNow
     waitFor = Stats.describeDuration <$> Stats.nextDueIn summary.at language.deck progress
 
-    title = if caughtUp then "All caught up" else "¡Bien hecho!"
+    title = if caughtUp then "All caught up" else language.done
 
     stats
       | caughtUp = case waitFor of
@@ -477,7 +502,8 @@ panelView state dispatch =
   H.fragment
   [ H.div_ "backdrop" { onClick: dispatch <| TogglePanel } H.empty
   , H.div "panel"
-    [ accentPicker
+    [ languagePicker
+    , accentPicker
     , voicePicker
     , H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
     , H.button_ "panel-item" { onClick: dispatch <| Export } "Save progress to a file"
@@ -488,15 +514,25 @@ panelView state dispatch =
     ]
   ]
   where
+    -- Only worth showing once there is more than one deck to switch between.
+    languagePicker
+      | Array.length Language.all < 2 = H.empty
+      | otherwise =
+          H.div "segmented langs" $ Language.all <#> \l ->
+            H.button_
+              ("segment lang" <> if l.code == state.language.code then " chosen" else "")
+              { key: l.code, onClick: dispatch <| ChooseLanguage l.code }
+              l.name
+
     available = Accent.locales state.voices
 
     -- Nothing to choose between when the device speaks only one Spanish.
     accentPicker
       | Array.length available < 2 = H.empty
       | otherwise =
-          H.div "accents" $ available <#> \accent ->
+          H.div "segmented accents" $ available <#> \accent ->
             H.button_
-              ("accent" <> if Just accent == state.accent then " chosen" else "")
+              ("segment accent" <> if Just accent == state.accent then " chosen" else "")
               { key: accent, onClick: dispatch <| ChooseAccent accent }
               (Accent.label accent)
 
@@ -532,7 +568,7 @@ statsView language now progress dispatch =
         else show o.answers <> " answers · " <> show o.misses <> " wrong"
             <> (if o.producing > 0 then " · " <> show o.producing <> " in production" else "")
             <> (if o.dueNow > 0 then " · " <> show o.dueNow <> " due now" else "")
-    , H.h3 "sheet-heading" "By frequency"
+    , H.h3 "sheet-heading" $ "By " <> language.ordering
     , H.div "bands" $ Stats.bands Stats.bandSize language.deck progress <#> \band ->
         H.div_ "band" { key: show band.from }
         [ H.div "band-label" $ show band.from <> "–" <> show band.to

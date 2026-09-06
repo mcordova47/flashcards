@@ -4,6 +4,7 @@
 module Flashcards.Accent
   ( Voice
   , autoVoice
+  , forLanguage
   , label
   , locales
   , nextIn
@@ -26,6 +27,10 @@ type Voice =
   { name :: String
   , locale :: String
   }
+
+-- | The voices belonging to one language, by BCP-47 prefix: "es", "de".
+forLanguage :: String -> Array Voice -> Array Voice
+forLanguage prefix = Array.filter \v -> String.take (String.length prefix) v.locale == prefix
 
 locales :: Array Voice -> Array String
 locales = Array.sort <<< Array.nub <<< map _.locale

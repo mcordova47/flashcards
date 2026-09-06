@@ -7,6 +7,8 @@ Spaced-repetition flashcards for the 1000 most common Spanish words.
 
 **[palabras.mcord.dev](https://palabras.mcord.dev)**
 
+Spanish and German, switchable from the panel, each with its own progress.
+
 No account, no backend, no database. Open it and a card is already there. Add it
 to your home screen and it works with no signal.
 
@@ -27,6 +29,24 @@ npm start        # http://localhost:8000
 | `npm run verify` | Browser suites against a real Chrome |
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
 | `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
+
+## Languages
+
+`Flashcards.Language` holds what differs: the deck, its fingerprint, the
+accents to prefer, what a rank means, and the end-of-session message. Both
+decks are compiled in rather than fetched, because switching has to work with
+no signal like everything else here.
+
+Progress lives under `flashcards.<code>.v1`, which is why adding German needed
+no migration — a second deck is simply a different key. Accent and voice are
+per-language too, since a device's German voices have nothing to do with its
+Spanish ones.
+
+Rank means different things in the two decks. Spanish is ordered by frequency;
+German is a course list, A1 then A2. The progress sheet says which.
+
+Adding a third is a row in the `LANGUAGES` table in `tools/sync-deck.mjs`, a
+CSV, and an entry in `Flashcards.Language`.
 
 ## Testing
 

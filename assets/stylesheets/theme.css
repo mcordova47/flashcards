@@ -326,7 +326,7 @@ body {
   mask: var(--speaker) center / contain no-repeat;
 }
 
-.accents {
+.segmented {
   display: flex;
   gap: 0.4rem;
   padding: 0.25rem;
@@ -334,7 +334,7 @@ body {
   background: var(--ghost);
 }
 
-.accent {
+.segment {
   appearance: none;
   flex: 1;
   border: 0;
@@ -349,7 +349,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.accent.chosen {
+.segment.chosen {
   background: var(--bg);
   color: var(--fg);
   font-weight: 600;
