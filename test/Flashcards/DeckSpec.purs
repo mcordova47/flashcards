@@ -23,10 +23,10 @@ import Test.Spec.Assertions (shouldEqual)
 -- | Two English sides deliberately collide, as they do in the real deck.
 deck :: Array Card
 deck =
-  [ { rank: Rank 1, english: "that", spanish: "que" }
-  , { rank: Rank 2, english: "to find", spanish: "encontrar" }
-  , { rank: Rank 3, english: "that", spanish: "ese" }
-  , { rank: Rank 4, english: "that", spanish: "aquel" }
+  [ { rank: Rank 1, english: "that", word: "que" }
+  , { rank: Rank 2, english: "to find", word: "encontrar" }
+  , { rank: Rank 3, english: "that", word: "ese" }
+  , { rank: Rank 4, english: "that", word: "aquel" }
   ]
 
 epoch :: Instant
@@ -36,7 +36,7 @@ spec :: Spec Unit
 spec = do
   describe "deck index" do
     it "finds a card by rank" do
-      (_.spanish <$> Deck.card (Rank 2) (Deck.index deck)) `shouldEqual` Just "encontrar"
+      (_.word <$> Deck.card (Rank 2) (Deck.index deck)) `shouldEqual` Just "encontrar"
 
     it "has nothing for a rank outside the deck" do
       Deck.card (Rank 99) (Deck.index deck) `shouldEqual` Nothing
@@ -56,17 +56,17 @@ spec = do
 
   describe "which card carries the production question" do
     it "the most frequent member of a colliding group" do
-      Deck.isCanonical { rank: Rank 1, english: "that", spanish: "que" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 1, english: "that", word: "que" } (Deck.index deck)
         `shouldEqual` true
 
     it "and not its rarer siblings, which would be the same prompt again" do
-      Deck.isCanonical { rank: Rank 3, english: "that", spanish: "ese" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 3, english: "that", word: "ese" } (Deck.index deck)
         `shouldEqual` false
-      Deck.isCanonical { rank: Rank 4, english: "that", spanish: "aquel" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 4, english: "that", word: "aquel" } (Deck.index deck)
         `shouldEqual` false
 
     it "a word that collides with nothing always carries its own" do
-      Deck.isCanonical { rank: Rank 2, english: "to find", spanish: "encontrar" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 2, english: "to find", word: "encontrar" } (Deck.index deck)
         `shouldEqual` true
 
     it "exactly one member of every real group carries it" do

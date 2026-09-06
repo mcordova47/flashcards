@@ -40,16 +40,16 @@ index deck =
     -- Appended rather than prepended, so the answers stay in frequency order:
     -- the most common reading of an English word comes first.
     collect acc c =
-      Map.alter (Just <<< maybe [ c.spanish ] (_ <> [ c.spanish ])) c.english acc
+      Map.alter (Just <<< maybe [ c.word ] (_ <> [ c.word ])) c.english acc
 
 card :: Rank -> Index -> Maybe Card
 card rank = Map.lookup rank <<< _.byRank
 
--- | Every Spanish word that legitimately answers this English prompt.
+-- | Every foreign word that legitimately answers this English prompt.
 -- |
--- | 61 English sides in the deck map to more than one — `that` covers six —
--- | so a production prompt cannot expect a single answer, and the reveal has
--- | to show the whole set to grade yourself against.
+-- | Some English sides map to more than one, so a production prompt cannot
+-- | expect a single answer and the reveal has to show the whole set to grade
+-- | yourself against.
 answersFor :: String -> Index -> Array String
 answersFor english = fromMaybe [] <<< Map.lookup english <<< _.answers
 
@@ -61,7 +61,7 @@ answersFor english = fromMaybe [] <<< Map.lookup english <<< _.answers
 -- | producing one word. The most frequent member carries the question; see
 -- | `Flashcards.Scheduler.Graduation`.
 isCanonical :: Card -> Index -> Boolean
-isCanonical c = (_ == Just c.spanish) <<< Array.head <<< answersFor c.english
+isCanonical c = (_ == Just c.word) <<< Array.head <<< answersFor c.english
 
 type Repair =
   { progress :: Progress

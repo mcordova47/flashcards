@@ -29,7 +29,7 @@ now = at $ 100.0 * day
 
 deck :: Array Card
 deck = Array.range 1 20 <#> \n ->
-  { rank: Rank n, english: "en" <> show n, spanish: "es" <> show n }
+  { rank: Rank n, english: "en" <> show n, word: "es" <> show n }
 
 -- | rank, box, seen, missed, lapses, days until due
 card :: Int -> Int -> Int -> Int -> Int -> Number -> Progress -> Progress
@@ -198,7 +198,7 @@ spec = do
           # card 2 1 9 9 6 1.0
         found = Stats.leeches 3 deck progress
       map _.lapses found `shouldEqual` [ 6, 3 ]
-      map _.spanish found `shouldEqual` [ "es2", "es1" ]
+      map _.word found `shouldEqual` [ "es2", "es1" ]
 
     it "leaves ordinary forgetting alone" do
       let progress = Progress.empty # card 1 1 9 5 2 1.0

@@ -80,7 +80,7 @@ type Overview =
 
 type Leech =
   { rank :: Rank
-  , spanish :: String
+  , word :: String
   , english :: String
   , lapses :: Int
   }
@@ -176,7 +176,7 @@ leeches threshold deck progress =
     toLeech card = do
       cp <- Progress.lookup card.rank progress
       guard $ cp.lapses >= threshold
-      pure { rank: card.rank, spanish: card.spanish, english: card.english, lapses: cp.lapses }
+      pure { rank: card.rank, word: card.word, english: card.english, lapses: cp.lapses }
 
     -- Stable sort, so equal counts stay in frequency order.
     mostLapsedFirst a b = compare b.lapses a.lapses

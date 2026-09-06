@@ -288,7 +288,7 @@ update state = case _ of
   SpeakCurrent -> case state.screen of
     Studying session | session.flipped -> do
       for_ (currentCard session) \card ->
-        forkVoid $ liftEffect $ Speech.speak (fromMaybe "" state.voice) (accentOf state) card.spanish
+        forkVoid $ liftEffect $ Speech.speak (fromMaybe "" state.voice) (accentOf state) card.word
       pure state
     _ ->
       pure state
@@ -371,7 +371,7 @@ studyingView state session dispatch =
           producing =
             (maybe Recognition _.direction $ Progress.lookup card.rank state.progress) == Production
 
-          prompt = if producing then card.english else card.spanish
+          prompt = if producing then card.english else card.word
 
           -- Production cannot expect one answer: 61 English sides in the deck
           -- have more than one, so grade yourself against the whole set.
@@ -537,7 +537,7 @@ statsView now progress dispatch =
         , H.p "sheet-note" "Words you had learned and then forgot again."
         , H.div "leeches" $ slipping <#> \leech ->
             H.div_ "leech" { key: show (rankToInt leech.rank) }
-            [ H.span "leech-word" leech.spanish
+            [ H.span "leech-word" leech.word
             , H.span "leech-gloss" leech.english
             , H.span "leech-count" $ show leech.lapses
             ]

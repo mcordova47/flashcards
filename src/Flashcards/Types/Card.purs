@@ -16,10 +16,12 @@ derive newtype instance Eq Rank
 derive newtype instance Ord Rank
 derive newtype instance Show Rank
 
+-- | `word` is the foreign side, whichever language the deck is in. It is the
+-- | recognition prompt, and every deck guarantees it unique.
 type Card =
   { rank :: Rank
   , english :: String
-  , spanish :: String
+  , word :: String
   }
 
 rankToInt :: Rank -> Int
