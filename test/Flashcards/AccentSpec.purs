@@ -23,6 +23,10 @@ mac =
   , { name: "Rocko (Spanish (Mexico))", locale: "es-MX" }
   ]
 
+-- What Spanish asks for, as `Flashcards.Language` supplies it.
+wanted :: Array String
+wanted = [ "es-MX", "es-ES" ]
+
 spec :: Spec Unit
 spec = do
   describe "reading the device's voice list" do
@@ -75,32 +79,32 @@ spec = do
 
   describe "preferred accent" do
     it "picks Mexico when the device has it" do
-      Accent.preferred [ "es-ES", "es-MX" ] `shouldEqual` Just "es-MX"
+      Accent.preferred wanted [ "es-ES", "es-MX" ] `shouldEqual` Just "es-MX"
 
     it "does not care what order the device lists them in" do
-      Accent.preferred [ "es-MX", "es-ES" ] `shouldEqual` Just "es-MX"
+      Accent.preferred wanted [ "es-MX", "es-ES" ] `shouldEqual` Just "es-MX"
 
     it "falls back to Spain when there is no Mexican voice" do
-      Accent.preferred [ "es-AR", "es-ES" ] `shouldEqual` Just "es-ES"
+      Accent.preferred wanted [ "es-AR", "es-ES" ] `shouldEqual` Just "es-ES"
 
     it "takes whatever exists when it recognises neither" do
-      Accent.preferred [ "es-CO", "es-PE" ] `shouldEqual` Just "es-CO"
+      Accent.preferred wanted [ "es-CO", "es-PE" ] `shouldEqual` Just "es-CO"
 
     it "has nothing to offer on a device with no Spanish voice" do
-      Accent.preferred [] `shouldEqual` Nothing
+      Accent.preferred wanted [] `shouldEqual` Nothing
 
   describe "resolving a remembered choice" do
     it "honours a remembered accent the device still has" do
-      Accent.resolve (Just "es-ES") [ "es-ES", "es-MX" ] `shouldEqual` Just "es-ES"
+      Accent.resolve wanted (Just "es-ES") [ "es-ES", "es-MX" ] `shouldEqual` Just "es-ES"
 
     it "ignores one the device can no longer speak" do
-      Accent.resolve (Just "es-AR") [ "es-ES", "es-MX" ] `shouldEqual` Just "es-MX"
+      Accent.resolve wanted (Just "es-AR") [ "es-ES", "es-MX" ] `shouldEqual` Just "es-MX"
 
     it "falls back to the default when nothing is remembered" do
-      Accent.resolve Nothing [ "es-ES", "es-MX" ] `shouldEqual` Just "es-MX"
+      Accent.resolve wanted Nothing [ "es-ES", "es-MX" ] `shouldEqual` Just "es-MX"
 
     it "has nothing to resolve before the voice list arrives" do
-      Accent.resolve (Just "es-MX") [] `shouldEqual` Nothing
+      Accent.resolve wanted (Just "es-MX") [] `shouldEqual` Nothing
 
   describe "accent labels" do
     it "names the locales a learner is likely to meet" do

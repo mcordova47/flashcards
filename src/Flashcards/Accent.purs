@@ -34,22 +34,18 @@ locales = Array.sort <<< Array.nub <<< map _.locale
 voicesIn :: String -> Array Voice -> Array String
 voicesIn locale = map _.name <<< Array.filter (\v -> v.locale == locale)
 
--- | Latin American Spanish is what a learner in the US is overwhelmingly more
--- | likely to meet, and Castilian's *ceceo* is a real difference to train into
--- | your ear — so Mexico wins when the device offers it, Spain is the fallback,
--- | and failing both, whatever exists.
-preferred :: Array String -> Maybe String
-preferred available =
-  Array.find (_ == "es-MX") available
-    <|> Array.find (_ == "es-ES") available
-    <|> Array.head available
+-- | The first of the language's preferred accents that this device can
+-- | actually speak, or failing all of them, whatever it has.
+preferred :: Array String -> Array String -> Maybe String
+preferred wanted available =
+  Array.findMap (\w -> Array.find (_ == w) available) wanted <|> Array.head available
 
 -- | A remembered choice only counts if this device still has it — the
 -- | preference is per-device, and devices disagree about what they can speak.
-resolve :: Maybe String -> Array String -> Maybe String
-resolve saved available = case saved of
+resolve :: Array String -> Maybe String -> Array String -> Maybe String
+resolve wanted saved available = case saved of
   Just chosen | Array.elem chosen available -> Just chosen
-  _ -> preferred available
+  _ -> preferred wanted available
 
 -- | The automatic pick within a locale: prefer a plain name over the novelty
 -- | voices, which on Apple platforms all carry a "(Spanish (Region))" suffix.
@@ -83,6 +79,9 @@ nextIn locale current voices =
 -- | raw tag, which is ugly but honest and beats hiding a real option.
 label :: String -> String
 label = case _ of
+  "de-AT" -> "Austria"
+  "de-CH" -> "Switzerland"
+  "de-DE" -> "Germany"
   "es-419" -> "Latin America"
   "es-AR" -> "Argentina"
   "es-CL" -> "Chile"

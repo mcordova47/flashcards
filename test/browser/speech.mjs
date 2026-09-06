@@ -2,6 +2,15 @@ import { VOICES, speechStub, wait } from "./harness.mjs"
 
 export const name = "Pronunciation, accent and voice"
 
+// Speaking goes through a fork and a voice-list check, so it lands a little
+// after the click. Wait for the utterance rather than guessing at a delay.
+const spokenAtLeast = async (page, n) => {
+  for (let i = 0; i < 40; i++) {
+    if ((await page.spoken()).length >= n) return
+    await wait(50)
+  }
+}
+
 export default async ({ check, open }) => {
   const page = await open({ stub: speechStub() })
   await page.waitForSelector(".prompt")
@@ -12,6 +21,7 @@ export default async ({ check, open }) => {
   check("the speaker appears with the answer", !!(await page.$(".speak")), true)
 
   await page.tap(".speak")
+  await spokenAtLeast(page, 1)
   const said = (await page.spoken()).at(-1)
   check("it says the Spanish, not the English", said.text, "yo")
   check("in the default accent", said.lang, "es-MX")
@@ -21,7 +31,7 @@ export default async ({ check, open }) => {
     await page.evaluate(() => window.__cancels), 0)
 
   await page.keyboard.press("s")
-  await wait(250)
+  await spokenAtLeast(page, 2)
   check("the s key speaks too", (await page.spoken()).length, 2)
   check("interrupting an utterance in flight", await page.evaluate(() => window.__cancels), 1)
 
@@ -35,6 +45,7 @@ export default async ({ check, open }) => {
   await page.tap(".panel-voice")
   check("cycling moves off a pick that may not work",
     await page.text(".panel-voice-name"), "Rocko (Spanish (Mexico))")
+  await spokenAtLeast(page, 3)
   check("previewing it with the word that shows the difference",
     (await page.spoken()).at(-1), { text: "gracias", lang: "es-MX", rate: 0.9, voice: "Rocko (Spanish (Mexico))" })
   await page.tap(".panel-voice")
@@ -53,7 +64,10 @@ export default async ({ check, open }) => {
   await page.tap(".backdrop")
   await page.tap(".card")
   await page.tap(".speak")
+  await spokenAtLeast(page, 5)
   check("cards speak in the chosen voice", (await page.spoken()).at(-1).voice, "Mónica")
+  // This suite had no error assertion, so a thrown exception was invisible.
+  check("no page errors", page.errors, [])
   await page.close()
 
   // A device that speaks only one Spanish has nothing to choose between.
@@ -80,7 +94,9 @@ export default async ({ check, open }) => {
   await wait(900)
   await shifting.tap(".card")
   await shifting.tap(".speak")
+  await spokenAtLeast(shifting, 1)
   check("a voice that vanished falls back to another Spanish one",
     (await shifting.spoken()).at(-1).voice, "Mónica")
+  check("and no page errors along the way", shifting.errors, [])
   await shifting.close()
 }

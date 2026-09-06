@@ -3,12 +3,15 @@
 -- | streak beats a white screen.
 module Flashcards.Storage
   ( accentKey
-  , key
+  , languageKey
   , load
   , loadAccent
+  , loadLanguage
   , loadVoice
+  , progressKey
   , save
   , saveAccent
+  , saveLanguage
   , saveVoice
   , voiceKey
   )
@@ -29,31 +32,31 @@ import Web.HTML (window)
 import Web.HTML.Window (localStorage)
 import Web.Storage.Storage as Storage
 
--- | Keyed by language and schema version from day one, so a second deck later
--- | is a new key rather than a migration.
-key :: String
-key = "flashcards.es.v1"
+-- | Keyed by language and schema version from day one, which is why adding a
+-- | second deck needed no migration: it is simply a different key.
+progressKey :: String -> String
+progressKey code = "flashcards." <> code <> ".v1"
 
 -- | Deliberately its own key rather than a field in the progress blob. Which
 -- | voices exist is a property of the device, not of the learner, so this must
 -- | never travel in a backup file or a future sync — your phone and your
 -- | laptop can reasonably disagree about it.
-accentKey :: String
-accentKey = "flashcards.es.accent"
+accentKey :: String -> String
+accentKey code = "flashcards." <> code <> ".accent"
 
 -- | Same reasoning as `accentKey`, and more so: a voice name that exists on
 -- | one machine may be missing — or listed but broken — on another.
-voiceKey :: String
-voiceKey = "flashcards.es.voice"
+voiceKey :: String -> String
+voiceKey code = "flashcards." <> code <> ".voice"
 
 -- | Takes the current deck fingerprint so it can tell you when your saved
 -- | progress predates a deck change. It loads anyway: this is your own history
 -- | on your own device, and refusing it would be worse than the drift. Import
 -- | applies the stricter rule — see `Flashcards.Backup`.
-load :: String -> Effect Progress
-load deck = do
+load :: String -> String -> Effect Progress
+load code deck = do
   storage <- localStorage =<< window
-  Storage.getItem key storage >>= case _ of
+  Storage.getItem (progressKey code) storage >>= case _ of
     Nothing -> pure Progress.empty
     Just raw -> case jsonParser raw of
       Left err -> recover $ "saved progress is not valid JSON: " <> err
@@ -68,27 +71,42 @@ load deck = do
       Console.warn $ message <> " — starting fresh"
       pure Progress.empty
 
-save :: String -> Progress -> Effect Unit
-save deck progress = do
+save :: String -> String -> Progress -> Effect Unit
+save code deck progress = do
   storage <- localStorage =<< window
-  Storage.setItem key (stringify $ Progress.toJson deck progress) storage
+  Storage.setItem (progressKey code) (stringify $ Progress.toJson deck progress) storage
 
-loadAccent :: Effect (Maybe String)
-loadAccent = do
+loadAccent :: String -> Effect (Maybe String)
+loadAccent code = do
   storage <- localStorage =<< window
-  Storage.getItem accentKey storage
+  Storage.getItem (accentKey code) storage
 
-saveAccent :: String -> Effect Unit
-saveAccent accent = do
+saveAccent :: String -> String -> Effect Unit
+saveAccent code accent = do
   storage <- localStorage =<< window
-  Storage.setItem accentKey accent storage
+  Storage.setItem (accentKey code) accent storage
 
-loadVoice :: Effect (Maybe String)
-loadVoice = do
+loadVoice :: String -> Effect (Maybe String)
+loadVoice code = do
   storage <- localStorage =<< window
-  Storage.getItem voiceKey storage
+  Storage.getItem (voiceKey code) storage
 
-saveVoice :: String -> Effect Unit
-saveVoice voice = do
+saveVoice :: String -> String -> Effect Unit
+saveVoice code voice = do
   storage <- localStorage =<< window
-  Storage.setItem voiceKey voice storage
+  Storage.setItem (voiceKey code) voice storage
+
+-- | Which language is being studied. Not per-language, obviously, and kept
+-- | apart from progress so switching never risks the histories.
+languageKey :: String
+languageKey = "flashcards.language"
+
+loadLanguage :: Effect (Maybe String)
+loadLanguage = do
+  storage <- localStorage =<< window
+  Storage.getItem languageKey storage
+
+saveLanguage :: String -> Effect Unit
+saveLanguage code = do
+  storage <- localStorage =<< window
+  Storage.setItem languageKey code storage

@@ -28,8 +28,9 @@ import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Styled as H
 import Flashcards.Accent as Accent
 import Flashcards.Backup as Backup
-import Flashcards.Data.Deck.Spanish as Deck
 import Flashcards.Deck as DeckIndex
+import Flashcards.Language (Language)
+import Flashcards.Language as Language
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
 import Flashcards.Speech as Speech
@@ -73,6 +74,8 @@ type State =
   , voice :: Maybe String
   , savedAccent :: Maybe String
   , savedVoice :: Maybe String
+  , language :: Language
+  , index :: DeckIndex.Index
   -- | `Just` the moment the screen was opened, which doubles as "is it open".
   -- | The time is fixed at open so the due counts cannot shift underneath you.
   , statsAt :: Maybe Instant
@@ -85,6 +88,7 @@ data Message
       , canSpeak :: Boolean
       , savedAccent :: Maybe String
       , savedVoice :: Maybe String
+      , language :: Language
       }
   | Flip
   | Answer Grade
@@ -107,16 +111,18 @@ data Message
 init :: Transition Message State
 init = do
   fork do
-    progress <- liftEffect $ Storage.load Deck.fingerprint
+    language <- liftEffect $ Language.resolve <$> Storage.loadLanguage
+    progress <- liftEffect $ Storage.load language.code language.fingerprint
     canSpeak <- liftEffect Speech.supported
-    savedAccent <- liftEffect Storage.loadAccent
-    savedVoice <- liftEffect Storage.loadVoice
+    savedAccent <- liftEffect $ Storage.loadAccent language.code
+    savedVoice <- liftEffect $ Storage.loadVoice language.code
     now <- liftEffect Now.now
-    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice }
+    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language }
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
-  forks \{ dispatch } ->
-    liftEffect $ Speech.onVoices $ dispatch <<< VoicesAvailable
+  forks \{ dispatch } -> liftEffect do
+    language <- Language.resolve <$> Storage.loadLanguage
+    Speech.onVoices language.code $ dispatch <<< VoicesAvailable
   pure
     { progress: Progress.empty
     , screen: Loading
@@ -128,6 +134,8 @@ init = do
     , voice: Nothing
     , savedAccent: Nothing
     , savedVoice: Nothing
+    , language: Language.default
+    , index: DeckIndex.index Language.default.deck
     , statsAt: Nothing
     }
 
@@ -135,20 +143,24 @@ update :: State -> Message -> Transition Message State
 update state = case _ of
   -- `Loaded` and `VoicesAvailable` race, so both resolve preferences from
   -- whatever the other has already put in state.
-  Loaded { progress, now, canSpeak, savedAccent, savedVoice } -> do
+  Loaded { progress, now, canSpeak, savedAccent, savedVoice, language } -> do
     -- Progress saved before colliding glosses were barred can hold cards that
     -- graduated when they should not have. Put them back before building a
     -- session out of them.
-    let repaired = DeckIndex.demoteIneligible deckIndex progress
+    let
+      index = DeckIndex.index language.deck
+      repaired = DeckIndex.demoteIneligible index progress
     when (repaired.demoted > 0) $
-      forkVoid $ liftEffect $ Storage.save Deck.fingerprint repaired.progress
+      forkVoid $ liftEffect $ Storage.save language.code language.fingerprint repaired.progress
     let
       loaded = settle savedAccent savedVoice state.voices state
-        { progress = repaired.progress
+        { language = language
+        , index = index
+        , progress = repaired.progress
         , canSpeak = canSpeak
         , savedAccent = savedAccent
         , savedVoice = savedVoice
-        , screen = startSession repaired.progress now
+        , screen = startSession language.deck repaired.progress now
         }
     if repaired.demoted == 0 then
       pure loaded
@@ -165,8 +177,8 @@ update state = case _ of
     Nothing ->
       pure state
     Just voice -> do
-      forkVoid $ liftEffect $ Storage.saveVoice voice
-      forkVoid $ liftEffect $ Speech.speak voice (accentOf state) "gracias"
+      forkVoid $ liftEffect $ Storage.saveVoice state.language.code voice
+      forkVoid $ liftEffect $ Speech.speak state.language.code voice (accentOf state) "gracias"
       pure state { voice = Just voice, savedVoice = Just voice }
 
   Flip -> case state.screen of
@@ -193,8 +205,8 @@ update state = case _ of
 
           -- Only the card that carries the production question for its
           -- English side may graduate; see `Deck.isCanonical`.
-          allowed = case DeckIndex.card rank deckIndex of
-            Just c | DeckIndex.isCanonical c deckIndex -> Scheduler.MayGraduate
+          allowed = case DeckIndex.card rank state.index of
+            Just c | DeckIndex.isCanonical c state.index -> Scheduler.MayGraduate
             _ -> Scheduler.RecognitionOnly
 
           progress =
@@ -214,7 +226,7 @@ update state = case _ of
             , again = session.again + countOf Again
             }
 
-        forkVoid $ liftEffect $ Storage.save Deck.fingerprint progress
+        forkVoid $ liftEffect $ Storage.save state.language.code state.language.fingerprint progress
         pure state
           { progress = progress
           , screen =
@@ -236,27 +248,27 @@ update state = case _ of
     pure state
 
   StartedAnother now ->
-    pure state { screen = startSession state.progress now }
+    pure state { screen = startSession state.language.deck state.progress now }
 
   TogglePanel ->
     pure state { panel = not state.panel }
 
   Export -> do
     forkVoid $ liftEffect $ Backup.download Backup.filename $
-      Backup.serialize Deck.fingerprint state.progress
+      Backup.serialize state.language.fingerprint state.progress
     noticing state { panel = false } $ "Saved " <> Backup.filename
 
   Import -> do
     forks \{ dispatch } -> liftEffect $ Backup.pickFile $ dispatch <<< Imported
     pure state { panel = false }
 
-  Imported raw -> case Backup.parse Deck.fingerprint raw of
+  Imported raw -> case Backup.parse state.language.fingerprint raw of
     Left message ->
       noticing state message
     Right incoming -> do
       -- A backup can carry cards that graduated before the rule existed.
-      let progress = (DeckIndex.demoteIneligible deckIndex $ Progress.merge state.progress incoming).progress
-      forkVoid $ liftEffect $ Storage.save Deck.fingerprint progress
+      let progress = (DeckIndex.demoteIneligible state.index $ Progress.merge state.progress incoming).progress
+      forkVoid $ liftEffect $ Storage.save state.language.code state.language.fingerprint progress
       -- The queue was built from the old history, so start over from the new.
       fork $ liftEffect $ StartedAnother <$> Now.now
       noticing state { progress = progress } $
@@ -277,18 +289,18 @@ update state = case _ of
 
   ChooseAccent accent -> do
     let voice = Accent.autoVoice accent state.voices
-    forkVoid $ liftEffect $ Storage.saveAccent accent
-    for_ voice \v -> forkVoid $ liftEffect $ Storage.saveVoice v
+    forkVoid $ liftEffect $ Storage.saveAccent state.language.code accent
+    for_ voice \v -> forkVoid $ liftEffect $ Storage.saveVoice state.language.code v
     -- `gracias` is the word that actually demonstrates the difference:
     -- "grah-thee-as" in Spain, "grah-see-as" in Mexico.
-    forkVoid $ liftEffect $ Speech.speak (fromMaybe "" voice) accent "gracias"
+    forkVoid $ liftEffect $ Speech.speak state.language.code (fromMaybe "" voice) accent "gracias"
     pure state { accent = Just accent, savedAccent = Just accent, voice = voice, savedVoice = voice }
 
   -- Only once the answer is showing: hearing it beforehand would give it away.
   SpeakCurrent -> case state.screen of
     Studying session | session.flipped -> do
-      for_ (currentCard session) \card ->
-        forkVoid $ liftEffect $ Speech.speak (fromMaybe "" state.voice) (accentOf state) card.word
+      for_ (currentCard state.index session) \card ->
+        forkVoid $ liftEffect $ Speech.speak state.language.code (fromMaybe "" state.voice) (accentOf state) card.word
       pure state
     _ ->
       pure state
@@ -296,15 +308,21 @@ update state = case _ of
 -- | Falls back to a bare language hint: even with no Spanish voice installed,
 -- | most engines still pronounce Spanish when told to.
 accentOf :: State -> String
-accentOf state = fromMaybe "es-ES" state.accent
+accentOf state = fromMaybe state.language.code state.accent
 
 -- | Re-derive both preferences from whatever the device currently reports.
 -- | Called from both racing startup messages, so neither ordering matters.
 settle :: Maybe String -> Maybe String -> Array Accent.Voice -> State -> State
 settle savedAccent savedVoice voices state =
-  state { accent = accent, voice = Accent.resolveVoice (fromMaybe "es-ES" accent) savedVoice voices }
+  state
+    { accent = accent
+    , voice = Accent.resolveVoice (fromMaybe fallback accent) savedVoice voices
+    }
   where
-    accent = Accent.resolve savedAccent $ Accent.locales voices
+    accent = Accent.resolve state.language.accents savedAccent $ Accent.locales voices
+    -- A bare language tag: even with no voice installed, most engines still
+    -- pronounce the right language when told which one.
+    fallback = state.language.code
 
 noticing :: State -> String -> Transition Message State
 noticing state message = do
@@ -313,15 +331,11 @@ noticing state message = do
     pure DismissNotice
   pure state { notice = Just message }
 
-startSession :: Progress -> Instant -> Screen
-startSession progress now =
-  case Scheduler.buildSession Deck.deck progress now Scheduler.sessionSize of
+startSession :: Array Card -> Progress -> Instant -> Screen
+startSession deck progress now =
+  case Scheduler.buildSession deck progress now Scheduler.sessionSize of
     [] -> Complete { answered: 0, gotIt: 0, again: 0, at: now }
     queue -> Studying { queue, position: 0, flipped: false, gotIt: 0, again: 0 }
-
--- | Built once: the deck is static.
-deckIndex :: DeckIndex.Index
-deckIndex = DeckIndex.index Deck.deck
 
 view :: State -> Dispatch Message -> ReactElement
 view state dispatch =
@@ -329,11 +343,11 @@ view state dispatch =
   [ case state.screen of
       Loading -> H.div "app" H.empty
       Studying session -> studyingView state session dispatch
-      Complete summary -> completeView state.progress summary dispatch
+      Complete summary -> completeView state.language state.progress summary dispatch
   , if state.panel then panelView state dispatch else H.empty
   , case state.statsAt of
       Nothing -> H.empty
-      Just now -> statsView now state.progress dispatch
+      Just now -> statsView state.language now state.progress dispatch
   , case state.notice of
       Nothing -> H.empty
       Just message -> H.div "notice" message
@@ -349,9 +363,9 @@ topBar session dispatch =
   , H.button_ "panel-toggle" { onClick: dispatch <| TogglePanel, title: "Progress" } "•••"
   ]
 
-currentCard :: Session -> Maybe Card
-currentCard session =
-  Array.index session.queue session.position >>= flip DeckIndex.card deckIndex
+currentCard :: DeckIndex.Index -> Session -> Maybe Card
+currentCard index session =
+  Array.index session.queue session.position >>= flip DeckIndex.card index
 
 studyingView :: State -> Session -> Dispatch Message -> ReactElement
 studyingView state session dispatch =
@@ -361,7 +375,7 @@ studyingView state session dispatch =
   , H.div "controls" controls
   ]
   where
-    face = case currentCard session of
+    face = case currentCard state.index session of
       Nothing ->
         H.empty
       Just card ->
@@ -376,7 +390,7 @@ studyingView state session dispatch =
           -- Production cannot expect one answer: 61 English sides in the deck
           -- have more than one, so grade yourself against the whole set.
           answers =
-            if producing then DeckIndex.answersFor card.english deckIndex
+            if producing then DeckIndex.answersFor card.english state.index
             else [ card.english ]
         in
           H.fragment
@@ -410,8 +424,8 @@ studyingView state session dispatch =
       | otherwise =
           [ H.p "hint" "tap anywhere to flip" ]
 
-completeView :: Progress -> Summary -> Dispatch Message -> ReactElement
-completeView progress summary dispatch =
+completeView :: Language -> Progress -> Summary -> Dispatch Message -> ReactElement
+completeView language progress summary dispatch =
   H.div "app"
   [ topBar Nothing dispatch
   , H.div "done-body"
@@ -428,12 +442,12 @@ completeView progress summary dispatch =
   ]
   where
     seen = Progress.seenCount progress
-    total = Array.length Deck.deck
+    total = Array.length language.deck
     percent = 100.0 * Int.toNumber seen / Int.toNumber total
     caughtUp = summary.answered == 0
 
-    dueNow = (Stats.overview summary.at Deck.deck progress).dueNow
-    waitFor = Stats.describeDuration <$> Stats.nextDueIn summary.at Deck.deck progress
+    dueNow = (Stats.overview summary.at language.deck progress).dueNow
+    waitFor = Stats.describeDuration <$> Stats.nextDueIn summary.at language.deck progress
 
     title = if caughtUp then "All caught up" else "¡Bien hecho!"
 
@@ -470,7 +484,7 @@ panelView state dispatch =
     , H.button_ "panel-item" { onClick: dispatch <| Import } "Load progress from a file"
     , H.p "panel-note" $
         show (Progress.seenCount state.progress) <> " of "
-          <> show (Array.length Deck.deck) <> " words seen"
+          <> show (Array.length state.language.deck) <> " words seen"
     ]
   ]
   where
@@ -496,8 +510,8 @@ panelView state dispatch =
           , H.span "panel-voice-name" $ fromMaybe "—" state.voice
           ]
 
-statsView :: Instant -> Progress -> Dispatch Message -> ReactElement
-statsView now progress dispatch =
+statsView :: Language -> Instant -> Progress -> Dispatch Message -> ReactElement
+statsView language now progress dispatch =
   H.div "sheet"
   [ H.div "sheet-head"
     [ H.h2 "sheet-title" "Progress"
@@ -519,7 +533,7 @@ statsView now progress dispatch =
             <> (if o.producing > 0 then " · " <> show o.producing <> " in production" else "")
             <> (if o.dueNow > 0 then " · " <> show o.dueNow <> " due now" else "")
     , H.h3 "sheet-heading" "By frequency"
-    , H.div "bands" $ Stats.bands Stats.bandSize Deck.deck progress <#> \band ->
+    , H.div "bands" $ Stats.bands Stats.bandSize language.deck progress <#> \band ->
         H.div_ "band" { key: show band.from }
         [ H.div "band-label" $ show band.from <> "–" <> show band.to
         , H.div "band-bar"
@@ -545,9 +559,9 @@ statsView now progress dispatch =
     ]
   ]
   where
-    o = Stats.overview now Deck.deck progress
+    o = Stats.overview now language.deck progress
     percent = 100.0 * Int.toNumber o.seen / Int.toNumber o.total
-    slipping = Stats.leeches Stats.leechThreshold Deck.deck progress
+    slipping = Stats.leeches Stats.leechThreshold language.deck progress
 
     tile value label =
       H.div "tile" [ H.div "tile-value" value, H.div "tile-label" label ]
