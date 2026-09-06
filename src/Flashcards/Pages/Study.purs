@@ -183,7 +183,7 @@ update state = case _ of
       pure state
     Just voice -> do
       forkVoid $ liftEffect $ Storage.saveVoice state.language.code voice
-      forkVoid $ liftEffect $ Speech.speak state.language.code voice (accentOf state) "gracias"
+      forkVoid $ liftEffect $ Speech.speak state.language.code voice (accentOf state) state.language.preview
       pure state { voice = Just voice, savedVoice = Just voice }
 
   Flip -> case state.screen of
@@ -312,9 +312,8 @@ update state = case _ of
     let voice = Accent.autoVoice accent state.voices
     forkVoid $ liftEffect $ Storage.saveAccent state.language.code accent
     for_ voice \v -> forkVoid $ liftEffect $ Storage.saveVoice state.language.code v
-    -- `gracias` is the word that actually demonstrates the difference:
-    -- "grah-thee-as" in Spain, "grah-see-as" in Mexico.
-    forkVoid $ liftEffect $ Speech.speak state.language.code (fromMaybe "" voice) accent "gracias"
+    forkVoid $ liftEffect $
+      Speech.speak state.language.code (fromMaybe "" voice) accent state.language.preview
     pure state { accent = Just accent, savedAccent = Just accent, voice = voice, savedVoice = voice }
 
   -- Only once the answer is showing: hearing it beforehand would give it away.
@@ -544,13 +543,20 @@ panelView state dispatch =
 
     -- A listed voice can have nothing behind it, and no API says so. Cycling
     -- lets the ear settle what the code cannot detect.
-    voicePicker
-      | Array.length (Accent.voicesIn (fromMaybe "" state.accent) state.voices) < 2 = H.empty
-      | otherwise =
-          H.button_ "panel-voice" { onClick: dispatch <| CycleVoice }
-          [ H.span "panel-voice-label" "Voice"
-          , H.span "panel-voice-name" $ fromMaybe "—" state.voice
-          ]
+    -- With one voice there is nothing to cycle, but it is still worth saying
+    -- which voice you are hearing: a listed voice can be a dud, and knowing
+    -- its name is the first step to working that out.
+    voicePicker = case Accent.voicesIn (fromMaybe "" state.accent) state.voices of
+      [] ->
+        H.empty
+      [ only ] ->
+        H.div "panel-voice sole"
+        [ H.span "panel-voice-label" "Voice", H.span "panel-voice-name" only ]
+      _ ->
+        H.button_ "panel-voice" { onClick: dispatch <| CycleVoice }
+        [ H.span "panel-voice-label" "Voice"
+        , H.span "panel-voice-name" $ fromMaybe "—" state.voice
+        ]
 
 statsView :: Language -> Instant -> Progress -> Dispatch Message -> ReactElement
 statsView language now progress dispatch =

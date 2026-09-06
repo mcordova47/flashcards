@@ -34,6 +34,9 @@ type Language =
   , ordering :: String
   -- | Shown when a session ends, in the language being learned.
   , done :: String
+  -- | Spoken when trying out an accent or a voice. Chosen to make the
+  -- | difference between accents audible, not just to demonstrate the voice.
+  , preview :: String
   }
 
 spanish :: Language
@@ -47,6 +50,8 @@ spanish =
   , accents: [ "es-MX", "es-ES" ]
   , ordering: "frequency"
   , done: "¡Bien hecho!"
+  -- "grah-thee-as" in Spain against "grah-see-as" in Mexico.
+  , preview: "gracias"
   }
 
 german :: Language
@@ -60,6 +65,9 @@ german =
   -- is a position in that curriculum, not a claim about how common a word is.
   , ordering: "course order"
   , done: "Gut gemacht!"
+  -- Final -ig is the clearest regional tell: /ɪç/ in the north against /ɪk/
+  -- further south.
+  , preview: "richtig"
   }
 
 all :: Array Language

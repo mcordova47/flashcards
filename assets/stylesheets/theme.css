@@ -606,3 +606,12 @@ body {
   font-size: 0.9375rem;
   line-height: 1.45;
 }
+
+/* Nothing to cycle, so it reads as a label rather than a control. */
+.panel-voice.sole {
+  cursor: default;
+}
+
+.panel-voice.sole .panel-voice-name::after {
+  content: "";
+}

@@ -37,6 +37,12 @@ export default async ({ check, open }) => {
   // Locales sort by tag, so de-AT precedes de-DE, just as es-ES precedes es-MX.
   check("now offering German accents", await labels(page, ".accent"), ["Austria", "Germany"])
   check("with a German voice picked", await page.text(".panel-voice-name"), "Anna")
+  ;(await page.byText(".accent", "Austria")).click()
+  await wait(300)
+  check("a lone voice is named but not a control", await page.text(".panel-voice-name"), "Petra")
+  check("and it previews in German, not Spanish", (await page.spoken()).at(-1).text, "richtig")
+  ;(await page.byText(".accent", "Germany")).click()
+  await wait(300)
   await page.tap(".backdrop")
 
   check("no example before the flip - most contain the word", await page.$(".example"), null)

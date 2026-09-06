@@ -76,7 +76,10 @@ export default async ({ check, open }) => {
   await wait(450)
   await solo.tap(".panel-toggle")
   check("no accent picker when there is one locale", (await solo.$$(".accent")).length, 0)
-  check("and no voice row when there is one voice", await solo.$(".panel-voice"), null)
+  // Not a control with one voice, but still named - a listed voice can be a
+  // dud, and its name is where working that out starts.
+  check("the lone voice is still named", await solo.text(".panel-voice-name"), "Mónica")
+  check("but is not a button", await solo.$eval(".panel-voice", e => e.tagName), "DIV")
   check("but the panel still works", !!(await solo.$(".panel-item")), true)
   await solo.close()
 
