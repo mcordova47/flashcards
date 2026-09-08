@@ -161,7 +161,10 @@ export const run = async (name, body) => {
       res.writeHead(reply.status, Object.fromEntries(reply.headers))
       return res.end(Buffer.from(await reply.arrayBuffer()))
     }
-    const rel = req.url === "/" ? "/index.html" : req.url.split("?")[0]
+    // Strip the query before anything else: `/?pair=<key>` is the root, and
+    // treating it as a path asks the filesystem to read a directory.
+    const asked = req.url.split("?")[0]
+    const rel = asked === "/" ? "/index.html" : asked
     let file = path.join(PUBLIC, rel)
     // Mirror the SPA rule in netlify.toml: a path with no file behind it and
     // no extension is a route, and gets the app. Without this the language
@@ -196,10 +199,24 @@ export const run = async (name, body) => {
     await page.goto(base + path, { waitUntil: "networkidle0" })
     await page.evaluate(() => localStorage.clear())
     if (seed) await page.evaluate((k, s) => localStorage.setItem(k, JSON.stringify(s)), storageKey, seed)
-    await page.reload({ waitUntil: "networkidle0" })
+    // Navigate again rather than reload: a pairing link takes itself back out
+    // of the address bar once adopted, so reloading would land on the stripped
+    // URL and the second run would see no link at all.
+    await page.goto(base + path, { waitUntil: "networkidle0" })
 
     page.text = sel => page.$eval(sel, e => e.textContent).catch(() => null)
     page.tap = async sel => { await page.click(sel); await wait(90) }
+    // Close the panel by tapping the exposed part of the backdrop, rather than
+    // its centre. The backdrop fills the viewport but the panel is a bottom
+    // sheet sitting on top of it, and the sheet has grown past halfway - so a
+    // click at the centre lands on the panel and does nothing, silently. Aim
+    // where a reader would: the gap above it.
+    page.dismiss = async () => {
+      const y = await page.evaluate(() =>
+        Math.round((document.querySelector(".panel")?.getBoundingClientRect().top ?? innerHeight) / 2))
+      await page.mouse.click(Math.round(page.viewport().width / 2), y)
+      await wait(90)
+    }
     page.stored = () => page.evaluate(k => JSON.parse(localStorage.getItem(k) ?? "null"), storageKey)
     page.spoken = () => page.evaluate(() => window.__spoken.filter(u => u.text.trim() !== ""))
     page.byText = async (sel, label) => {

@@ -7,6 +7,7 @@
 module Flashcards.Route
   ( current
   , replace
+  , search
   )
   where
 
@@ -16,6 +17,10 @@ import Effect (Effect)
 import Effect.Uncurried (EffectFn1, runEffectFn1)
 
 foreign import current :: Effect String
+
+-- | The query string, including its leading `?`. Only a pairing link uses one,
+-- | and it is cleared as soon as it has been read — see `Flashcards.Sync`.
+foreign import search :: Effect String
 
 -- | Keeps the address bar honest after a switch, without stacking a history
 -- | entry every time you toggle.

@@ -43,7 +43,7 @@ export default async ({ check, open }) => {
   check("and it previews in German, not Spanish", (await page.spoken()).at(-1).text, "richtig")
   ;(await page.byText(".accent", "Germany")).click()
   await wait(300)
-  await page.tap(".backdrop")
+  await page.dismiss()
 
   check("no example before the flip - most contain the word", await page.$(".example"), null)
   await page.tap(".card")

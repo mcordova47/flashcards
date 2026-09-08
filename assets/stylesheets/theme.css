@@ -615,3 +615,40 @@ body {
 .panel-voice.sole .panel-voice-name::after {
   content: "";
 }
+
+.pair-lead {
+  margin: 0.5rem 0 1rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.pair-link {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--track);
+  border-radius: 12px;
+  background: var(--ghost);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  /* Wraps rather than scrolling out of sight: the key is the one part worth
+     checking against the other device. */
+  resize: none;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.pair-copy {
+  width: 100%;
+}
+
+.pair-warning {
+  margin: 1.25rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--faint);
+}

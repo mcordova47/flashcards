@@ -1,3 +1,5 @@
+import { slugAt, wait } from "./harness.mjs"
+
 export const name = "The progress endpoint"
 
 const KEY = "k7m2p9x4w1n8q3r6t5v0y2z7b4d9f1h3"
@@ -56,14 +58,93 @@ export default async ({ check, open, base, blobs }) => {
   check("and only the one blob was ever written", blobs.size, 1)
 
   // --- the service worker must stay out of it ---
-  const page = await open()
-  await page.waitForSelector(".prompt")
-  await page.waitForFunction(() => navigator.serviceWorker.controller !== null, { timeout: 20000 })
-  const cached = await page.evaluate(async key => {
-    const url = `/api/progress/${key}`
+  const first = await open()
+  await first.waitForSelector(".prompt")
+  await first.waitForFunction(() => navigator.serviceWorker.controller !== null, { timeout: 20000 })
+  const cached = await first.evaluate(async key => {
+    const url = `/api/progress/${key}/es`
     await fetch(url)
     return (await caches.match(url)) !== undefined
   }, KEY)
   check("a fetch through the service worker is not cached", cached, false)
-  check("no page errors", page.errors, [])
+  await first.close()
+  blobs.clear()
+
+  // --- a device on its own ---
+  const phone = await open()
+  await phone.waitForSelector(".prompt")
+  const phoneKey = await phone.evaluate(() => localStorage.getItem("flashcards.sync-key"))
+  check("a fresh device generates a key", /^[a-z0-9]{32}$/.test(phoneKey ?? ""), true)
+
+  for (let i = 0; i < 3; i++) { await phone.tap(".card"); await phone.tap(".got-it") }
+  // Sync is on load and at the end of a session, so three cards into a
+  // twenty-card session nothing has gone up yet beyond the first seed.
+  await phone.reload({ waitUntil: "networkidle0" })
+  await phone.waitForSelector(".prompt")
+  await wait(400)
+  const seeded = JSON.parse(blobs.get(`${phoneKey}.es`) ?? "null")
+  check("and uploads what it has", seeded?.cards?.length, 3)
+  check("as the same bytes the backup file would hold", seeded, await phone.stored())
+
+  // --- pairing a second device with the link ---
+  const laptop = await open({ path: `/?pair=${phoneKey}` })
+  await laptop.waitForSelector(".prompt")
+  await wait(500)
+  check("a pairing link is adopted",
+    await laptop.evaluate(() => localStorage.getItem("flashcards.sync-key")), phoneKey)
+  // The key is the only secret here; leaving it in the address bar puts it in
+  // history and in whatever gets shared next.
+  check("and taken back out of the address bar", new URL(laptop.url()).search, "")
+  check("the other device's history came down", (await laptop.stored())?.cards?.length, 3)
+  // Three cards answered, so the next new word is the fourth.
+  check("and the session starts past what was already learned",
+    await laptop.text(".prompt"), slugAt(4))
+
+  // --- and back the other way ---
+  await laptop.tap(".card")
+  await laptop.tap(".got-it")
+  await laptop.reload({ waitUntil: "networkidle0" })
+  await laptop.waitForSelector(".prompt")
+  await wait(400)
+  check("what the second device learns goes up too",
+    JSON.parse(blobs.get(`${phoneKey}.es`)).cards.length, 4)
+
+  await phone.reload({ waitUntil: "networkidle0" })
+  await phone.waitForSelector(".prompt")
+  await wait(400)
+  check("and comes back down to the first", (await phone.stored()).cards.length, 4)
+  check("whose session skips it too", await phone.text(".prompt"), slugAt(5))
+  check("no page errors on either", [...phone.errors, ...laptop.errors], [])
+  await laptop.close()
+
+  // --- handing the link over ---
+  await phone.tap(".panel-toggle")
+  ;(await phone.byText(".panel-item", "Sync another device")).click()
+  await wait(300)
+  const shown = await phone.$eval(".pair-link", e => e.value)
+  // Shown rather than only copied: both the clipboard and a share sheet need a
+  // user activation that can be lost on the way through the update loop, and a
+  // reader with nothing on screen would have no second move.
+  check("the pairing sheet shows the whole link", shown, `${base}/?pair=${phoneKey}`)
+  check("and says plainly what the link gives away",
+    (await phone.text(".pair-warning")).startsWith("Anyone with this link can read and change"), true)
+  ;(await phone.byText(".grade", "Copy link")).click()
+  await wait(300)
+  check("copying reports what happened, either way",
+    ["Link copied", "Couldn't copy it — select the link instead"].includes(await phone.text(".notice")), true)
+  check("and leaves the link selected to fall back on",
+    await phone.$eval(".pair-link", e => e.selectionEnd - e.selectionStart), shown.length)
+  check("and does not throw", phone.errors, [])
+  await phone.tap(".sheet-close")
+
+  // --- with no network at all ---
+  await phone.setOfflineMode(true)
+  await phone.reload({ waitUntil: "domcontentloaded" })
+  await phone.waitForSelector(".prompt", { timeout: 20000 })
+  check("a failed sync is silent", await phone.text(".notice"), null)
+  await phone.tap(".card")
+  await phone.tap(".got-it")
+  check("and studying carries on regardless", (await phone.stored()).cards.length, 5)
+  await phone.setOfflineMode(false)
+  await phone.close()
 }

@@ -12,6 +12,7 @@ import Test.Flashcards.LanguageSpec as LanguageSpec
 import Test.Flashcards.ProgressSpec as ProgressSpec
 import Test.Flashcards.SchedulerSpec as SchedulerSpec
 import Test.Flashcards.StatsSpec as StatsSpec
+import Test.Flashcards.SyncSpec as SyncSpec
 import Test.Spec.Runner.Node (runSpecAndExitProcess)
 import Test.Spec.Reporter.Console (consoleReporter)
 
@@ -23,3 +24,4 @@ main = runSpecAndExitProcess [ consoleReporter ] do
   StatsSpec.spec
   DeckSpec.spec
   LanguageSpec.spec
+  SyncSpec.spec

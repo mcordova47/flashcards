@@ -36,6 +36,7 @@ import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
 import Flashcards.Speech as Speech
 import Flashcards.Storage as Storage
+import Flashcards.Sync as Sync
 import Flashcards.Types.Card (Card, Slug, rankToInt)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
@@ -80,10 +81,17 @@ type State =
   , savedAccent :: Maybe String
   , savedVoice :: Maybe String
   , language :: Language
+  -- | This device's sync key. `Nothing` only for the moment before startup
+  -- | finishes; after that it is always set, generated on first run.
+  , syncKey :: Maybe String
   , index :: DeckIndex.Index
   -- | `Just` the moment the screen was opened, which doubles as "is it open".
   -- | The time is fixed at open so the due counts cannot shift underneath you.
   , statsAt :: Maybe Instant
+  , pairing :: Boolean
+  -- | Where this app is served from, so the pairing link is absolute and can
+  -- | be pasted anywhere rather than only followed from here.
+  , origin :: String
   }
 
 data Message
@@ -98,6 +106,8 @@ data Message
       -- | anything written before v5 names its cards by position, and only the
       -- | deck can say which word that was.
       , index :: DeckIndex.Index
+      , syncKey :: String
+      , origin :: String
       }
   | Flip
   | Answer Grade
@@ -117,18 +127,31 @@ data Message
   | ShowStats
   | StatsAt Instant
   | HideStats
+  -- | Ask the other side for its bytes. Safe to send at any time: the merge
+  -- | is order-insensitive, so a sync that overlaps another loses nothing.
+  | Sync
+  -- | Carries the language it was fetched for. A request in flight outlives a
+  -- | switch, and applying a Spanish answer to a German session would merge
+  -- | one deck's history into the other's key.
+  | Synced String Sync.Remote
+  | ShowPairing
+  | HidePairing
+  | CopyLink
+  | Copied String
 
 init :: Transition Message State
 init = do
   fork do
     language <- liftEffect $ Language.resolve <$> Route.current <*> Storage.loadLanguage
+    syncKey <- liftEffect $ adoptKey language
+    origin <- liftEffect Sync.origin
     let index = DeckIndex.index language.deck
     progress <- liftEffect $ Storage.load language.code language.fingerprint index
     canSpeak <- liftEffect Speech.supported
     savedAccent <- liftEffect $ Storage.loadAccent language.code
     savedVoice <- liftEffect $ Storage.loadVoice language.code
     now <- liftEffect Now.now
-    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index }
+    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin }
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
   forks \{ dispatch } ->
@@ -146,15 +169,18 @@ init = do
     , savedAccent: Nothing
     , savedVoice: Nothing
     , language: Language.default
+    , syncKey: Nothing
     , index: DeckIndex.index Language.default.deck
     , statsAt: Nothing
+    , pairing: false
+    , origin: ""
     }
 
 update :: State -> Message -> Transition Message State
 update state = case _ of
   -- `Loaded` and `VoicesAvailable` race, so both resolve preferences from
   -- whatever the other has already put in state.
-  Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index } -> do
+  Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin } -> do
     -- Progress saved before colliding glosses were barred can hold cards that
     -- graduated when they should not have. Put them back before building a
     -- session out of them.
@@ -165,12 +191,17 @@ update state = case _ of
       loaded = settle savedAccent savedVoice state.allVoices state
         { language = language
         , index = index
+        , syncKey = Just syncKey
+        , origin = origin
         , progress = repaired.progress
         , canSpeak = canSpeak
         , savedAccent = savedAccent
         , savedVoice = savedVoice
         , screen = startSession language.deck repaired.progress now
         }
+    -- Every load asks the other side what it has. A sync you must remember is
+    -- a sync you will not do, and the merge makes asking repeatedly free.
+    fork $ pure Sync
     if repaired.demoted == 0 then
       pure loaded
     else
@@ -235,11 +266,16 @@ update state = case _ of
             , again = session.again + countOf Again
             }
 
+          finished = advanced.position >= Array.length advanced.queue
+
         forkVoid $ liftEffect $ Storage.save state.language.code state.language.fingerprint progress
+        -- The other end of the pair, so a session finished on the phone is
+        -- there when the laptop opens.
+        when finished $ fork $ pure Sync
         pure state
           { progress = progress
           , screen =
-              if advanced.position >= Array.length advanced.queue then
+              if finished then
                 Complete
                   { answered: advanced.position
                   , gotIt: advanced.gotIt
@@ -308,13 +344,96 @@ update state = case _ of
         Route.replace $ Language.pathFor language
       fork do
         let index = DeckIndex.index language.deck
+        -- The key is per device, not per language, so a switch carries it
+        -- across rather than pairing again.
+        syncKey <- liftEffect $ maybe (adoptKey language) pure state.syncKey
+        origin <- liftEffect Sync.origin
         progress <- liftEffect $ Storage.load language.code language.fingerprint index
         savedAccent <- liftEffect $ Storage.loadAccent language.code
         savedVoice <- liftEffect $ Storage.loadVoice language.code
         now <- liftEffect Now.now
         pure $ Loaded
-          { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language, index }
+          { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language, index, syncKey, origin }
       pure state { panel = false, statsAt = Nothing }
+
+  Sync -> case state.syncKey of
+    Nothing ->
+      pure state
+    Just key -> do
+      forks \{ dispatch } ->
+        liftEffect $ Sync.fetchRemote key state.language.code $
+          dispatch <<< Synced state.language.code
+      pure state
+
+  -- Answered for a language that has since been switched away from. The
+  -- language it belongs to will ask again on its own.
+  Synced code _ | code /= state.language.code ->
+    pure state
+
+  Synced _ remote -> case state.syncKey of
+    Nothing ->
+      pure state
+    Just key -> do
+      let
+        push progress =
+          forkVoid $ liftEffect $ Sync.pushRemote key state.language.code
+            (Backup.serialize state.language.code state.language.fingerprint progress)
+            (const $ pure unit)
+      case remote of
+        -- Offline, or the endpoint is unhappy. Local-first: the network is an
+        -- optimisation, so this is not worth saying anything about.
+        Sync.Failed ->
+          pure state
+
+        -- Nothing stored under this key yet, so this device seeds it.
+        Sync.Absent -> do
+          push state.progress
+          pure state
+
+        Sync.Found body ->
+          case Backup.parse state.language.code state.language.fingerprint state.index body of
+            -- A blob this device cannot read is not one it should overwrite.
+            Left _ ->
+              pure state
+            Right incoming -> do
+              let
+                merged =
+                  (DeckIndex.demoteIneligible state.index $ Progress.merge state.progress incoming).progress
+              forkVoid $ liftEffect $
+                Storage.save state.language.code state.language.fingerprint merged
+              -- Only when this device has something the other side lacks.
+              -- Merge is order-insensitive, so an equal result means the blob
+              -- is already right and writing it back would be noise.
+              when (merged /= incoming) $ push merged
+              -- The session was built from the older history, so it can be
+              -- full of cards the other device already answered. Rebuild it,
+              -- but only when the merge actually brought something in and
+              -- nobody is part-way through a card: a rebuild resets the flip,
+              -- so landing one under a reader mid-tap would take the answer
+              -- back off the screen.
+              when (merged /= state.progress && untouched state.screen) $
+                fork $ liftEffect $ StartedAnother <$> Now.now
+              pure state { progress = merged }
+
+  ShowPairing ->
+    pure state { pairing = true, panel = false }
+
+  HidePairing ->
+    pure state { pairing = false }
+
+  CopyLink -> case state.syncKey of
+    Nothing ->
+      pure state
+    Just key -> do
+      forks \{ dispatch } -> liftEffect do
+        here <- Sync.origin
+        Sync.copyLink (Sync.pairingLink here key) $ dispatch <<< Copied
+      pure state
+
+  -- Only ever a convenience: the link is on screen, so a refused clipboard
+  -- costs the reader a long-press rather than the feature.
+  Copied "copied" -> noticing state "Link copied"
+  Copied _ -> noticing state "Couldn't copy it — select the link instead"
 
   ChooseAccent accent -> do
     let voice = Accent.autoVoice accent state.voices
@@ -332,6 +451,35 @@ update state = case _ of
       pure state
     _ ->
       pure state
+
+-- | This device's sync key: the one a pairing link carried, else the one
+-- | already saved here, else a fresh one. Generated on first run rather than
+-- | on first sync, so there is always a link to hand out.
+adoptKey :: Language -> Effect String
+adoptKey language = Sync.keyFromPath <$> Route.search >>= case _ of
+  Just key -> do
+    Sync.saveKey key
+    -- Take it back out of the address bar. It is the only secret this app
+    -- has, and leaving it there puts it in history and in whatever gets
+    -- shared next.
+    Route.replace $ Language.pathFor language
+    pure key
+  Nothing -> Sync.loadKey >>= case _ of
+    Just key ->
+      pure key
+    Nothing -> do
+      key <- Sync.generateKey
+      Sync.saveKey key
+      pure key
+
+-- | Whether a session can be rebuilt under the reader without costing them
+-- | anything: nothing answered into it, and no card turned over. A session
+-- | with answers in it has a place worth keeping, and a flipped card is an
+-- | answer someone is looking at.
+untouched :: Screen -> Boolean
+untouched = case _ of
+  Studying session -> session.position == 0 && not session.flipped
+  _ -> false
 
 -- | Falls back to a bare language hint: even with no Spanish voice installed,
 -- | most engines still pronounce Spanish when told to.
@@ -379,6 +527,7 @@ view state dispatch =
   , case state.statsAt of
       Nothing -> H.empty
       Just now -> statsView state.language now state.progress dispatch
+  , if state.pairing then pairingView state dispatch else H.empty
   , case state.notice of
       Nothing -> H.empty
       Just message -> H.div "notice" message
@@ -510,6 +659,40 @@ completeView language progress summary dispatch =
 
     cta = if caughtUp then "Check again" else "Study " <> show Scheduler.sessionSize <> " more"
 
+-- | The link, shown rather than only copied.
+-- |
+-- | A toast saying "copied" is a claim the app cannot always keep: both the
+-- | clipboard and a share sheet need a user activation that can be lost on the
+-- | way through the update loop, and a reader with nothing on screen has no
+-- | second move. With the link visible there is always one — select it, or
+-- | long-press it — and the button is a shortcut rather than the mechanism.
+pairingView :: State -> Dispatch Message -> ReactElement
+pairingView state dispatch =
+  H.div "sheet"
+  [ H.div "sheet-head"
+    [ H.h2 "sheet-title" "Sync another device"
+    , H.button_ "sheet-close" { onClick: dispatch <| HidePairing, title: "Close" } "✕"
+    ]
+  , H.div "sheet-body"
+    [ H.p "pair-lead" $
+        "Open this link on your other device. Both will then keep the same "
+          <> "progress, merging whichever has seen a word more often."
+    -- A textarea rather than an input so the whole link wraps into view: the
+    -- key is the one thing worth checking against the other device, and an
+    -- input would ellipsise exactly the part that differs.
+    , H.textarea_ "pair-link" { readOnly: true, rows: 2, value: link }
+    , H.button_ "grade got-it pair-copy" { onClick: dispatch <| CopyLink } "Copy link"
+    -- Said plainly, because it is the whole security model. See the README.
+    , H.p "pair-warning" $
+        "Anyone with this link can read and change your progress. There are no "
+          <> "accounts here — treat it like a door key, not a password."
+    ]
+  ]
+  where
+    link = case state.syncKey of
+      Just key -> Sync.pairingLink state.origin key
+      Nothing -> ""
+
 panelView :: State -> Dispatch Message -> ReactElement
 panelView state dispatch =
   H.fragment
@@ -519,6 +702,7 @@ panelView state dispatch =
     , accentPicker
     , voicePicker
     , H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
+    , H.button_ "panel-item" { onClick: dispatch <| ShowPairing } "Sync another device"
     , H.button_ "panel-item" { onClick: dispatch <| Export } "Save progress to a file"
     , H.button_ "panel-item" { onClick: dispatch <| Import } "Load progress from a file"
     , H.p "panel-note" $

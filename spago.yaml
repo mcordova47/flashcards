@@ -5,6 +5,7 @@ package:
     - argonaut
     - arrays
     - console
+    - control
     - datetime
     - effect
     - either

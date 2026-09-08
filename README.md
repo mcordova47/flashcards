@@ -152,10 +152,8 @@ manual device transfer — the OS does the networking.
 
 ## Sync
 
-*Endpoint only so far — the client half is not wired up yet.*
-
-A Netlify Function over Netlify Blobs, deployed by the same `git push` as the
-rest:
+Two devices holding the same key keep the same progress. A Netlify Function
+over Netlify Blobs, deployed by the same `git push` as the rest:
 
 ```
 GET  /api/progress/<key>/<lang>   the stored blob, or 404
@@ -171,6 +169,40 @@ It is a **dumb blob store** and does not merge. The client does `GET` →
 `Progress.merge` → `PUT`, so the merge rule stays in one place, pure and
 specced, rather than being written a second time in JavaScript where the two
 would drift. Nothing on the server knows what a card is.
+
+### Pairing
+
+The `•••` panel's **Sync another device** opens a sheet with a `?pair=<key>`
+link. Open it on the second device and it adopts the key, pulls what is there,
+and takes the key back out of the address bar — it is the only secret this app
+has, and leaving it there would put it in history and in whatever gets shared
+next.
+
+A link rather than a QR code or a typed code: no rendering library, no second
+store to expire, and it works phone-to-laptop as well as the other way, which
+a camera does not.
+
+The link is **shown**, not just copied. Both `navigator.clipboard` and
+`navigator.share` need a transient user activation that a click can lose on its
+way through the update loop, and a reader looking at a toast that says
+"couldn't copy" has no second move. With the link on screen there is always
+one, so the button is a shortcut rather than the mechanism. `navigator.share`
+is not used at all: when it fails to open it leaves a promise that neither
+resolves nor rejects, and the reader is told nothing.
+
+### When it syncs
+
+On load, and at the end of a session. Repeated syncs are free because the merge
+is order-insensitive, and a sync you have to remember is one you will not do.
+Offline it fails silently and picks up next time — the network is an
+optimisation, never a dependency.
+
+The client does `GET` → `Progress.merge` → `PUT`, and only writes back when the
+merge produced something the other side lacked. If the merge brought new
+history in and the session has not been touched yet — nothing answered, no card
+turned over — the session is rebuilt, since it was assembled from the older
+history and may be full of cards the other device already did. It is never
+rebuilt under a flipped card: that would take the answer back off the screen.
 
 ### There is no authentication
 
@@ -377,9 +409,11 @@ data/es-1000.csv                     committed snapshot of the sheet
 tools/sync-deck.mjs                  sheet -> CSV -> generated module
 tools/rename.mjs                     pins a slug when a word is respelled
 tools/deck-source.mjs                the language table, shared by both
+netlify/functions/progress.mjs       the blob store, and all of the server
 src/Flashcards/
   Scheduler.purs                     pure; the learning logic
   Storage.purs                       localStorage, at the edge
+  Sync.purs                          the other device's bytes
   Types/{Card,Grade,Progress}.purs
   Pages/Study.purs                   the entire UI
   Data/Deck/Spanish.purs             GENERATED - do not edit
@@ -395,8 +429,9 @@ indefinitely.
 ## Roadmap
 
 - **Now** — ES→EN, self-graded, Leitner, `localStorage`, installable and
-  offline, file backup with merge, pronunciation, deployed.
-- **Next** — cross-device sync, if the file flow proves annoying (see #2).
+  offline, file backup with merge, cross-device sync, pronunciation, deployed.
+- **Next** — a visible sync state and a manual button, so a device that has not
+  reached the server says so.
 - **Later** — example sentences generated at build time under a
   high-frequency-vocabulary constraint, EN→ES with every valid answer shown on
   the reveal, a progress screen, more languages, FSRS scheduling.

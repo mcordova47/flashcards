@@ -61,7 +61,7 @@ export default async ({ check, open }) => {
   check("the accent stays out of the progress blob",
     Object.keys(await page.stored() ?? {}).sort(), [])
 
-  await page.tap(".backdrop")
+  await page.dismiss()
   await page.tap(".card")
   await page.tap(".speak")
   await spokenAtLeast(page, 5)
