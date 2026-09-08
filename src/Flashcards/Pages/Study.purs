@@ -14,11 +14,12 @@ module Flashcards.Pages.Study
 import Prelude
 
 import Data.Array as Array
-import Data.DateTime.Instant (Instant)
+import Data.DateTime.Instant (Instant, unInstant)
 import Data.Either (Either(..))
 import Data.Foldable (for_, intercalate)
 import Data.Int as Int
-import Data.Maybe (Maybe(..), fromMaybe, maybe)
+import Data.Maybe (Maybe(..), fromMaybe, isJust, maybe)
+import Data.Newtype (unwrap)
 import Effect (Effect)
 import Effect.Aff (Milliseconds(..), delay)
 import Effect.Class (liftEffect)
@@ -68,7 +69,10 @@ data Screen
 type State =
   { progress :: Progress
   , screen :: Screen
-  , panel :: Boolean
+  -- | `Just` the moment the panel was opened, which doubles as "is it open".
+  -- | Fixed at open, like the progress sheet, so "last synced 3 days ago" does
+  -- | not tick over while you are reading it.
+  , panel :: Maybe Instant
   , notice :: Maybe String
   , canSpeak :: Boolean
   -- | Every voice the device has, and the slice belonging to the language
@@ -89,6 +93,16 @@ type State =
   -- | The time is fixed at open so the due counts cannot shift underneath you.
   , statsAt :: Maybe Instant
   , pairing :: Boolean
+  -- | What the server is known to hold, and when it last took something.
+  -- |
+  -- | `sent` is the progress itself rather than a flag, so "is there anything
+  -- | to send" is answered by comparison and cannot drift out of step with
+  -- | reality the way a flag set in the wrong place would. `Nothing` means
+  -- | this device has not exchanged anything yet *this run* and so does not
+  -- | know — which is different from knowing there is something to send.
+  , sent :: Maybe Progress
+  , syncedAt :: Maybe Instant
+  , offline :: Boolean
   -- | Where this app is served from, so the pairing link is absolute and can
   -- | be pasted anywhere rather than only followed from here.
   , origin :: String
@@ -108,6 +122,7 @@ data Message
       , index :: DeckIndex.Index
       , syncKey :: String
       , origin :: String
+      , syncedAt :: Maybe Instant
       }
   | Flip
   | Answer Grade
@@ -115,6 +130,7 @@ data Message
   | StartAnother
   | StartedAnother Instant
   | TogglePanel
+  | OpenedPanel Instant
   | Export
   | Import
   | Imported String
@@ -134,6 +150,10 @@ data Message
   -- | switch, and applying a Spanish answer to a German session would merge
   -- | one deck's history into the other's key.
   | Synced String Sync.Remote
+  -- | Carries what was sent, so `sent` records the exact progress the server
+  -- | is now known to hold rather than whatever state has drifted to since.
+  | Pushed Progress Boolean
+  | SyncedAt Instant
   | ShowPairing
   | HidePairing
   | CopyLink
@@ -145,13 +165,14 @@ init = do
     language <- liftEffect $ Language.resolve <$> Route.current <*> Storage.loadLanguage
     syncKey <- liftEffect $ adoptKey language
     origin <- liftEffect Sync.origin
+    syncedAt <- liftEffect $ Storage.loadSyncedAt language.code
     let index = DeckIndex.index language.deck
     progress <- liftEffect $ Storage.load language.code language.fingerprint index
     canSpeak <- liftEffect Speech.supported
     savedAccent <- liftEffect $ Storage.loadAccent language.code
     savedVoice <- liftEffect $ Storage.loadVoice language.code
     now <- liftEffect Now.now
-    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin }
+    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt }
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
   forks \{ dispatch } ->
@@ -159,7 +180,7 @@ init = do
   pure
     { progress: Progress.empty
     , screen: Loading
-    , panel: false
+    , panel: Nothing
     , notice: Nothing
     , canSpeak: false
     , allVoices: []
@@ -174,13 +195,16 @@ init = do
     , statsAt: Nothing
     , pairing: false
     , origin: ""
+    , sent: Nothing
+    , syncedAt: Nothing
+    , offline: false
     }
 
 update :: State -> Message -> Transition Message State
 update state = case _ of
   -- `Loaded` and `VoicesAvailable` race, so both resolve preferences from
   -- whatever the other has already put in state.
-  Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin } -> do
+  Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt } -> do
     -- Progress saved before colliding glosses were barred can hold cards that
     -- graduated when they should not have. Put them back before building a
     -- session out of them.
@@ -193,6 +217,11 @@ update state = case _ of
         , index = index
         , syncKey = Just syncKey
         , origin = origin
+        , syncedAt = syncedAt
+        -- A different language is a different blob, so nothing is known about
+        -- this one until it has been asked.
+        , sent = Nothing
+        , offline = false
         , progress = repaired.progress
         , canSpeak = canSpeak
         , savedAccent = savedAccent
@@ -295,17 +324,24 @@ update state = case _ of
   StartedAnother now ->
     pure state { screen = startSession state.language.deck state.progress now }
 
-  TogglePanel ->
-    pure state { panel = not state.panel }
+  TogglePanel -> case state.panel of
+    Just _ ->
+      pure state { panel = Nothing }
+    Nothing -> do
+      fork $ liftEffect $ OpenedPanel <$> Now.now
+      pure state
+
+  OpenedPanel now ->
+    pure state { panel = Just now }
 
   Export -> do
     forkVoid $ liftEffect $ Backup.download Backup.filename $
       Backup.serialize state.language.code state.language.fingerprint state.progress
-    noticing state { panel = false } $ "Saved " <> Backup.filename
+    noticing state { panel = Nothing } $ "Saved " <> Backup.filename
 
   Import -> do
     forks \{ dispatch } -> liftEffect $ Backup.pickFile $ dispatch <<< Imported
-    pure state { panel = false }
+    pure state { panel = Nothing }
 
   Imported raw -> case Backup.parse state.language.code state.language.fingerprint state.index raw of
     Left message ->
@@ -327,7 +363,7 @@ update state = case _ of
     pure state
 
   StatsAt now ->
-    pure state { statsAt = Just now, panel = false }
+    pure state { statsAt = Just now, panel = Nothing }
 
   HideStats ->
     pure state { statsAt = Nothing }
@@ -348,13 +384,14 @@ update state = case _ of
         -- across rather than pairing again.
         syncKey <- liftEffect $ maybe (adoptKey language) pure state.syncKey
         origin <- liftEffect Sync.origin
+        syncedAt <- liftEffect $ Storage.loadSyncedAt language.code
         progress <- liftEffect $ Storage.load language.code language.fingerprint index
         savedAccent <- liftEffect $ Storage.loadAccent language.code
         savedVoice <- liftEffect $ Storage.loadVoice language.code
         now <- liftEffect Now.now
         pure $ Loaded
-          { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language, index, syncKey, origin }
-      pure state { panel = false, statsAt = Nothing }
+          { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt }
+      pure state { panel = Nothing, statsAt = Nothing }
 
   Sync -> case state.syncKey of
     Nothing ->
@@ -376,19 +413,19 @@ update state = case _ of
     Just key -> do
       let
         push progress =
-          forkVoid $ liftEffect $ Sync.pushRemote key state.language.code
+          forks \{ dispatch } -> liftEffect $ Sync.pushRemote key state.language.code
             (Backup.serialize state.language.code state.language.fingerprint progress)
-            (const $ pure unit)
+            (dispatch <<< Pushed progress)
       case remote of
-        -- Offline, or the endpoint is unhappy. Local-first: the network is an
-        -- optimisation, so this is not worth saying anything about.
+        -- Offline, or the endpoint is unhappy. Local-first, so nothing is said
+        -- on the card screen — but the panel stops claiming to be up to date.
         Sync.Failed ->
-          pure state
+          pure state { offline = true }
 
         -- Nothing stored under this key yet, so this device seeds it.
         Sync.Absent -> do
           push state.progress
-          pure state
+          pure state { offline = false }
 
         Sync.Found body ->
           case Backup.parse state.language.code state.language.fingerprint state.index body of
@@ -404,7 +441,12 @@ update state = case _ of
               -- Only when this device has something the other side lacks.
               -- Merge is order-insensitive, so an equal result means the blob
               -- is already right and writing it back would be noise.
-              when (merged /= incoming) $ push merged
+              if merged /= incoming then push merged
+              -- Equal means the server already holds this, which is worth
+              -- recording as much as a successful write is.
+              -- Equal means the server already holds this, which is as much
+              -- worth recording as a write would be.
+              else fork $ pure $ Pushed merged true
               -- The session was built from the older history, so it can be
               -- full of cards the other device already answered. Rebuild it,
               -- but only when the merge actually brought something in and
@@ -415,8 +457,21 @@ update state = case _ of
                 fork $ liftEffect $ StartedAnother <$> Now.now
               pure state { progress = merged }
 
+  Pushed progress ok ->
+    if not ok then
+      pure state { offline = true }
+    else do
+      fork $ liftEffect do
+        now <- Now.now
+        Storage.saveSyncedAt state.language.code now
+        pure $ SyncedAt now
+      pure state { sent = Just progress, offline = false }
+
+  SyncedAt now ->
+    pure state { syncedAt = Just now }
+
   ShowPairing ->
-    pure state { pairing = true, panel = false }
+    pure state { pairing = true, panel = Nothing }
 
   HidePairing ->
     pure state { pairing = false }
@@ -472,6 +527,10 @@ adoptKey language = Sync.keyFromPath <$> Route.search >>= case _ of
       Sync.saveKey key
       pure key
 
+-- | How long ago something happened, in the units the panel wants.
+elapsed :: Instant -> Instant -> Milliseconds
+elapsed from to = Milliseconds $ unwrap (unInstant to) - unwrap (unInstant from)
+
 -- | Whether a session can be rebuilt under the reader without costing them
 -- | anything: nothing answered into it, and no card turned over. A session
 -- | with answers in it has a place worth keeping, and a flipped card is an
@@ -523,7 +582,7 @@ view state dispatch =
       Loading -> H.div "app" H.empty
       Studying session -> studyingView state session dispatch
       Complete summary -> completeView state.language state.progress summary dispatch
-  , if state.panel then panelView state dispatch else H.empty
+  , if isJust state.panel then panelView state dispatch else H.empty
   , case state.statsAt of
       Nothing -> H.empty
       Just now -> statsView state.language now state.progress dispatch
@@ -704,15 +763,40 @@ panelView state dispatch =
     , accentPicker
     , voicePicker
     , H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
+    , H.button_ "panel-item" { onClick: dispatch <| Sync } "Sync now"
     , H.button_ "panel-item" { onClick: dispatch <| ShowPairing } "Sync another device"
     , H.button_ "panel-item" { onClick: dispatch <| Export } "Save progress to a file"
     , H.button_ "panel-item" { onClick: dispatch <| Import } "Load progress from a file"
     , H.p "panel-note" $
         show (Progress.seenCount state.progress) <> " of "
           <> show (Array.length state.language.deck) <> " words seen"
+    , H.p ("panel-note sync" <> if settled then "" else " pending") syncNote
     ]
   ]
   where
+    -- Exact rather than a flag: the server holds this progress or it does not,
+    -- and comparing says so without any bookkeeping that could fall out of
+    -- step. `Nothing` means nothing has been exchanged yet this run, which is
+    -- not the same as knowing there is something to send.
+    settled = state.sent == Just state.progress && not state.offline
+
+    syncNote
+      | settled = "Everything is synced"
+      | otherwise = case state.offline, state.syncedAt, state.panel of
+          -- The only case worth a reason: a failed exchange is invisible on
+          -- the card screen by design, so this is where it surfaces.
+          true, _, _ -> "Not synced — no connection" <> since
+          _, Nothing, _ -> "Not synced yet"
+          _, _, _ -> "Not synced" <> since
+
+    -- How stale the last successful exchange is, but only once that is worth
+    -- remarking on. "Not synced · last synced under a minute ago" reads as a
+    -- contradiction; a week is the thing you actually want to be told.
+    since = case state.syncedAt, state.panel of
+      Just at, Just now | elapsed at now >= Milliseconds 3600000.0 ->
+        " · last synced " <> Stats.describeDuration (elapsed at now) <> " ago"
+      _, _ -> ""
+
     -- Only worth showing once there is more than one deck to switch between.
     languagePicker
       | Array.length Language.all < 2 = H.empty

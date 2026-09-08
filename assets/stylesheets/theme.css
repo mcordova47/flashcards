@@ -276,6 +276,16 @@ body {
   text-align: center;
 }
 
+.panel-note.sync {
+  margin-top: 0;
+}
+
+/* Only the unsettled state earns any colour: "everything is synced" is the
+   expected case and should read as quietly as the word count above it. */
+.panel-note.sync.pending {
+  color: var(--accent);
+}
+
 .notice {
   position: fixed;
   left: 50%;

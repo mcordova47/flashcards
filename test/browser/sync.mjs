@@ -119,6 +119,43 @@ export default async ({ check, open, base, blobs }) => {
   check("no page errors on either", [...phone.errors, ...laptop.errors], [])
   await laptop.close()
 
+  // --- what the panel says about it ---
+  const note = async page => {
+    await page.tap(".panel-toggle")
+    await wait(150)
+    const text = await page.text(".panel-note.sync")
+    await page.dismiss()
+    return text
+  }
+
+  const syncNow = async page => {
+    await page.tap(".panel-toggle")
+    ;(await page.byText(".panel-item", "Sync now")).click()
+    await wait(400)
+    await page.dismiss()
+  }
+
+  check("a device that has just exchanged says so", await note(phone), "Everything is synced")
+  await phone.tap(".card")
+  await phone.tap(".got-it")
+  // Sync is on load and at session end, so a card graded mid-session is
+  // genuinely not up there yet - and the panel is the only place that says so.
+  check("and stops saying it the moment there is something to send",
+    await note(phone), "Not synced")
+  await syncNow(phone)
+  check("which the manual button clears", await note(phone), "Everything is synced")
+
+  await phone.setOfflineMode(true)
+  await phone.tap(".card")
+  await phone.tap(".got-it")
+  await syncNow(phone)
+  // A failed exchange stays off the card screen by design. This is where it
+  // surfaces, and it has to distinguish "not yet" from "cannot".
+  check("a failed attempt says why", await note(phone), "Not synced — no connection")
+  await phone.setOfflineMode(false)
+  await syncNow(phone)
+  check("and it recovers when the network does", await note(phone), "Everything is synced")
+
   // --- the QR code has to actually scan ---
   // A transposed grid, an off-by-one quiet zone or a mirrored path all still
   // look like a QR code, so reading the picture back is the only check worth
@@ -181,9 +218,10 @@ export default async ({ check, open, base, blobs }) => {
   await phone.reload({ waitUntil: "domcontentloaded" })
   await phone.waitForSelector(".prompt", { timeout: 20000 })
   check("a failed sync is silent", await phone.text(".notice"), null)
+  const before = (await phone.stored()).cards.length
   await phone.tap(".card")
   await phone.tap(".got-it")
-  check("and studying carries on regardless", (await phone.stored()).cards.length, 5)
+  check("and studying carries on regardless", (await phone.stored()).cards.length, before + 1)
   await phone.setOfflineMode(false)
   await phone.close()
 }

@@ -205,6 +205,21 @@ is order-insensitive, and a sync you have to remember is one you will not do.
 Offline it fails silently and picks up next time — the network is an
 optimisation, never a dependency.
 
+The `•••` panel says where things stand, and carries a **Sync now** for when
+you would rather not wait for the end of a session:
+
+| | |
+| --- | --- |
+| `Everything is synced` | the server holds exactly this |
+| `Not synced` | there are answers it has not seen |
+| `Not synced — no connection` | and the last attempt did not get through |
+
+"Everything is synced" is decided by comparing the progress against what the
+last successful exchange sent, not by a flag — a flag set in the wrong place
+would claim to be up to date while quietly not being, which is the one thing
+this line exists to rule out. A `· last synced 3 days ago` is appended once the
+gap is worth remarking on; below an hour it would read as a contradiction.
+
 The client does `GET` → `Progress.merge` → `PUT`, and only writes back when the
 merge produced something the other side lacked. If the merge brought new
 history in and the session has not been touched yet — nothing answered, no card

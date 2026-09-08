@@ -4,6 +4,9 @@
 module Flashcards.Storage
   ( accentKey
   , languageKey
+  , loadSyncedAt
+  , saveSyncedAt
+  , syncedAtKey
   , load
   , loadAccent
   , loadLanguage
@@ -22,8 +25,12 @@ import Prelude
 import Data.Argonaut.Core (stringify)
 import Data.Argonaut.Decode.Error (printJsonDecodeError)
 import Data.Argonaut.Parser (jsonParser)
+import Data.DateTime.Instant (Instant, instant, unInstant)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
+import Data.Newtype (unwrap)
+import Data.Number as Number
+import Data.Time.Duration (Milliseconds(..))
 import Effect (Effect)
 import Effect.Class.Console as Console
 import Flashcards.Deck (Index)
@@ -107,6 +114,24 @@ saveVoice :: String -> String -> Effect Unit
 saveVoice code voice = do
   storage <- localStorage =<< window
   Storage.setItem (voiceKey code) voice storage
+
+-- | When this device last got its progress onto the server, so a device that
+-- | has been offline for a week can say so rather than only saying "not
+-- | synced". Its own key, like the accent and the voice: it is a fact about
+-- | this device, and must not travel in a backup.
+syncedAtKey :: String -> String
+syncedAtKey code = "flashcards." <> code <> ".synced"
+
+loadSyncedAt :: String -> Effect (Maybe Instant)
+loadSyncedAt code = do
+  storage <- localStorage =<< window
+  raw <- Storage.getItem (syncedAtKey code) storage
+  pure $ instant <<< Milliseconds =<< Number.fromString =<< raw
+
+saveSyncedAt :: String -> Instant -> Effect Unit
+saveSyncedAt code at = do
+  storage <- localStorage =<< window
+  Storage.setItem (syncedAtKey code) (show $ unwrap $ unInstant at) storage
 
 -- | Which language is being studied. Not per-language, obviously, and kept
 -- | apart from progress so switching never risks the histories.
