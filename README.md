@@ -31,6 +31,7 @@ npm start        # http://localhost:8000
 | `npm run verify` | Browser suites against a real Chrome |
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
 | `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
+| `npm run rename` | Report words whose spelling changed, and pin the ones that should keep their history |
 
 ## Languages
 
@@ -87,7 +88,7 @@ rewrite when Leitner gets replaced by SM-2 or FSRS, and the only one worth
 testing.
 
 ```purescript
-buildSession :: Array Card -> Progress -> Instant -> Int -> Array Rank
+buildSession :: Array Card -> Progress -> Instant -> Int -> Array Slug
 applyGrade   :: Grade -> Instant -> Maybe CardProgress -> CardProgress
 ```
 
@@ -135,18 +136,65 @@ between two records for the same card the one with more sightings has strictly
 more history behind it and wins. No timestamps to reconcile, no lost sessions.
 The same function is what a sync layer will need later.
 
-Every file carries the deck's fingerprint, which hashes **rank and Spanish
-side only**. Progress is keyed by rank, so the one change that can corrupt it
-is a Spanish word moving to a different rank; rewording an English gloss cannot,
-and folding English into the hash would refuse every backup over an edit that
-changed nothing about what the progress refers to. A renumbered deck is a different deck as far as saved progress is concerned —
-importing across that boundary is refused outright, because it would remap your
-history onto the wrong words with no visible symptom. Loading your own
-`localStorage` only warns: refusing to open your own history would be worse
-than the drift.
+Every file names the language it belongs to, and a mismatch is refused. The
+decks share the word `mal`, and nearly every other German slug is simply inert
+in Spanish — which is the danger: a German file poured into the Spanish deck
+would report a thousand words learned and hand `mal` someone else's past.
+
+It also carries the deck's fingerprint, which no longer gates anything for a
+current file. That is the point of keying by slug: a slug means the same word
+in every version of the deck, so a backup crosses a deck edit freely. The
+fingerprint's remaining job is placing payloads written before v5, which named
+their cards by position — see below.
 
 Saving into a synced folder (iCloud Drive, Google Drive) makes this a workable
 manual device transfer — the OS does the networking.
+
+## What a card is, and renaming one
+
+Progress is keyed by a **slug**: the foreign word's spelling at the moment the
+card was written down, frozen thereafter. Rank is a position and moves whenever
+the deck is edited, so it cannot serve as an identity — for four format
+versions it did, and every deck decision was shaped by that: `funciona` was
+re-glossed rather than removed, three RAE-deprecated spellings were marked
+rather than deleted, five German words were appended rather than put where they
+belong. Rank now means only what it says: the `#N` on the card, the order new
+words are introduced, the frequency bands.
+
+Once frozen, a slug **is** an opaque id, and it inherits the hazard of one:
+keep the slug while replacing the word and history lands on the wrong card. The
+difference from `es-0472` is that the divergence is *visible* — `concrete`
+sitting beside `concreto` says exactly what happened, and `sync-deck` flags it.
+
+The slug is the word verbatim unless the CSV's `Slug` column pins something
+else, and that column is empty for all 2005 rows today. Fill it in only when a
+word is respelled and its history should follow. It is deliberately not
+normalised: stripping accents would merge `este`/`éste` and eleven other
+Spanish pairs the deck keeps apart on purpose, plus `schön`/`schon` in German.
+
+**To rename a word**, edit the sheet, pull it, then:
+
+```
+npm run rename                    # what changed since the last commit
+node tools/rename.mjs es 472      # a respelling: keep the history
+node tools/rename.mjs es 472 --new  # a different word: start fresh
+```
+
+Which of the two a change is cannot be decided by machine — `concrete` to
+`concreto` and `concrete` to `armario` are the same edit — so the script
+reports and waits to be told. Pinning writes the old spelling into the local
+CSV and prints the sheet cell to copy it into; `sync-deck --fetch` refuses to
+let the sheet quietly drop a pin the snapshot had.
+
+### Migrating from rank
+
+Progress written before format v5 names its cards by position, and turning a
+position back into a word means reading it off the current deck — sound only
+while the deck has not moved since, which is exactly what the fingerprint
+attests. `Deck.adopt` does this on load and writes the result straight back, so
+it happens once per device. Progress whose fingerprint no longer matches is
+placed anyway and warned about in the console: that placement is what the app
+has been showing all along, so discarding it would be a loss rather than a fix.
 
 ## Offline
 
@@ -158,15 +206,19 @@ deploy invalidates it and nothing else does.
 
 ### What `sync-deck` refuses
 
-Contiguous ranks, non-empty sides, and a unique Spanish side, which ES→EN
-prompting depends on. It also fails on spreadsheet damage: a cell reading
-`TRUE` or `FALSE` (Sheets decides the string "true" is a boolean, which is how
-`verdadero` was glossed for months) or a `#REF!`-style error value.
+Contiguous ranks, non-empty sides, a unique Spanish side (which ES→EN
+prompting depends on) and a unique slug (which saved history depends on). It
+also fails on spreadsheet damage: a cell reading `TRUE` or `FALSE` (Sheets
+decides the string "true" is a boolean, which is how `verdadero` was glossed
+for months) or a `#REF!`-style error value. With `--fetch` it additionally
+refuses to let the sheet drop a pinned slug the local snapshot had, because
+that loss is otherwise silent.
 
-Two heuristics only warn, because both have legitimate exceptions: an all-caps
-gloss, and a gloss containing its own Spanish answer — the latter makes a
+Three heuristics only warn, because all have legitimate exceptions: an all-caps
+gloss; a gloss containing its own Spanish answer — the latter makes a
 production card free, though a whole gloss equal to its Spanish is just a
-cognate and fine.
+cognate and fine; and a slug that no longer matches its word, which is exactly
+what a rename looks like and also exactly what a mistake looks like.
 
 ## The study model
 
@@ -272,6 +324,8 @@ a backup file.
 ```
 data/es-1000.csv                     committed snapshot of the sheet
 tools/sync-deck.mjs                  sheet -> CSV -> generated module
+tools/rename.mjs                     pins a slug when a word is respelled
+tools/deck-source.mjs                the language table, shared by both
 src/Flashcards/
   Scheduler.purs                     pure; the learning logic
   Storage.purs                       localStorage, at the edge

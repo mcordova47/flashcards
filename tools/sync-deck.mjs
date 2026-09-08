@@ -9,58 +9,13 @@
 
 import fs from "fs"
 import crypto from "crypto"
-
-const SHEET = "1vz4CgmSxP7fFmoa-uzjXPmHckkjSfl2evmRyG5EsH5w"
-
-// One entry per language. `column` names the foreign side in the CSV, and
-// `gid` identifies the tab — a tab *name* cannot be used, because the export
-// endpoint silently falls back to the first sheet for a name it does not know.
-const LANGUAGES = [
-  {
-    code: "es",
-    name: "Spanish",
-    gid: "886210546",
-    column: "Español",
-    csv: "data/es-1000.csv",
-    module: "Spanish",
-    note: "ordered by frequency, most common first",
-  },
-  {
-    code: "de",
-    name: "German",
-    gid: "1432606036",
-    column: "Deutsch",
-    csv: "data/de-1000.csv",
-    module: "German",
-    note: "a course vocabulary list, A1 then A2, so rank is curriculum position rather than frequency",
-  },
-]
-
-// RFC 4180: fields may be quoted, quotes escape as "".
-const parseCsv = text => {
-  const rows = []
-  let row = [], field = "", quoted = false
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i]
-    if (quoted) {
-      if (c === '"' && text[i + 1] === '"') { field += '"'; i++ }
-      else if (c === '"') quoted = false
-      else field += c
-    } else if (c === '"') quoted = true
-    else if (c === ",") { row.push(field); field = "" }
-    else if (c === "\n") { row.push(field); rows.push(row); row = []; field = "" }
-    else if (c !== "\r") field += c
-  }
-  if (field !== "" || row.length) { row.push(field); rows.push(row) }
-  return rows
-}
+import { LANGUAGES, languagesFor, parseCsv, pinsIn } from "./deck-source.mjs"
 
 const args = process.argv.slice(2)
 const fetching = args.includes("--fetch")
+const droppingPins = args.includes("--drop-pins")
 const only = args.find(a => !a.startsWith("--"))
-const chosen = only
-  ? LANGUAGES.filter(l => l.code === only || l.module.toLowerCase() === only.toLowerCase())
-  : LANGUAGES
+const chosen = languagesFor(only)
 
 if (!chosen.length) {
   console.error(`Unknown language "${only}". Known: ${LANGUAGES.map(l => l.code).join(", ")}`)
@@ -91,6 +46,21 @@ for (const lang of chosen) {
     // both places.
     console.log(`  wrote ${lang.csv}`
       + (differing ? ` - ${differing} row(s) differ from the local snapshot` : " - unchanged"))
+
+    // A pinned slug is the only thing tying a renamed card to its history, and
+    // the sheet overwrites the snapshot wholesale. Losing one is silent - the
+    // slug simply goes back to matching the word, so nothing downstream can
+    // tell - which makes this the one place it can be caught.
+    if (!droppingPins) {
+      const had = pinsIn(previous), has = pinsIn(normalised)
+      const lost = [...had].filter(([rank, pin]) => has.get(rank) !== pin)
+      if (lost.length) {
+        fail(`the fetch dropped ${lost.length} pinned slug(s) that ${lang.csv} had:\n`
+           + lost.map(([rank, pin]) => `    #${rank} was keyed ${JSON.stringify(pin)}`).join("\n")
+           + `\n  Add them to the Slug column of the ${lang.tab} tab, or rerun with --drop-pins `
+           + `to orphan that history deliberately.`)
+      }
+    }
   }
 
   const [header, ...body] = parseCsv(fs.readFileSync(lang.csv, "utf-8"))
@@ -184,9 +154,11 @@ for (const lang of chosen) {
   for (const c of cards) byEnglish.set(c.english, [...(byEnglish.get(c.english) ?? []), c.foreign])
   const collisions = [...byEnglish.values()].filter(v => v.length > 1)
 
-  // Identifies what a rank *means*. Deliberately excludes the English side:
-  // progress is keyed by rank, so the only change that can corrupt it is a
-  // word moving rank. Rewording a gloss cannot.
+  // Identifies what a rank *means*. Progress is keyed by slug now, so this no
+  // longer guards saved history; what is left is placing the rank-keyed
+  // payloads that predate v5, and refusing a backup from the wrong deck to a
+  // version of the app too old to say which language it is. Excludes the
+  // English side, because rewording a gloss moves nothing.
   const fingerprint = crypto.createHash("sha256")
     .update(cards.map(c => `${c.rank}\u0000${c.foreign}`).join("\n"))
     .digest("hex").slice(0, 12)
@@ -210,9 +182,9 @@ module Flashcards.Data.Deck.${lang.module}
 
 import Flashcards.Types.Card (Card, Rank(..), Slug(..))
 
--- | Content hash of what each rank means. Progress is keyed by rank, so a deck
--- | whose rows were renumbered is a different deck as far as saved progress is
--- | concerned.
+-- | Content hash of what each rank means. Progress is keyed by slug, so this
+-- | is no longer what protects it - it certifies that a rank still names the
+-- | word it named, which is all that placing a pre-v5 payload needs.
 fingerprint :: String
 fingerprint = "${fingerprint}"
 

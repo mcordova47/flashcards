@@ -9,9 +9,9 @@ module Flashcards.Data.Deck.Spanish
 
 import Flashcards.Types.Card (Card, Rank(..), Slug(..))
 
--- | Content hash of what each rank means. Progress is keyed by rank, so a deck
--- | whose rows were renumbered is a different deck as far as saved progress is
--- | concerned.
+-- | Content hash of what each rank means. Progress is keyed by slug, so this
+-- | is no longer what protects it - it certifies that a rank still names the
+-- | word it named, which is all that placing a pre-v5 payload needs.
 fingerprint :: String
 fingerprint = "654958a3f958"
 

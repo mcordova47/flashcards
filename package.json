@@ -8,7 +8,8 @@
     "start": "spago build && node dev.mjs",
     "test": "spago test",
     "verify": "npm run build && node test/browser/run.mjs",
-    "sync-deck": "node tools/sync-deck.mjs"
+    "sync-deck": "node tools/sync-deck.mjs",
+    "rename": "node tools/rename.mjs"
   },
   "license": "ISC",
   "devDependencies": {
