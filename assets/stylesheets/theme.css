@@ -71,6 +71,26 @@ body {
   height: 3px;
 }
 
+/* Same weight as the panel toggle beside it: undo is a way out of a slip, not
+   something to be drawn towards. */
+.undo {
+  appearance: none;
+  border: 0;
+  background: none;
+  color: var(--faint);
+  font: inherit;
+  font-size: 0.8125rem;
+  line-height: 1;
+  padding: 0.5rem 0.4rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.undo:hover {
+  color: var(--accent);
+}
+
 .panel-toggle {
   appearance: none;
   border: 0;

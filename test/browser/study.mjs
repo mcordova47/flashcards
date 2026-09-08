@@ -1,4 +1,4 @@
-import { formatVersion, storedAt } from "./harness.mjs"
+import { formatVersion, slugAt, storedAt, wait } from "./harness.mjs"
 
 export const name = "Study loop"
 
@@ -59,4 +59,45 @@ export default async ({ check, open }) => {
   await page.waitForSelector(".prompt")
   check("reloading resumes past what was learned", await page.text(".rank"), "#21")
   check("no page errors", page.errors, [])
+
+  // --- undo ---
+  // The only action in the app that used to be unrecoverable: a mis-tapped
+  // "Got it" pushes a word you did not know three weeks out, silently.
+  const slip = await open()
+  await slip.waitForSelector(".prompt")
+  check("nothing to undo before anything is answered", await slip.$(".undo"), null)
+
+  await slip.tap(".card")
+  await slip.tap(".got-it")
+  check("a grade offers one", await slip.text(".undo"), "Undo")
+  check("having moved on", await slip.text(".prompt"), slugAt(2))
+  await slip.tap(".undo")
+  check("undoing goes back to the card", await slip.text(".prompt"), slugAt(1))
+  // Still face up, with both grades to hand. You undo in order to press the
+  // other button, and putting the card back face down would make you flip it
+  // again to get there.
+  check("still showing its answer", await slip.text(".answer"), "I")
+  check("with both grades to hand", (await slip.$$(".grade")).length, 2)
+  check("and the offer is gone, because one step is all there is",
+    await slip.$(".undo"), null)
+  check("with the history it wrote taken back out of storage",
+    (await slip.stored()).cards.length, 0)
+
+  // Each grade replaces the snapshot rather than stacking, so undo always
+  // means the most recent answer and never an older one.
+  for (let i = 0; i < 3; i++) { await slip.tap(".card"); await slip.tap(".got-it") }
+  await slip.tap(".undo")
+  check("only ever the last of several", (await slip.stored()).cards.length, 2)
+  check("landing on the card that was graded", await slip.text(".prompt"), slugAt(3))
+
+  // Again drops a card to box 0 and requeues it a few places later, so undo
+  // has a queue to put back as well as a record.
+  await slip.tap(".card")
+  await slip.tap(".again")
+  const requeued = (await slip.evaluate(() => document.querySelectorAll(".pip").length))
+  await slip.tap(".undo")
+  check("a requeue is taken back too",
+    await slip.evaluate(() => document.querySelectorAll(".pip").length), requeued - 1)
+  check("no page errors", slip.errors, [])
+  await slip.close()
 }

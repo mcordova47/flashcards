@@ -5,6 +5,7 @@ module Flashcards.Pages.Study
   , Screen
   , Session
   , State
+  , Undo
   , init
   , update
   , view
@@ -61,6 +62,14 @@ type Summary =
   , at :: Instant
   }
 
+-- | The whole of one step backwards. The progress is kept entire rather than
+-- | as the one card that changed: `applyGrade` is the only thing that knows
+-- | what a grade touches, and re-deriving that here is how the two drift.
+type Undo =
+  { progress :: Progress
+  , screen :: Screen
+  }
+
 data Screen
   = Loading
   | Studying Session
@@ -100,6 +109,13 @@ type State =
   -- | reality the way a flag set in the wrong place would. `Nothing` means
   -- | this device has not exchanged anything yet *this run* and so does not
   -- | know — which is different from knowing there is something to send.
+  -- | Enough to put the last grade back, and only the last one.
+  -- |
+  -- | Cleared as soon as the progress reaches the server, because undoing
+  -- | after that would lose the argument anyway: the next merge sees a higher
+  -- | `seen` on the other side and takes it, silently re-applying the grade.
+  -- | Better to stop offering it than to offer something that quietly fails.
+  , undo :: Maybe Undo
   , sent :: Maybe Progress
   , syncedAt :: Maybe Instant
   , offline :: Boolean
@@ -127,6 +143,7 @@ data Message
   | Flip
   | Answer Grade
   | Answered Grade Instant
+  | Undo
   | StartAnother
   | StartedAnother Instant
   | TogglePanel
@@ -193,6 +210,7 @@ init = do
     , statsAt: Nothing
     , pairing: false
     , origin: ""
+    , undo: Nothing
     , sent: Nothing
     , syncedAt: Nothing
     , offline: false
@@ -220,6 +238,7 @@ update state = case _ of
         -- this one until it has been asked.
         , sent = Nothing
         , offline = false
+        , undo = Nothing
         , progress = repaired.progress
         , canSpeak = canSpeak
         , savedAccent = savedAccent
@@ -301,6 +320,7 @@ update state = case _ of
         when finished $ fork $ pure Sync
         pure state
           { progress = progress
+          , undo = Just { progress: state.progress, screen: state.screen }
           , screen =
               if finished then
                 Complete
@@ -315,12 +335,22 @@ update state = case _ of
     _ ->
       pure state
 
+  -- One step, and only ever the most recent grade: each new one replaces the
+  -- snapshot, so there is no stack to get lost in.
+  Undo -> case state.undo of
+    Nothing ->
+      pure state
+    Just back -> do
+      forkVoid $ liftEffect $
+        Storage.save state.language.code state.language.fingerprint back.progress
+      pure state { progress = back.progress, screen = back.screen, undo = Nothing }
+
   StartAnother -> do
     fork $ liftEffect $ StartedAnother <$> Now.now
     pure state
 
   StartedAnother now ->
-    pure state { screen = startSession state.language.deck state.progress now }
+    pure state { screen = startSession state.language.deck state.progress now, undo = Nothing }
 
   TogglePanel -> case state.panel of
     Just _ ->
@@ -348,6 +378,7 @@ update state = case _ of
         pure state
           { statsAt = Nothing
           , screen = Studying { queue, position: 0, flipped: false, gotIt: 0, again: 0 }
+          , undo = Nothing
           }
 
   ShowStats -> do
@@ -457,7 +488,7 @@ update state = case _ of
         now <- Now.now
         Storage.saveSyncedAt state.language.code now
         pure $ SyncedAt now
-      pure state { sent = Just progress, offline = false }
+      pure state { sent = Just progress, offline = false, undo = Nothing }
 
   SyncedAt now ->
     pure state { syncedAt = Just now }
@@ -573,7 +604,7 @@ view state dispatch =
   [ case state.screen of
       Loading -> H.div "app" H.empty
       Studying session -> studyingView state session dispatch
-      Complete summary -> completeView state.language state.progress summary dispatch
+      Complete summary -> completeView (isJust state.undo) state.language state.progress summary dispatch
   , if isJust state.panel then panelView state dispatch else H.empty
   , case state.statsAt of
       Nothing -> H.empty
@@ -584,13 +615,21 @@ view state dispatch =
       Just message -> H.div "notice" message
   ]
 
-topBar :: Maybe Session -> Dispatch Message -> ReactElement
-topBar session dispatch =
+-- | Undo sits here rather than beside the grade buttons, so that it is in the
+-- | same place whether a session is running or finished — a mis-tap on the
+-- | last card of a session is exactly when it is wanted, and by then the
+-- | controls have gone.
+topBar :: Boolean -> Maybe Session -> Dispatch Message -> ReactElement
+topBar undoable session dispatch =
   H.div "topbar"
   [ H.div "pips" case session of
       Nothing -> []
       Just s -> s.queue # Array.mapWithIndex \i _ ->
         H.div_ ("pip" <> if i < s.position then " done" else "") { key: show i } H.empty
+  , if undoable then
+      H.button_ "undo" { onClick: dispatch <| Undo, title: "Undo the last answer" } "Undo"
+    else
+      H.empty
   , H.button_ "panel-toggle" { onClick: dispatch <| TogglePanel, title: "Progress" } "•••"
   ]
 
@@ -601,7 +640,7 @@ currentCard index session =
 studyingView :: State -> Session -> Dispatch Message -> ReactElement
 studyingView state session dispatch =
   H.div "app"
-  [ topBar (Just session) dispatch
+  [ topBar (isJust state.undo) (Just session) dispatch
   , H.div_ "card" { onClick: dispatch <| Flip } face
   , H.div "controls" controls
   ]
@@ -662,10 +701,10 @@ studyingView state session dispatch =
       | otherwise =
           [ H.p "hint" "tap anywhere to flip" ]
 
-completeView :: Language -> Progress -> Summary -> Dispatch Message -> ReactElement
-completeView language progress summary dispatch =
+completeView :: Boolean -> Language -> Progress -> Summary -> Dispatch Message -> ReactElement
+completeView undoable language progress summary dispatch =
   H.div "app"
-  [ topBar Nothing dispatch
+  [ topBar undoable Nothing dispatch
   , H.div "done-body"
     [ H.h1 "done-title" title
     , H.p "done-stats" stats
@@ -905,6 +944,7 @@ keyMessage = case _ of
   "2" -> Just $ Answer GotIt
   "ArrowRight" -> Just $ Answer GotIt
   "s" -> Just SpeakCurrent
+  "z" -> Just Undo
   _ -> Nothing
 
 onKeyDown :: (String -> Effect Unit) -> Effect Unit

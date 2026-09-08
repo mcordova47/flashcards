@@ -120,6 +120,20 @@ export default async ({ check, open, base, blobs }) => {
   check("no page errors on either", [...phone.errors, ...laptop.errors], [])
   await laptop.close()
 
+  // --- undo stops being offered once the server has it ---
+  // Undoing after a push would lose the argument anyway: the next merge sees a
+  // higher `seen` on the other side and takes it, silently putting the grade
+  // back. Better to stop offering it than to offer something that fails
+  // quietly.
+  await phone.tap(".card")
+  await phone.tap(".got-it")
+  check("a fresh grade can still be taken back", await phone.text(".undo"), "Undo")
+  await phone.tap(".panel-toggle")
+  ;(await phone.byText(".panel-item", "Sync now")).click()
+  await wait(400)
+  await phone.dismiss()
+  check("but not once it has been sent", await phone.$(".undo"), null)
+
   // --- a blob this device cannot place ---
   // Not reachable by pairing, since blobs are per language, but the server is
   // a dumb store and this is the last thing standing between a bad one and

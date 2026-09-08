@@ -316,6 +316,27 @@ production card free, though a whole gloss equal to its Spanish is just a
 cognate and fine; and a slug that no longer matches its word, which is exactly
 what a rename looks like and also exactly what a mistake looks like.
 
+### Undo
+
+The top bar offers one step back after a grade, and only the most recent one —
+each grade replaces the snapshot rather than stacking, so undo always means the
+answer just given. It restores the whole `Progress` and the whole session, not
+the one card that changed: `applyGrade` is the only thing that knows what a
+grade touches, and re-deriving that at the undo site is how the two drift.
+
+The card comes back **face up**, with both grades to hand. You undo in order to
+press the other button; putting it face down would make you flip it again to
+get there.
+
+It sits in the top bar rather than beside the grades so that it is in the same
+place whether a session is running or finished — a mis-tap on the last card is
+exactly when it is wanted, and by then the controls have gone.
+
+The offer disappears once the progress reaches the server. Undoing after that
+would lose the argument anyway: the next merge sees a higher `seen` on the
+other side and takes it, silently putting the grade back. Better to stop
+offering it than to offer something that quietly fails.
+
 ## The study model
 
 Cards are shown **Spanish → English** and graded by hand: tap to flip, then
