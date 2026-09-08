@@ -1,3 +1,5 @@
+import qrcode from "qrcode-generator"
+
 // 32 characters of [a-z0-9], about 165 bits. `crypto.getRandomValues` rather
 // than `Math.random`, because this is the only thing standing between someone
 // else's progress and the open internet.
@@ -67,4 +69,51 @@ export const copyLink_ = (link, done) => {
   if (field && field.select) field.select()
   if (!navigator.clipboard) return done("failed")
   navigator.clipboard.writeText(link).then(() => done("copied")).catch(() => done("failed"))
+}
+
+// The pairing link as a QR code, so a phone can take it off a laptop screen
+// with nothing typed and nothing messaged. This is the case the link alone
+// serves worst: the two devices are in the same room and have no channel
+// between them.
+//
+// Built as an SVG data URL rather than injected markup, so it is an ordinary
+// <img> with no innerHTML anywhere, and crisp at any size.
+export const qrDataUrl = link => {
+  // 0 asks for the smallest version that fits. Level M is 15% recovery, which
+  // is the usual default and ample for a screen a camera is pointed at.
+  const qr = qrcode(0, "M")
+  qr.addData(link)
+  qr.make()
+
+  const count = qr.getModuleCount()
+  // The spec's quiet zone. Without it a scanner cannot find the code against
+  // a page that is nearly the same colour.
+  const quiet = 4
+  const size = count + quiet * 2
+
+  // One path segment per horizontal run rather than per module: the same
+  // picture at a fraction of the bytes, which matters when the whole thing
+  // has to fit in a data URL.
+  let d = ""
+  for (let row = 0; row < count; row++) {
+    let from = null
+    for (let col = 0; col <= count; col++) {
+      const dark = col < count && qr.isDark(row, col)
+      if (dark && from === null) from = col
+      if (!dark && from !== null) {
+        const run = col - from
+        d += `M${from + quiet} ${row + quiet}h${run}v1h-${run}z`
+        from = null
+      }
+    }
+  }
+
+  // Black on white in both themes, deliberately. Plenty of scanners cope with
+  // an inverted code and enough of them do not, and a code that fails on one
+  // phone in five is worse than one that clashes with a dark page.
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges">` +
+    `<rect width="${size}" height="${size}" fill="#fff"/>` +
+    `<path d="${d}" fill="#000"/></svg>`
+  return "data:image/svg+xml," + encodeURIComponent(svg)
 }

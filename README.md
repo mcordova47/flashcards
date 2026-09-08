@@ -172,15 +172,23 @@ would drift. Nothing on the server knows what a card is.
 
 ### Pairing
 
-The `•••` panel's **Sync another device** opens a sheet with a `?pair=<key>`
-link. Open it on the second device and it adopts the key, pulls what is there,
-and takes the key back out of the address bar — it is the only secret this app
-has, and leaving it there would put it in history and in whatever gets shared
-next.
+The `•••` panel's **Sync another device** opens a sheet with a QR code and the
+`?pair=<key>` link behind it. Either way the second device adopts the key,
+pulls what is there, and takes the key back out of the address bar — it is the
+only secret this app has, and leaving it there would put it in history and in
+whatever gets shared next.
 
-A link rather than a QR code or a typed code: no rendering library, no second
-store to expire, and it works phone-to-laptop as well as the other way, which
-a camera does not.
+Both, because they fail in opposite places. The QR is unbeatable when the two
+devices are in the same room and have no channel between them — nothing typed,
+nothing messaged — and useless when they are not. The link is the reverse.
+
+The code is drawn as an SVG data URL in an ordinary `<img>`, with one path
+segment per horizontal run rather than one rect per module: 712 dark modules
+are about 21 KB drawn separately and 5 KB drawn as 364 runs. It is black on
+white in both themes, deliberately — plenty of scanners cope with an inverted
+code and enough of them do not. The suite reads the picture back with a decoder
+rather than trusting that it looks right, because a transposed grid or an
+off-by-one quiet zone still looks exactly like a QR code.
 
 The link is **shown**, not just copied. Both `navigator.clipboard` and
 `navigator.share` need a transient user activation that a click can lose on its
@@ -281,8 +289,9 @@ has been showing all along, so discarding it would be a loss rather than a fix.
 
 ## Offline
 
-`sw.js` is network-first with the cache as fallback. At 76 KB the cache buys
-almost nothing in speed, but everything in being usable underground — and
+`sw.js` is network-first with the cache as fallback. At about 130 KB over the
+wire — two thousand cards and their example sentences, all compiled in — the
+cache buys little in speed, but everything in being usable underground — and
 network-first means a deploy always wins, so you can never get wedged on a stale
 bundle. The cache name is stamped at build time with a hash of the shell, so a
 deploy invalidates it and nothing else does.

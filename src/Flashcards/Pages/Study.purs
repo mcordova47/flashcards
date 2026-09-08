@@ -675,8 +675,10 @@ pairingView state dispatch =
     ]
   , H.div "sheet-body"
     [ H.p "pair-lead" $
-        "Open this link on your other device. Both will then keep the same "
-          <> "progress, merging whichever has seen a word more often."
+        "Point your other device's camera at this, or open the link on it. "
+          <> "Both will then keep the same progress, merging whichever has "
+          <> "seen a word more often."
+    , H.img_ "pair-qr" { src: Sync.qrDataUrl link, alt: "Pairing code" }
     -- A textarea rather than an input so the whole link wraps into view: the
     -- key is the one thing worth checking against the other device, and an
     -- input would ellipsise exactly the part that differs.

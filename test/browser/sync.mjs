@@ -1,3 +1,5 @@
+import jsQR from "jsqr"
+import { qrDataUrl } from "../../src/Flashcards/Sync.js"
 import { slugAt, wait } from "./harness.mjs"
 
 export const name = "The progress endpoint"
@@ -117,10 +119,47 @@ export default async ({ check, open, base, blobs }) => {
   check("no page errors on either", [...phone.errors, ...laptop.errors], [])
   await laptop.close()
 
+  // --- the QR code has to actually scan ---
+  // A transposed grid, an off-by-one quiet zone or a mirrored path all still
+  // look like a QR code, so reading the picture back is the only check worth
+  // making. The grid is rebuilt from the SVG this ships, not from the
+  // library's own output, so it tests the part written here.
+  {
+    const link = `https://palabras.mcord.dev/?pair=${KEY}`
+    const svg = decodeURIComponent(qrDataUrl(link).replace("data:image/svg+xml,", ""))
+    const size = Number(svg.match(/viewBox="0 0 (\d+)/)[1])
+    const grid = Array.from({ length: size }, () => new Array(size).fill(false))
+    for (const [, x, y, run] of svg.matchAll(/M(\d+) (\d+)h(\d+)v1h-\d+z/g)) {
+      for (let i = 0; i < Number(run); i++) grid[Number(y)][Number(x) + i] = true
+    }
+    const scale = 4
+    const side = size * scale
+    const pixels = new Uint8ClampedArray(side * side * 4)
+    for (let y = 0; y < side; y++) {
+      for (let x = 0; x < side; x++) {
+        const shade = grid[Math.floor(y / scale)][Math.floor(x / scale)] ? 0 : 255
+        const at = (y * side + x) * 4
+        pixels[at] = pixels[at + 1] = pixels[at + 2] = shade
+        pixels[at + 3] = 255
+      }
+    }
+    check("the QR code reads back as the pairing link", jsQR(pixels, side, side)?.data, link)
+    // The whole picture travels in a data URL. Runs rather than one rect per
+    // module is what keeps that reasonable - 712 dark modules would be about
+    // 21 KB drawn separately, against 5 KB drawn as 364 runs - so the bound is
+    // set to catch a regression to the naive form, not to shave bytes.
+    check("and is drawn as runs rather than a rect per module", svg.length < 8000, true)
+    // Four modules of white on every side, or a scanner cannot find the code.
+    check("with the quiet zone the spec asks for",
+      grid[0].some(Boolean) || grid[3].some(Boolean) || grid.some(r => r[3]), false)
+  }
+
   // --- handing the link over ---
   await phone.tap(".panel-toggle")
   ;(await phone.byText(".panel-item", "Sync another device")).click()
   await wait(300)
+  check("the sheet shows a scannable code", 
+    (await phone.$eval(".pair-qr", e => e.src)).startsWith("data:image/svg+xml,"), true)
   const shown = await phone.$eval(".pair-link", e => e.value)
   // Shown rather than only copied: both the clipboard and a share sheet need a
   // user activation that can be lost on the way through the update loop, and a

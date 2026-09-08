@@ -18,6 +18,7 @@ module Flashcards.Sync
   , origin
   , pairingLink
   , pushRemote
+  , qrDataUrl
   , saveKey
   , syncKey
   )
@@ -119,6 +120,10 @@ fetchRemote key language handler =
 pushRemote :: String -> String -> String -> (Boolean -> Effect Unit) -> Effect Unit
 pushRemote key language body handler =
   runEffectFn4 pushRemote_ key language body $ mkEffectFn1 handler
+
+-- | Pure: the same link always gives the same code, so this can be called
+-- | straight from the view without a message round trip.
+foreign import qrDataUrl :: String -> String
 
 foreign import origin :: Effect String
 

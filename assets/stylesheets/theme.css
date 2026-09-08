@@ -622,6 +622,17 @@ body {
   line-height: 1.5;
 }
 
+.pair-qr {
+  display: block;
+  width: 100%;
+  max-width: 15rem;
+  margin: 0 auto 1.25rem;
+  border-radius: 12px;
+  /* The code carries its own quiet zone, so the white goes right to the edge
+     of the image and the rounding is all that separates it from the page. */
+  background: #fff;
+}
+
 .pair-link {
   display: block;
   width: 100%;
