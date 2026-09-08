@@ -10,7 +10,7 @@ import Data.DateTime.Instant (Instant, instant)
 import Data.Maybe (Maybe(..), fromJust)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Stats as Stats
-import Flashcards.Types.Card (Card, Rank(..))
+import Flashcards.Types.Card (Card, Rank(..), Slug(..))
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
@@ -29,7 +29,7 @@ now = at $ 100.0 * day
 
 deck :: Array Card
 deck = Array.range 1 20 <#> \n ->
-  { rank: Rank n, english: "en" <> show n, word: "es" <> show n, example: "" }
+  { rank: Rank n, slug: Slug ("es" <> show n), english: "en" <> show n, word: "es" <> show n, example: "" }
 
 -- | rank, box, seen, missed, lapses, days until due
 card :: Int -> Int -> Int -> Int -> Int -> Number -> Progress -> Progress

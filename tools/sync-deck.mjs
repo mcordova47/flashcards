@@ -101,16 +101,24 @@ for (const lang of chosen) {
 
   // Optional, and found by name: the decks do not agree on column count.
   const exampleAt = header.indexOf("Example")
+  // Also optional, and usually empty. A slug is only written down when a word
+  // is renamed and its history should follow; otherwise the word is the slug.
+  const slugAt = header.indexOf("Slug")
 
   const cards = body.map((cells, i) => {
     const rank = Number((cells[0] ?? "").trim())
     const english = (cells[1] ?? "").trim()
     const foreign = (cells[2] ?? "").trim()
     const example = exampleAt < 0 ? "" : (cells[exampleAt] ?? "").trim()
+    const pinned = slugAt < 0 ? "" : (cells[slugAt] ?? "").trim()
     if (!Number.isInteger(rank)) fail(`row ${i + 2} has a non-integer Order: ${cells[0]}`)
     if (!english) fail(`row ${i + 2} has an empty English side`)
     if (!foreign) fail(`row ${i + 2} has an empty ${lang.column} side`)
-    return { rank, english, foreign, example }
+    // Verbatim, not normalised. Stripping accents merges este/éste and
+    // schön/schon; lowercasing would merge German Sie and sie in a deck that
+    // carried both. The word is already required unique, so it needs nothing
+    // doing to it.
+    return { rank, english, foreign, example, slug: pinned || foreign }
   })
 
   cards.forEach((c, i) => {
@@ -153,6 +161,25 @@ for (const lang of chosen) {
     seen.set(c.foreign, c.rank)
   }
 
+  const slugs = new Map()
+  for (const c of cards) {
+    if (slugs.has(c.slug)) {
+      fail(`duplicate slug ${JSON.stringify(c.slug)} at #${slugs.get(c.slug)} and #${c.rank}. `
+         + `Progress is keyed by slug, so two cards sharing one would share a history.`)
+    }
+    slugs.set(c.slug, c.rank)
+  }
+
+  // A slug outliving its spelling is exactly what the Slug column is for, so
+  // this is not an error - but it is also what an accidentally reused slug
+  // looks like, and those are indistinguishable to a machine.
+  for (const c of cards) {
+    if (c.slug !== c.foreign) {
+      warnings.push(`#${c.rank} is keyed ${JSON.stringify(c.slug)} but reads `
+                  + `${JSON.stringify(c.foreign)} - intended after a rename, wrong if the word was replaced`)
+    }
+  }
+
   const byEnglish = new Map()
   for (const c of cards) byEnglish.set(c.english, [...(byEnglish.get(c.english) ?? []), c.foreign])
   const collisions = [...byEnglish.values()].filter(v => v.length > 1)
@@ -166,8 +193,9 @@ for (const lang of chosen) {
 
   const escape = s => s.replace(/\\/g, "\\\\").replace(/"/g, '\\"')
   const entries = cards
-    .map(c => `  { rank: Rank ${c.rank}, english: "${escape(c.english)}"`
-             + `, word: "${escape(c.foreign)}", example: "${escape(c.example)}" }`)
+    .map(c => `  { rank: Rank ${c.rank}, slug: Slug "${escape(c.slug)}"`
+             + `, english: "${escape(c.english)}", word: "${escape(c.foreign)}"`
+             + `, example: "${escape(c.example)}" }`)
     .join("\n  ,\n")
 
   const out = `src/Flashcards/Data/Deck/${lang.module}.purs`
@@ -180,7 +208,7 @@ module Flashcards.Data.Deck.${lang.module}
   )
   where
 
-import Flashcards.Types.Card (Card, Rank(..))
+import Flashcards.Types.Card (Card, Rank(..), Slug(..))
 
 -- | Content hash of what each rank means. Progress is keyed by rank, so a deck
 -- | whose rows were renumbered is a different deck as far as saved progress is

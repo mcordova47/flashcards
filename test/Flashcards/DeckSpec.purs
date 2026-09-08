@@ -7,12 +7,14 @@ import Prelude
 
 import Data.Array as Array
 import Data.Maybe (Maybe(..))
+import Flashcards.Data.Deck.German as German
 import Flashcards.Data.Deck.Spanish as Spanish
 import Flashcards.Deck as Deck
 import Data.DateTime.Instant (Instant, instant)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Scheduler as Scheduler
-import Flashcards.Types.Card (Card, Rank(..))
+import Flashcards.Types.Card (Card, Rank(..), Slug(..))
+import Flashcards.Types.Card as Card
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress as Progress
 import Partial.Unsafe (unsafePartial)
@@ -23,10 +25,10 @@ import Test.Spec.Assertions (shouldEqual)
 -- | Two English sides deliberately collide, as they do in the real deck.
 deck :: Array Card
 deck =
-  [ { rank: Rank 1, english: "that", word: "que", example: "" }
-  , { rank: Rank 2, english: "to find", word: "encontrar", example: "" }
-  , { rank: Rank 3, english: "that", word: "ese", example: "" }
-  , { rank: Rank 4, english: "that", word: "aquel", example: "" }
+  [ { rank: Rank 1, slug: Slug ("que"), english: "that", word: "que", example: "" }
+  , { rank: Rank 2, slug: Slug ("encontrar"), english: "to find", word: "encontrar", example: "" }
+  , { rank: Rank 3, slug: Slug ("ese"), english: "that", word: "ese", example: "" }
+  , { rank: Rank 4, slug: Slug ("aquel"), english: "that", word: "aquel", example: "" }
   ]
 
 epoch :: Instant
@@ -56,17 +58,17 @@ spec = do
 
   describe "which card carries the production question" do
     it "the most frequent member of a colliding group" do
-      Deck.isCanonical { rank: Rank 1, english: "that", word: "que", example: "" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 1, slug: Slug ("que"), english: "that", word: "que", example: "" } (Deck.index deck)
         `shouldEqual` true
 
     it "and not its rarer siblings, which would be the same prompt again" do
-      Deck.isCanonical { rank: Rank 3, english: "that", word: "ese", example: "" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 3, slug: Slug ("ese"), english: "that", word: "ese", example: "" } (Deck.index deck)
         `shouldEqual` false
-      Deck.isCanonical { rank: Rank 4, english: "that", word: "aquel", example: "" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 4, slug: Slug ("aquel"), english: "that", word: "aquel", example: "" } (Deck.index deck)
         `shouldEqual` false
 
     it "a word that collides with nothing always carries its own" do
-      Deck.isCanonical { rank: Rank 2, english: "to find", word: "encontrar", example: "" } (Deck.index deck)
+      Deck.isCanonical { rank: Rank 2, slug: Slug ("encontrar"), english: "to find", word: "encontrar", example: "" } (Deck.index deck)
         `shouldEqual` true
 
     it "exactly one member of every real group carries it" do
@@ -133,6 +135,29 @@ spec = do
         twice = Deck.demoteIneligible idx once.progress
       twice.demoted `shouldEqual` 0
       twice.progress `shouldEqual` once.progress
+
+  describe "slugs in the shipped decks" do
+    it "defaults to the word itself, verbatim" do
+      let card = Array.find (\c -> c.word == "encontrar") Spanish.deck
+      (Card.slugToString <<< _.slug <$> card) `shouldEqual` Just "encontrar"
+
+    it "keeps accents, which distinguish words the deck deliberately separates" do
+      -- Stripping them would merge this pair, and eleven others in Spanish.
+      let slugs = Card.slugToString <<< _.slug <$> Spanish.deck
+      Array.elem "este" slugs `shouldEqual` true
+      Array.elem "éste" slugs `shouldEqual` true
+
+    it "keeps German pairs apart that differ only by an umlaut" do
+      let slugs = Card.slugToString <<< _.slug <$> German.deck
+      Array.elem "schon" slugs `shouldEqual` true
+      Array.elem "schön" slugs `shouldEqual` true
+
+    it "is unique across every card, which is what progress depends on" do
+      let
+        slugs = Card.slugToString <<< _.slug <$> Spanish.deck
+        germanSlugs = Card.slugToString <<< _.slug <$> German.deck
+      Array.length (Array.nub slugs) `shouldEqual` Array.length slugs
+      Array.length (Array.nub germanSlugs) `shouldEqual` Array.length germanSlugs
 
   describe "against the real deck" do
     it "gathers a synonym group, which is what collisions are now for" do
