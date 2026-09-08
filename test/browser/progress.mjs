@@ -16,7 +16,8 @@ const PRODUCING = 100 - [...BARRED].filter(r => r <= 100).length
 const worked = () => {
   const cards = []
   const add = (rank, box, seen, missed, lapses, dueIn, direction = "recognition") =>
-    cards.push({ rank, box, seen, missed, lapses, direction, due: Date.now() + dueIn * DAY })
+    cards.push({ slug: slugAt(rank), box, seen, missed, lapses, direction,
+                 due: Date.now() + dueIn * DAY })
   for (let r = 1; r <= 100; r++)
     BARRED.has(r) ? add(r, 5, 6, 0, 0, 40) : add(r, 4, 6, 0, 0, 40, "production")
   for (let r = 101; r <= 160; r++) add(r, 3, 2, 0, 0, 6)
@@ -67,6 +68,19 @@ export default async ({ check, open }) => {
   const leeches = await page.$$eval(".leech", es => es.map(e => e.textContent))
   check("words that keep slipping are listed", leeches.length, 3)
   check("worst first", leeches[0].endsWith("6"), true)
+  check("with a way to act on them", await page.text(".drill"), "Drill these 3")
+
+  // The three leeches are ranks 181-183 with 4, 6 and 3 lapses, so a drill
+  // asks the worst of them first and ignores that none of them is due.
+  await (await page.byText(".drill", "Drill these 3")).click()
+  await wait(250)
+  check("drilling closes the sheet", await page.$(".sheet"), null)
+  check("and starts on the worst of them", await page.text(".prompt"), slugAt(182))
+  check("with a session exactly that long", (await page.$$(".pip")).length, 3)
+  await page.tap(".card")
+  await page.tap(".got-it")
+  check("which grades like any other", await page.text(".prompt"), slugAt(181))
+  await openSheet(page)
 
   check("the body is the scrolling region",
     await page.$eval(".sheet-body", e => getComputedStyle(e).overflowY), "auto")

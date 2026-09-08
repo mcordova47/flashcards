@@ -140,6 +140,7 @@ data Message
   | ChooseLanguage String
   | VoicesAvailable (Array Accent.Voice)
   | CycleVoice
+  | DrillLeeches
   | ShowStats
   | StatsAt Instant
   | HideStats
@@ -357,6 +358,21 @@ update state = case _ of
 
   DismissNotice ->
     pure state { notice = Nothing }
+
+  -- The progress sheet names the words that keep slipping and then does
+  -- nothing about them. This is the whole of doing something: the queue is
+  -- just an array of slugs, so a drill is an ordinary session that happens to
+  -- ignore what is due.
+  DrillLeeches ->
+    case Array.take Scheduler.sessionSize $ map _.slug $
+           Stats.leeches Stats.leechThreshold state.language.deck state.progress of
+      [] ->
+        pure state
+      queue ->
+        pure state
+          { statsAt = Nothing
+          , screen = Studying { queue, position: 0, flipped: false, gotIt: 0, again: 0 }
+          }
 
   ShowStats -> do
     fork $ liftEffect $ StatsAt <$> Now.now
@@ -881,6 +897,7 @@ statsView language now progress dispatch =
             , H.span "leech-gloss" leech.english
             , H.span "leech-count" $ show leech.lapses
             ]
+        , H.button_ "grade got-it drill" { onClick: dispatch <| DrillLeeches } drillLabel
         ]
     ]
   ]
@@ -888,6 +905,14 @@ statsView language now progress dispatch =
     o = Stats.overview now language.deck progress
     percent = 100.0 * Int.toNumber o.seen / Int.toNumber o.total
     slipping = Stats.leeches Stats.leechThreshold language.deck progress
+
+    -- A session is capped, and a list of forty leeches would otherwise promise
+    -- forty. Say which it is.
+    drilling = min Scheduler.sessionSize (Array.length slipping)
+
+    drillLabel =
+      if drilling == Array.length slipping then "Drill these " <> show drilling
+      else "Drill " <> show drilling <> " of " <> show (Array.length slipping)
 
     tile value label =
       H.div "tile" [ H.div "tile-value" value, H.div "tile-label" label ]

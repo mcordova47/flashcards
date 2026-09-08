@@ -205,6 +205,9 @@ spec = do
         found = Stats.leeches 3 deck progress
       map _.lapses found `shouldEqual` [ 6, 3 ]
       map _.word found `shouldEqual` [ "es2", "es1" ]
+      -- The slug is what a drill session is built from, so it has to come out
+      -- of here rather than being looked up again from the word.
+      map _.slug found `shouldEqual` (slugAt <$> [ 2, 1 ])
 
     it "leaves ordinary forgetting alone" do
       let progress = Progress.empty # card 1 1 9 5 2 1.0

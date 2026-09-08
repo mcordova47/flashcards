@@ -276,6 +276,11 @@ body {
   text-align: center;
 }
 
+.drill {
+  width: 100%;
+  margin-top: 1rem;
+}
+
 .panel-note.sync {
   margin-top: 0;
 }

@@ -29,7 +29,7 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Scheduler (maxBox)
-import Flashcards.Types.Card (Card, Rank, rankToInt)
+import Flashcards.Types.Card (Card, Rank, Slug, rankToInt)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
 import Flashcards.Types.Progress as Progress
@@ -79,7 +79,8 @@ type Overview =
   }
 
 type Leech =
-  { rank :: Rank
+  { slug :: Slug
+  , rank :: Rank
   , word :: String
   , english :: String
   , lapses :: Int
@@ -176,7 +177,7 @@ leeches threshold deck progress =
     toLeech card = do
       cp <- Progress.lookup card.slug progress
       guard $ cp.lapses >= threshold
-      pure { rank: card.rank, word: card.word, english: card.english, lapses: cp.lapses }
+      pure { slug: card.slug, rank: card.rank, word: card.word, english: card.english, lapses: cp.lapses }
 
     -- Stable sort, so equal counts stay in frequency order.
     mostLapsedFirst a b = compare b.lapses a.lapses

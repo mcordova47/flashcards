@@ -115,6 +115,13 @@ there is something to divide.
 brand-new word is just learning; forgetting one you had already earned is a
 leech. A word missed eight times on the way in but never since does not appear.
 
+**Drill these** builds a session out of that list, worst first, ignoring what
+is due — which is the whole point, since a leech is a word whose schedule has
+already been proved too generous. It is an ordinary session otherwise: the
+queue is just an array of slugs, so grading, requeuing and graduation all
+behave exactly as they do anywhere else. Capped at the usual twenty, and the
+button says so when there are more.
+
 ## Example sentences
 
 The German source ships a sentence for every word, and the card shows it under
