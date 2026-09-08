@@ -150,6 +150,57 @@ their cards by position — see below.
 Saving into a synced folder (iCloud Drive, Google Drive) makes this a workable
 manual device transfer — the OS does the networking.
 
+## Sync
+
+*Endpoint only so far — the client half is not wired up yet.*
+
+A Netlify Function over Netlify Blobs, deployed by the same `git push` as the
+rest:
+
+```
+GET  /api/progress/<key>/<lang>   the stored blob, or 404
+PUT  /api/progress/<key>/<lang>   replaces it
+```
+
+One key pairs a device; one blob per language hangs off it, because progress is
+per-language and each blob is then byte-identical to the backup file. The
+server does not know which languages exist — `<lang>` is capped at two letters
+only so that one key cannot become unlimited storage.
+
+It is a **dumb blob store** and does not merge. The client does `GET` →
+`Progress.merge` → `PUT`, so the merge rule stays in one place, pure and
+specced, rather than being written a second time in JavaScript where the two
+would drift. Nothing on the server knows what a card is.
+
+### There is no authentication
+
+Anyone holding a key can read and overwrite that blob — the model of an
+unlisted document link. The key is 32 characters of `[a-z0-9]`, about 165 bits,
+so it is not guessable, and the payload is a list of words someone has studied.
+But it is a publicly reachable endpoint that accepts writes, and that should be
+a choice rather than something you discover later.
+
+The step up is real accounts (Supabase, Cloudflare D1), which is a much larger
+commitment and buys little for a handful of family members.
+
+Bodies over 500 KB are refused, measured in bytes rather than characters — the
+decks are full of multi-byte words, and `length` would let nearly twice the cap
+through. Responses are `no-store`, and the service worker skips `/api/`
+entirely: a stale blob would silently undo a sync, and nothing offline needs it.
+
+### Routing
+
+The catch-all in `netlify.toml` rewrites anything unmatched to `index.html`
+with a **200**, so a routing mistake here does not 404 — it serves HTML to a
+JSON client. That has already produced one wrong conclusion in this project. The
+route is therefore declared twice, by the function's `config.path` and by an
+ordered redirect above the catch-all, and the handler reads the key off the end
+of the path so either resolution works.
+
+Netlify's own routing is the one thing the test suite cannot check. On the first
+deploy, verify the **content type** of a 404 from `/api/progress/<32 chars>/es`,
+not its status.
+
 ## What a card is, and renaming one
 
 Progress is keyed by a **slug**: the foreign word's spelling at the moment the

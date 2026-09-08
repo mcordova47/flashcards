@@ -5,6 +5,21 @@
 [build.environment]
   NODE_VERSION = "24"
 
+[functions]
+  directory = "netlify/functions"
+
+# The function declares `config.path = "/api/progress/:key/:language"` itself, which
+# Netlify routes ahead of these rules. This says the same thing again through
+# the redirect table, because the catch-all below returns **200** for anything
+# that falls past it - so a routing mistake here does not 404, it quietly
+# serves HTML to a JSON client. That has already caused one wrong conclusion in
+# this project. Redirects match in order, so a rule above the catch-all cannot
+# be reached by it.
+[[redirects]]
+  from = "/api/progress/*"
+  to = "/.netlify/functions/progress/:splat"
+  status = 200
+
 # Single-page app: everything resolves to the one entry point.
 [[redirects]]
   from = "/*"

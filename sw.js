@@ -36,8 +36,13 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   const { request } = event
+  const url = new URL(request.url)
   if (request.method !== "GET") return
-  if (new URL(request.url).origin !== self.location.origin) return
+  if (url.origin !== self.location.origin) return
+  // Progress is the one thing on this origin that changes. Caching it would
+  // serve a stale blob after a network blip and quietly undo a sync, and the
+  // app is local-first anyway - there is nothing offline needs from here.
+  if (url.pathname.startsWith("/api/")) return
 
   event.respondWith(
     fetch(request)

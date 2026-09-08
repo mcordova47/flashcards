@@ -10,6 +10,7 @@ import os from "os"
 import path from "path"
 import puppeteer from "puppeteer-core"
 import { fileURLToPath } from "url"
+import { handle } from "../../netlify/functions/progress.mjs"
 
 export const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const PUBLIC = path.join(REPO, "public")
@@ -136,7 +137,30 @@ export const run = async (name, body) => {
     throw new Error("public/ is not built — run `npm run build` first")
   }
 
-  const server = http.createServer((req, res) => {
+  // Netlify Blobs, in memory. The suites drive the real handler rather than a
+  // reimplementation of it, so everything the endpoint can get wrong - key
+  // shape, size cap, method, 404 - is tested against the code that ships.
+  const blobs = new Map()
+  const store = {
+    get: async key => blobs.get(key) ?? null,
+    set: async (key, value) => { blobs.set(key, value) },
+  }
+
+  const server = http.createServer(async (req, res) => {
+    if (req.url.startsWith("/api/")) {
+      const chunks = []
+      for await (const chunk of req) chunks.push(chunk)
+      const body = Buffer.concat(chunks)
+      const reply = await handle(
+        new Request(`http://localhost${req.url}`, {
+          method: req.method,
+          body: body.length ? body : undefined,
+        }),
+        store,
+      )
+      res.writeHead(reply.status, Object.fromEntries(reply.headers))
+      return res.end(Buffer.from(await reply.arrayBuffer()))
+    }
     const rel = req.url === "/" ? "/index.html" : req.url.split("?")[0]
     let file = path.join(PUBLIC, rel)
     // Mirror the SPA rule in netlify.toml: a path with no file behind it and
@@ -189,7 +213,7 @@ export const run = async (name, body) => {
 
   console.log(`\n${name}`)
   try {
-    await body({ base, browser, check, open, downloads })
+    await body({ base, browser, check, open, downloads, blobs })
   } catch (e) {
     failed++
     console.log(`  ✗ suite threw: ${e.message}`)
