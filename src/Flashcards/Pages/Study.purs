@@ -453,8 +453,11 @@ update state = case _ of
         Sync.Found body ->
           case Payload.parse state.language.code state.language.fingerprint state.index body of
             -- A blob this device cannot read is not one it should overwrite.
+            -- The network did its part, so this is not an offline problem and
+            -- must not be reported as one; the panel is left saying "not
+            -- synced", which is exactly what is true.
             Left _ ->
-              pure state
+              pure state { offline = false }
             Right incoming -> do
               let
                 merged =
@@ -465,8 +468,6 @@ update state = case _ of
               -- Merge is order-insensitive, so an equal result means the blob
               -- is already right and writing it back would be noise.
               if merged /= incoming then push merged
-              -- Equal means the server already holds this, which is worth
-              -- recording as much as a successful write is.
               -- Equal means the server already holds this, which is as much
               -- worth recording as a write would be.
               else fork $ pure $ Pushed merged true
