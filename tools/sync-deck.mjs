@@ -9,7 +9,7 @@
 
 import fs from "fs"
 import crypto from "crypto"
-import { LANGUAGES, languagesFor, parseCsv, pinsIn } from "./deck-source.mjs"
+import { LANGUAGES, SHEET, languagesFor, parseCsv, pinsIn } from "./deck-source.mjs"
 
 const args = process.argv.slice(2)
 const fetching = args.includes("--fetch")
