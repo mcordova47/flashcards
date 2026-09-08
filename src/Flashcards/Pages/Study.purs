@@ -28,10 +28,10 @@ import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Styled as H
 import Flashcards.Accent as Accent
-import Flashcards.Backup as Backup
 import Flashcards.Deck as DeckIndex
 import Flashcards.Language (Language)
 import Flashcards.Language as Language
+import Flashcards.Payload as Payload
 import Flashcards.Route as Route
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
@@ -131,9 +131,6 @@ data Message
   | StartedAnother Instant
   | TogglePanel
   | OpenedPanel Instant
-  | Export
-  | Import
-  | Imported String
   | DismissNotice
   | SpeakCurrent
   | ChooseAccent String
@@ -335,27 +332,6 @@ update state = case _ of
   OpenedPanel now ->
     pure state { panel = Just now }
 
-  Export -> do
-    forkVoid $ liftEffect $ Backup.download Backup.filename $
-      Backup.serialize state.language.code state.language.fingerprint state.progress
-    noticing state { panel = Nothing } $ "Saved " <> Backup.filename
-
-  Import -> do
-    forks \{ dispatch } -> liftEffect $ Backup.pickFile $ dispatch <<< Imported
-    pure state { panel = Nothing }
-
-  Imported raw -> case Backup.parse state.language.code state.language.fingerprint state.index raw of
-    Left message ->
-      noticing state message
-    Right incoming -> do
-      -- A backup can carry cards that graduated before the rule existed.
-      let progress = (DeckIndex.demoteIneligible state.index $ Progress.merge state.progress incoming).progress
-      forkVoid $ liftEffect $ Storage.save state.language.code state.language.fingerprint progress
-      -- The queue was built from the old history, so start over from the new.
-      fork $ liftEffect $ StartedAnother <$> Now.now
-      noticing state { progress = progress } $
-        "Loaded backup · " <> show (Progress.seenCount progress) <> " words seen"
-
   DismissNotice ->
     pure state { notice = Nothing }
 
@@ -430,7 +406,7 @@ update state = case _ of
       let
         push progress =
           forks \{ dispatch } -> liftEffect $ Sync.pushRemote key state.language.code
-            (Backup.serialize state.language.code state.language.fingerprint progress)
+            (Payload.serialize state.language.code state.language.fingerprint progress)
             (dispatch <<< Pushed progress)
       case remote of
         -- Offline, or the endpoint is unhappy. Local-first, so nothing is said
@@ -444,7 +420,7 @@ update state = case _ of
           pure state { offline = false }
 
         Sync.Found body ->
-          case Backup.parse state.language.code state.language.fingerprint state.index body of
+          case Payload.parse state.language.code state.language.fingerprint state.index body of
             -- A blob this device cannot read is not one it should overwrite.
             Left _ ->
               pure state
@@ -781,8 +757,6 @@ panelView state dispatch =
     , H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
     , H.button_ "panel-item" { onClick: dispatch <| Sync } "Sync now"
     , H.button_ "panel-item" { onClick: dispatch <| ShowPairing } "Sync another device"
-    , H.button_ "panel-item" { onClick: dispatch <| Export } "Save progress to a file"
-    , H.button_ "panel-item" { onClick: dispatch <| Import } "Load progress from a file"
     , H.p "panel-note" $
         show (Progress.seenCount state.progress) <> " of "
           <> show (Array.length state.language.deck) <> " words seen"

@@ -131,35 +131,17 @@ itself, so on a production card an early reveal would hand over the answer.
 Spanish has none, so its cards are unchanged. Generating them is what #3 is
 about.
 
-## Backup and transfer
-
-The `•••` control opens a panel to save your progress to a file and load it
-back. The file is byte-for-byte what lives in `localStorage` — one codec, one
-validation path, no second format to drift.
-
-Loading a file **merges** rather than replaces. `Progress.merge` compares the
-two histories card by card: `seen` only ever increases on a given device, so
-between two records for the same card the one with more sightings has strictly
-more history behind it and wins. No timestamps to reconcile, no lost sessions.
-The same function is what a sync layer will need later.
-
-Every file names the language it belongs to, and a mismatch is refused. The
-decks share the word `mal`, and nearly every other German slug is simply inert
-in Spanish — which is the danger: a German file poured into the Spanish deck
-would report a thousand words learned and hand `mal` someone else's past.
-
-It also carries the deck's fingerprint, which no longer gates anything for a
-current file. That is the point of keying by slug: a slug means the same word
-in every version of the deck, so a backup crosses a deck edit freely. The
-fingerprint's remaining job is placing payloads written before v5, which named
-their cards by position — see below.
-
-Saving into a synced folder (iCloud Drive, Google Drive) makes this a workable
-manual device transfer — the OS does the networking.
-
 ## Sync
 
-Two devices holding the same key keep the same progress. A Netlify Function
+Two devices holding the same key keep the same progress. This replaced saving
+and loading a file, which shipped first to find out whether manual transfer
+through a synced folder was good enough — it was not, and keeping both would
+have cost two of the five rows the panel can comfortably hold.
+
+Loading **merges** rather than replaces. `Progress.merge` compares the two
+histories card by card: `seen` only ever increases on a given device, so
+between two records for the same card the one with more sightings has strictly
+more history behind it and wins. No timestamps to reconcile, no lost sessions. A Netlify Function
 over Netlify Blobs, deployed by the same `git push` as the rest:
 
 ```
@@ -444,6 +426,7 @@ netlify/functions/progress.mjs       the blob store, and all of the server
 src/Flashcards/
   Scheduler.purs                     pure; the learning logic
   Storage.purs                       localStorage, at the edge
+  Payload.purs                       the bytes progress travels as
   Sync.purs                          the other device's bytes
   Types/{Card,Grade,Progress}.purs
   Pages/Study.purs                   the entire UI
@@ -460,9 +443,9 @@ indefinitely.
 ## Roadmap
 
 - **Now** — ES→EN, self-graded, Leitner, `localStorage`, installable and
-  offline, file backup with merge, cross-device sync, pronunciation, deployed.
-- **Next** — a visible sync state and a manual button, so a device that has not
-  reached the server says so.
+  offline, cross-device sync with a visible state, pronunciation, deployed.
+- **Next** — undo the last grade, the only action in the app you cannot
+  currently take back.
 - **Later** — example sentences generated at build time under a
   high-frequency-vocabulary constraint, EN→ES with every valid answer shown on
   the reveal, a progress screen, more languages, FSRS scheduling.

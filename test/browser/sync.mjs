@@ -1,10 +1,11 @@
 import jsQR from "jsqr"
 import { qrDataUrl } from "../../src/Flashcards/Sync.js"
-import { slugAt, wait } from "./harness.mjs"
+import { deckFingerprint, slugAt, wait } from "./harness.mjs"
 
 export const name = "The progress endpoint"
 
 const KEY = "k7m2p9x4w1n8q3r6t5v0y2z7b4d9f1h3"
+const BASE = 1700000000000
 const OTHER = "z9y8x7w6v5u4t3s2r1q0p9o8n7m6l5k4"
 
 export default async ({ check, open, base, blobs }) => {
@@ -118,6 +119,32 @@ export default async ({ check, open, base, blobs }) => {
   check("whose session skips it too", await phone.text(".prompt"), slugAt(5))
   check("no page errors on either", [...phone.errors, ...laptop.errors], [])
   await laptop.close()
+
+  // --- a blob this device cannot place ---
+  // Not reachable by pairing, since blobs are per language, but the server is
+  // a dumb store and this is the last thing standing between a bad one and
+  // somebody's history. It must be left alone, not overwritten and not merged.
+  {
+    const key = await phone.evaluate(() => localStorage.getItem("flashcards.sync-key"))
+    const mine = await phone.stored()
+    blobs.set(`${key}.es`, JSON.stringify({
+      version: 5, language: "de", deck: deckFingerprint("de"),
+      cards: [{ slug: "mal", box: 5, seen: 99, missed: 0, lapses: 0, direction: "production", due: BASE }],
+    }))
+    await phone.reload({ waitUntil: "networkidle0" })
+    await phone.waitForSelector(".prompt")
+    await wait(400)
+    check("progress for another language is refused", await phone.stored(), mine)
+    check("and the bad blob is left where it is, not overwritten",
+      JSON.parse(blobs.get(`${key}.es`)).language, "de")
+    check("silently, because the card screen is not the place for it",
+      await phone.text(".notice"), null)
+    // Put it back so the checks below start from a sane server.
+    blobs.set(`${key}.es`, JSON.stringify(mine))
+    await phone.reload({ waitUntil: "networkidle0" })
+    await phone.waitForSelector(".prompt")
+    await wait(400)
+  }
 
   // --- what the panel says about it ---
   const note = async page => {
