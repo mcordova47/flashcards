@@ -44,26 +44,47 @@ const chrome = () => {
 const readConstant = (file, pattern) =>
   fs.readFileSync(path.join(REPO, file), "utf-8").match(pattern)[1]
 
-export const deckFingerprint = () =>
-  readConstant("src/Flashcards/Data/Deck/Spanish.purs", /fingerprint = "([a-f0-9]+)"/)
+const DECK_MODULE = { es: "Spanish", de: "German" }
+
+export const deckFingerprint = (code = "es") =>
+  readConstant(`src/Flashcards/Data/Deck/${DECK_MODULE[code]}.purs`, /fingerprint = "([a-f0-9]+)"/)
 
 export const formatVersion = () =>
   Number(readConstant("src/Flashcards/Types/Progress.purs", /currentVersion = (\d+)/))
 
 export const storageKey = "flashcards.es.v1"
 
-// Ranks that share an English gloss with an earlier card, and so are barred
-// from production. Read from the deck rather than hardcoded, so fixtures stay
+// The shipped Spanish deck, read from the CSV the generator reads. Fixtures
+// derive what they need from this rather than hardcoding words, so they stay
 // honest when the deck changes.
-export const nonCanonicalRanks = () => {
+let deckCache = null
+export const spanishDeck = () => deckCache ?? (deckCache = readSpanishDeck())
+
+const readSpanishDeck = () => {
   const csv = fs.readFileSync(path.join(REPO, "data/es-1000.csv"), "utf-8")
+  const cell = c => c.replace(/^"|"$/g, "").replace(/""/g, '"').trim()
+  return csv.split("\n").slice(1).filter(l => l.trim()).map(line => {
+    const cells = line.match(/("([^"]|"")*"|[^,]*)/g).filter((_, i) => i % 2 === 0)
+    // The slug is the word verbatim; only a renamed card pins anything else,
+    // and none do today. See tools/sync-deck.mjs.
+    return { rank: Number(cells[0]), english: cell(cells[1]), word: cell(cells[2]) }
+  })
+}
+
+// The slug progress is keyed by, for the card standing at a given rank.
+// Fixtures still name cards by rank because that is how the deck reads, and
+// this is the one place that turns a position into an identity.
+export const slugAt = rank => spanishDeck().find(c => c.rank === rank).word
+
+// The stored record for the card at a given rank.
+export const storedAt = (cards, rank) => cards.find(c => c.slug === slugAt(rank))
+
+// Ranks that share an English gloss with an earlier card, and so are barred
+// from production.
+export const nonCanonicalRanks = () => {
   const seen = new Set()
   const barred = new Set()
-  for (const line of csv.split("\n").slice(1)) {
-    if (!line.trim()) continue
-    const cells = line.match(/("([^"]|"")*"|[^,]*)/g).filter((_, i) => i % 2 === 0)
-    const rank = Number(cells[0])
-    const english = cells[1].replace(/^"|"$/g, "").replace(/""/g, '"').trim()
+  for (const { rank, english } of spanishDeck()) {
     if (seen.has(english)) barred.add(rank)
     else seen.add(english)
   }

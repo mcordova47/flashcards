@@ -26,6 +26,8 @@ import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Class.Console as Console
+import Flashcards.Deck (Index)
+import Flashcards.Deck as Deck
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 import Web.HTML (window)
@@ -49,12 +51,16 @@ accentKey code = "flashcards." <> code <> ".accent"
 voiceKey :: String -> String
 voiceKey code = "flashcards." <> code <> ".voice"
 
--- | Takes the current deck fingerprint so it can tell you when your saved
--- | progress predates a deck change. It loads anyway: this is your own history
--- | on your own device, and refusing it would be worse than the drift. Import
--- | applies the stricter rule — see `Flashcards.Backup`.
-load :: String -> String -> Effect Progress
-load code deck = do
+-- | Takes the deck and its fingerprint, because progress written before v5
+-- | names its cards by position and only the deck can say which word that was.
+-- | See `Flashcards.Deck.adopt`.
+-- |
+-- | It loads even when the fingerprint says that placement is unreliable: this
+-- | is your own history on your own device, and it is what the app has been
+-- | showing you all along, so discarding it now would be a loss and not a fix.
+-- | Import applies the stricter rule — see `Flashcards.Backup`.
+load :: String -> String -> Index -> Effect Progress
+load code deck idx = do
   storage <- localStorage =<< window
   Storage.getItem (progressKey code) storage >>= case _ of
     Nothing -> pure Progress.empty
@@ -63,9 +69,15 @@ load code deck = do
       Right json -> case Progress.fromJson json of
         Left err -> recover $ "saved progress could not be read: " <> printJsonDecodeError err
         Right saved -> do
-          when (saved.deck /= Nothing && saved.deck /= Just deck) $
-            Console.warn "saved progress was written against a different deck; ranks may have shifted"
-          pure saved.progress
+          let adopted = Deck.adopt deck idx saved
+          unless adopted.sound $
+            Console.warn "saved progress predates a deck change and is keyed by position; some words may have picked up another's history"
+          -- Rewrite it keyed by slug straight away, so this happens once
+          -- rather than on every load for the rest of time. That stamps the
+          -- current fingerprint over a mismatched one, which is honest enough:
+          -- the placement has been made, and no later load can improve on it.
+          when adopted.migrated $ save code deck adopted.progress
+          pure adopted.progress
   where
     recover message = do
       Console.warn $ message <> " — starting fresh"
@@ -74,7 +86,7 @@ load code deck = do
 save :: String -> String -> Progress -> Effect Unit
 save code deck progress = do
   storage <- localStorage =<< window
-  Storage.setItem (progressKey code) (stringify $ Progress.toJson deck progress) storage
+  Storage.setItem (progressKey code) (stringify $ Progress.toJson code deck progress) storage
 
 loadAccent :: String -> Effect (Maybe String)
 loadAccent code = do

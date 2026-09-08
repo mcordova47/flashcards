@@ -36,14 +36,14 @@ import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
 import Flashcards.Speech as Speech
 import Flashcards.Storage as Storage
-import Flashcards.Types.Card (Card, Rank, rankToInt)
+import Flashcards.Types.Card (Card, Slug, rankToInt)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 
 type Session =
-  { queue :: Array Rank
+  { queue :: Array Slug
   , position :: Int
   , flipped :: Boolean
   , gotIt :: Int
@@ -94,6 +94,10 @@ data Message
       , savedAccent :: Maybe String
       , savedVoice :: Maybe String
       , language :: Language
+      -- | Carried rather than rebuilt, because loading progress needs it too:
+      -- | anything written before v5 names its cards by position, and only the
+      -- | deck can say which word that was.
+      , index :: DeckIndex.Index
       }
   | Flip
   | Answer Grade
@@ -118,12 +122,13 @@ init :: Transition Message State
 init = do
   fork do
     language <- liftEffect $ Language.resolve <$> Route.current <*> Storage.loadLanguage
-    progress <- liftEffect $ Storage.load language.code language.fingerprint
+    let index = DeckIndex.index language.deck
+    progress <- liftEffect $ Storage.load language.code language.fingerprint index
     canSpeak <- liftEffect Speech.supported
     savedAccent <- liftEffect $ Storage.loadAccent language.code
     savedVoice <- liftEffect $ Storage.loadVoice language.code
     now <- liftEffect Now.now
-    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language }
+    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index }
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
   forks \{ dispatch } ->
@@ -149,13 +154,11 @@ update :: State -> Message -> Transition Message State
 update state = case _ of
   -- `Loaded` and `VoicesAvailable` race, so both resolve preferences from
   -- whatever the other has already put in state.
-  Loaded { progress, now, canSpeak, savedAccent, savedVoice, language } -> do
+  Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index } -> do
     -- Progress saved before colliding glosses were barred can hold cards that
     -- graduated when they should not have. Put them back before building a
     -- session out of them.
-    let
-      index = DeckIndex.index language.deck
-      repaired = DeckIndex.demoteIneligible index progress
+    let repaired = DeckIndex.demoteIneligible index progress
     when (repaired.demoted > 0) $
       forkVoid $ liftEffect $ Storage.save language.code language.fingerprint repaired.progress
     let
@@ -205,23 +208,23 @@ update state = case _ of
     Studying session -> case Array.index session.queue session.position of
       Nothing ->
         pure state
-      Just rank -> do
+      Just slug -> do
         let
           countOf g = if grade == g then 1 else 0
 
           -- Only the card that carries the production question for its
           -- English side may graduate; see `Deck.isCanonical`.
-          allowed = case DeckIndex.card rank state.index of
+          allowed = case DeckIndex.card slug state.index of
             Just c | DeckIndex.isCanonical c state.index -> Scheduler.MayGraduate
             _ -> Scheduler.RecognitionOnly
 
           progress =
-            Progress.insert rank
-              (Scheduler.applyGrade grade now allowed $ Progress.lookup rank state.progress)
+            Progress.insert slug
+              (Scheduler.applyGrade grade now allowed $ Progress.lookup slug state.progress)
               state.progress
 
           queue = case grade of
-            Again -> Scheduler.requeue rank session.position session.queue
+            Again -> Scheduler.requeue slug session.position session.queue
             GotIt -> session.queue
 
           advanced = session
@@ -261,14 +264,14 @@ update state = case _ of
 
   Export -> do
     forkVoid $ liftEffect $ Backup.download Backup.filename $
-      Backup.serialize state.language.fingerprint state.progress
+      Backup.serialize state.language.code state.language.fingerprint state.progress
     noticing state { panel = false } $ "Saved " <> Backup.filename
 
   Import -> do
     forks \{ dispatch } -> liftEffect $ Backup.pickFile $ dispatch <<< Imported
     pure state { panel = false }
 
-  Imported raw -> case Backup.parse state.language.fingerprint raw of
+  Imported raw -> case Backup.parse state.language.code state.language.fingerprint state.index raw of
     Left message ->
       noticing state message
     Right incoming -> do
@@ -304,12 +307,13 @@ update state = case _ of
         -- So the address bar is copyable straight after a switch.
         Route.replace $ Language.pathFor language
       fork do
-        progress <- liftEffect $ Storage.load language.code language.fingerprint
+        let index = DeckIndex.index language.deck
+        progress <- liftEffect $ Storage.load language.code language.fingerprint index
         savedAccent <- liftEffect $ Storage.loadAccent language.code
         savedVoice <- liftEffect $ Storage.loadVoice language.code
         now <- liftEffect Now.now
         pure $ Loaded
-          { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language }
+          { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language, index }
       pure state { panel = false, statsAt = Nothing }
 
   ChooseAccent accent -> do
@@ -410,7 +414,7 @@ studyingView state session dispatch =
           -- A card asks whichever way it has earned; unseen words start on
           -- recognition.
           producing =
-            (maybe Recognition _.direction $ Progress.lookup card.rank state.progress) == Production
+            (maybe Recognition _.direction $ Progress.lookup card.slug state.progress) == Production
 
           prompt = if producing then card.english else card.word
 

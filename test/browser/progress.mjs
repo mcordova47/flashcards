@@ -1,4 +1,4 @@
-import { deckFingerprint, formatVersion, nonCanonicalRanks, wait } from "./harness.mjs"
+import { deckFingerprint, formatVersion, nonCanonicalRanks, slugAt, wait } from "./harness.mjs"
 
 export const name = "Progress sheet and next-due"
 
@@ -31,7 +31,7 @@ const worked = () => {
 const caughtUp = soonestHours => {
   const cards = []
   for (let r = 1; r <= 1000; r++)
-    cards.push({ rank: r, box: BARRED.has(r) ? 5 : 4, seen: 6, missed: 0, lapses: 0,
+    cards.push({ slug: slugAt(r), box: BARRED.has(r) ? 5 : 4, seen: 6, missed: 0, lapses: 0,
                  direction: BARRED.has(r) ? "recognition" : "production",
                  due: Date.now() + (r === 500 ? soonestHours * 3600000 : 20 * DAY) })
   return { version: V, deck: FP, cards }
@@ -97,7 +97,7 @@ export default async ({ check, open }) => {
   {
     const cards = []
     for (let r = 21; r <= 1000; r++)
-      cards.push({ rank: r, box: BARRED.has(r) ? 5 : 4, seen: 6, missed: 0, lapses: 0,
+      cards.push({ slug: slugAt(r), box: BARRED.has(r) ? 5 : 4, seen: 6, missed: 0, lapses: 0,
                    direction: BARRED.has(r) ? "recognition" : "production", due: Date.now() + 30 * DAY })
     const p = await open({ seed: { version: V, deck: FP, cards } })
     await p.waitForSelector(".prompt")
@@ -112,9 +112,9 @@ export default async ({ check, open }) => {
   {
     const cards = []
     for (let r = 1; r <= 30; r++)
-      cards.push({ rank: r, box: 2, seen: 4, missed: 0, lapses: 0, direction: "recognition", due: Date.now() - (31 - r) * 1000 })
+      cards.push({ slug: slugAt(r), box: 2, seen: 4, missed: 0, lapses: 0, direction: "recognition", due: Date.now() - (31 - r) * 1000 })
     for (let r = 31; r <= 1000; r++)
-      cards.push({ rank: r, box: BARRED.has(r) ? 5 : 4, seen: 6, missed: 0, lapses: 0,
+      cards.push({ slug: slugAt(r), box: BARRED.has(r) ? 5 : 4, seen: 6, missed: 0, lapses: 0,
                    direction: BARRED.has(r) ? "recognition" : "production", due: Date.now() + 30 * DAY })
     const p = await open({ seed: { version: V, deck: FP, cards } })
     await p.waitForSelector(".prompt")

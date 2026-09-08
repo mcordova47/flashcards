@@ -1,8 +1,10 @@
 -- | Lookups over a deck, built once. The deck is static, so these are computed
 -- | at first use and reused for the life of the page.
 module Flashcards.Deck
-  ( Index
+  ( Adoption
+  , Index
   , Repair
+  , adopt
   , answersFor
   , card
   , demoteIneligible
@@ -18,22 +20,25 @@ import Data.Map (Map)
 import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Tuple (fst, snd)
-import Data.Tuple.Nested ((/\))
-import Data.Tuple.Nested (type (/\))
+import Data.Tuple.Nested (type (/\), (/\))
 import Flashcards.Scheduler (graduationBox)
-import Flashcards.Types.Card (Card, Rank)
+import Flashcards.Types.Card (Card, Rank, Slug)
 import Flashcards.Types.Direction (Direction(..))
-import Flashcards.Types.Progress (CardProgress, Progress)
+import Flashcards.Types.Progress (CardProgress, Progress, Saved)
 import Flashcards.Types.Progress as Progress
 
 type Index =
-  { byRank :: Map Rank Card
+  { bySlug :: Map Slug Card
+  -- | Only used to place progress written before v5, which named its cards by
+  -- | position. See `adopt`.
+  , byRank :: Map Rank Card
   , answers :: Map String (Array String)
   }
 
 index :: Array Card -> Index
 index deck =
-  { byRank: Map.fromFoldable $ deck <#> \c -> c.rank /\ c
+  { bySlug: Map.fromFoldable $ deck <#> \c -> c.slug /\ c
+  , byRank: Map.fromFoldable $ deck <#> \c -> c.rank /\ c
   , answers: Array.foldl collect Map.empty deck
   }
   where
@@ -42,8 +47,8 @@ index deck =
     collect acc c =
       Map.alter (Just <<< maybe [ c.word ] (_ <> [ c.word ])) c.english acc
 
-card :: Rank -> Index -> Maybe Card
-card rank = Map.lookup rank <<< _.byRank
+card :: Slug -> Index -> Maybe Card
+card slug = Map.lookup slug <<< _.bySlug
 
 -- | Every foreign word that legitimately answers this English prompt.
 -- |
@@ -62,6 +67,51 @@ answersFor english = fromMaybe [] <<< Map.lookup english <<< _.answers
 -- | `Flashcards.Scheduler.Graduation`.
 isCanonical :: Card -> Index -> Boolean
 isCanonical c = (_ == Just c.word) <<< Array.head <<< answersFor c.english
+
+type Adoption =
+  { progress :: Progress
+  -- | Whether anything had to be placed by rank, which is to say the payload
+  -- | predates v5 and is worth rewriting in the current shape.
+  , migrated :: Boolean
+  -- | Whether that placement can be believed. False only when there were ranks
+  -- | to place *and* the deck has moved since they were written.
+  , sound :: Boolean
+  }
+
+-- | Resolve a decoded payload onto this deck.
+-- |
+-- | v5 entries name their card by slug, which means the same word in every
+-- | version of the deck, so there is nothing to resolve and nothing that can go
+-- | wrong. Older entries name it by rank — a position — and turning a position
+-- | back into a word is only sound while the deck has not moved since. That is
+-- | precisely what the fingerprint attests, so it is required for those and
+-- | irrelevant for the rest: the fingerprint's last act is to certify its own
+-- | retirement.
+-- |
+-- | A slug that is not in the deck is kept. It costs a few bytes, everything
+-- | that reads progress walks the deck rather than the history, and a backup
+-- | restored onto a stale bundle would otherwise quietly lose the newest words.
+-- | A rank that is not in the deck can only be dropped — there is no word to
+-- | attach it to.
+adopt :: String -> Index -> Saved -> Adoption
+adopt fingerprint idx saved =
+  { progress: Progress.fromEntries $ Array.mapMaybe place saved.cards
+  , migrated
+  , sound: not migrated || knownDeck
+  }
+  where
+    migrated = Array.any (\c -> c.slug == Nothing) saved.cards
+
+    -- v1 carried no fingerprint and predates every renumbering, so an absent
+    -- one is as good as a match.
+    knownDeck = saved.deck == Nothing || saved.deck == Just fingerprint
+
+    place c = case c.slug of
+      Just slug -> Just $ slug /\ c.progress
+      Nothing -> do
+        rank <- c.rank
+        found <- Map.lookup rank idx.byRank
+        pure $ found.slug /\ c.progress
 
 type Repair =
   { progress :: Progress
@@ -83,18 +133,18 @@ type Repair =
 -- | history cannot be told apart after the fact.
 demoteIneligible :: Index -> Progress -> Repair
 demoteIneligible idx progress =
-  { progress: Progress.mapWithRank fix progress
+  { progress: Progress.mapWithSlug fix progress
   , demoted: Array.length $ Array.filter stranded $ Progress.entries progress
   }
   where
-    ineligible :: Rank -> CardProgress -> Boolean
-    ineligible rank cp = case card rank idx of
+    ineligible :: Slug -> CardProgress -> Boolean
+    ineligible slug cp = case card slug idx of
       Just c -> cp.direction == Production && not (isCanonical c idx)
       Nothing -> false
 
-    stranded :: Rank /\ CardProgress -> Boolean
+    stranded :: Slug /\ CardProgress -> Boolean
     stranded pair = ineligible (fst pair) (snd pair)
 
-    fix rank cp =
-      if ineligible rank cp then cp { direction = Recognition, box = graduationBox }
+    fix slug cp =
+      if ineligible slug cp then cp { direction = Recognition, box = graduationBox }
       else cp

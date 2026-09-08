@@ -1,4 +1,4 @@
-import { formatVersion } from "./harness.mjs"
+import { formatVersion, storedAt } from "./harness.mjs"
 
 export const name = "Study loop"
 
@@ -48,9 +48,9 @@ export default async ({ check, open }) => {
   check("progress is written at the current format version", saved.version, formatVersion())
   check("every answered card was written", saved.cards.length, 20)
 
-  const first = saved.cards.find(c => c.rank === 1)
+  const first = storedAt(saved.cards, 1)
   check("a word missed then learned sits low", first.box, 1)
-  const easy = saved.cards.find(c => c.rank === 3)
+  const easy = storedAt(saved.cards, 3)
   check("a word known on sight is fast-tracked", easy.box, 3)
   const days = await page.evaluate(due => Math.round((due - Date.now()) / 86400000), easy.due)
   check("and is not due again for a week", days, 7)

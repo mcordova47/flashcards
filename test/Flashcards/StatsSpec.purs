@@ -29,7 +29,13 @@ now = at $ 100.0 * day
 
 deck :: Array Card
 deck = Array.range 1 20 <#> \n ->
-  { rank: Rank n, slug: Slug ("es" <> show n), english: "en" <> show n, word: "es" <> show n, example: "" }
+  { rank: Rank n, slug: slugAt n, english: "en" <> show n, word: "es" <> show n, example: "" }
+
+-- | The slug of the card at rank `n`. Progress is keyed by slug, so the
+-- | helpers below take a rank only because it is the readable way to name a
+-- | card in a synthetic deck.
+slugAt :: Int -> Slug
+slugAt n = Slug $ "es" <> show n
 
 -- | rank, box, seen, missed, lapses, days until due
 card :: Int -> Int -> Int -> Int -> Int -> Number -> Progress -> Progress
@@ -40,7 +46,7 @@ producing = cardIn Production
 
 cardIn :: Direction -> Int -> Int -> Int -> Int -> Int -> Number -> Progress -> Progress
 cardIn direction rank box seen missed lapses dueIn =
-  Progress.insert (Rank rank)
+  Progress.insert (slugAt rank)
     { box, seen, missed, lapses, due: at $ (100.0 + dueIn) * day, direction }
 
 spec :: Spec Unit
@@ -147,7 +153,7 @@ spec = do
       (Stats.overview now deck progress).producing `shouldEqual` 1
 
     it "ignores history for words no longer in the deck" do
-      -- A rank beyond the deck must not inflate the totals.
+      -- A word that is not in the deck must not inflate the totals.
       let progress = Progress.empty # card 1 2 4 1 0 5.0 # card 999 5 50 20 9 5.0
       (Stats.overview now deck progress).answers `shouldEqual` 4
       (Stats.overview now deck progress).seen `shouldEqual` 1

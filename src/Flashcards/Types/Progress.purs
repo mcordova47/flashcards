@@ -2,17 +2,23 @@
 -- | byte, the backup file format: `Flashcards.Storage` writes it to
 -- | localStorage and `Flashcards.Backup` writes the same bytes to disk, so
 -- | there is one codec and one validation path rather than two that drift.
+-- |
+-- | Keyed by slug, not by rank. A rank is a position and moves whenever the
+-- | deck is edited; a slug is frozen when the card is first written down. See
+-- | `Flashcards.Types.Card`.
 module Flashcards.Types.Progress
   ( CardProgress
   , Progress
   , Saved
+  , SavedCard
   , currentVersion
   , empty
   , entries
+  , fromEntries
   , fromJson
   , insert
   , lookup
-  , mapWithRank
+  , mapWithSlug
   , merge
   , seenCount
   , toJson
@@ -34,7 +40,7 @@ import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Data.Traversable (traverse)
 import Data.Tuple.Nested (type (/\), (/\))
-import Flashcards.Types.Card (Rank(..), rankToInt)
+import Flashcards.Types.Card (Rank(..), Slug(..), slugToString)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Direction as Direction
 
@@ -55,45 +61,57 @@ type CardProgress =
   , direction :: Direction
   }
 
-newtype Progress = Progress (Map Rank CardProgress)
+newtype Progress = Progress (Map Slug CardProgress)
 
 derive newtype instance Eq Progress
 derive newtype instance Show Progress
 
--- | A decoded payload together with the deck it was written against. The
--- | caller decides what a mismatch means: `Storage` warns and carries on,
--- | because refusing to load your own history is worse than a little drift;
--- | `Backup` refuses, because combining two histories against different decks
--- | corrupts silently.
+-- | A decoded payload, still unresolved: entries written before v5 identify
+-- | their card by rank, and turning a rank into a slug needs the deck. See
+-- | `Flashcards.Deck.adopt`.
+-- |
+-- | No version field, deliberately. Which of the two identifiers an entry
+-- | carries is the thing that matters, and reading that off the entry itself
+-- | is both simpler and truer than trusting a number in the header.
 type Saved =
-  { deck :: Maybe String
-  , progress :: Progress
+  { language :: Maybe String
+  , deck :: Maybe String
+  , cards :: Array SavedCard
   }
 
--- | v1 had no deck fingerprint, v2 no miss count, v3 no direction. All stay
--- | readable and get written back at the current version on the next save.
--- | Absent fields read as their starting value — zero misses, recognition —
--- | which understates history that was never recorded rather than inventing
--- | any.
+-- | Exactly one of `slug` and `rank` is present in practice: v5 writes the
+-- | first, everything before it wrote the second.
+type SavedCard =
+  { slug :: Maybe Slug
+  , rank :: Maybe Rank
+  , progress :: CardProgress
+  }
+
+-- | v1 had no deck fingerprint, v2 no miss count, v3 no direction, and v4 was
+-- | keyed by rank. All stay readable, and absent fields read as their starting
+-- | value rather than being invented.
 currentVersion :: Int
-currentVersion = 4
+currentVersion = 5
 
 empty :: Progress
 empty = Progress Map.empty
 
-lookup :: Rank -> Progress -> Maybe CardProgress
-lookup rank (Progress m) = Map.lookup rank m
+lookup :: Slug -> Progress -> Maybe CardProgress
+lookup slug (Progress m) = Map.lookup slug m
 
-insert :: Rank -> CardProgress -> Progress -> Progress
-insert rank cp (Progress m) = Progress $ Map.insert rank cp m
+insert :: Slug -> CardProgress -> Progress -> Progress
+insert slug cp (Progress m) = Progress $ Map.insert slug cp m
 
-entries :: Progress -> Array (Rank /\ CardProgress)
+entries :: Progress -> Array (Slug /\ CardProgress)
 entries (Progress m) = Map.toUnfoldable m
 
-mapWithRank :: (Rank -> CardProgress -> CardProgress) -> Progress -> Progress
-mapWithRank f (Progress m) = Progress $ Map.mapMaybeWithKey (\rank cp -> Just $ f rank cp) m
+fromEntries :: Array (Slug /\ CardProgress) -> Progress
+fromEntries = Progress <<< Map.fromFoldable
 
--- | How many of the 1000 words have been seen at least once.
+mapWithSlug :: (Slug -> CardProgress -> CardProgress) -> Progress -> Progress
+mapWithSlug f (Progress m) = Progress $ Map.mapMaybeWithKey (\slug cp -> Just $ f slug cp) m
+
+-- | How many words have been seen at least once.
 seenCount :: Progress -> Int
 seenCount (Progress m) = Map.size m
 
@@ -108,14 +126,19 @@ merge (Progress a) (Progress b) = Progress $ Map.unionWith furtherAlong a b
   where
     furtherAlong x y = if y.seen > x.seen then y else x
 
+-- | What is read. Every field a past version could omit is optional, and
+-- | `slug` against `rank` is the v5 boundary itself: exactly one of them is
+-- | ever present.
 type Wire =
   { version :: Int
+  , language :: Maybe String
   , deck :: Maybe String
   , cards :: Array WireCard
   }
 
 type WireCard =
-  { rank :: Int
+  { slug :: Maybe String
+  , rank :: Maybe Int
   , box :: Int
   , due :: Number
   , seen :: Int
@@ -124,23 +147,41 @@ type WireCard =
   , direction :: Maybe String
   }
 
-toJson :: String -> Progress -> Json
-toJson deck (Progress m) = encodeJson
+-- | What is written, which is deliberately not `WireCard`. Argonaut renders an
+-- | absent `Maybe` field as `"rank":null`, and a dozen dead bytes on each of a
+-- | thousand cards is a real cost in a file people mail to themselves.
+type WrittenCard =
+  { slug :: String
+  , box :: Int
+  , due :: Number
+  , seen :: Int
+  , lapses :: Int
+  , missed :: Int
+  , direction :: String
+  }
+
+-- | The language is written from v5 on, because the fingerprint stopped being
+-- | a gate the moment slugs made a moved deck harmless — and it was the only
+-- | thing stopping a German file being poured into the Spanish deck. Nearly
+-- | every German slug is inert there, which is the trouble: it would look like
+-- | a thousand words learned, and `mal` is in both decks.
+toJson :: String -> String -> Progress -> Json
+toJson language deck progress = encodeJson
   { version: currentVersion
-  , deck: Just deck
-  , cards: toWire <$> pairs
+  , language
+  , deck
+  , cards: written <$> entries progress
   }
   where
-    pairs = Map.toUnfoldable m :: Array (Rank /\ CardProgress)
-
-    toWire (rank /\ cp) =
-      { rank: rankToInt rank
+    written :: Slug /\ CardProgress -> WrittenCard
+    written (slug /\ cp) =
+      { slug: slugToString slug
       , box: cp.box
       , due: unwrap $ unInstant cp.due
       , seen: cp.seen
       , lapses: cp.lapses
-      , missed: Just cp.missed
-      , direction: Just $ Direction.toString cp.direction
+      , missed: cp.missed
+      , direction: Direction.toString cp.direction
       }
 
 fromJson :: Json -> Either JsonDecodeError Saved
@@ -149,16 +190,20 @@ fromJson json = do
   -- Only reject the future. Older payloads are readable by construction.
   when (wire.version > currentVersion) $
     Left $ TypeMismatch $ "progress was written by a newer version of the app (" <> show wire.version <> ")"
-  progress <- Progress <<< Map.fromFoldable <$> traverse fromWire wire.cards
-  pure { deck: wire.deck, progress }
+  cards <- traverse fromWire wire.cards
+  pure { language: wire.language, deck: wire.deck, cards }
   where
     fromWire w = do
       due <- note (TypeMismatch "due is not a valid instant") $ instant $ Milliseconds w.due
-      pure $ Rank w.rank /\
-        { box: w.box
-        , due
-        , seen: w.seen
-        , lapses: w.lapses
-        , missed: fromMaybe 0 w.missed
-        , direction: fromMaybe Recognition $ Direction.fromString =<< w.direction
+      pure
+        { slug: Slug <$> w.slug
+        , rank: Rank <$> w.rank
+        , progress:
+            { box: w.box
+            , due
+            , seen: w.seen
+            , lapses: w.lapses
+            , missed: fromMaybe 0 w.missed
+            , direction: fromMaybe Recognition $ Direction.fromString =<< w.direction
+            }
         }

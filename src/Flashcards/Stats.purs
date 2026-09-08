@@ -117,7 +117,7 @@ masteryOf = case _ of
 tally :: Progress -> Array Card -> Counts
 tally progress = Array.foldl add { unseen: 0, learning: 0, familiar: 0, mastered: 0 }
   where
-    add acc card = case masteryOf $ Progress.lookup card.rank progress of
+    add acc card = case masteryOf $ Progress.lookup card.slug progress of
       Unseen -> acc { unseen = acc.unseen + 1 }
       Learning -> acc { learning = acc.learning + 1 }
       Familiar -> acc { familiar = acc.familiar + 1 }
@@ -159,7 +159,7 @@ overview now deck progress =
   where
     -- Only cards still in the deck count, so a resynced deck cannot leave
     -- orphaned history inflating the totals.
-    tracked = Array.mapMaybe (\card -> Progress.lookup card.rank progress) deck
+    tracked = Array.mapMaybe (\card -> Progress.lookup card.slug progress) deck
     answers = sum $ map _.seen tracked
     misses = sum $ map _.missed tracked
     tomorrow = plusDays 1.0 now
@@ -174,7 +174,7 @@ leeches threshold deck progress =
   Array.sortBy mostLapsedFirst $ Array.mapMaybe toLeech deck
   where
     toLeech card = do
-      cp <- Progress.lookup card.rank progress
+      cp <- Progress.lookup card.slug progress
       guard $ cp.lapses >= threshold
       pure { rank: card.rank, word: card.word, english: card.english, lapses: cp.lapses }
 
@@ -189,7 +189,7 @@ nextDueIn now deck progress = do
   soonest <- minimum $ Array.filter (_ > now) $ map _.due tracked
   pure $ Milliseconds $ unwrap (unInstant soonest) - unwrap (unInstant now)
   where
-    tracked = Array.mapMaybe (\card -> Progress.lookup card.rank progress) deck
+    tracked = Array.mapMaybe (\card -> Progress.lookup card.slug progress) deck
 
 -- | A wait in round human units — "4 hours", "1 day". Deliberately coarse:
 -- | the exact minute is noise when the answer is "come back this evening".

@@ -18,6 +18,8 @@ import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn1, runEffectFn2)
+import Flashcards.Deck (Index)
+import Flashcards.Deck as Deck
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 
@@ -26,20 +28,32 @@ import Flashcards.Types.Progress as Progress
 filename :: String
 filename = "palabras-progress.json"
 
-serialize :: String -> Progress -> String
-serialize deck = stringify <<< Progress.toJson deck
+serialize :: String -> String -> Progress -> String
+serialize language deck = stringify <<< Progress.toJson language deck
 
--- | Import combines two histories, and getting the deck wrong would remap
--- | progress onto the wrong words with no visible symptom — so a fingerprint
--- | mismatch is refused outright. A v1 file carries no fingerprint and predates
--- | any renumbering, so it is accepted.
-parse :: String -> String -> Either String Progress
-parse deck raw = do
+-- | Import combines two histories, and placing one wrongly would attach it to
+-- | the wrong words with no visible symptom, so anything unsound is refused
+-- | outright rather than warned about.
+-- |
+-- | Since v5 that almost never happens: a file that names its cards by slug is
+-- | placeable on any version of the deck, which is the whole point. Only an
+-- | older file, written against a deck that has since moved, has to be turned
+-- | away. See `Flashcards.Deck.adopt`.
+-- |
+-- | The wrong language is refused outright. From v5 the file says which one it
+-- | is; before that the fingerprint gives the same answer, since no two decks
+-- | share one — and a v1 file, which carries neither, predates the second deck
+-- | by long enough that none can exist.
+parse :: String -> String -> Index -> String -> Either String Progress
+parse language deck idx raw = do
   json <- lmap (const "That file isn't valid JSON.") $ jsonParser raw
   saved <- lmap (const "That file isn't a Palabras backup.") $ Progress.fromJson json
-  case saved.deck of
-    Just other | other /= deck -> Left "That backup was made against a different deck."
-    _ -> Right saved.progress
+  case saved.language of
+    Just other | other /= language -> Left "That backup is for a different language."
+    _ -> do
+      let adopted = Deck.adopt deck idx saved
+      if adopted.sound then Right adopted.progress
+      else Left "That backup predates a deck change, so its words can't be matched up."
 
 download :: String -> String -> Effect Unit
 download = runEffectFn2 download_

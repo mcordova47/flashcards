@@ -23,7 +23,7 @@ import Data.DateTime.Instant (Instant, instant, unInstant)
 import Data.Maybe (Maybe(..), fromMaybe, isJust, isNothing)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
-import Flashcards.Types.Card (Card, Rank)
+import Flashcards.Types.Card (Card, Slug)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
@@ -100,15 +100,15 @@ intervalFor box = Milliseconds $ day * case box of
 -- | Due reviews first, most overdue first; then brand-new words in frequency
 -- | order. The deck is never shuffled — its order *is* the curriculum, so the
 -- | next new word is always the most common one you do not yet know.
-buildSession :: Array Card -> Progress -> Instant -> Int -> Array Rank
+buildSession :: Array Card -> Progress -> Instant -> Int -> Array Slug
 buildSession deck progress now size =
-  Array.take size $ map _.rank dueCards <> map _.rank newCards
+  Array.take size $ map _.slug dueCards <> map _.slug newCards
   where
-    annotated = deck <#> \card -> { rank: card.rank, state: Progress.lookup card.rank progress }
+    annotated = deck <#> \card -> { slug: card.slug, state: Progress.lookup card.slug progress }
 
     dueCards =
       annotated
-        # Array.mapMaybe (\a -> a.state <#> \s -> { rank: a.rank, due: s.due })
+        # Array.mapMaybe (\a -> a.state <#> \s -> { slug: a.slug, due: s.due })
         # Array.filter (\a -> a.due <= now)
         # Array.sortWith _.due
 
@@ -166,9 +166,9 @@ applyGrade grade now allowed previous =
 
 -- | Put a missed card back into the queue a few positions later, so the loop
 -- | closes before the session ends. Lands at the end if there is no room left.
-requeue :: Rank -> Int -> Array Rank -> Array Rank
-requeue rank position queue =
-  fromMaybe (Array.snoc queue rank) $ Array.insertAt target rank queue
+requeue :: Slug -> Int -> Array Slug -> Array Slug
+requeue slug position queue =
+  fromMaybe (Array.snoc queue slug) $ Array.insertAt target slug queue
   where
     target = min (position + requeueGap) (Array.length queue)
 

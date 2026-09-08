@@ -32,10 +32,16 @@ now = at $ 100.0 * day
 -- | The English and Spanish sides are irrelevant to scheduling.
 deck :: Array Card
 deck = Array.range 1 50 <#> \n ->
-  { rank: Rank n, slug: Slug ("es" <> show n), english: "en" <> show n, word: "es" <> show n, example: "" }
+  { rank: Rank n, slug: slugAt n, english: "en" <> show n, word: "es" <> show n, example: "" }
+
+-- | The slug of the card at rank `n`, which is how progress and the session
+-- | queue name it. `word` is the same string; the deck derives one from the
+-- | other, exactly as the real ones do.
+slugAt :: Int -> Slug
+slugAt n = Slug $ "es" <> show n
 
 reviewed :: Int -> Int -> Number -> Progress -> Progress
-reviewed rank box due = Progress.insert (Rank rank) { box, due: at due, seen: 1, lapses: 0, missed: 0, direction: Recognition }
+reviewed rank box due = Progress.insert (slugAt rank) { box, due: at due, seen: 1, lapses: 0, missed: 0, direction: Recognition }
 
 boxedAt :: Int -> Maybe CardProgress
 boxedAt box = Just { box, due: at $ 99.0 * day, seen: 4, lapses: 2, missed: 3, direction: Recognition }
@@ -52,14 +58,14 @@ spec :: Spec Unit
 spec = do
   describe "buildSession" do
     it "starts a new learner on the most frequent words" do
-      Scheduler.buildSession deck Progress.empty now 5 `shouldEqual` (Rank <$> [ 1, 2, 3, 4, 5 ])
+      Scheduler.buildSession deck Progress.empty now 5 `shouldEqual` (slugAt <$> [ 1, 2, 3, 4, 5 ])
 
     it "caps the queue at the requested size" do
       Array.length (Scheduler.buildSession deck Progress.empty now 20) `shouldEqual` 20
 
     it "puts due reviews ahead of new words" do
       let progress = Progress.empty # reviewed 30 2 (99.0 * day)
-      Scheduler.buildSession deck progress now 3 `shouldEqual` (Rank <$> [ 30, 1, 2 ])
+      Scheduler.buildSession deck progress now 3 `shouldEqual` (slugAt <$> [ 30, 1, 2 ])
 
     it "orders due reviews by how overdue they are" do
       let
@@ -68,11 +74,11 @@ spec = do
           # reviewed 20 1 (95.0 * day)
           # reviewed 30 1 (98.0 * day)
       Array.take 3 (Scheduler.buildSession deck progress now 10)
-        `shouldEqual` (Rank <$> [ 20, 30, 10 ])
+        `shouldEqual` (slugAt <$> [ 20, 30, 10 ])
 
     it "leaves a card alone until it comes due" do
       let progress = Progress.empty # reviewed 7 3 (105.0 * day)
-      Scheduler.buildSession deck progress now 3 `shouldEqual` (Rank <$> [ 1, 2, 3 ])
+      Scheduler.buildSession deck progress now 3 `shouldEqual` (slugAt <$> [ 1, 2, 3 ])
 
   describe "applyGrade" do
     it "fast-tracks a word you knew on sight, skipping the short intervals" do
@@ -243,9 +249,9 @@ spec = do
 
   describe "requeue" do
     it "brings a missed card back five cards later" do
-      Scheduler.requeue (Rank 99) 0 (Rank <$> [ 1, 2, 3, 4, 5, 6, 7, 8 ])
-        `shouldEqual` (Rank <$> [ 1, 2, 3, 4, 5, 99, 6, 7, 8 ])
+      Scheduler.requeue (slugAt 99) 0 (slugAt <$> [ 1, 2, 3, 4, 5, 6, 7, 8 ])
+        `shouldEqual` (slugAt <$> [ 1, 2, 3, 4, 5, 99, 6, 7, 8 ])
 
     it "appends when the session is nearly over" do
-      Scheduler.requeue (Rank 99) 6 (Rank <$> [ 1, 2, 3, 4, 5, 6, 7, 8 ])
-        `shouldEqual` (Rank <$> [ 1, 2, 3, 4, 5, 6, 7, 8, 99 ])
+      Scheduler.requeue (slugAt 99) 6 (slugAt <$> [ 1, 2, 3, 4, 5, 6, 7, 8 ])
+        `shouldEqual` (slugAt <$> [ 1, 2, 3, 4, 5, 6, 7, 8, 99 ])
