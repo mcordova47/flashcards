@@ -62,6 +62,30 @@ export const origin = () => (typeof window === "undefined" ? "" : window.locatio
 // that never opens leaves a promise that neither resolves nor rejects, and the
 // reader is told nothing at all. The link is on screen either way, so the
 // button is a convenience and the sheet would only be a nicer convenience.
+// Read on submit rather than tracked keystroke by keystroke. A controlled
+// input fed by an update loop that dispatches asynchronously loses the caret
+// between renders, which scrambles anything typed at speed - and a pasted link
+// is the one thing that must arrive intact.
+export const pastedLink = () => {
+  const field = document.querySelector(".pair-paste")
+  return field ? field.value : ""
+}
+
+export const clearPasted = () => {
+  const field = document.querySelector(".pair-paste")
+  if (field) field.value = ""
+}
+
+export const canShare = () => typeof navigator !== "undefined" && !!navigator.share
+
+// Fire and forget, deliberately. A share sheet is its own feedback, and its
+// promise is not to be trusted: where the sheet cannot open, it can sit
+// unresolved forever and a caller waiting on it would tell the reader nothing
+// at all. The catch is only to keep the rejection from going unhandled.
+export const share_ = link => {
+  navigator.share({ url: link, title: "Mil Palabras" }).catch(() => {})
+}
+
 export const copyLink_ = (link, done) => {
   // Select it first, so a refused clipboard leaves the link highlighted and
   // one keystroke away rather than leaving the reader to find it again.

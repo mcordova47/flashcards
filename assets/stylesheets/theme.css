@@ -688,7 +688,44 @@ body {
   word-break: break-all;
 }
 
+.pair-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .pair-copy {
+  flex: 1;
+}
+
+/* Quieter than Copy: on the devices that have a share sheet it is the better
+   move, but it is the one that leaves the app, so it does not lead. */
+.pair-share {
+  background: var(--ghost);
+  color: var(--ghost-fg);
+  flex: 0 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.pair-paste {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--track);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.pair-paste::placeholder {
+  color: var(--faint);
+}
+
+.pair-use {
   width: 100%;
 }
 

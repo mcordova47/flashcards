@@ -243,8 +243,11 @@ export default async ({ check, open, base, blobs }) => {
   // user activation that can be lost on the way through the update loop, and a
   // reader with nothing on screen would have no second move.
   check("the pairing sheet shows the whole link", shown, `${base}/?pair=${phoneKey}`)
-  check("and says plainly what the link gives away",
-    (await phone.text(".pair-warning")).startsWith("Anyone with this link can read and change"), true)
+  const warning = await phone.text(".pair-warning")
+  check("and says the link is the only way back to the progress",
+    warning.includes("only way back to your progress"), true)
+  check("as well as what holding it lets anyone do",
+    warning.includes("read and change"), true)
   ;(await phone.byText(".grade", "Copy link")).click()
   await wait(300)
   check("copying reports what happened, either way",
@@ -252,17 +255,82 @@ export default async ({ check, open, base, blobs }) => {
   check("and leaves the link selected to fall back on",
     await phone.$eval(".pair-link", e => e.selectionEnd - e.selectionStart), shown.length)
   check("and does not throw", phone.errors, [])
+  // Offered exactly where the platform has one to offer. Headless Chrome
+  // claims `navigator.share`, so this asserts the correspondence rather than
+  // an absence it would not see.
+  check("the share button tracks whether there is a share sheet",
+    (await phone.$(".pair-share")) !== null,
+    await phone.evaluate(() => !!navigator.share))
   await phone.tap(".sheet-close")
+
+  // --- where there is a share sheet ---
+  // The point of it is AirDrop: a phone handing the link to a laptop with no
+  // messaging app in between. Nothing waits on the promise, because a sheet
+  // that cannot open leaves one that never settles either way.
+  const withShare = await open({ stub: `
+    window.__shared = []
+    Object.defineProperty(navigator, "share", { configurable: true,
+      value: data => { window.__shared.push(data); return new Promise(() => {}) } })
+  ` })
+  await withShare.waitForSelector(".prompt")
+  const ownKey = await withShare.evaluate(() => localStorage.getItem("flashcards.sync-key"))
+  await withShare.tap(".panel-toggle")
+  ;(await withShare.byText(".panel-item", "Sync another device")).click()
+  await wait(300)
+  ;(await withShare.byText(".grade", "Share")).click()
+  await wait(300)
+  check("the share sheet gets the pairing link",
+    await withShare.evaluate(() => window.__shared.map(d => d.url)), [`${base}/?pair=${ownKey}`])
+  check("and a promise that never settles hangs nothing", withShare.errors, [])
+  await withShare.close()
+
+  // --- pairing the other way, by pasting ---
+  // The only way in once an app is on a home screen: it can start with its own
+  // storage and has no camera to point at anything.
+  const installed = await open()
+  await installed.waitForSelector(".prompt")
+  await installed.tap(".panel-toggle")
+  ;(await installed.byText(".panel-item", "Sync another device")).click()
+  await wait(300)
+  const its = await installed.$eval(".pair-link", e => e.value)
+
+  await installed.type(".pair-paste", "not a link")
+  ;(await installed.byText(".grade", "Use this link")).click()
+  await wait(200)
+  check("something that is not a link is refused",
+    await installed.text(".notice"), "That doesn't look like a pairing link")
+
+  await installed.$eval(".pair-paste", e => { e.value = "" })
+  await installed.type(".pair-paste", its)
+  ;(await installed.byText(".grade", "Use this link")).click()
+  await wait(200)
+  check("and so is its own", await installed.text(".notice"), "That is this device's own link")
+
+  await installed.$eval(".pair-paste", e => { e.value = "" })
+  // Whitespace either side, because that is what a paste from a share sheet
+  // or a message actually looks like.
+  await installed.type(".pair-paste", `  ${base}/?pair=${phoneKey}  `)
+  ;(await installed.byText(".grade", "Use this link")).click()
+  await wait(600)
+  check("the other device's link is adopted",
+    await installed.evaluate(() => localStorage.getItem("flashcards.sync-key")), phoneKey)
+  check("closing the sheet behind it", await installed.$(".sheet"), null)
+  check("and pulling down what it has", (await installed.stored()).cards.length > 0, true)
+  check("no page errors", installed.errors, [])
+  await installed.close()
 
   // --- with no network at all ---
   await phone.setOfflineMode(true)
   await phone.reload({ waitUntil: "domcontentloaded" })
   await phone.waitForSelector(".prompt", { timeout: 20000 })
   check("a failed sync is silent", await phone.text(".notice"), null)
-  const before = (await phone.stored()).cards.length
+  // Sightings rather than cards: by now the session opens on a review, so the
+  // record is updated and no new one appears.
+  const sightings = p => (p.cards ?? []).reduce((n, c) => n + c.seen, 0)
+  const before = sightings(await phone.stored())
   await phone.tap(".card")
   await phone.tap(".got-it")
-  check("and studying carries on regardless", (await phone.stored()).cards.length, before + 1)
+  check("and studying carries on regardless", sightings(await phone.stored()), before + 1)
   await phone.setOfflineMode(false)
   await phone.close()
 }

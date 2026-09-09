@@ -179,13 +179,30 @@ code and enough of them do not. The suite reads the picture back with a decoder
 rather than trusting that it looks right, because a transposed grid or an
 off-by-one quiet zone still looks exactly like a QR code.
 
-The link is **shown**, not just copied. Both `navigator.clipboard` and
-`navigator.share` need a transient user activation that a click can lose on its
-way through the update loop, and a reader looking at a toast that says
-"couldn't copy" has no second move. With the link on screen there is always
-one, so the button is a shortcut rather than the mechanism. `navigator.share`
-is not used at all: when it fails to open it leaves a promise that neither
-resolves nor rejects, and the reader is told nothing.
+The link is **shown**, not just copied. `navigator.clipboard` needs a transient
+user activation that a click can lose on its way through the update loop, and a
+reader looking at a toast that says "couldn't copy" has no second move. With
+the link on screen there is always one, so the button is a shortcut rather than
+the mechanism.
+
+**Share** appears where `navigator.share` exists — phones, mostly, which is
+where AirDrop and the messaging apps are. Nothing waits on its promise: a share
+sheet that cannot open leaves one that never settles either way, so the sheet
+is its own feedback and the app reports nothing.
+
+### Pairing the other way
+
+**From another device** takes a pasted link instead, which is the only way in
+once an app has been added to a home screen. The manifest's `start_url` is `/`,
+so an installed app does not launch with the `?pair=` it was added from, and on
+iOS it can start with storage of its own besides — either way it comes up
+unpaired, with no camera to point at anything. Install first, then paste.
+
+The paste field is **uncontrolled**, read on submit. Fed through the update
+loop keystroke by keystroke it lost the caret between renders and scrambled
+anything typed at speed, and a link that arrives scrambled is worse than one
+that does not arrive. The parser is forgiving in the other direction: a whole
+link, a bare key, or either wrapped in the whitespace a paste usually brings.
 
 ### When it syncs
 

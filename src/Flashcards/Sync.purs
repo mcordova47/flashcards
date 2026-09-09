@@ -10,16 +10,20 @@
 -- | on. The network is an optimisation, never a dependency.
 module Flashcards.Sync
   ( Remote(..)
+  , canShare
+  , clearPasted
   , copyLink
   , fetchRemote
   , generateKey
-  , keyFromPath
+  , keyFromLink
   , loadKey
   , origin
   , pairingLink
+  , pastedLink
   , pushRemote
   , qrDataUrl
   , saveKey
+  , share
   , syncKey
   )
   where
@@ -28,11 +32,11 @@ import Prelude
 
 import Control.Alternative (guard)
 import Data.Array as Array
-import Data.Maybe (Maybe, fromMaybe)
+import Data.Maybe (Maybe(..))
 import Data.String as String
 import Data.String.CodePoints as CodePoints
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, EffectFn4, mkEffectFn1, runEffectFn2, runEffectFn3, runEffectFn4)
+import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, EffectFn4, mkEffectFn1, runEffectFn1, runEffectFn2, runEffectFn3, runEffectFn4)
 import Web.HTML (window)
 import Web.HTML.Window (localStorage)
 import Web.Storage.Storage as Storage
@@ -78,26 +82,33 @@ saveKey key = do
 -- | second store to expire, and works in both directions between a phone and a
 -- | laptop, which a camera does not.
 pairingLink :: String -> String -> String
-pairingLink origin key = origin <> "/?pair=" <> key
+pairingLink here key = here <> "/?pair=" <> key
 
--- | The key a pairing link carries, if the query string is one.
+-- | The key in whatever was handed over: a whole pairing link, a bare key, or
+-- | either with stray whitespace around it.
 -- |
--- | Parsed rather than read off `URLSearchParams` so it can be specced without
--- | a browser. Anything that is not a well-formed key is ignored rather than
--- | adopted, because adopting a malformed one would strand this device on a
--- | blob it can never write to.
-keyFromPath :: String -> Maybe String
-keyFromPath query = do
-  found <- Array.findMap (String.stripPrefix (String.Pattern "pair=")) parts
-  -- Anything malformed is ignored rather than adopted: taking it would strand
-  -- this device on a blob the server will never let it write to.
-  guard $ isKey found
-  pure found
-  where
-    parts =
-      String.split (String.Pattern "&")
-        $ fromMaybe query
-        $ String.stripPrefix (String.Pattern "?") query
+-- | Forgiving on the way in because there is no way to be wrong quietly — a
+-- | key either has the right shape or it does not, and one that does not is
+-- | ignored rather than adopted. Taking a malformed one would strand the
+-- | device on a blob the server will never accept a write to.
+-- |
+-- | Parsed here rather than read off `URLSearchParams` so it can be specced
+-- | without a browser, and so that a pasted link and an opened one go through
+-- | exactly the same rule.
+keyFromLink :: String -> Maybe String
+keyFromLink raw =
+  let
+    -- A `let` rather than guards with a `where`: PureScript does not bring
+    -- `where` bindings into scope inside guard expressions.
+    trimmed = String.trim raw
+    flatten p = String.replaceAll (String.Pattern p) (String.Replacement "&")
+    parts = String.split (String.Pattern "&") $ flatten "?" $ flatten "#" trimmed
+  in
+    if isKey trimmed then Just trimmed
+    else do
+      found <- Array.findMap (String.stripPrefix (String.Pattern "pair=")) parts
+      guard $ isKey found
+      pure found
 
 alphabet :: String
 alphabet = "abcdefghijklmnopqrstuvwxyz0123456789"
@@ -126,6 +137,23 @@ pushRemote key language body handler =
 foreign import qrDataUrl :: String -> String
 
 foreign import origin :: Effect String
+
+-- | Whether this device can hand the link straight to another one. Present on
+-- | phones, which is where AirDrop and the messaging apps are, and absent on
+-- | most desktop browsers — where copying is the natural move anyway.
+foreign import canShare :: Effect Boolean
+
+-- | What is in the paste field, read at the moment it is needed. See the note
+-- | in the FFI: tracking it keystroke by keystroke through the update loop
+-- | costs the caret, and a link that arrives scrambled is worse than useless.
+foreign import pastedLink :: Effect String
+
+foreign import clearPasted :: Effect Unit
+
+share :: String -> Effect Unit
+share = runEffectFn1 share_
+
+foreign import share_ :: EffectFn1 String Unit
 
 -- | Hand the link to the other device, however this one can. Reports what
 -- | happened so the panel can say something true: "Link copied" is a lie on a

@@ -102,6 +102,7 @@ type State =
   -- | The time is fixed at open so the due counts cannot shift underneath you.
   , statsAt :: Maybe Instant
   , pairing :: Boolean
+  , canShare :: Boolean
   -- | What the server is known to hold, and when it last took something.
   -- |
   -- | `sent` is the progress itself rather than a flag, so "is there anything
@@ -139,6 +140,7 @@ data Message
       , syncKey :: String
       , origin :: String
       , syncedAt :: Maybe Instant
+      , canShare :: Boolean
       }
   | Flip
   | Answer Grade
@@ -173,6 +175,11 @@ data Message
   | HidePairing
   | CopyLink
   | Copied String
+  | ShareLink
+  -- | Reading the paste field is an effect, so it takes two hops, the way
+  -- | grading does for the clock.
+  | UseLink
+  | LinkPasted String
 
 init :: Transition Message State
 init = do
@@ -181,13 +188,14 @@ init = do
     syncKey <- liftEffect $ adoptKey language
     origin <- liftEffect Sync.origin
     syncedAt <- liftEffect $ Storage.loadSyncedAt language.code
+    canShare <- liftEffect Sync.canShare
     let index = DeckIndex.index language.deck
     progress <- liftEffect $ Storage.load language.code language.fingerprint index
     canSpeak <- liftEffect Speech.supported
     savedAccent <- liftEffect $ Storage.loadAccent language.code
     savedVoice <- liftEffect $ Storage.loadVoice language.code
     now <- liftEffect Now.now
-    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt }
+    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt, canShare }
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
   forks \{ dispatch } ->
@@ -209,6 +217,7 @@ init = do
     , index: DeckIndex.index Language.default.deck
     , statsAt: Nothing
     , pairing: false
+    , canShare: false
     , origin: ""
     , undo: Nothing
     , sent: Nothing
@@ -220,7 +229,7 @@ update :: State -> Message -> Transition Message State
 update state = case _ of
   -- `Loaded` and `VoicesAvailable` race, so both resolve preferences from
   -- whatever the other has already put in state.
-  Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt } -> do
+  Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt, canShare } -> do
     -- Progress saved before colliding glosses were barred can hold cards that
     -- graduated when they should not have. Put them back before building a
     -- session out of them.
@@ -234,6 +243,7 @@ update state = case _ of
         , syncKey = Just syncKey
         , origin = origin
         , syncedAt = syncedAt
+        , canShare = canShare
         -- A different language is a different blob, so nothing is known about
         -- this one until it has been asked.
         , sent = Nothing
@@ -408,12 +418,13 @@ update state = case _ of
         syncKey <- liftEffect $ maybe (adoptKey language) pure state.syncKey
         origin <- liftEffect Sync.origin
         syncedAt <- liftEffect $ Storage.loadSyncedAt language.code
+        canShare <- liftEffect Sync.canShare
         progress <- liftEffect $ Storage.load language.code language.fingerprint index
         savedAccent <- liftEffect $ Storage.loadAccent language.code
         savedVoice <- liftEffect $ Storage.loadVoice language.code
         now <- liftEffect Now.now
         pure $ Loaded
-          { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt }
+          { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt, canShare }
       pure state { panel = Nothing, statsAt = Nothing }
 
   Sync -> case state.syncKey of
@@ -514,6 +525,41 @@ update state = case _ of
   Copied "copied" -> noticing state "Link copied"
   Copied _ -> noticing state "Couldn't copy it — select the link instead"
 
+  ShareLink -> case state.syncKey of
+    Nothing ->
+      pure state
+    Just key -> do
+      forkVoid $ liftEffect $ Sync.share <<< flip Sync.pairingLink key =<< Sync.origin
+      pure state
+
+  -- Pairing the other way round, which is the only way in once an app has been
+  -- added to a home screen: an installed app can start with storage of its own
+  -- and no camera to point at anything, so it has to be told rather than shown.
+  UseLink -> do
+    fork $ liftEffect $ LinkPasted <$> Sync.pastedLink
+    pure state
+
+  LinkPasted pasted -> case Sync.keyFromLink pasted of
+    Nothing ->
+      noticing state "That doesn't look like a pairing link"
+    Just key
+      | Just key == state.syncKey ->
+          noticing state "That is this device's own link"
+      | otherwise -> do
+          forkVoid $ liftEffect do
+            Sync.saveKey key
+            Sync.clearPasted
+          fork $ pure Sync
+          noticing
+            state
+              { syncKey = Just key
+              , pairing = false
+              -- A different key is a different blob, so nothing is known about
+              -- it until it answers.
+              , sent = Nothing
+              }
+            "Paired · fetching their progress"
+
   ChooseAccent accent -> do
     let voice = Accent.autoVoice accent state.voices
     forkVoid $ liftEffect $ Storage.saveAccent state.language.code accent
@@ -535,7 +581,7 @@ update state = case _ of
 -- | already saved here, else a fresh one. Generated on first run rather than
 -- | on first sync, so there is always a link to hand out.
 adoptKey :: Language -> Effect String
-adoptKey language = Sync.keyFromPath <$> Route.search >>= case _ of
+adoptKey language = Sync.keyFromLink <$> Route.search >>= case _ of
   Just key -> do
     Sync.saveKey key
     -- Take it back out of the address bar. It is the only secret this app
@@ -774,11 +820,30 @@ pairingView state dispatch =
     -- key is the one thing worth checking against the other device, and an
     -- input would ellipsise exactly the part that differs.
     , H.textarea_ "pair-link" { readOnly: true, rows: 2, value: link }
-    , H.button_ "grade got-it pair-copy" { onClick: dispatch <| CopyLink } "Copy link"
-    -- Said plainly, because it is the whole security model. See the README.
+    , H.div "pair-actions" $
+        [ H.button_ "grade got-it pair-copy" { onClick: dispatch <| CopyLink } "Copy link" ]
+          <> if state.canShare then
+               [ H.button_ "grade pair-share" { onClick: dispatch <| ShareLink } "Share" ]
+             else
+               []
+    -- Said plainly, because it is the whole security model, and because
+    -- dropping the file export left this link as the only way back in.
     , H.p "pair-warning" $
-        "Anyone with this link can read and change your progress. There are no "
-          <> "accounts here — treat it like a door key, not a password."
+        "Keep this link somewhere. It is the only way back to your progress if "
+          <> "you lose this device — and anyone who has it can read and change "
+          <> "that progress, since there are no accounts here. A door key, not "
+          <> "a password."
+    , H.h3 "sheet-heading" "From another device"
+    , H.p "sheet-note" "Paste its link here instead."
+    -- Uncontrolled, and read on submit. See `Flashcards.Sync.pastedLink`.
+    , H.input_ "pair-paste"
+        { placeholder: "https://…/?pair=…"
+        , spellCheck: false
+        , autoCapitalize: "none"
+        }
+    , H.button_ "grade got-it pair-use"
+        { onClick: dispatch <| UseLink }
+        "Use this link"
     ]
   ]
   where
