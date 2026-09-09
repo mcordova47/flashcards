@@ -226,14 +226,16 @@ is order-insensitive, and a sync you have to remember is one you will not do.
 Offline it fails silently and picks up next time — the network is an
 optimisation, never a dependency.
 
-The `•••` panel says where things stand, and carries a **Sync now** for when
-you would rather not wait for the end of a session:
+The `•••` panel says where things stand, with the retry attached to the line
+that reports the problem rather than sitting in a row of its own — a row reads
+as a peer of "Sync another device" and invites being confused with it, and
+there is nothing to press when everything is synced:
 
 | | |
 | --- | --- |
 | `Everything is synced` | the server holds exactly this |
-| `Not synced` | there are answers it has not seen |
-| `Not synced — no connection` | and the last attempt did not get through |
+| `Not synced · Sync now` | there are answers it has not seen |
+| `Not synced — no connection · Retry` | and the last attempt did not get through |
 
 "Everything is synced" is decided by comparing the progress against what the
 last successful exchange sent, not by a flag — a flag set in the wrong place
@@ -360,9 +362,12 @@ The card comes back **face up**, with both grades to hand. You undo in order to
 press the other button; putting it face down would make you flip it again to
 get there.
 
-It sits in the top bar rather than beside the grades so that it is in the same
-place whether a session is running or finished — a mis-tap on the last card is
-exactly when it is wanted, and by then the controls have gone.
+It takes the flip hint's row rather than a place of its own. "Tap anywhere to
+flip" is a first-run nicety that stops being read after the first card, and
+undo is wanted immediately or not at all — so the card screen gains no chrome
+and the top bar stays as it was. The finished screen has no hint row to give
+up, so there it goes quietly under the tally, which is exactly where a mis-tap
+on the last card of a session leaves you looking.
 
 The offer disappears once the progress reaches the server. Undoing after that
 would lose the argument anyway: the next merge sees a higher `seen` on the

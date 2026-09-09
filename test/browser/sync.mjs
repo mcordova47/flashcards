@@ -124,6 +124,27 @@ export default async ({ check, open, base, blobs }) => {
   check("no page errors on either", [...phone.errors, ...laptop.errors], [])
   await laptop.close()
 
+  // --- what the panel says about it ---
+  const note = async page => {
+    await page.tap(".panel-toggle")
+    await wait(150)
+    // The status alone: the retry link lives in the same paragraph.
+    const text = await page.text(".sync-state")
+    await page.dismiss()
+    return text
+  }
+
+  // Beside the line reporting the problem rather than a row of its own, so it
+  // cannot be mistaken for "Sync another device" and is absent when there is
+  // nothing to do.
+  const syncNow = async page => {
+    await page.tap(".panel-toggle")
+    // Whatever it says — "Sync now" ordinarily, "Retry" after a failure.
+    await page.click(".link-button")
+    await wait(400)
+    await page.dismiss()
+  }
+
   // --- undo stops being offered once the server has it ---
   // Undoing after a push would lose the argument anyway: the next merge sees a
   // higher `seen` on the other side and takes it, silently putting the grade
@@ -131,12 +152,10 @@ export default async ({ check, open, base, blobs }) => {
   // quietly.
   await phone.tap(".card")
   await phone.tap(".got-it")
-  check("a fresh grade can still be taken back", await phone.text(".undo"), "Undo")
-  await phone.tap(".panel-toggle")
-  ;(await phone.byText(".panel-item", "Sync now")).click()
-  await wait(400)
-  await phone.dismiss()
-  check("but not once it has been sent", await phone.$(".undo"), null)
+  check("a fresh grade can still be taken back",
+    await phone.text(".hint-action"), "Undo last answer")
+  await syncNow(phone)
+  check("but not once it has been sent", await phone.$(".hint-action"), null)
 
   // --- a blob this device cannot place ---
   // Not reachable by pairing, since blobs are per language, but the server is
@@ -164,23 +183,12 @@ export default async ({ check, open, base, blobs }) => {
     await wait(400)
   }
 
-  // --- what the panel says about it ---
-  const note = async page => {
-    await page.tap(".panel-toggle")
-    await wait(150)
-    const text = await page.text(".panel-note.sync")
-    await page.dismiss()
-    return text
-  }
-
-  const syncNow = async page => {
-    await page.tap(".panel-toggle")
-    ;(await page.byText(".panel-item", "Sync now")).click()
-    await wait(400)
-    await page.dismiss()
-  }
-
   check("a device that has just exchanged says so", await note(phone), "Everything is synced")
+  // Nothing to do, so nothing offered.
+  await phone.tap(".panel-toggle")
+  await wait(150)
+  check("and offers nothing to press", await phone.$(".link-button"), null)
+  await phone.dismiss()
   await phone.tap(".card")
   await phone.tap(".got-it")
   // Sync is on load and at session end, so a card graded mid-session is
@@ -197,6 +205,11 @@ export default async ({ check, open, base, blobs }) => {
   // A failed exchange stays off the card screen by design. This is where it
   // surfaces, and it has to distinguish "not yet" from "cannot".
   check("a failed attempt says why", await note(phone), "Not synced — no connection")
+  await phone.tap(".panel-toggle")
+  await wait(150)
+  // "Retry" rather than "Sync now": the last one did not get through.
+  check("offering to try again", await phone.text(".link-button"), "Retry")
+  await phone.dismiss()
   await phone.setOfflineMode(false)
   await syncNow(phone)
   check("and it recovers when the network does", await note(phone), "Everything is synced")

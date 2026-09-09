@@ -71,26 +71,6 @@ body {
   height: 3px;
 }
 
-/* Same weight as the panel toggle beside it: undo is a way out of a slip, not
-   something to be drawn towards. */
-.undo {
-  appearance: none;
-  border: 0;
-  background: none;
-  color: var(--faint);
-  font: inherit;
-  font-size: 0.8125rem;
-  line-height: 1;
-  padding: 0.5rem 0.4rem;
-  cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.undo:hover {
-  color: var(--accent);
-}
-
 .panel-toggle {
   appearance: none;
   border: 0;
@@ -201,6 +181,48 @@ body {
 
 .hint {
   margin: 0 auto;
+  color: var(--faint);
+  font-size: 0.875rem;
+}
+
+/* The hint row is a paragraph; when undo takes it over it has to stop looking
+   like a button and start looking like the text it replaced. */
+.hint-action {
+  appearance: none;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-color: var(--track);
+}
+
+.hint-action:hover {
+  color: var(--muted);
+}
+
+/* An action that belongs to the sentence beside it rather than to the panel. */
+.link-button {
+  appearance: none;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.done-undo {
+  margin-top: 1.5rem;
   color: var(--faint);
   font-size: 0.875rem;
 }

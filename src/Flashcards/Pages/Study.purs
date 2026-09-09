@@ -694,21 +694,13 @@ view state dispatch =
       Just message -> H.div "notice" message
   ]
 
--- | Undo sits here rather than beside the grade buttons, so that it is in the
--- | same place whether a session is running or finished — a mis-tap on the
--- | last card of a session is exactly when it is wanted, and by then the
--- | controls have gone.
-topBar :: Boolean -> Maybe Session -> Dispatch Message -> ReactElement
-topBar undoable session dispatch =
+topBar :: Maybe Session -> Dispatch Message -> ReactElement
+topBar session dispatch =
   H.div "topbar"
   [ H.div "pips" case session of
       Nothing -> []
       Just s -> s.queue # Array.mapWithIndex \i _ ->
         H.div_ ("pip" <> if i < s.position then " done" else "") { key: show i } H.empty
-  , if undoable then
-      H.button_ "undo" { onClick: dispatch <| Undo, title: "Undo the last answer" } "Undo"
-    else
-      H.empty
   , H.button_ "panel-toggle" { onClick: dispatch <| TogglePanel, title: "Progress" } "•••"
   ]
 
@@ -719,7 +711,7 @@ currentCard index session =
 studyingView :: State -> Session -> Dispatch Message -> ReactElement
 studyingView state session dispatch =
   H.div "app"
-  [ topBar (isJust state.undo) (Just session) dispatch
+  [ topBar (Just session) dispatch
   , H.div_ "card" { onClick: dispatch <| Flip } face
   , H.div "controls" controls
   ]
@@ -777,13 +769,18 @@ studyingView state session dispatch =
           [ H.button_ "grade again" { onClick: dispatch <| Answer Again } "Again"
           , H.button_ "grade got-it" { onClick: dispatch <| Answer GotIt } "Got it"
           ]
+      -- The flip hint is a first-run nicety that stops being read after the
+      -- first card; undo is wanted immediately or not at all. So it takes the
+      -- row rather than adding one, and the top bar stays as it was.
+      | isJust state.undo =
+          [ H.button_ "hint hint-action" { onClick: dispatch <| Undo } "Undo last answer" ]
       | otherwise =
           [ H.p "hint" "tap anywhere to flip" ]
 
 completeView :: Boolean -> Language -> Progress -> Summary -> Dispatch Message -> ReactElement
 completeView undoable language progress summary dispatch =
   H.div "app"
-  [ topBar undoable Nothing dispatch
+  [ topBar Nothing dispatch
   , H.div "done-body"
     [ H.h1 "done-title" title
     , H.p "done-stats" stats
@@ -792,6 +789,12 @@ completeView undoable language progress summary dispatch =
       [ H.div "bar" $ H.div_ "fill" { style: H.css { width: show percent <> "%" } } H.empty
       , H.p "deck-count" $ show seen <> " of " <> show total <> " words seen"
       ]
+    -- No hint row here to give up, so it goes quietly under the tally. A
+    -- mis-tap on the last card of a session is exactly when undo is wanted.
+    , if undoable then
+        H.button_ "link-button done-undo" { onClick: dispatch <| Undo } "Undo last answer"
+      else
+        H.empty
     ]
   , H.div "controls"
     [ H.button_ "grade got-it" { onClick: dispatch <| StartAnother } cta ]
@@ -913,12 +916,12 @@ panelView state dispatch =
     , accentPicker
     , voicePicker
     , H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
-    , H.button_ "panel-item" { onClick: dispatch <| Sync } "Sync now"
     , H.button_ "panel-item" { onClick: dispatch <| ShowPairing } "Sync another device"
     , H.p "panel-note" $
         show (Progress.seenCount state.progress) <> " of "
           <> show (Array.length state.language.deck) <> " words seen"
-    , H.p ("panel-note sync" <> if settled then "" else " pending") syncNote
+    , H.p ("panel-note sync" <> if settled then "" else " pending") $
+        [ H.span "sync-state" syncNote ] <> retry
     ]
   ]
   where
@@ -927,6 +930,17 @@ panelView state dispatch =
     -- step. `Nothing` means nothing has been exchanged yet this run, which is
     -- not the same as knowing there is something to send.
     settled = state.sent == Just state.progress && not state.offline
+
+    -- Beside the line that reports the problem, rather than a row of its own:
+    -- a row reads as a peer of "Sync another device" and invites being
+    -- confused with it, and there is nothing to do when everything is synced.
+    retry
+      | settled = []
+      | otherwise =
+          [ H.span "" " · "
+          , H.button_ "link-button" { onClick: dispatch <| Sync } $
+              if state.offline then "Retry" else "Sync now"
+          ]
 
     syncNote
       | settled = "Everything is synced"

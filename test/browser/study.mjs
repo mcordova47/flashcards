@@ -65,13 +65,16 @@ export default async ({ check, open }) => {
   // "Got it" pushes a word you did not know three weeks out, silently.
   const slip = await open()
   await slip.waitForSelector(".prompt")
-  check("nothing to undo before anything is answered", await slip.$(".undo"), null)
+  // It takes the flip hint's row rather than a place of its own, so before
+  // anything is answered that row still says what it always said.
+  check("nothing to undo before anything is answered", await slip.text(".hint"), "tap anywhere to flip")
+  check("and no control for it", await slip.$(".hint-action"), null)
 
   await slip.tap(".card")
   await slip.tap(".got-it")
-  check("a grade offers one", await slip.text(".undo"), "Undo")
+  check("a grade puts one in the hint's place", await slip.text(".hint-action"), "Undo last answer")
   check("having moved on", await slip.text(".prompt"), slugAt(2))
-  await slip.tap(".undo")
+  await slip.tap(".hint-action")
   check("undoing goes back to the card", await slip.text(".prompt"), slugAt(1))
   // Still face up, with both grades to hand. You undo in order to press the
   // other button, and putting the card back face down would make you flip it
@@ -79,14 +82,14 @@ export default async ({ check, open }) => {
   check("still showing its answer", await slip.text(".answer"), "I")
   check("with both grades to hand", (await slip.$$(".grade")).length, 2)
   check("and the offer is gone, because one step is all there is",
-    await slip.$(".undo"), null)
+    await slip.$(".hint-action"), null)
   check("with the history it wrote taken back out of storage",
     (await slip.stored()).cards.length, 0)
 
   // Each grade replaces the snapshot rather than stacking, so undo always
   // means the most recent answer and never an older one.
   for (let i = 0; i < 3; i++) { await slip.tap(".card"); await slip.tap(".got-it") }
-  await slip.tap(".undo")
+  await slip.tap(".hint-action")
   check("only ever the last of several", (await slip.stored()).cards.length, 2)
   check("landing on the card that was graded", await slip.text(".prompt"), slugAt(3))
 
@@ -95,7 +98,7 @@ export default async ({ check, open }) => {
   await slip.tap(".card")
   await slip.tap(".again")
   const requeued = (await slip.evaluate(() => document.querySelectorAll(".pip").length))
-  await slip.tap(".undo")
+  await slip.tap(".hint-action")
   check("a requeue is taken back too",
     await slip.evaluate(() => document.querySelectorAll(".pip").length), requeued - 1)
   check("no page errors", slip.errors, [])
