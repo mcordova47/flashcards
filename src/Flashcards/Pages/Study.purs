@@ -103,6 +103,8 @@ type State =
   , statsAt :: Maybe Instant
   , pairing :: Boolean
   , canShare :: Boolean
+  , canScan :: Boolean
+  , scanning :: Boolean
   -- | What the server is known to hold, and when it last took something.
   -- |
   -- | `sent` is the progress itself rather than a flag, so "is there anything
@@ -141,6 +143,7 @@ data Message
       , origin :: String
       , syncedAt :: Maybe Instant
       , canShare :: Boolean
+      , canScan :: Boolean
       }
   | Flip
   | Answer Grade
@@ -180,6 +183,9 @@ data Message
   -- | grading does for the clock.
   | UseLink
   | LinkPasted String
+  | StartScan
+  | Scanned Sync.Scan
+  | StopScan
 
 init :: Transition Message State
 init = do
@@ -189,13 +195,14 @@ init = do
     origin <- liftEffect Sync.origin
     syncedAt <- liftEffect $ Storage.loadSyncedAt language.code
     canShare <- liftEffect Sync.canShare
+    canScan <- liftEffect Sync.canScan
     let index = DeckIndex.index language.deck
     progress <- liftEffect $ Storage.load language.code language.fingerprint index
     canSpeak <- liftEffect Speech.supported
     savedAccent <- liftEffect $ Storage.loadAccent language.code
     savedVoice <- liftEffect $ Storage.loadVoice language.code
     now <- liftEffect Now.now
-    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt, canShare }
+    pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt, canShare, canScan }
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
   forks \{ dispatch } ->
@@ -218,6 +225,8 @@ init = do
     , statsAt: Nothing
     , pairing: false
     , canShare: false
+    , canScan: false
+    , scanning: false
     , origin: ""
     , undo: Nothing
     , sent: Nothing
@@ -229,7 +238,7 @@ update :: State -> Message -> Transition Message State
 update state = case _ of
   -- `Loaded` and `VoicesAvailable` race, so both resolve preferences from
   -- whatever the other has already put in state.
-  Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt, canShare } -> do
+  Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt, canShare, canScan } -> do
     -- Progress saved before colliding glosses were barred can hold cards that
     -- graduated when they should not have. Put them back before building a
     -- session out of them.
@@ -244,6 +253,7 @@ update state = case _ of
         , origin = origin
         , syncedAt = syncedAt
         , canShare = canShare
+        , canScan = canScan
         -- A different language is a different blob, so nothing is known about
         -- this one until it has been asked.
         , sent = Nothing
@@ -419,12 +429,13 @@ update state = case _ of
         origin <- liftEffect Sync.origin
         syncedAt <- liftEffect $ Storage.loadSyncedAt language.code
         canShare <- liftEffect Sync.canShare
+        canScan <- liftEffect Sync.canScan
         progress <- liftEffect $ Storage.load language.code language.fingerprint index
         savedAccent <- liftEffect $ Storage.loadAccent language.code
         savedVoice <- liftEffect $ Storage.loadVoice language.code
         now <- liftEffect Now.now
         pure $ Loaded
-          { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt, canShare }
+          { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt, canShare, canScan }
       pure state { panel = Nothing, statsAt = Nothing }
 
   Sync -> case state.syncKey of
@@ -508,8 +519,29 @@ update state = case _ of
   ShowPairing ->
     pure state { pairing = true, panel = Nothing }
 
-  HidePairing ->
-    pure state { pairing = false }
+  HidePairing -> do
+    forkVoid $ liftEffect Sync.stopScan
+    pure state { pairing = false, scanning = false }
+
+  StartScan -> do
+    forks \{ dispatch } -> liftEffect $ Sync.startScan $ dispatch <<< Scanned
+    pure state { scanning = true }
+
+  StopScan -> do
+    forkVoid $ liftEffect Sync.stopScan
+    pure state { scanning = false }
+
+  -- Reading a code is only a nicer way of arriving at a link, so it lands in
+  -- the same place a pasted one does and gets the same forgiving parse.
+  Scanned (Sync.Code text) -> do
+    fork $ pure $ LinkPasted text
+    pure state { scanning = false }
+
+  Scanned Sync.Refused ->
+    noticing state { scanning = false } "Camera access was refused"
+
+  Scanned Sync.Unusable ->
+    noticing state { scanning = false } "Couldn't start the camera"
 
   CopyLink -> case state.syncKey of
     Nothing ->
@@ -834,22 +866,43 @@ pairingView state dispatch =
           <> "that progress, since there are no accounts here. A door key, not "
           <> "a password."
     , H.h3 "sheet-heading" "From another device"
-    , H.p "sheet-note" "Paste its link here instead."
-    -- Uncontrolled, and read on submit. See `Flashcards.Sync.pastedLink`.
-    , H.input_ "pair-paste"
-        { placeholder: "https://…/?pair=…"
-        , spellCheck: false
-        , autoCapitalize: "none"
-        }
-    , H.button_ "grade got-it pair-use"
-        { onClick: dispatch <| UseLink }
-        "Use this link"
+    , if state.scanning then scanner else takeALink
     ]
   ]
   where
     link = case state.syncKey of
       Just key -> Sync.pairingLink state.origin key
       Nothing -> ""
+
+    -- The camera closes the loop the QR code opened: until now this app could
+    -- show a code and not read one, so pairing into an installed app meant
+    -- getting a link to it by hand.
+    scanner =
+      H.fragment
+      [ H.p "sheet-note" "Point this at the code on your other device."
+      -- The class is how `Flashcards.Sync` finds it to attach the stream, and
+      -- all three attributes are what iOS wants before it will play inline.
+      , H.video_ "pair-video" { autoPlay: true, muted: true, playsInline: true } H.empty
+      , H.button_ "grade pair-cancel" { onClick: dispatch <| StopScan } "Cancel"
+      ]
+
+    takeALink =
+      H.fragment $
+        (if state.canScan then
+           [ H.button_ "grade got-it pair-scan" { onClick: dispatch <| StartScan } "Scan its code" ]
+         else
+           [])
+          <>
+        [ H.p "sheet-note" $
+            if state.canScan then "Or paste its link." else "Paste its link here."
+        -- Uncontrolled, and read on submit. See `Flashcards.Sync.pastedLink`.
+        , H.input_ "pair-paste"
+            { placeholder: "https://…/?pair=…"
+            , spellCheck: false
+            , autoCapitalize: "none"
+            }
+        , H.button_ "grade pair-use" { onClick: dispatch <| UseLink } "Use this link"
+        ]
 
 panelView :: State -> Dispatch Message -> ReactElement
 panelView state dispatch =

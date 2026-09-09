@@ -11,6 +11,7 @@ import path from "path"
 import puppeteer from "puppeteer-core"
 import { fileURLToPath } from "url"
 import { handle } from "../../netlify/functions/progress.mjs"
+import { qrDataUrl } from "../../src/Flashcards/Sync.js"
 
 export const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const PUBLIC = path.join(REPO, "public")
@@ -34,7 +35,7 @@ const CHROME = [
   "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
 ].filter(Boolean)
 
-const chrome = () => {
+export const chrome = () => {
   const found = CHROME.find(p => fs.existsSync(p))
   if (!found) throw new Error("No Chrome found. Set CHROME=/path/to/chrome")
   return found
@@ -131,6 +132,40 @@ const stable = v =>
     x && typeof x === "object" && !Array.isArray(x)
       ? Object.fromEntries(Object.entries(x).sort(([a], [b]) => (a < b ? -1 : 1)))
       : x)
+
+// A y4m of a QR code, for Chrome's fake camera. Uncompressed and planar, so
+// it can be written straight from the module grid: Y is 0 or 255, and the
+// colour planes are a flat 128 for grey.
+export const qrVideo = (text, { width = 640, height = 480 } = {}) => {
+  const svg = decodeURIComponent(qrDataUrl(text).replace("data:image/svg+xml,", ""))
+  const modules = Number(svg.match(/viewBox="0 0 (\d+)/)[1])
+  const grid = Array.from({ length: modules }, () => new Array(modules).fill(false))
+  for (const [, x, y, run] of svg.matchAll(/M(\d+) (\d+)h(\d+)v1h-\d+z/g)) {
+    for (let i = 0; i < Number(run); i++) grid[Number(y)][Number(x) + i] = true
+  }
+
+  // Centred and as large as the frame allows, the way a code held up to a
+  // camera fills it.
+  const scale = Math.floor(Math.min(width, height) / modules)
+  const side = scale * modules
+  const left = Math.floor((width - side) / 2)
+  const top = Math.floor((height - side) / 2)
+
+  const luma = Buffer.alloc(width * height, 255)
+  for (let y = 0; y < side; y++) {
+    for (let x = 0; x < side; x++) {
+      if (grid[Math.floor(y / scale)][Math.floor(x / scale)]) {
+        luma[(top + y) * width + (left + x)] = 0
+      }
+    }
+  }
+  const chroma = Buffer.alloc((width / 2) * (height / 2), 128)
+
+  const header = Buffer.from(`YUV4MPEG2 W${width} H${height} F20:1 Ip A1:1 C420\n`)
+  const frame = Buffer.concat([Buffer.from("FRAME\n"), luma, chroma, chroma])
+  // Chrome loops the file, but only once it has some frames to loop.
+  return Buffer.concat([header, ...Array(20).fill(frame)])
+}
 
 export const run = async (name, body) => {
   if (!fs.existsSync(path.join(PUBLIC, "index.js"))) {

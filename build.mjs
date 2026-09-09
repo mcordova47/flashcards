@@ -12,6 +12,15 @@ await build({
   minify: true,
 })
 
+// Its own bundle, loaded on demand. See scanner.js.
+await build({
+  entryPoints: ["./scanner.js"],
+  outfile: "./public/scan.js",
+  bundle: true,
+  format: "iife",
+  minify: true,
+})
+
 fs.cpSync("assets", "./public/assets", { recursive: true })
 fs.cpSync("index.html", "./public/index.html")
 

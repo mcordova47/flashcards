@@ -141,3 +141,138 @@ export const qrDataUrl = link => {
     `<path d="${d}" fill="#000"/></svg>`
   return "data:image/svg+xml," + encodeURIComponent(svg)
 }
+
+// --- reading someone else's code off their screen ---
+
+let live = null
+
+export const canScan = () =>
+  typeof navigator !== "undefined" &&
+  !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+
+// `BarcodeDetector` where the platform has it, which on Chrome means the
+// operating system does the work for nothing. Everywhere else - Safari, so
+// every iPhone - the bundled decoder is fetched on first use. See scanner.js.
+const loadDecoder = async () => {
+  if (typeof BarcodeDetector !== "undefined") {
+    try {
+      if ((await BarcodeDetector.getSupportedFormats()).includes("qr_code")) {
+        const detector = new BarcodeDetector({ formats: ["qr_code"] })
+        return async video => {
+          const found = await detector.detect(video)
+          return found.length ? found[0].rawValue : null
+        }
+      }
+    } catch {
+      // Present but unusable. Fall through rather than give up.
+    }
+  }
+  if (!window.__jsQR) {
+    await new Promise((resolve, reject) => {
+      const tag = document.createElement("script")
+      tag.src = "/scan.js"
+      tag.onload = resolve
+      tag.onerror = () => reject(new Error("no scanner"))
+      document.head.appendChild(tag)
+    })
+  }
+  const canvas = document.createElement("canvas")
+  const context = canvas.getContext("2d", { willReadFrequently: true })
+  return video => {
+    if (!video.videoWidth) return null
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
+    context.drawImage(video, 0, 0)
+    const frame = context.getImageData(0, 0, canvas.width, canvas.height)
+    const read = window.__jsQR(frame.data, frame.width, frame.height)
+    return read ? read.data : null
+  }
+}
+
+// The <video> is rendered by the app a beat after the state change that starts
+// this, so wait for it rather than assume it is already there.
+const awaitVideo = async () => {
+  for (let i = 0; i < 60; i++) {
+    const found = document.querySelector(".pair-video")
+    if (found) return found
+    await new Promise(resolve => setTimeout(resolve, 16))
+  }
+  return null
+}
+
+export const startScan_ = done => {
+  stopScan()
+  const session = { stopped: false }
+  live = session
+
+  const give = (tag, value) => {
+    stopScan()
+    done({ tag, value })
+  }
+
+  const run = async () => {
+    let stream
+    try {
+      // The back camera, which is the one pointed at somebody else's screen.
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+        audio: false,
+      })
+    } catch (e) {
+      return give(e && e.name === "NotAllowedError" ? "denied" : "failed", "")
+    }
+    if (session.stopped) return stream.getTracks().forEach(t => t.stop())
+    session.stream = stream
+
+    const video = await awaitVideo()
+    if (session.stopped) return
+    if (!video) return give("failed", "")
+
+    video.srcObject = stream
+    // iOS shows a black rectangle without all three, and even a muted autoplay
+    // wants the play() that the tap authorised.
+    video.setAttribute("playsinline", "")
+    video.muted = true
+    try {
+      await video.play()
+    } catch {
+      // A paused first frame still decodes once it arrives.
+    }
+
+    let read
+    try {
+      read = await loadDecoder()
+    } catch {
+      return give("failed", "")
+    }
+    if (session.stopped) return
+
+    // Five times a second is far more than a hand holding a phone needs, and
+    // leaves the main thread alone in between.
+    session.timer = setInterval(async () => {
+      if (session.stopped) return
+      let found = null
+      try {
+        found = await read(video)
+      } catch {
+        found = null
+      }
+      if (found && !session.stopped) give("found", found)
+    }, 200)
+  }
+
+  run()
+}
+
+// Idempotent, and called from everywhere the sheet can close. A camera left
+// running is an indicator light that will not go out.
+export const stopScan = () => {
+  if (!live) return
+  const session = live
+  live = null
+  session.stopped = true
+  if (session.timer) clearInterval(session.timer)
+  if (session.stream) session.stream.getTracks().forEach(t => t.stop())
+  const video = document.querySelector(".pair-video")
+  if (video) video.srcObject = null
+}

@@ -192,17 +192,32 @@ is its own feedback and the app reports nothing.
 
 ### Pairing the other way
 
-**From another device** takes a pasted link instead, which is the only way in
-once an app has been added to a home screen. The manifest's `start_url` is `/`,
-so an installed app does not launch with the `?pair=` it was added from, and on
-iOS it can start with storage of its own besides — either way it comes up
-unpaired, with no camera to point at anything. Install first, then paste.
+An app added to a home screen comes up unpaired: the manifest's `start_url` is
+`/`, so it never launches with the `?pair=` it was added from, and on iOS it
+can start with storage of its own besides. **From another device** is the way
+in — install first, then pair from inside.
 
-The paste field is **uncontrolled**, read on submit. Fed through the update
-loop keystroke by keystroke it lost the caret between renders and scrambled
-anything typed at speed, and a link that arrives scrambled is worse than one
-that does not arrive. The parser is forgiving in the other direction: a whole
-link, a bare key, or either wrapped in the whitespace a paste usually brings.
+**Scan its code** points the camera at the other device's screen, which closes
+the loop the QR code opened: until then this app could show a code and not read
+one. `BarcodeDetector` does the work where the platform has it, which on Chrome
+means the operating system decodes for nothing. Safari does not ship it, so
+every iPhone falls back to `jsQR` — 47 KB gzipped against a 135 KB app, for
+something used once per device, so it is a **separate bundle fetched on first
+use** rather than precached. Pairing needs the network anyway.
+
+The suite tests both decoders, because Chrome would otherwise only ever
+exercise the one iPhones never take. Chrome's fake camera is fed a `.y4m`
+written from a real pairing code's module grid — uncompressed and planar, so it
+can be generated rather than checked in — and the assertion is that the app
+pairs, not that a decoder was called.
+
+**Or paste its link.** That field is **uncontrolled**, read on submit. Fed
+through the update loop keystroke by keystroke it lost the caret between
+renders and scrambled anything typed at speed, and a link that arrives
+scrambled is worse than one that does not arrive. The parser is forgiving in
+the other direction: a whole link, a bare key, or either wrapped in the
+whitespace a paste usually brings — and a scanned code goes through exactly the
+same rule, so the two cannot disagree about what a key is.
 
 ### When it syncs
 
@@ -461,6 +476,7 @@ tools/sync-deck.mjs                  sheet -> CSV -> generated module
 tools/rename.mjs                     pins a slug when a word is respelled
 tools/deck-source.mjs                the language table, shared by both
 netlify/functions/progress.mjs       the blob store, and all of the server
+scanner.js                           the QR decoder, bundled on its own
 src/Flashcards/
   Scheduler.purs                     pure; the learning logic
   Storage.purs                       localStorage, at the edge

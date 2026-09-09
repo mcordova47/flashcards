@@ -10,6 +10,8 @@
 -- | on. The network is an optimisation, never a dependency.
 module Flashcards.Sync
   ( Remote(..)
+  , Scan(..)
+  , canScan
   , canShare
   , clearPasted
   , copyLink
@@ -24,6 +26,8 @@ module Flashcards.Sync
   , qrDataUrl
   , saveKey
   , share
+  , startScan
+  , stopScan
   , syncKey
   )
   where
@@ -143,6 +147,41 @@ foreign import origin :: Effect String
 -- | most desktop browsers — where copying is the natural move anyway.
 foreign import canShare :: Effect Boolean
 
+-- | What came of pointing the camera at something.
+-- |
+-- | `Refused` is kept apart from `Unusable` because only one of them is worth
+-- | saying anything about: a refusal is a decision the reader made and can
+-- | unmake, whereas a camera that will not start is nothing they can act on.
+data Scan
+  = Code String
+  | Refused
+  | Unusable
+
+derive instance Eq Scan
+
+instance Show Scan where
+  show (Code _) = "Code"
+  show Refused = "Refused"
+  show Unusable = "Unusable"
+
+-- | Whether this device has a camera to offer at all.
+foreign import canScan :: Effect Boolean
+
+-- | Runs until it reads something, fails, or is stopped. Reading something
+-- | stops it: the camera is freed before the caller hears about it, so a
+-- | forgotten `stopScan` cannot leave the indicator light on.
+startScan :: (Scan -> Effect Unit) -> Effect Unit
+startScan handler =
+  runEffectFn1 startScan_ $ mkEffectFn1 \r ->
+    handler case r.tag of
+      "found" -> Code r.value
+      "denied" -> Refused
+      _ -> Unusable
+
+foreign import stopScan :: Effect Unit
+
+foreign import startScan_ :: EffectFn1 (EffectFn1 Reply Unit) Unit
+
 -- | What is in the paste field, read at the moment it is needed. See the note
 -- | in the FFI: tracking it keystroke by keystroke through the update loop
 -- | costs the caret, and a link that arrives scrambled is worse than useless.
@@ -163,8 +202,10 @@ copyLink link handler = runEffectFn2 copyLink_ link $ mkEffectFn1 handler
 
 foreign import copyLink_ :: EffectFn2 String (EffectFn1 String Unit) Unit
 
-type Reply = { tag :: String, body :: String }
+type Reply = { tag :: String, value :: String }
 
-foreign import fetchRemote_ :: EffectFn3 String String (EffectFn1 Reply Unit) Unit
+type Fetched = { tag :: String, body :: String }
+
+foreign import fetchRemote_ :: EffectFn3 String String (EffectFn1 Fetched Unit) Unit
 
 foreign import pushRemote_ :: EffectFn4 String String String (EffectFn1 Boolean Unit) Unit

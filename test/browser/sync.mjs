@@ -1,6 +1,10 @@
 import jsQR from "jsqr"
 import { qrDataUrl } from "../../src/Flashcards/Sync.js"
-import { deckFingerprint, slugAt, wait } from "./harness.mjs"
+import fs from "fs"
+import os from "os"
+import path from "path"
+import puppeteer from "puppeteer-core"
+import { chrome, deckFingerprint, qrVideo, slugAt, wait } from "./harness.mjs"
 
 export const name = "The progress endpoint"
 
@@ -283,6 +287,76 @@ export default async ({ check, open, base, blobs }) => {
     await withShare.evaluate(() => window.__shared.map(d => d.url)), [`${base}/?pair=${ownKey}`])
   check("and a promise that never settles hangs nothing", withShare.errors, [])
   await withShare.close()
+
+  // --- pairing by reading the other device's code ---
+  // Its own browser, because the fake camera is a launch flag. Chrome is
+  // handed a y4m of an actual pairing code, so what is tested is the whole
+  // path: camera, frame, decode, adopt.
+  //
+  // Twice, because there are two decoders. Chrome has `BarcodeDetector` and
+  // uses it for nothing; Safari does not, so every iPhone takes the other
+  // path - the one that fetches scan.js - and it would otherwise ship untried.
+  {
+    const reel = path.join(os.tmpdir(), `palabras-qr-${Date.now()}.y4m`)
+    fs.writeFileSync(reel, qrVideo(`${base}/?pair=${phoneKey}`))
+    const eyes = await puppeteer.launch({
+      executablePath: chrome(),
+      headless: "new",
+      args: [
+        "--no-sandbox",
+        "--use-fake-ui-for-media-stream",
+        "--use-fake-device-for-media-stream",
+        `--use-file-for-fake-video-capture=${reel}`,
+      ],
+    })
+    try {
+      for (const native of [true, false]) {
+        const how = native ? "the platform's decoder" : "the bundled decoder"
+        const page = await eyes.newPage()
+        const errors = []
+        const fetched = []
+        page.on("pageerror", e => errors.push(String(e)))
+        page.on("request", r => fetched.push(new URL(r.url()).pathname))
+        if (!native) {
+          await page.evaluateOnNewDocument("delete window.BarcodeDetector")
+        }
+        await page.goto(base + "/", { waitUntil: "networkidle0" })
+        await page.evaluate(() => localStorage.clear())
+        await page.goto(base + "/", { waitUntil: "networkidle0" })
+        await page.waitForSelector(".prompt")
+        await page.click(".panel-toggle")
+        await wait(150)
+        for (const item of await page.$$(".panel-item")) {
+          if (await item.evaluate(e => e.textContent) === "Sync another device") await item.click()
+        }
+        await wait(300)
+        check(`a device with a camera offers to scan (${how})`,
+          (await page.$(".pair-scan")) !== null, true)
+        await page.click(".pair-scan")
+        // The key exists from first run, so waiting for "not null" would wait
+        // for nothing. Wait for it to become theirs.
+        await page.waitForFunction(
+          want => localStorage.getItem("flashcards.sync-key") === want,
+          { timeout: 20000 }, phoneKey,
+        ).catch(() => {})
+        check(`and reading the code pairs with it (${how})`,
+          await page.evaluate(() => localStorage.getItem("flashcards.sync-key")), phoneKey)
+        check(`closing the camera behind it (${how})`, await page.$(".pair-video"), null)
+        // An indicator light that will not go out is the thing people notice.
+        check(`and letting go of it (${how})`,
+          await page.evaluate(() => document.querySelectorAll("video").length), 0)
+        // 47 KB gzipped, so it must stay off the critical path and be fetched
+        // only by the browsers that have no decoder of their own.
+        check(`scan.js is fetched only when it is needed (${how})`,
+          fetched.includes("/scan.js"), !native)
+        check(`no page errors (${how})`, errors, [])
+        await page.close()
+      }
+    } finally {
+      await eyes.close()
+      fs.rmSync(reel, { force: true })
+    }
+  }
 
   // --- pairing the other way, by pasting ---
   // The only way in once an app is on a home screen: it can start with its own
