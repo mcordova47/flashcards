@@ -10,6 +10,7 @@ module Flashcards.Pages.Study.Model
   , Purpose(..)
   , Screen(..)
   , Session
+  , Startup
   , State
   , Summary
   , Undo
@@ -137,24 +138,32 @@ type State =
   , origin :: String
   }
 
+-- | Everything that has to be asked of the outside world before the screen can
+-- | exist: what was saved, what this device can do, and the time.
+-- |
+-- | Gathered under one name because a language switch needs exactly the same
+-- | set — see `ChooseLanguage`, which reuses the startup path rather than
+-- | assembling a second one that would drift from it.
+type Startup =
+  { progress :: Progress
+  , now :: Instant
+  , canSpeak :: Boolean
+  , savedAccent :: Maybe String
+  , savedVoice :: Maybe String
+  , language :: Language
+  -- | Carried rather than rebuilt, because loading progress needs it too:
+  -- | anything written before v5 names its cards by position, and only the
+  -- | deck can say which word that was.
+  , index :: DeckIndex.Index
+  , syncKey :: String
+  , origin :: String
+  , syncedAt :: Maybe Instant
+  , canShare :: Boolean
+  , canScan :: Boolean
+  }
+
 data Message
-  = Loaded
-      { progress :: Progress
-      , now :: Instant
-      , canSpeak :: Boolean
-      , savedAccent :: Maybe String
-      , savedVoice :: Maybe String
-      , language :: Language
-      -- | Carried rather than rebuilt, because loading progress needs it too:
-      -- | anything written before v5 names its cards by position, and only the
-      -- | deck can say which word that was.
-      , index :: DeckIndex.Index
-      , syncKey :: String
-      , origin :: String
-      , syncedAt :: Maybe Instant
-      , canShare :: Boolean
-      , canScan :: Boolean
-      }
+  = Loaded Startup
   | Flip
   | Answer Grade
   | Answered Grade Instant
