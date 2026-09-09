@@ -2,6 +2,7 @@
 -- | quiet panel for getting your progress on and off the device.
 module Flashcards.Pages.Study
   ( Message
+  , Purpose(..)
   , Screen
   , Session
   , State
@@ -45,8 +46,31 @@ import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 
+-- | Why a session exists, which is also whether its answers outlive it.
+-- |
+-- | A `Drill` is chosen, not scheduled. Getting a word right thirty seconds
+-- | after reading it off a list of your worst words is not evidence you will
+-- | have it next week, and letting it promote a box would push the review out
+-- | on the strength of exactly the massed practice spacing exists to avoid.
+-- | So a drill writes nothing at all — not the box, not the tallies.
+-- |
+-- | Not even `seen`, which is the one that would be tempting: it is what
+-- | `Progress.merge` uses to decide which of two devices is further along, so
+-- | a drill that raised it could make practice on this device overwrite a real
+-- | review from another.
+data Purpose
+  = Review
+  | Drill
+
+derive instance Eq Purpose
+
+instance Show Purpose where
+  show Review = "Review"
+  show Drill = "Drill"
+
 type Session =
-  { queue :: Array Slug
+  { purpose :: Purpose
+  , queue :: Array Slug
   , position :: Int
   , flipped :: Boolean
   , gotIt :: Int
@@ -320,9 +344,13 @@ update state = case _ of
               (Scheduler.applyGrade grade now allowed $ Progress.lookup slug state.progress)
               state.progress
 
+          -- Session-local either way: looping on the ones you keep missing is
+          -- most of what a drill is for.
           queue = case grade of
             Again -> Scheduler.requeue slug session.position session.queue
             GotIt -> session.queue
+
+          keeping = session.purpose == Review
 
           advanced = session
             { queue = queue
@@ -334,13 +362,16 @@ update state = case _ of
 
           finished = advanced.position >= Array.length advanced.queue
 
-        forkVoid $ liftEffect $ Storage.save state.language.code state.language.fingerprint progress
+        when keeping $
+          forkVoid $ liftEffect $ Storage.save state.language.code state.language.fingerprint progress
         -- The other end of the pair, so a session finished on the phone is
-        -- there when the laptop opens.
-        when finished $ fork $ pure Sync
+        -- there when the laptop opens. A drill changed nothing, so there is
+        -- nothing to tell it.
+        when (finished && keeping) $ fork $ pure Sync
         pure state
-          { progress = progress
-          , undo = Just { progress: state.progress, screen: state.screen }
+          { progress = if keeping then progress else state.progress
+          -- Nothing was written, so there is nothing to take back.
+          , undo = if keeping then Just { progress: state.progress, screen: state.screen } else state.undo
           , screen =
               if finished then
                 Complete
@@ -397,7 +428,7 @@ update state = case _ of
       queue ->
         pure state
           { statsAt = Nothing
-          , screen = Studying { queue, position: 0, flipped: false, gotIt: 0, again: 0 }
+          , screen = Studying { purpose: Drill, queue, position: 0, flipped: false, gotIt: 0, again: 0 }
           , undo = Nothing
           }
 
@@ -637,9 +668,14 @@ elapsed from to = Milliseconds $ unwrap (unInstant to) - unwrap (unInstant from)
 -- | anything: nothing answered into it, and no card turned over. A session
 -- | with answers in it has a place worth keeping, and a flipped card is an
 -- | answer someone is looking at.
+-- |
+-- | Never a drill. Rebuilding one would quietly swap the words you asked for
+-- | with whatever happens to be due, and a drill's queue is the whole point
+-- | of it.
 untouched :: Screen -> Boolean
 untouched = case _ of
-  Studying session -> session.position == 0 && not session.flipped
+  Studying session ->
+    session.purpose == Review && session.position == 0 && not session.flipped
   _ -> false
 
 -- | Falls back to a bare language hint: even with no Spanish voice installed,
@@ -675,7 +711,7 @@ startSession :: Array Card -> Progress -> Instant -> Screen
 startSession deck progress now =
   case Scheduler.buildSession deck progress now Scheduler.sessionSize of
     [] -> Complete { answered: 0, gotIt: 0, again: 0, at: now }
-    queue -> Studying { queue, position: 0, flipped: false, gotIt: 0, again: 0 }
+    queue -> Studying { purpose: Review, queue, position: 0, flipped: false, gotIt: 0, again: 0 }
 
 view :: State -> Dispatch Message -> ReactElement
 view state dispatch =

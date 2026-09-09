@@ -77,9 +77,36 @@ export default async ({ check, open }) => {
   check("drilling closes the sheet", await page.$(".sheet"), null)
   check("and starts on the worst of them", await page.text(".prompt"), slugAt(182))
   check("with a session exactly that long", (await page.$$(".pip")).length, 3)
+  // A drill is chosen rather than scheduled, so nothing it produces is
+  // evidence: getting a word right straight after reading it off a list of
+  // your worst words says nothing about next week.
+  const before = await page.stored()
   await page.tap(".card")
   await page.tap(".got-it")
-  check("which grades like any other", await page.text(".prompt"), slugAt(181))
+  check("moving on like any other session", await page.text(".prompt"), slugAt(181))
+  check("but writing nothing at all", await page.stored(), before)
+  check("so there is nothing to undo", await page.$(".hint-action"), null)
+
+  // Again still loops within the drill: that is most of what one is for.
+  await page.tap(".card")
+  await page.tap(".again")
+  check("a missed card still comes round again",
+    (await page.$$(".pip")).length, 4)
+  check("and still writes nothing", await page.stored(), before)
+
+  await page.tap(".card")
+  await page.tap(".got-it")
+  await page.tap(".card")
+  await page.tap(".got-it")
+  await page.waitForSelector(".done-title")
+  check("the tally is the session's own", await page.text(".done-stats"),
+    "4 cards · 3 got it · 1 again")
+  check("with the history still untouched", await page.stored(), before)
+  check("and the words still listed as slipping", (await page.stored()).cards.length,
+    before.cards.length)
+
+  await page.tap(".grade")
+  await wait(250)
   await openSheet(page)
 
   check("the body is the scrolling region",

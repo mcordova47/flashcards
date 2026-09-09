@@ -117,10 +117,21 @@ leech. A word missed eight times on the way in but never since does not appear.
 
 **Drill these** builds a session out of that list, worst first, ignoring what
 is due — which is the whole point, since a leech is a word whose schedule has
-already been proved too generous. It is an ordinary session otherwise: the
-queue is just an array of slugs, so grading, requeuing and graduation all
-behave exactly as they do anywhere else. Capped at the usual twenty, and the
-button says so when there are more.
+already been proved too generous. Capped at the usual twenty, and the button
+says so when there are more.
+
+A drill **writes nothing**. Getting a word right thirty seconds after reading
+it off a list of your worst words is not evidence you will have it next week,
+and letting it promote a box would push the review out on the strength of
+exactly the massed practice that spacing exists to avoid. Not even `seen`,
+which is the tempting one: `Progress.merge` uses it to decide which of two
+devices is further along, so a drill that raised it could let practice on one
+device overwrite a real review from another.
+
+What a drill does keep is session-local. `Again` still puts a card back a few
+places, which is most of what one is for, and the closing tally still counts
+what happened — it just leaves no trace. The same words stay on the list until
+you get them right at a scheduled review, which is the only place that counts.
 
 ## Example sentences
 
