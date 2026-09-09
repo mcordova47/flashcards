@@ -506,12 +506,15 @@ tools/deck-source.mjs                the language table, shared by both
 netlify/functions/progress.mjs       the blob store, and all of the server
 scanner.js                           the QR decoder, bundled on its own
 src/Flashcards/
+  Pages/Study.purs                   the card, the loop, the wiring
+  Pages/Study/Model.purs             one State and one Message, for all of it
+  Pages/Study/Pairing.purs           getting a key from one device to another
+  Pages/Study/{Panel,Progress}.purs  the ••• menu, and the sheet it opens
   Scheduler.purs                     pure; the learning logic
   Storage.purs                       localStorage, at the edge
   Payload.purs                       the bytes progress travels as
   Sync.purs                          the other device's bytes
   Types/{Card,Grade,Progress}.purs
-  Pages/Study.purs                   the entire UI
   Data/Deck/Spanish.purs             GENERATED - do not edit
 test/Flashcards/SchedulerSpec.purs
 ```

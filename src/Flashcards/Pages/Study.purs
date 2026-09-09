@@ -1,12 +1,7 @@
 -- | The whole app. One screen: a card, a flip, two grades, a summary — plus a
 -- | quiet panel for getting your progress on and off the device.
 module Flashcards.Pages.Study
-  ( Message
-  , Purpose(..)
-  , Screen
-  , Session
-  , State
-  , Undo
+  ( module Model
   , init
   , update
   , view
@@ -16,14 +11,12 @@ module Flashcards.Pages.Study
 import Prelude
 
 import Data.Array as Array
-import Data.DateTime.Instant (Instant, unInstant)
+import Data.DateTime.Instant (Instant)
 import Data.Either (Either(..))
 import Data.Foldable (for_, intercalate)
 import Data.Int as Int
 import Data.Maybe (Maybe(..), fromMaybe, isJust, maybe)
-import Data.Newtype (unwrap)
 import Effect (Effect)
-import Effect.Aff (Milliseconds(..), delay)
 import Effect.Class (liftEffect)
 import Effect.Now as Now
 import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
@@ -33,6 +26,11 @@ import Flashcards.Accent as Accent
 import Flashcards.Deck as DeckIndex
 import Flashcards.Language (Language)
 import Flashcards.Language as Language
+import Flashcards.Pages.Study.Model (Message(..), Purpose(..), Screen(..), Session, State, Summary, noticing, untouched)
+import Flashcards.Pages.Study.Model (Message, State) as Model
+import Flashcards.Pages.Study.Pairing as Pairing
+import Flashcards.Pages.Study.Panel as Panel
+import Flashcards.Pages.Study.Progress as ProgressSheet
 import Flashcards.Payload as Payload
 import Flashcards.Route as Route
 import Flashcards.Scheduler as Scheduler
@@ -40,182 +38,17 @@ import Flashcards.Stats as Stats
 import Flashcards.Speech as Speech
 import Flashcards.Storage as Storage
 import Flashcards.Sync as Sync
-import Flashcards.Types.Card (Card, Slug, rankToInt)
+import Flashcards.Types.Card (Card, rankToInt)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 
--- | Why a session exists, which is also whether its answers outlive it.
--- |
--- | A `Drill` is chosen, not scheduled. Getting a word right thirty seconds
--- | after reading it off a list of your worst words is not evidence you will
--- | have it next week, and letting it promote a box would push the review out
--- | on the strength of exactly the massed practice spacing exists to avoid.
--- | So a drill writes nothing at all — not the box, not the tallies.
--- |
--- | Not even `seen`, which is the one that would be tempting: it is what
--- | `Progress.merge` uses to decide which of two devices is further along, so
--- | a drill that raised it could make practice on this device overwrite a real
--- | review from another.
-data Purpose
-  = Review
-  | Drill
-
-derive instance Eq Purpose
-
-instance Show Purpose where
-  show Review = "Review"
-  show Drill = "Drill"
-
-type Session =
-  { purpose :: Purpose
-  , queue :: Array Slug
-  , position :: Int
-  , flipped :: Boolean
-  , gotIt :: Int
-  , again :: Int
-  }
-
-type Summary =
-  { answered :: Int
-  , gotIt :: Int
-  , again :: Int
-  -- | When the session ended, so "next review in ..." has something to count
-  -- | from without the view needing a clock.
-  , at :: Instant
-  }
-
--- | The whole of one step backwards. The progress is kept entire rather than
--- | as the one card that changed: `applyGrade` is the only thing that knows
--- | what a grade touches, and re-deriving that here is how the two drift.
-type Undo =
-  { progress :: Progress
-  , screen :: Screen
-  }
-
-data Screen
-  = Loading
-  | Studying Session
-  | Complete Summary
-
-type State =
-  { progress :: Progress
-  , screen :: Screen
-  -- | `Just` the moment the panel was opened, which doubles as "is it open".
-  -- | Fixed at open, like the progress sheet, so "last synced 3 days ago" does
-  -- | not tick over while you are reading it.
-  , panel :: Maybe Instant
-  , notice :: Maybe String
-  , canSpeak :: Boolean
-  -- | Every voice the device has, and the slice belonging to the language
-  -- | being studied. Keeping both means switching re-filters rather than
-  -- | re-subscribing.
-  , allVoices :: Array Accent.Voice
-  , voices :: Array Accent.Voice
-  , accent :: Maybe String
-  , voice :: Maybe String
-  , savedAccent :: Maybe String
-  , savedVoice :: Maybe String
-  , language :: Language
-  -- | This device's sync key. `Nothing` only for the moment before startup
-  -- | finishes; after that it is always set, generated on first run.
-  , syncKey :: Maybe String
-  , index :: DeckIndex.Index
-  -- | `Just` the moment the screen was opened, which doubles as "is it open".
-  -- | The time is fixed at open so the due counts cannot shift underneath you.
-  , statsAt :: Maybe Instant
-  , pairing :: Boolean
-  , canShare :: Boolean
-  , canScan :: Boolean
-  , scanning :: Boolean
-  -- | What the server is known to hold, and when it last took something.
-  -- |
-  -- | `sent` is the progress itself rather than a flag, so "is there anything
-  -- | to send" is answered by comparison and cannot drift out of step with
-  -- | reality the way a flag set in the wrong place would. `Nothing` means
-  -- | this device has not exchanged anything yet *this run* and so does not
-  -- | know — which is different from knowing there is something to send.
-  -- | Enough to put the last grade back, and only the last one.
-  -- |
-  -- | Cleared as soon as the progress reaches the server, because undoing
-  -- | after that would lose the argument anyway: the next merge sees a higher
-  -- | `seen` on the other side and takes it, silently re-applying the grade.
-  -- | Better to stop offering it than to offer something that quietly fails.
-  , undo :: Maybe Undo
-  , sent :: Maybe Progress
-  , syncedAt :: Maybe Instant
-  , offline :: Boolean
-  -- | Where this app is served from, so the pairing link is absolute and can
-  -- | be pasted anywhere rather than only followed from here.
-  , origin :: String
-  }
-
-data Message
-  = Loaded
-      { progress :: Progress
-      , now :: Instant
-      , canSpeak :: Boolean
-      , savedAccent :: Maybe String
-      , savedVoice :: Maybe String
-      , language :: Language
-      -- | Carried rather than rebuilt, because loading progress needs it too:
-      -- | anything written before v5 names its cards by position, and only the
-      -- | deck can say which word that was.
-      , index :: DeckIndex.Index
-      , syncKey :: String
-      , origin :: String
-      , syncedAt :: Maybe Instant
-      , canShare :: Boolean
-      , canScan :: Boolean
-      }
-  | Flip
-  | Answer Grade
-  | Answered Grade Instant
-  | Undo
-  | StartAnother
-  | StartedAnother Instant
-  | TogglePanel
-  | OpenedPanel Instant
-  | DismissNotice
-  | SpeakCurrent
-  | ChooseAccent String
-  | ChooseLanguage String
-  | VoicesAvailable (Array Accent.Voice)
-  | CycleVoice
-  | DrillLeeches
-  | ShowStats
-  | StatsAt Instant
-  | HideStats
-  -- | Ask the other side for its bytes. Safe to send at any time: the merge
-  -- | is order-insensitive, so a sync that overlaps another loses nothing.
-  | Sync
-  -- | Carries the language it was fetched for. A request in flight outlives a
-  -- | switch, and applying a Spanish answer to a German session would merge
-  -- | one deck's history into the other's key.
-  | Synced String Sync.Remote
-  -- | Carries what was sent, so `sent` records the exact progress the server
-  -- | is now known to hold rather than whatever state has drifted to since.
-  | Pushed Progress Boolean
-  | SyncedAt Instant
-  | ShowPairing
-  | HidePairing
-  | CopyLink
-  | Copied String
-  | ShareLink
-  -- | Reading the paste field is an effect, so it takes two hops, the way
-  -- | grading does for the clock.
-  | UseLink
-  | LinkPasted String
-  | StartScan
-  | Scanned Sync.Scan
-  | StopScan
-
 init :: Transition Message State
 init = do
   fork do
     language <- liftEffect $ Language.resolve <$> Route.current <*> Storage.loadLanguage
-    syncKey <- liftEffect $ adoptKey language
+    syncKey <- liftEffect $ Pairing.adoptKey language
     origin <- liftEffect Sync.origin
     syncedAt <- liftEffect $ Storage.loadSyncedAt language.code
     canShare <- liftEffect Sync.canShare
@@ -456,7 +289,7 @@ update state = case _ of
         let index = DeckIndex.index language.deck
         -- The key is per device, not per language, so a switch carries it
         -- across rather than pairing again.
-        syncKey <- liftEffect $ maybe (adoptKey language) pure state.syncKey
+        syncKey <- liftEffect $ maybe (Pairing.adoptKey language) pure state.syncKey
         origin <- liftEffect Sync.origin
         syncedAt <- liftEffect $ Storage.loadSyncedAt language.code
         canShare <- liftEffect Sync.canShare
@@ -547,81 +380,16 @@ update state = case _ of
   SyncedAt now ->
     pure state { syncedAt = Just now }
 
-  ShowPairing ->
-    pure state { pairing = true, panel = Nothing }
-
-  HidePairing -> do
-    forkVoid $ liftEffect Sync.stopScan
-    pure state { pairing = false, scanning = false }
-
-  StartScan -> do
-    forks \{ dispatch } -> liftEffect $ Sync.startScan $ dispatch <<< Scanned
-    pure state { scanning = true }
-
-  StopScan -> do
-    forkVoid $ liftEffect Sync.stopScan
-    pure state { scanning = false }
-
-  -- Reading a code is only a nicer way of arriving at a link, so it lands in
-  -- the same place a pasted one does and gets the same forgiving parse.
-  Scanned (Sync.Code text) -> do
-    fork $ pure $ LinkPasted text
-    pure state { scanning = false }
-
-  Scanned Sync.Refused ->
-    noticing state { scanning = false } "Camera access was refused"
-
-  Scanned Sync.Unusable ->
-    noticing state { scanning = false } "Couldn't start the camera"
-
-  CopyLink -> case state.syncKey of
-    Nothing ->
-      pure state
-    Just key -> do
-      forks \{ dispatch } -> liftEffect do
-        here <- Sync.origin
-        Sync.copyLink (Sync.pairingLink here key) $ dispatch <<< Copied
-      pure state
-
-  -- Only ever a convenience: the link is on screen, so a refused clipboard
-  -- costs the reader a long-press rather than the feature.
-  Copied "copied" -> noticing state "Link copied"
-  Copied _ -> noticing state "Couldn't copy it — select the link instead"
-
-  ShareLink -> case state.syncKey of
-    Nothing ->
-      pure state
-    Just key -> do
-      forkVoid $ liftEffect $ Sync.share <<< flip Sync.pairingLink key =<< Sync.origin
-      pure state
-
-  -- Pairing the other way round, which is the only way in once an app has been
-  -- added to a home screen: an installed app can start with storage of its own
-  -- and no camera to point at anything, so it has to be told rather than shown.
-  UseLink -> do
-    fork $ liftEffect $ LinkPasted <$> Sync.pastedLink
-    pure state
-
-  LinkPasted pasted -> case Sync.keyFromLink pasted of
-    Nothing ->
-      noticing state "That doesn't look like a pairing link"
-    Just key
-      | Just key == state.syncKey ->
-          noticing state "That is this device's own link"
-      | otherwise -> do
-          forkVoid $ liftEffect do
-            Sync.saveKey key
-            Sync.clearPasted
-          fork $ pure Sync
-          noticing
-            state
-              { syncKey = Just key
-              , pairing = false
-              -- A different key is a different blob, so nothing is known about
-              -- it until it answers.
-              , sent = Nothing
-              }
-            "Paired · fetching their progress"
+  ShowPairing -> Pairing.open state
+  HidePairing -> Pairing.close state
+  StartScan -> Pairing.startScan state
+  StopScan -> Pairing.stopScan state
+  Scanned result -> Pairing.scanned result state
+  CopyLink -> Pairing.copyLink state
+  Copied outcome -> Pairing.copied outcome state
+  ShareLink -> Pairing.share state
+  UseLink -> Pairing.useLink state
+  LinkPasted pasted -> Pairing.linkPasted pasted state
 
   ChooseAccent accent -> do
     let voice = Accent.autoVoice accent state.voices
@@ -639,44 +407,6 @@ update state = case _ of
       pure state
     _ ->
       pure state
-
--- | This device's sync key: the one a pairing link carried, else the one
--- | already saved here, else a fresh one. Generated on first run rather than
--- | on first sync, so there is always a link to hand out.
-adoptKey :: Language -> Effect String
-adoptKey language = Sync.keyFromLink <$> Route.search >>= case _ of
-  Just key -> do
-    Sync.saveKey key
-    -- Take it back out of the address bar. It is the only secret this app
-    -- has, and leaving it there puts it in history and in whatever gets
-    -- shared next.
-    Route.replace $ Language.pathFor language
-    pure key
-  Nothing -> Sync.loadKey >>= case _ of
-    Just key ->
-      pure key
-    Nothing -> do
-      key <- Sync.generateKey
-      Sync.saveKey key
-      pure key
-
--- | How long ago something happened, in the units the panel wants.
-elapsed :: Instant -> Instant -> Milliseconds
-elapsed from to = Milliseconds $ unwrap (unInstant to) - unwrap (unInstant from)
-
--- | Whether a session can be rebuilt under the reader without costing them
--- | anything: nothing answered into it, and no card turned over. A session
--- | with answers in it has a place worth keeping, and a flipped card is an
--- | answer someone is looking at.
--- |
--- | Never a drill. Rebuilding one would quietly swap the words you asked for
--- | with whatever happens to be due, and a drill's queue is the whole point
--- | of it.
-untouched :: Screen -> Boolean
-untouched = case _ of
-  Studying session ->
-    session.purpose == Review && session.position == 0 && not session.flipped
-  _ -> false
 
 -- | Falls back to a bare language hint: even with no Spanish voice installed,
 -- | most engines still pronounce Spanish when told to.
@@ -700,13 +430,6 @@ settle savedAccent savedVoice allVoices state =
     -- pronounce the right language when told which one.
     fallback = state.language.code
 
-noticing :: State -> String -> Transition Message State
-noticing state message = do
-  fork do
-    delay $ Milliseconds 3500.0
-    pure DismissNotice
-  pure state { notice = Just message }
-
 startSession :: Array Card -> Progress -> Instant -> Screen
 startSession deck progress now =
   case Scheduler.buildSession deck progress now Scheduler.sessionSize of
@@ -720,11 +443,11 @@ view state dispatch =
       Loading -> H.div "app" H.empty
       Studying session -> studyingView state session dispatch
       Complete summary -> completeView (isJust state.undo) state.language state.progress summary dispatch
-  , if isJust state.panel then panelView state dispatch else H.empty
+  , if isJust state.panel then Panel.view state dispatch else H.empty
   , case state.statsAt of
       Nothing -> H.empty
-      Just now -> statsView state.language now state.progress dispatch
-  , if state.pairing then pairingView state dispatch else H.empty
+      Just now -> ProgressSheet.view state.language now state.progress dispatch
+  , if state.pairing then Pairing.view state dispatch else H.empty
   , case state.notice of
       Nothing -> H.empty
       Just message -> H.div "notice" message
@@ -866,243 +589,6 @@ completeView undoable language progress summary dispatch =
         H.empty
 
     cta = if caughtUp then "Check again" else "Study " <> show Scheduler.sessionSize <> " more"
-
--- | The link, shown rather than only copied.
--- |
--- | A toast saying "copied" is a claim the app cannot always keep: both the
--- | clipboard and a share sheet need a user activation that can be lost on the
--- | way through the update loop, and a reader with nothing on screen has no
--- | second move. With the link visible there is always one — select it, or
--- | long-press it — and the button is a shortcut rather than the mechanism.
-pairingView :: State -> Dispatch Message -> ReactElement
-pairingView state dispatch =
-  H.div "sheet"
-  [ H.div "sheet-head"
-    [ H.h2 "sheet-title" "Sync another device"
-    , H.button_ "sheet-close" { onClick: dispatch <| HidePairing, title: "Close" } "✕"
-    ]
-  , H.div "sheet-body"
-    [ H.p "pair-lead" $
-        "Point your other device's camera at this, or open the link on it. "
-          <> "Both will then keep the same progress, merging whichever has "
-          <> "seen a word more often."
-    , H.img_ "pair-qr" { src: Sync.qrDataUrl link, alt: "Pairing code" }
-    -- A textarea rather than an input so the whole link wraps into view: the
-    -- key is the one thing worth checking against the other device, and an
-    -- input would ellipsise exactly the part that differs.
-    , H.textarea_ "pair-link" { readOnly: true, rows: 2, value: link }
-    , H.div "pair-actions" $
-        [ H.button_ "grade got-it pair-copy" { onClick: dispatch <| CopyLink } "Copy link" ]
-          <> if state.canShare then
-               [ H.button_ "grade pair-share" { onClick: dispatch <| ShareLink } "Share" ]
-             else
-               []
-    -- Said plainly, because it is the whole security model, and because
-    -- dropping the file export left this link as the only way back in.
-    , H.p "pair-warning" $
-        "Keep this link somewhere. It is the only way back to your progress if "
-          <> "you lose this device — and anyone who has it can read and change "
-          <> "that progress, since there are no accounts here. A door key, not "
-          <> "a password."
-    , H.h3 "sheet-heading" "From another device"
-    , if state.scanning then scanner else takeALink
-    ]
-  ]
-  where
-    link = case state.syncKey of
-      Just key -> Sync.pairingLink state.origin key
-      Nothing -> ""
-
-    -- The camera closes the loop the QR code opened: until now this app could
-    -- show a code and not read one, so pairing into an installed app meant
-    -- getting a link to it by hand.
-    scanner =
-      H.fragment
-      [ H.p "sheet-note" "Point this at the code on your other device."
-      -- The class is how `Flashcards.Sync` finds it to attach the stream, and
-      -- all three attributes are what iOS wants before it will play inline.
-      , H.video_ "pair-video" { autoPlay: true, muted: true, playsInline: true } H.empty
-      , H.button_ "grade pair-cancel" { onClick: dispatch <| StopScan } "Cancel"
-      ]
-
-    takeALink =
-      H.fragment $
-        (if state.canScan then
-           [ H.button_ "grade got-it pair-scan" { onClick: dispatch <| StartScan } "Scan its code" ]
-         else
-           [])
-          <>
-        [ H.p "sheet-note" $
-            if state.canScan then "Or paste its link." else "Paste its link here."
-        -- Uncontrolled, and read on submit. See `Flashcards.Sync.pastedLink`.
-        , H.input_ "pair-paste"
-            { placeholder: "https://…/?pair=…"
-            , spellCheck: false
-            , autoCapitalize: "none"
-            }
-        , H.button_ "grade pair-use" { onClick: dispatch <| UseLink } "Use this link"
-        ]
-
-panelView :: State -> Dispatch Message -> ReactElement
-panelView state dispatch =
-  H.fragment
-  [ H.div_ "backdrop" { onClick: dispatch <| TogglePanel } H.empty
-  , H.div "panel"
-    [ languagePicker
-    , accentPicker
-    , voicePicker
-    , H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
-    , H.button_ "panel-item" { onClick: dispatch <| ShowPairing } "Sync another device"
-    , H.p "panel-note" $
-        show (Progress.seenCount state.progress) <> " of "
-          <> show (Array.length state.language.deck) <> " words seen"
-    , H.p ("panel-note sync" <> if settled then "" else " pending") $
-        [ H.span "sync-state" syncNote ] <> retry
-    ]
-  ]
-  where
-    -- Exact rather than a flag: the server holds this progress or it does not,
-    -- and comparing says so without any bookkeeping that could fall out of
-    -- step. `Nothing` means nothing has been exchanged yet this run, which is
-    -- not the same as knowing there is something to send.
-    settled = state.sent == Just state.progress && not state.offline
-
-    -- Beside the line that reports the problem, rather than a row of its own:
-    -- a row reads as a peer of "Sync another device" and invites being
-    -- confused with it, and there is nothing to do when everything is synced.
-    retry
-      | settled = []
-      | otherwise =
-          [ H.span "" " · "
-          , H.button_ "link-button" { onClick: dispatch <| Sync } $
-              if state.offline then "Retry" else "Sync now"
-          ]
-
-    syncNote
-      | settled = "Everything is synced"
-      | otherwise = case state.offline, state.syncedAt, state.panel of
-          -- The only case worth a reason: a failed exchange is invisible on
-          -- the card screen by design, so this is where it surfaces.
-          true, _, _ -> "Not synced — no connection" <> since
-          _, Nothing, _ -> "Not synced yet"
-          _, _, _ -> "Not synced" <> since
-
-    -- How stale the last successful exchange is, but only once that is worth
-    -- remarking on. "Not synced · last synced under a minute ago" reads as a
-    -- contradiction; a week is the thing you actually want to be told.
-    since = case state.syncedAt, state.panel of
-      Just at, Just now | elapsed at now >= Milliseconds 3600000.0 ->
-        " · last synced " <> Stats.describeDuration (elapsed at now) <> " ago"
-      _, _ -> ""
-
-    -- Only worth showing once there is more than one deck to switch between.
-    languagePicker
-      | Array.length Language.all < 2 = H.empty
-      | otherwise =
-          H.div "segmented langs" $ Language.all <#> \l ->
-            H.button_
-              ("segment lang" <> if l.code == state.language.code then " chosen" else "")
-              { key: l.code, onClick: dispatch <| ChooseLanguage l.code }
-              l.name
-
-    available = Accent.locales state.voices
-
-    -- Nothing to choose between when the device speaks only one Spanish.
-    accentPicker
-      | Array.length available < 2 = H.empty
-      | otherwise =
-          H.div "segmented accents" $ available <#> \accent ->
-            H.button_
-              ("segment accent" <> if Just accent == state.accent then " chosen" else "")
-              { key: accent, onClick: dispatch <| ChooseAccent accent }
-              (Accent.label accent)
-
-    -- A listed voice can have nothing behind it, and no API says so. Cycling
-    -- lets the ear settle what the code cannot detect.
-    -- With one voice there is nothing to cycle, but it is still worth saying
-    -- which voice you are hearing: a listed voice can be a dud, and knowing
-    -- its name is the first step to working that out.
-    voicePicker = case Accent.voicesIn (fromMaybe "" state.accent) state.voices of
-      [] ->
-        H.empty
-      [ only ] ->
-        H.div "panel-voice sole"
-        [ H.span "panel-voice-label" "Voice", H.span "panel-voice-name" only ]
-      _ ->
-        H.button_ "panel-voice" { onClick: dispatch <| CycleVoice }
-        [ H.span "panel-voice-label" "Voice"
-        , H.span "panel-voice-name" $ fromMaybe "—" state.voice
-        ]
-
-statsView :: Language -> Instant -> Progress -> Dispatch Message -> ReactElement
-statsView language now progress dispatch =
-  H.div "sheet"
-  [ H.div "sheet-head"
-    [ H.h2 "sheet-title" "Progress"
-    , H.button_ "sheet-close" { onClick: dispatch <| HideStats, title: "Close" } "✕"
-    ]
-  , H.div "sheet-body"
-    [ H.div "deck-progress"
-      [ H.div "bar" $ H.div_ "fill" { style: H.css { width: show percent <> "%" } } H.empty
-      , H.p "deck-count" $ show o.seen <> " of " <> show o.total <> " words seen"
-      ]
-    , H.div "tiles"
-      [ tile (maybe "—" (\a -> show (Int.round a) <> "%") o.accuracy) "correct"
-      , tile (show o.mastered) "mastered"
-      , tile (show o.dueTomorrow) "due tomorrow"
-      ]
-    , H.p "tiles-note" $
-        if o.answers == 0 then "No answers yet."
-        else show o.answers <> " answers · " <> show o.misses <> " wrong"
-            <> (if o.producing > 0 then " · " <> show o.producing <> " in production" else "")
-            <> (if o.dueNow > 0 then " · " <> show o.dueNow <> " due now" else "")
-    , H.h3 "sheet-heading" $ "By " <> language.ordering
-    , H.div "bands" $ Stats.bands Stats.bandSize language.deck progress <#> \band ->
-        H.div_ "band" { key: show band.from }
-        [ H.div "band-label" $ show band.from <> "–" <> show band.to
-        , H.div "band-bar"
-          [ segment "mastered" band.counts.mastered
-          , segment "familiar" band.counts.familiar
-          , segment "learning" band.counts.learning
-          , segment "unseen" band.counts.unseen
-          ]
-        ]
-    , H.div "legend" $ [ "mastered", "familiar", "learning", "unseen" ] <#> \name ->
-        H.div_ "legend-item" { key: name } [ H.span ("swatch " <> name) H.empty, H.span "" name ]
-    , if Array.null slipping then H.empty else
-        H.fragment
-        [ H.h3 "sheet-heading" "Keeps slipping"
-        , H.p "sheet-note" "Words you had learned and then forgot again."
-        , H.div "leeches" $ slipping <#> \leech ->
-            H.div_ "leech" { key: show (rankToInt leech.rank) }
-            [ H.span "leech-word" leech.word
-            , H.span "leech-gloss" leech.english
-            , H.span "leech-count" $ show leech.lapses
-            ]
-        , H.button_ "grade got-it drill" { onClick: dispatch <| DrillLeeches } drillLabel
-        ]
-    ]
-  ]
-  where
-    o = Stats.overview now language.deck progress
-    percent = 100.0 * Int.toNumber o.seen / Int.toNumber o.total
-    slipping = Stats.leeches Stats.leechThreshold language.deck progress
-
-    -- A session is capped, and a list of forty leeches would otherwise promise
-    -- forty. Say which it is.
-    drilling = min Scheduler.sessionSize (Array.length slipping)
-
-    drillLabel =
-      if drilling == Array.length slipping then "Drill these " <> show drilling
-      else "Drill " <> show drilling <> " of " <> show (Array.length slipping)
-
-    tile value label =
-      H.div "tile" [ H.div "tile-value" value, H.div "tile-label" label ]
-
-    -- Zero-width segments would still draw a border radius sliver.
-    segment name n =
-      if n == 0 then H.empty
-      else H.div_ ("seg " <> name) { key: name, style: H.css { flexGrow: n } } H.empty
 
 keyMessage :: String -> Maybe Message
 keyMessage = case _ of
