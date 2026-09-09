@@ -13,6 +13,7 @@ module Flashcards.Scheduler
   , requeue
   , requeueGap
   , sessionSize
+  , struggling
   )
   where
 
@@ -84,6 +85,19 @@ graduationBox = 4
 -- | evidence, but it is weak evidence that you can summon it unprompted.
 productionStartBox :: Int
 productionStartBox = 1
+
+-- | Whether a card is currently at the bottom of its ladder — which is to say
+-- | the last notable thing that happened to it was getting it wrong.
+-- |
+-- | Two boxes for recognition and one for production, because the two do not
+-- | start in the same place. A card graduates *into* production box 1, so a
+-- | card sitting there may simply have arrived; nothing but a recent failure
+-- | puts one at production box 0. Recognition has no such floor, so two boxes
+-- | is the judgement: fewer than two right answers since the last reset.
+struggling :: CardProgress -> Boolean
+struggling cp = case cp.direction of
+  Recognition -> cp.box < 2
+  Production -> cp.box < productionStartBox
 
 -- | Box 0 is due immediately, so a missed card reappears in the same session.
 intervalFor :: Int -> Milliseconds

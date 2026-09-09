@@ -213,6 +213,20 @@ spec = do
       let progress = Progress.empty # card 1 1 9 5 2 1.0
       Stats.leeches 3 deck progress `shouldEqual` []
 
+    -- `lapses` never comes down, so on its own it lists every word that ever
+    -- qualified. The heading is present tense; the list has to be too.
+    it "forgets a word that has climbed back up" do
+      let progress = Progress.empty # card 1 4 20 6 5 20.0
+      Stats.leeches 3 deck progress `shouldEqual` []
+
+    it "and one that went on to graduate" do
+      let progress = Progress.empty # producing 1 2 20 6 5 20.0
+      Stats.leeches 3 deck progress `shouldEqual` []
+
+    it "but keeps one that has fallen back in production" do
+      let progress = Progress.empty # producing 1 0 20 6 5 (-0.1)
+      map _.word (Stats.leeches 3 deck progress) `shouldEqual` [ "es1" ]
+
     it "judges on lapses, not on a hard first encounter" do
       -- Missed eight times while learning, never forgotten since.
       let progress = Progress.empty # card 1 3 9 8 0 1.0

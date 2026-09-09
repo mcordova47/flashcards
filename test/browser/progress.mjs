@@ -164,4 +164,37 @@ export default async ({ check, open }) => {
     check("no promise of a future review while cards are waiting", await p.$(".next-due"), null)
     await p.close()
   }
+
+  // --- "keeps slipping" is present tense ---
+  // Its own seed rather than a card added to the one above: every figure on
+  // that sheet is an aggregate, so one more card moves the accuracy, the
+  // mastered count and the bands along with it.
+  {
+    const cards = [
+      // Forgotten more often than anything else here, and long since
+      // recovered. Ranked on the lifetime count alone it would lead the list.
+      { slug: slugAt(1), box: 5, seen: 30, missed: 9, lapses: 8,
+        direction: "recognition", due: Date.now() + 55 * DAY },
+      // Graduated, so it is being asked the harder way round and starts near
+      // the bottom of a new ladder. That is arrival, not trouble.
+      { slug: slugAt(2), box: 1, seen: 22, missed: 7, lapses: 6,
+        direction: "production", due: Date.now() + 2 * DAY },
+      // Fell back in production, which is trouble.
+      { slug: slugAt(3), box: 0, seen: 18, missed: 8, lapses: 5,
+        direction: "production", due: Date.now() - 1000 },
+      // Still down where a failure leaves it.
+      { slug: slugAt(4), box: 1, seen: 11, missed: 6, lapses: 4,
+        direction: "recognition", due: Date.now() - 1000 },
+    ]
+    const p = await open({ seed: { version: V, deck: FP, cards } })
+    await p.waitForSelector(".prompt")
+    await openSheet(p)
+    const listed = await p.$$eval(".leech-word", es => es.map(e => e.textContent))
+    check("a word that climbed back is no longer slipping", listed.includes(slugAt(1)), false)
+    check("nor is one that has only just graduated", listed.includes(slugAt(2)), false)
+    check("one that fell back in production still is", listed.includes(slugAt(3)), true)
+    check("and so is one still down where a failure left it", listed.includes(slugAt(4)), true)
+    check("so the list is what is wrong now, not what ever was", listed.length, 2)
+    await p.close()
+  }
 }

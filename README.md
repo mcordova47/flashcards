@@ -115,6 +115,18 @@ there is something to divide.
 brand-new word is just learning; forgetting one you had already earned is a
 leech. A word missed eight times on the way in but never since does not appear.
 
+The heading is present tense and the list has to be too, so a word also has to
+be *still* down there — bottom two boxes in recognition, or fallen back to zero
+in production. `lapses` only ever goes up, so on its own it would list every
+word that ever qualified: a permanent record of old trouble, with something
+mastered in April ranked above something failed yesterday. Recover and a word
+leaves the list, while the count keeps meaning exactly what it says.
+
+Two boxes for recognition and one for production because they do not start in
+the same place. A card graduates *into* production box 1, so one sitting there
+may simply have arrived — flagging it would call a word a leech at the moment
+it earned the harder question.
+
 **Drill these** builds a session out of that list, worst first, ignoring what
 is due — which is the whole point, since a leech is a word whose schedule has
 already been proved too generous. Capped at the usual twenty, and the button

@@ -28,7 +28,7 @@ import Data.Int as Int
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
-import Flashcards.Scheduler (maxBox)
+import Flashcards.Scheduler (maxBox, struggling)
 import Flashcards.Types.Card (Card, Rank, Slug, rankToInt)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
@@ -165,18 +165,26 @@ overview now deck progress =
     misses = sum $ map _.missed tracked
     tomorrow = plusDays 1.0 now
 
--- | Words that keep slipping *after* you had learned them.
+-- | Words that keep slipping *after* you had learned them, and are still
+-- | slipping now.
 -- |
--- | `lapses` is the right measure here and `missed` is not: struggling with a
+-- | `lapses` is the right measure and `missed` is not: struggling with a
 -- | brand-new word is just learning, whereas forgetting one you had already
 -- | earned is the thing worth surfacing.
+-- |
+-- | But `lapses` only ever goes up, so on its own it lists every word that has
+-- | *ever* qualified — a permanent record of old trouble, with something
+-- | mastered in April sitting above something failed yesterday. The heading
+-- | says "keeps slipping", present tense, so the card has to still be down
+-- | there: see `Scheduler.struggling`. Recover and it leaves the list, and the
+-- | count keeps meaning exactly what it says.
 leeches :: Int -> Array Card -> Progress -> Array Leech
 leeches threshold deck progress =
   Array.sortBy mostLapsedFirst $ Array.mapMaybe toLeech deck
   where
     toLeech card = do
       cp <- Progress.lookup card.slug progress
-      guard $ cp.lapses >= threshold
+      guard $ cp.lapses >= threshold && struggling cp
       pure { slug: card.slug, rank: card.rank, word: card.word, english: card.english, lapses: cp.lapses }
 
     -- Stable sort, so equal counts stay in frequency order.

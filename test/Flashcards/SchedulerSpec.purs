@@ -247,6 +247,28 @@ spec = do
       (_.box <$> after 6) `shouldEqual` Just Scheduler.maxBox
       (_.direction <$> after 6) `shouldEqual` Just Production
 
+  describe "still at the bottom of the ladder" do
+    let
+      at direction box =
+        { box, due: now, seen: 9, lapses: 4, missed: 5, direction }
+
+    it "counts the two boxes a recognition card falls to" do
+      Scheduler.struggling (at Recognition 0) `shouldEqual` true
+      Scheduler.struggling (at Recognition 1) `shouldEqual` true
+
+    it "and lets it go once it has held on twice running" do
+      Scheduler.struggling (at Recognition 2) `shouldEqual` false
+      Scheduler.struggling (at Recognition 5) `shouldEqual` false
+
+    -- A card graduates *into* production box 1, so one sitting there may
+    -- simply have arrived. Calling that struggling would flag a word at the
+    -- moment it earned the harder question.
+    it "does not count a card that has only just graduated" do
+      Scheduler.struggling (at Production Scheduler.productionStartBox) `shouldEqual` false
+
+    it "but does count one that has fallen in production" do
+      Scheduler.struggling (at Production 0) `shouldEqual` true
+
   describe "requeue" do
     it "brings a missed card back five cards later" do
       Scheduler.requeue (slugAt 99) 0 (slugAt <$> [ 1, 2, 3, 4, 5, 6, 7, 8 ])
