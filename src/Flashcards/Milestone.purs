@@ -103,6 +103,6 @@ describe :: Milestone -> String
 describe = case _ of
   Everything n -> "Every one of the " <> show n <> " words is yours!"
   EveryWordSeen n -> "You have now met all " <> show n <> " words!"
-  Hundred n -> "That makes " <> show n <> " words mastered!"
+  Hundred n -> "You’ve now mastered " <> show n <> " words!"
   FirstMastered -> "Your first word mastered!"
   Recovered -> "Nothing is slipping any more!"
