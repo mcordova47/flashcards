@@ -441,10 +441,20 @@ when two devices both think they got there first. Reading the standing again
 when the next session opens is what stops a crossing being crossed twice.
 
 The confetti is a canvas and some rectangles rather than a library — two
-hundred lines for three seconds that happen twice would be a poor trade — and
+hundred lines for five seconds that happen twice would be a poor trade — and
 it takes its colours from the stylesheet, so it matches whichever theme the
 reader is in. Under `prefers-reduced-motion` it is skipped outright: the
 sentence says the same thing, so nothing is lost.
+
+Getting it to read as paper took two things beyond gravity. **Drag on both
+axes**, which gives the pieces a terminal velocity: without it they accelerate
+off the bottom of the screen and the whole thing is over in a second, and with
+it the cannon speed is gone in half a second and what remains is a drift of
+about 150 pixels a second — roughly a phone screen in four. And a **tumble
+through the third axis**, drawn by scaling each piece's height by the cosine of
+its own angle, so it turns edge-on and all but vanishes before broadsiding
+again. A rectangle spinning in the plane of the screen stays the same size,
+which is what makes it read as a brick.
 
 ## The study model
 

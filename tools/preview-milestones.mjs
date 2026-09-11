@@ -81,7 +81,7 @@ await run("Milestones", async ({ open }) => {
       await wait(watching ? 500 : 900)
       const said = await page.text(".milestone")
       if (scheme === "light") console.log(`  ${scene.says.padEnd(36)}${said ?? "(nothing)"}`)
-      if (watching) await wait(4000)
+      if (watching) await wait(5600)
       else await page.screenshot({ path: path.join(out, `${scene.name}-${scheme}.png`) })
       await page.close()
     }

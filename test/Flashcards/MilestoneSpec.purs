@@ -81,6 +81,6 @@ spec = do
   describe "what it says" do
     -- Stated as a fact. Being congratulated by a flashcard is a different app.
     it "reports rather than praises" do
-      Milestone.describe (Hundred 200) `shouldEqual` "That makes 200 words mastered."
-      Milestone.describe (EveryWordSeen 1000) `shouldEqual` "You have now met all 1000 words."
-      Milestone.describe Recovered `shouldEqual` "Nothing is slipping any more."
+      Milestone.describe (Hundred 200) `shouldEqual` "That makes 200 words mastered!"
+      Milestone.describe (EveryWordSeen 1000) `shouldEqual` "You have now met all 1000 words!"
+      Milestone.describe Recovered `shouldEqual` "Nothing is slipping any more!"

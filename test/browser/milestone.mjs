@@ -48,7 +48,7 @@ export default async ({ check, open }) => {
     await page.waitForSelector(".prompt")
     await finish(page)
     check("the last slipping word coming good earns a sentence",
-      await page.text(".milestone"), "Nothing is slipping any more.")
+      await page.text(".milestone"), "Nothing is slipping any more!")
     check("and no more than that", await page.$eval(".milestone", e => e.className),
       "milestone remark")
     check("with the bar left alone", await page.$eval(".deck-progress", e => e.className),
@@ -68,7 +68,7 @@ export default async ({ check, open }) => {
     await page.waitForSelector(".prompt")
     await finish(page)
     check("a hundred is worth saying", await page.text(".milestone"),
-      "That makes 100 words mastered.")
+      "That makes 100 words mastered!")
     check("louder than a sentence", await page.$eval(".milestone", e => e.className),
       "milestone flourish")
     // A hundred is a hundred *of* the bar, so the bar is what to look at.
@@ -81,7 +81,7 @@ export default async ({ check, open }) => {
     await page.tap(".grade")
     await wait(250)
     await finish(page)
-    check("and it is not said twice", (await page.text(".milestone")) !== "That makes 100 words mastered.", true)
+    check("and it is not said twice", (await page.text(".milestone")) !== "That makes 100 words mastered!", true)
     await page.close()
   }
 
@@ -95,12 +95,15 @@ export default async ({ check, open }) => {
     await page.waitForSelector(".prompt")
     await finish(page)
     check("meeting the whole deck is the loud one", await page.text(".milestone"),
-      "You have now met all 1000 words.")
+      "You have now met all 1000 words!")
     check("said as such", await page.$eval(".milestone", e => e.className), "milestone burst")
     check("with confetti over the page", (await page.$(".confetti")) !== null, true)
     check("which does not take the taps", await page.$eval(".confetti", e =>
       getComputedStyle(e).pointerEvents), "none")
-    await wait(3200)
+    // Confetti runs just under five seconds: high drag gives the pieces a
+    // terminal velocity, so they drift down rather than accelerating off the
+    // bottom, and that takes about as long as a phone screen is tall.
+    await wait(5200)
     check("and clears itself up", await page.$(".confetti"), null)
     check("no page errors", page.errors, [])
     await page.close()
@@ -119,7 +122,7 @@ export default async ({ check, open }) => {
     // The sentence carries the whole message, so skipping the animation
     // costs nothing at all.
     check("the milestone still says what happened", await page.text(".milestone"),
-      "You have now met all 1000 words.")
+      "You have now met all 1000 words!")
     check("and nothing is thrown across the screen", await page.$(".confetti"), null)
     await page.close()
   }

@@ -95,9 +95,10 @@ reached before after
   | otherwise =
       Nothing
 
--- | Said as a fact rather than as praise. The app's register elsewhere is
--- | "Nothing due for another 4 hours"; being told "Amazing job!" by a
--- | flashcard would be a different app.
+-- | Facts, pleased about themselves. Every one of these says what happened
+-- | rather than how well you did it — "that makes 200 words mastered", not
+-- | "you are doing great" — which is the line worth holding: the app can be
+-- | glad without being the sort that tells you so.
 describe :: Milestone -> String
 describe = case _ of
   Everything n -> "Every one of the " <> show n <> " words is yours!"

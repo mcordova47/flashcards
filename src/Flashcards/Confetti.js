@@ -45,40 +45,67 @@ export const burst = () => {
   for (const side of [-1, 1]) {
     for (let i = 0; i < 70; i++) {
       const angle = (Math.PI / 2.6) * (0.55 + Math.random() * 0.9)
-      const speed = 11 + Math.random() * 11
+      const speed = 22 + Math.random() * 14
       pieces.push({
         x: side < 0 ? -10 : innerWidth + 10,
         y: innerHeight * (0.82 + Math.random() * 0.12),
         vx: Math.cos(angle) * speed * -side,
         vy: -Math.sin(angle) * speed,
-        spin: (Math.random() - 0.5) * 0.3,
+        // How much air the piece catches, and how little it weighs. Between
+        // them these set a terminal velocity of roughly 150px a second, so a
+        // piece takes about five seconds to come down a phone screen — paper,
+        // rather than gravel. Varied, so they do not descend in formation.
+        drag: 0.93 + Math.random() * 0.025,
+        weight: 0.12 + Math.random() * 0.08,
+        // Turning in the plane of the screen.
         turn: Math.random() * Math.PI,
-        w: 5 + Math.random() * 6,
-        h: 3 + Math.random() * 5,
+        spin: (Math.random() - 0.5) * 0.22,
+        // And turning *through* it. Scaling the drawn height by the cosine of
+        // this is what makes a piece go edge-on and all but vanish before
+        // broadsiding again — the whole difference between paper and a brick.
+        tumble: Math.random() * Math.PI,
+        tumbleRate: 0.06 + Math.random() * 0.1,
+        // A slow sideways wander once the speed has gone out of it.
+        phase: Math.random() * Math.PI * 2,
+        swayRate: 0.02 + Math.random() * 0.03,
+        // Only noticeable once the speed is out of them, which is the point.
+        sway: 0.5 + Math.random() * 1.1,
+        w: 6 + Math.random() * 7,
+        h: 5 + Math.random() * 6,
         colour: colours[Math.floor(Math.random() * colours.length)],
       })
     }
   }
 
   const started = performance.now()
-  const span = 2800
+  // Long enough for the slowest pieces to still be in the air when the fade
+  // starts, and no longer: past that it is fading an empty screen.
+  const span = 4800
+  const fade = 1200
 
   const frame = now => {
     const age = now - started
     if (age > span) return stop()
     context.clearRect(0, 0, width, height)
-    // Fade the whole thing out rather than each piece, so they leave together
+    // Fade the whole thing rather than each piece, so they leave together
     // instead of trailing off one at a time.
-    context.globalAlpha = age > span - 700 ? (span - age) / 700 : 1
+    context.globalAlpha = age > span - fade ? (span - age) / fade : 1
     for (const p of pieces) {
-      p.vy += 0.32
-      p.vx *= 0.995
-      p.x += p.vx
+      // Drag on both axes, which is what gives a terminal velocity: the
+      // cannon speed is gone within half a second and what is left is a
+      // drift. Without it these accelerate off the bottom of the screen and
+      // the whole thing is over before it has started.
+      p.vx *= p.drag
+      p.vy = (p.vy + p.weight) * p.drag
+      p.phase += p.swayRate
+      p.x += p.vx + Math.sin(p.phase) * p.sway
       p.y += p.vy
       p.turn += p.spin
+      p.tumble += p.tumbleRate
       context.save()
       context.translate(p.x, p.y)
       context.rotate(p.turn)
+      context.scale(1, Math.cos(p.tumble))
       context.fillStyle = p.colour
       context.fillRect(-p.w / 2, -p.h / 2, p.w, p.h)
       context.restore()
