@@ -23,9 +23,11 @@ import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Styled as H
 import Flashcards.Accent as Accent
+import Flashcards.Confetti as Confetti
 import Flashcards.Deck as DeckIndex
 import Flashcards.Language (Language)
 import Flashcards.Language as Language
+import Flashcards.Milestone as Milestone
 import Flashcards.Pages.Study.Model (Message(..), Purpose(..), Screen(..), Session, State, Summary, noticing, untouched)
 import Flashcards.Pages.Study.Model (Message, State) as Model
 import Flashcards.Pages.Study.Pairing as Pairing
@@ -195,12 +197,22 @@ update state = case _ of
 
           finished = advanced.position >= Array.length advanced.queue
 
+          crossed =
+            Milestone.reached Scheduler.sessionSize session.began
+              (standingOf now state.language.deck progress)
+              { answered: advanced.position, again: advanced.again }
+
         when keeping $
           forkVoid $ liftEffect $ Storage.save state.language.code state.language.fingerprint progress
         -- The other end of the pair, so a session finished on the phone is
         -- there when the laptop opens. A drill changed nothing, so there is
         -- nothing to tell it.
         when (finished && keeping) $ fork $ pure Sync
+        -- Fired here rather than from the view: it is a thing that happens at
+        -- a moment, not a thing the finished screen is made of, and a view
+        -- that launched animations would do it again on every re-render.
+        when (finished && (Milestone.fanfare <$> crossed) == Just Milestone.Burst) $
+          forkVoid $ liftEffect Confetti.burst
         pure state
           { progress = if keeping then progress else state.progress
           -- Nothing was written, so there is nothing to take back.
@@ -212,6 +224,7 @@ update state = case _ of
                   , gotIt: advanced.gotIt
                   , again: advanced.again
                   , at: now
+                  , began: session.began
                   }
               else
                 Studying advanced
@@ -253,17 +266,28 @@ update state = case _ of
   -- nothing about them. This is the whole of doing something: the queue is
   -- just an array of slugs, so a drill is an ordinary session that happens to
   -- ignore what is due.
-  DrillLeeches ->
-    case Array.take Scheduler.sessionSize $ map _.slug $
-           Stats.leeches Stats.leechThreshold state.language.deck state.progress of
-      [] ->
-        pure state
-      queue ->
-        pure state
-          { statsAt = Nothing
-          , screen = Studying { purpose: Drill, queue, position: 0, flipped: false, gotIt: 0, again: 0 }
-          , undo = Nothing
-          }
+  -- Only reachable from the open progress sheet, which already fixed a
+  -- moment when it opened — so the standing is taken from the same clock the
+  -- figures on that sheet were read with.
+  DrillLeeches -> case state.statsAt of
+    Nothing ->
+      pure state
+    Just now ->
+      case Array.take Scheduler.sessionSize $ map _.slug $
+             Stats.leeches Stats.leechThreshold state.language.deck state.progress of
+        [] ->
+          pure state
+        queue ->
+          pure state
+            { statsAt = Nothing
+            , screen =
+                Studying
+                  { purpose: Drill
+                  , began: standingOf now state.language.deck state.progress
+                  , queue, position: 0, flipped: false, gotIt: 0, again: 0
+                  }
+            , undo = Nothing
+            }
 
   ShowStats -> do
     fork $ liftEffect $ StatsAt <$> Now.now
@@ -433,8 +457,21 @@ settle savedAccent savedVoice allVoices state =
 startSession :: Array Card -> Progress -> Instant -> Screen
 startSession deck progress now =
   case Scheduler.buildSession deck progress now Scheduler.sessionSize of
-    [] -> Complete { answered: 0, gotIt: 0, again: 0, at: now }
-    queue -> Studying { purpose: Review, queue, position: 0, flipped: false, gotIt: 0, again: 0 }
+    [] -> Complete { answered: 0, gotIt: 0, again: 0, at: now, began: standing }
+    queue ->
+      Studying
+        { purpose: Review, began: standing, queue, position: 0, flipped: false, gotIt: 0, again: 0 }
+  where
+    standing = standingOf now deck progress
+
+-- | Where the deck stands, for `Flashcards.Milestone` to compare against
+-- | later. Everything in it is already on the progress sheet; this is the
+-- | same walk, taken at the moment a session opens.
+standingOf :: Instant -> Array Card -> Progress -> Milestone.Standing
+standingOf now deck progress =
+  { mastered: o.mastered, seen: o.seen, total: o.total }
+  where
+    o = Stats.overview now deck progress
 
 view :: State -> Dispatch Message -> ReactElement
 view state dispatch =
@@ -544,7 +581,8 @@ completeView undoable language progress summary dispatch =
     [ H.h1 "done-title" title
     , H.p "done-stats" stats
     , nextLine
-    , H.div "deck-progress"
+    , milestoneLine
+    , H.div ("deck-progress" <> if loud then " marked" else "")
       [ H.div "bar" $ H.div_ "fill" { style: H.css { width: show percent <> "%" } } H.empty
       , H.p "deck-count" $ show seen <> " of " <> show total <> " words seen"
       ]
@@ -563,6 +601,25 @@ completeView undoable language progress summary dispatch =
     total = Array.length language.deck
     percent = 100.0 * Int.toNumber seen / Int.toNumber total
     caughtUp = summary.answered == 0
+
+    crossed =
+      Milestone.reached Scheduler.sessionSize summary.began
+        (standingOf summary.at language.deck progress)
+        { answered: summary.answered, again: summary.again }
+
+    -- The bar is what a hundred is a hundred *of*, so it is the thing worth
+    -- drawing the eye to when one lands.
+    loud = (Milestone.fanfare <$> crossed) /= Just Milestone.Remark && crossed /= Nothing
+
+    milestoneLine = case crossed of
+      Nothing -> H.empty
+      Just m ->
+        H.p ("milestone " <> tier (Milestone.fanfare m)) (Milestone.describe m)
+
+    tier = case _ of
+      Milestone.Burst -> "burst"
+      Milestone.Flourish -> "flourish"
+      Milestone.Remark -> "remark"
 
     dueNow = (Stats.overview summary.at language.deck progress).dueNow
     waitFor = Stats.describeDuration <$> Stats.nextDueIn summary.at language.deck progress

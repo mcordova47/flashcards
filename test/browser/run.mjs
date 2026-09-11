@@ -12,6 +12,7 @@ import * as production from "./production.mjs"
 import * as progress from "./progress.mjs"
 import * as language from "./language.mjs"
 import * as sync from "./sync.mjs"
+import * as milestone from "./milestone.mjs"
 
 // Keyed by file as well as title, so `verify -- speech` finds speech.mjs even
 // though its title reads differently.
@@ -24,6 +25,7 @@ const suites = [
   ["progress", progress],
   ["language", language],
   ["sync", sync],
+  ["milestone", milestone],
 ]
 
 const filter = process.argv[2]?.toLowerCase()

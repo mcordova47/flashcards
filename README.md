@@ -404,6 +404,40 @@ would lose the argument anyway: the next merge sees a higher `seen` on the
 other side and takes it, silently putting the grade back. Better to stop
 offering it than to offer something that quietly fails.
 
+## Milestones
+
+A session that crossed something says so on the finished screen, in three
+registers:
+
+| | |
+| --- | --- |
+| every word mastered, every word met | a sentence, and confetti |
+| each hundred mastered | a sentence in the accent colour, and the bar catches the light |
+| the first word mastered, a session with nothing missed | a sentence |
+
+Three rather than two so the rare things stay rare: the loud one happens twice
+in the life of a deck and the middle one ten times, which is the only reason
+either registers. At most one fires — crossing the last hundred *is* finishing
+the deck, and meeting every word is usually several hundreds at once, so saying
+both would make the larger one smaller.
+
+100% alone would have been a reward nobody collects. A word's fastest path to
+mastered is about eleven days, and at twenty new words a session it takes fifty
+sessions merely to *meet* a thousand of them.
+
+`Flashcards.Milestone` is pure and decides everything by comparing where the
+deck stood when the session opened against where it stands now. Nothing is
+remembered between sessions, so there is no "already celebrated" flag to keep,
+nothing extra in the saved progress, and nothing for the merge to arbitrate
+when two devices both think they got there first. Reading the standing again
+when the next session opens is what stops a crossing being crossed twice.
+
+The confetti is a canvas and some rectangles rather than a library — two
+hundred lines for three seconds that happen twice would be a poor trade — and
+it takes its colours from the stylesheet, so it matches whichever theme the
+reader is in. Under `prefers-reduced-motion` it is skipped outright: the
+sentence says the same thing, so nothing is lost.
+
 ## The study model
 
 Cards are shown **Spanish → English** and graded by hand: tap to flip, then

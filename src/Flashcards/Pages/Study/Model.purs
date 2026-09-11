@@ -28,6 +28,7 @@ import Elmish (Transition, fork)
 import Flashcards.Accent as Accent
 import Flashcards.Deck as DeckIndex
 import Flashcards.Language (Language)
+import Flashcards.Milestone as Milestone
 import Flashcards.Sync as Sync
 import Flashcards.Types.Card (Slug)
 import Flashcards.Types.Grade (Grade)
@@ -57,6 +58,10 @@ instance Show Purpose where
 
 type Session =
   { purpose :: Purpose
+  -- | Where the deck stood when this session opened, so that what it came to
+  -- | is a subtraction rather than something remembered between sessions.
+  -- | See `Flashcards.Milestone`.
+  , began :: Milestone.Standing
   , queue :: Array Slug
   , position :: Int
   , flipped :: Boolean
@@ -71,6 +76,7 @@ type Summary =
   -- | When the session ended, so "next review in ..." has something to count
   -- | from without the view needing a clock.
   , at :: Instant
+  , began :: Milestone.Standing
   }
 
 -- | The whole of one step backwards. The progress is kept entire rather than
