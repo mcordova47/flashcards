@@ -100,8 +100,8 @@ reached before after
 -- | flashcard would be a different app.
 describe :: Milestone -> String
 describe = case _ of
-  Everything n -> "Every one of the " <> show n <> " words is yours."
-  EveryWordSeen n -> "You have now met all " <> show n <> " words."
-  Hundred n -> "That makes " <> show n <> " words mastered."
-  FirstMastered -> "Your first word mastered."
-  Recovered -> "Nothing is slipping any more."
+  Everything n -> "Every one of the " <> show n <> " words is yours!"
+  EveryWordSeen n -> "You have now met all " <> show n <> " words!"
+  Hundred n -> "That makes " <> show n <> " words mastered!"
+  FirstMastered -> "Your first word mastered!"
+  Recovered -> "Nothing is slipping any more!"
