@@ -116,16 +116,23 @@ brand-new word is just learning; forgetting one you had already earned is a
 leech. A word missed eight times on the way in but never since does not appear.
 
 The heading is present tense and the list has to be too, so a word also has to
-be *still* down there — bottom two boxes in recognition, or fallen back to zero
-in production. `lapses` only ever goes up, so on its own it would list every
-word that ever qualified: a permanent record of old trouble, with something
-mastered in April ranked above something failed yesterday. Recover and a word
-leaves the list, while the count keeps meaning exactly what it says.
+be *still* down there: fewer than two right answers since the last time it went
+wrong. `lapses` only ever goes up, so on its own it would list every word that
+ever qualified — a permanent record of old trouble, with something mastered in
+April ranked above something failed yesterday. Recover and a word leaves the
+list, while the count keeps meaning exactly what it says.
 
-Two boxes for recognition and one for production because they do not start in
-the same place. A card graduates *into* production box 1, so one sitting there
-may simply have arrived — flagging it would call a word a leech at the moment
-it earned the harder question.
+Box **1**, not box 0, is where a struggling card comes to rest. Box 0 is due
+immediately and gets requeued into the same session, so it is answered again
+and climbs before the session ends — nothing but abandoning a session halfway
+leaves a card at 0. An earlier version looked for box 0 in production and so
+found nothing, ever: words failing at the harder question, which are the
+hardest words there are, never appeared at all.
+
+The cost, knowingly: a card graduates *into* production box 1, so a word that
+lapsed enough times and has now earned the harder question is called a leech
+for exactly one review, until its first correct production answer moves it to
+2. A transient wrong answer beats a permanent blind spot.
 
 **Drill these** builds a session out of that list, worst first, ignoring what
 is due — which is the whole point, since a leech is a word whose schedule has

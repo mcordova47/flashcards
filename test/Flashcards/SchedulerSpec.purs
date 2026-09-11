@@ -260,14 +260,16 @@ spec = do
       Scheduler.struggling (card Recognition 2) `shouldEqual` false
       Scheduler.struggling (card Recognition 5) `shouldEqual` false
 
-    -- A card graduates *into* production box 1, so one sitting there may
-    -- simply have arrived. Calling that struggling would flag a word at the
-    -- moment it earned the harder question.
-    it "does not count a card that has only just graduated" do
-      Scheduler.struggling (card Production Scheduler.productionStartBox) `shouldEqual` false
-
-    it "but does count one that has fallen in production" do
+    it "counts a production card the same way" do
       Scheduler.struggling (card Production 0) `shouldEqual` true
+      -- Where a production leech actually sits. Box 0 is due immediately and
+      -- gets requeued into the same session, so you answer it again before
+      -- the session ends and it climbs to 1 — which means box 0 is a state
+      -- nothing but abandoning a session leaves behind.
+      Scheduler.struggling (card Production 1) `shouldEqual` true
+
+    it "and lets that one go on the same terms" do
+      Scheduler.struggling (card Production 2) `shouldEqual` false
 
   describe "requeue" do
     it "brings a missed card back five cards later" do

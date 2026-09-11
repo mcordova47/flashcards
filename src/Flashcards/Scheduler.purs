@@ -87,17 +87,24 @@ productionStartBox :: Int
 productionStartBox = 1
 
 -- | Whether a card is currently at the bottom of its ladder — which is to say
--- | the last notable thing that happened to it was getting it wrong.
+-- | fewer than two right answers since the last time it went wrong.
 -- |
--- | Two boxes for recognition and one for production, because the two do not
--- | start in the same place. A card graduates *into* production box 1, so a
--- | card sitting there may simply have arrived; nothing but a recent failure
--- | puts one at production box 0. Recognition has no such floor, so two boxes
--- | is the judgement: fewer than two right answers since the last reset.
+-- | Box 0 is not the state to look for, even though it is the one a failure
+-- | produces: it is due immediately and gets requeued into the same session,
+-- | so it is answered again before the session ends and climbs to 1. Nothing
+-- | but abandoning a session halfway leaves a card at 0. Box 1 is where a card
+-- | you are struggling with actually comes to rest.
+-- |
+-- | Which costs one false positive, knowingly. A card graduates *into*
+-- | production box 1, so a word that lapsed enough times and has now earned
+-- | the harder question is called a leech for exactly one review — until its
+-- | first correct production answer moves it to 2. The alternative was to
+-- | exempt production box 1, and that made the production case unreachable:
+-- | words failing at the harder question, which are the hardest words there
+-- | are, never appeared at all. A transient wrong answer beats a permanent
+-- | blind spot.
 struggling :: CardProgress -> Boolean
-struggling cp = case cp.direction of
-  Recognition -> cp.box < 2
-  Production -> cp.box < productionStartBox
+struggling cp = cp.box < 2
 
 -- | Box 0 is due immediately, so a missed card reappears in the same session.
 intervalFor :: Int -> Milliseconds

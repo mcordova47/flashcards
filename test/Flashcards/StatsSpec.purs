@@ -219,12 +219,15 @@ spec = do
       let progress = Progress.empty # card 1 4 20 6 5 20.0
       Stats.leeches 3 deck progress `shouldEqual` []
 
-    it "and one that went on to graduate" do
-      let progress = Progress.empty # producing 1 2 20 6 5 20.0
+    it "and one that has settled at the harder question" do
+      let progress = Progress.empty # producing 1 3 20 6 5 20.0
       Stats.leeches 3 deck progress `shouldEqual` []
 
-    it "but keeps one that has fallen back in production" do
-      let progress = Progress.empty # producing 1 0 20 6 5 (-0.1)
+    -- Where a production leech actually sits. Box 0 is due immediately and
+    -- requeued into the same session, so it is answered again and climbs to 1
+    -- before the session ends.
+    it "but keeps one that is failing at the harder question" do
+      let progress = Progress.empty # producing 1 1 20 6 5 (-0.1)
       map _.word (Stats.leeches 3 deck progress) `shouldEqual` [ "es1" ]
 
     it "judges on lapses, not on a hard first encounter" do
