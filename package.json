@@ -10,7 +10,8 @@
     "test": "spago test",
     "verify": "npm run build && node test/browser/run.mjs",
     "sync-deck": "node tools/sync-deck.mjs",
-    "rename": "node tools/rename.mjs"
+    "rename": "node tools/rename.mjs",
+    "preview": "node tools/preview-milestones.mjs"
   },
   "license": "ISC",
   "devDependencies": {

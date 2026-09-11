@@ -196,6 +196,14 @@ spec = do
       Stats.describeDuration (Milliseconds $ 59.7 * 60000.0) `shouldEqual` "1 hour"
       Stats.describeDuration (Milliseconds $ 23.8 * 3600000.0) `shouldEqual` "1 day"
 
+  describe "counting things" do
+    -- The session tally read "1 cards" from the day it was written, which is
+    -- every time exactly one card comes due.
+    it "says one card and two cards" do
+      Stats.plural 1 "card" `shouldEqual` "1 card"
+      Stats.plural 2 "card" `shouldEqual` "2 cards"
+      Stats.plural 0 "card" `shouldEqual` "0 cards"
+
   describe "leeches" do
     it "surfaces words that keep slipping, worst first" do
       let

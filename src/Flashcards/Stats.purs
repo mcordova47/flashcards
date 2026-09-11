@@ -15,6 +15,7 @@ module Flashcards.Stats
   , masteryOf
   , nextDueIn
   , overview
+  , plural
   )
   where
 
@@ -213,12 +214,17 @@ describeDuration (Milliseconds ms) =
     minutes = Int.round $ ms / 60000.0
     hours = Int.round $ ms / 3600000.0
     days = Int.round $ ms / 86400000.0
-    plural n unit = show n <> " " <> unit <> (if n == 1 then "" else "s")
   in
     if ms < 60000.0 then "under a minute"
     else if minutes < 60 then plural minutes "minute"
     else if hours < 24 then plural hours "hour"
     else plural days "day"
+
+-- | "1 card", "20 cards". Trivial, and worth having in one place: the session
+-- | tally said "1 cards" for as long as it has existed, which is every time
+-- | exactly one card comes due.
+plural :: Int -> String -> String
+plural n unit = show n <> " " <> unit <> (if n == 1 then "" else "s")
 
 plusDays :: Number -> Instant -> Instant
 plusDays days t =

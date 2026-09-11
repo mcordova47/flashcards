@@ -10,7 +10,6 @@ module Flashcards.Milestone
   ( Fanfare(..)
   , Milestone(..)
   , Standing
-  , Tally
   , describe
   , fanfare
   , reached
@@ -26,13 +25,8 @@ import Data.Maybe (Maybe(..))
 type Standing =
   { mastered :: Int
   , seen :: Int
+  , slipping :: Int
   , total :: Int
-  }
-
--- | What the session itself came to.
-type Tally =
-  { answered :: Int
-  , again :: Int
   }
 
 data Milestone
@@ -40,7 +34,7 @@ data Milestone
   | EveryWordSeen Int
   | Hundred Int
   | FirstMastered
-  | NothingMissed Int
+  | Recovered
 
 derive instance Eq Milestone
 
@@ -49,7 +43,7 @@ instance Show Milestone where
   show (EveryWordSeen n) = "EveryWordSeen " <> show n
   show (Hundred n) = "Hundred " <> show n
   show FirstMastered = "FirstMastered"
-  show (NothingMissed n) = "NothingMissed " <> show n
+  show Recovered = "Recovered"
 
 -- | How loudly to say it. Three steps rather than two so that the rare things
 -- | stay rare: `Burst` happens twice in the life of a deck and `Flourish` ten
@@ -72,20 +66,20 @@ fanfare = case _ of
   EveryWordSeen _ -> Burst
   Hundred _ -> Flourish
   FirstMastered -> Remark
-  NothingMissed _ -> Remark
+  Recovered -> Remark
 
 -- | At most one, and the biggest thing that happened.
 -- |
 -- | The order matters where two could fire at once: finishing the deck is also
--- | a hundred, and a session that masters your first word is also very likely
--- | one with nothing missed. Saying both would make the larger one smaller.
+-- | a hundred, and meeting every word is usually several hundreds at a time.
+-- | Saying both would make the larger one smaller.
 -- |
--- | `smallest` keeps a three-card catch-up session from counting as a clean
--- | sweep. Early on almost every answer is right — new words fast-track on
--- | first sight — so without it the smallest tier would fire constantly and
--- | stop registering.
-reached :: Int -> Standing -> Standing -> Tally -> Maybe Milestone
-reached smallest before after tally
+-- | Every one of these is something the finished screen does not otherwise
+-- | say. A clean sweep was here once and came out again: the tally above
+-- | already reads "20 cards · 20 got it · 0 again", so a line underneath
+-- | saying "20 out of 20" was the same sentence twice.
+reached :: Standing -> Standing -> Maybe Milestone
+reached before after
   | after.total > 0 && after.mastered >= after.total && before.mastered < after.total =
       Just $ Everything after.total
   | after.total > 0 && after.seen >= after.total && before.seen < after.total =
@@ -94,8 +88,10 @@ reached smallest before after tally
       Just $ Hundred $ (after.mastered / 100) * 100
   | before.mastered == 0 && after.mastered > 0 =
       Just FirstMastered
-  | tally.answered >= smallest && tally.again == 0 =
-      Just $ NothingMissed tally.answered
+  -- The one repeatable thing on this list, and the only one about words
+  -- getting better rather than about totals getting bigger.
+  | before.slipping > 0 && after.slipping == 0 =
+      Just Recovered
   | otherwise =
       Nothing
 
@@ -108,4 +104,4 @@ describe = case _ of
   EveryWordSeen n -> "You have now met all " <> show n <> " words."
   Hundred n -> "That makes " <> show n <> " words mastered."
   FirstMastered -> "Your first word mastered."
-  NothingMissed n -> show n <> " out of " <> show n <> "."
+  Recovered -> "Nothing is slipping any more."

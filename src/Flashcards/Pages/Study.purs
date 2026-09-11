@@ -198,9 +198,8 @@ update state = case _ of
           finished = advanced.position >= Array.length advanced.queue
 
           crossed =
-            Milestone.reached Scheduler.sessionSize session.began
+            Milestone.reached session.began
               (standingOf now state.language.deck progress)
-              { answered: advanced.position, again: advanced.again }
 
         when keeping $
           forkVoid $ liftEffect $ Storage.save state.language.code state.language.fingerprint progress
@@ -469,7 +468,11 @@ startSession deck progress now =
 -- | same walk, taken at the moment a session opens.
 standingOf :: Instant -> Array Card -> Progress -> Milestone.Standing
 standingOf now deck progress =
-  { mastered: o.mastered, seen: o.seen, total: o.total }
+  { mastered: o.mastered
+  , seen: o.seen
+  , slipping: Array.length $ Stats.leeches Stats.leechThreshold deck progress
+  , total: o.total
+  }
   where
     o = Stats.overview now deck progress
 
@@ -602,10 +605,7 @@ completeView undoable language progress summary dispatch =
     percent = 100.0 * Int.toNumber seen / Int.toNumber total
     caughtUp = summary.answered == 0
 
-    crossed =
-      Milestone.reached Scheduler.sessionSize summary.began
-        (standingOf summary.at language.deck progress)
-        { answered: summary.answered, again: summary.again }
+    crossed = Milestone.reached summary.began (standingOf summary.at language.deck progress)
 
     -- The bar is what a hundred is a hundred *of*, so it is the thing worth
     -- drawing the eye to when one lands.
@@ -631,7 +631,7 @@ completeView undoable language progress summary dispatch =
           Just wait -> "Nothing due for another " <> wait <> "."
           Nothing -> "Nothing is due right now."
       | otherwise =
-          show summary.answered <> " cards · "
+          Stats.plural summary.answered "card" <> " · "
             <> show summary.gotIt <> " got it · "
             <> show summary.again <> " again"
 

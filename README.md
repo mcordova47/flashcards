@@ -32,6 +32,7 @@ npm start        # http://localhost:8000
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
 | `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
 | `npm run rename` | Report words whose spelling changed, and pin the ones that should keep their history |
+| `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
 
 ## Languages
 
@@ -413,9 +414,16 @@ registers:
 | --- | --- |
 | every word mastered, every word met | a sentence, and confetti |
 | each hundred mastered | a sentence in the accent colour, and the bar catches the light |
-| the first word mastered, a session with nothing missed | a sentence |
+| the first word mastered, the last slipping word coming good | a sentence |
 
-Three rather than two so the rare things stay rare: the loud one happens twice
+Everything on that list is something the screen does not otherwise say. A
+clean sweep was on it once and came off again: the tally already reads
+"20 cards · 20 got it · 0 again", so a line underneath saying "20 out of 20"
+was the same sentence twice. Recovering your last slipping word is the
+repeatable one, and the only one about words getting better rather than about
+totals getting bigger.
+
+Three registers rather than two so the rare things stay rare: the loud one happens twice
 in the life of a deck and the middle one ten times, which is the only reason
 either registers. At most one fires — crossing the last hundred *is* finishing
 the deck, and meeting every word is usually several hundreds at once, so saying

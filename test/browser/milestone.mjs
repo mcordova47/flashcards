@@ -27,23 +27,28 @@ export default async ({ check, open }) => {
   {
     const page = await open()
     await page.waitForSelector(".prompt")
-    for (let i = 0; i < 19; i++) { await page.tap(".card"); await page.tap(".got-it") }
-    // One missed card, so not even a clean sweep.
-    await page.tap(".card")
-    await page.tap(".again")
-    await wait(300)
+    await finish(page)
     check("a session that came to nothing says nothing", await page.$(".milestone"), null)
     await page.close()
   }
 
   // --- the quietest tier ---
+  // Everything here has to be something the finished screen does not already
+  // say. A clean sweep was on this list once and came off it: the tally reads
+  // "20 cards · 20 got it · 0 again", so a line under it saying "20 out of 20"
+  // was the same sentence twice.
   {
-    const page = await open()
+    // Three words slipping, all of them one right answer from recovery, and
+    // all due now.
+    const cards = [181, 182, 183].map(rank => ({
+      slug: slugAt(rank), box: 1, seen: 9, missed: 5, lapses: 4,
+      direction: "recognition", due: Date.now() - 1000,
+    }))
+    const page = await open({ seed: seed(cards) })
     await page.waitForSelector(".prompt")
     await finish(page)
-    // Twenty new words, all right, none of them mastered yet — a first
-    // sighting fast-tracks to box 3 in recognition, which is Familiar.
-    check("nothing missed earns a sentence", await page.text(".milestone"), "20 out of 20.")
+    check("the last slipping word coming good earns a sentence",
+      await page.text(".milestone"), "Nothing is slipping any more.")
     check("and no more than that", await page.$eval(".milestone", e => e.className),
       "milestone remark")
     check("with the bar left alone", await page.$eval(".deck-progress", e => e.className),

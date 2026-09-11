@@ -167,7 +167,7 @@ export const qrVideo = (text, { width = 640, height = 480 } = {}) => {
   return Buffer.concat([header, ...Array(20).fill(frame)])
 }
 
-export const run = async (name, body) => {
+export const run = async (name, body, { headless = "new", slowMo } = {}) => {
   if (!fs.existsSync(path.join(PUBLIC, "index.js"))) {
     throw new Error("public/ is not built — run `npm run build` first")
   }
@@ -211,7 +211,9 @@ export const run = async (name, body) => {
   })
   await new Promise(r => server.listen(0, r))
   const base = `http://localhost:${server.address().port}`
-  const browser = await puppeteer.launch({ executablePath: chrome(), headless: "new", args: ["--no-sandbox"] })
+  const browser = await puppeteer.launch({
+    executablePath: chrome(), headless, slowMo, args: ["--no-sandbox"],
+  })
   const downloads = fs.mkdtempSync(path.join(os.tmpdir(), "palabras-"))
 
   let failed = 0
