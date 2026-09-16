@@ -108,7 +108,7 @@ Order,English,Español
 107,"there is, there are",hay
 108,"on, about",sobre
 109,you (informal),tú
-110,"any, some",alguno
+110,"some, any (in questions)",alguno
 111,same,mismo
 112,"like that, so",así
 113,how,cómo
@@ -179,7 +179,7 @@ Order,English,Español
 178,point,punto
 179,done,hecho
 180,during,durante
-181,any,cualquier
+181,any (whichever),cualquier
 182,hand,mano
 183,way,manera
 184,which,cual
@@ -237,7 +237,7 @@ Order,English,Español
 236,important,importante
 237,with me,conmigo
 238,wrong,mal
-239,yet,todavía
+239,"still, yet",todavía
 240,reason,razón
 241,as much as,cuanto
 242,low; under,bajo
@@ -255,7 +255,7 @@ Order,English,Español
 254,to start,comenzar
 255,several,varios
 256,possible,posible
-257,yet,aún
+257,"still, yet",aún
 258,to serve,servir
 259,general,general
 260,to take out,sacar
@@ -906,7 +906,7 @@ Order,English,Español
 905,costume,traje
 906,to send,enviar
 907,soul,alma
-908,"even, yet, still",aun
+908,even,aun
 909,destination,destino
 910,education,educación
 911,to care,cuidar

@@ -238,7 +238,7 @@ deck =
   ,
   { rank: Rank 109, slug: Slug "tú", english: "you (informal)", word: "tú", example: "" }
   ,
-  { rank: Rank 110, slug: Slug "alguno", english: "any, some", word: "alguno", example: "" }
+  { rank: Rank 110, slug: Slug "alguno", english: "some, any (in questions)", word: "alguno", example: "" }
   ,
   { rank: Rank 111, slug: Slug "mismo", english: "same", word: "mismo", example: "" }
   ,
@@ -380,7 +380,7 @@ deck =
   ,
   { rank: Rank 180, slug: Slug "durante", english: "during", word: "durante", example: "" }
   ,
-  { rank: Rank 181, slug: Slug "cualquier", english: "any", word: "cualquier", example: "" }
+  { rank: Rank 181, slug: Slug "cualquier", english: "any (whichever)", word: "cualquier", example: "" }
   ,
   { rank: Rank 182, slug: Slug "mano", english: "hand", word: "mano", example: "" }
   ,
@@ -496,7 +496,7 @@ deck =
   ,
   { rank: Rank 238, slug: Slug "mal", english: "wrong", word: "mal", example: "" }
   ,
-  { rank: Rank 239, slug: Slug "todavía", english: "yet", word: "todavía", example: "" }
+  { rank: Rank 239, slug: Slug "todavía", english: "still, yet", word: "todavía", example: "" }
   ,
   { rank: Rank 240, slug: Slug "razón", english: "reason", word: "razón", example: "" }
   ,
@@ -532,7 +532,7 @@ deck =
   ,
   { rank: Rank 256, slug: Slug "posible", english: "possible", word: "posible", example: "" }
   ,
-  { rank: Rank 257, slug: Slug "aún", english: "yet", word: "aún", example: "" }
+  { rank: Rank 257, slug: Slug "aún", english: "still, yet", word: "aún", example: "" }
   ,
   { rank: Rank 258, slug: Slug "servir", english: "to serve", word: "servir", example: "" }
   ,
@@ -1834,7 +1834,7 @@ deck =
   ,
   { rank: Rank 907, slug: Slug "alma", english: "soul", word: "alma", example: "" }
   ,
-  { rank: Rank 908, slug: Slug "aun", english: "even, yet, still", word: "aun", example: "" }
+  { rank: Rank 908, slug: Slug "aun", english: "even", word: "aun", example: "" }
   ,
   { rank: Rank 909, slug: Slug "destino", english: "destination", word: "destino", example: "" }
   ,

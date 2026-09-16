@@ -68,7 +68,7 @@ export default async ({ check, open }) => {
     await page.waitForSelector(".prompt")
     await finish(page)
     check("a hundred is worth saying", await page.text(".milestone"),
-      "That makes 100 words mastered!")
+      "You’ve now mastered 100 words!")
     check("louder than a sentence", await page.$eval(".milestone", e => e.className),
       "milestone flourish")
     // A hundred is a hundred *of* the bar, so the bar is what to look at.
@@ -81,7 +81,7 @@ export default async ({ check, open }) => {
     await page.tap(".grade")
     await wait(250)
     await finish(page)
-    check("and it is not said twice", (await page.text(".milestone")) !== "That makes 100 words mastered!", true)
+    check("and it is not said twice", (await page.text(".milestone")) !== "You’ve now mastered 100 words!", true)
     await page.close()
   }
 

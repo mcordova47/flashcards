@@ -148,7 +148,9 @@ spec = do
       let
         index = Deck.index Spanish.deck
         barred = Array.filter (\c -> not $ Deck.isCanonical c index) Spanish.deck
-      Array.length barred `shouldEqual` 14
+      -- Fifteen since `aun` was corrected from "even, yet, still" to "even",
+      -- which made it the synonym of `incluso` it always was.
+      Array.length barred `shouldEqual` 15
 
   describe "repairing cards that reached production before the rule" do
     let
