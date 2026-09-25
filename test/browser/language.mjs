@@ -91,4 +91,25 @@ export default async ({ check, open }) => {
     await shared.evaluate(() => history.length) < 4, true)
   check("still no page errors", shared.errors, [])
   await shared.close()
+
+  // --- a path names a page before it names a language ---
+  // `/verbs` used to strip its slashes, fail to look up as a language code,
+  // fall through to the saved choice and quietly serve the flashcards. The
+  // catch-all returns 200 for every path, so nothing anywhere said otherwise.
+  const verbs = await open({ path: "/verbs" })
+  await verbs.waitForSelector(".done-title")
+  check("a page that is not a language is not the flashcards",
+    await verbs.text(".done-title"), "Verbs")
+  check("and keeps the path it was asked for", new URL(verbs.url()).pathname, "/verbs")
+  check("no page errors", verbs.errors, [])
+  await verbs.close()
+
+  // A path naming nothing we have gets the address put right, rather than
+  // being left claiming to be somewhere that does not exist.
+  const astray = await open({ path: "/nonsense" })
+  await astray.waitForSelector(".prompt")
+  await wait(400)
+  check("a path naming no page falls back", await astray.text(".prompt"), "yo")
+  check("and says so in the address bar", new URL(astray.url()).pathname, "/es")
+  await astray.close()
 }

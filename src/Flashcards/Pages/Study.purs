@@ -27,6 +27,7 @@ import Flashcards.Confetti as Confetti
 import Flashcards.Deck as DeckIndex
 import Flashcards.Language (Language)
 import Flashcards.Language as Language
+import Flashcards.Page as Page
 import Flashcards.Milestone as Milestone
 import Flashcards.Pages.Study.Model (Message(..), Purpose(..), Screen(..), Session, State, Summary, noticing, untouched)
 import Flashcards.Pages.Study.Model (Message, State) as Model
@@ -46,10 +47,12 @@ import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 
-init :: Transition Message State
-init = do
+-- | Takes the language rather than working it out, because which page you are
+-- | on was decided before this one was mounted. See `EntryPoints.Index`.
+init :: Language -> Transition Message State
+init opening = do
   fork do
-    language <- liftEffect $ Language.resolve <$> Route.current <*> Storage.loadLanguage
+    let language = opening
     syncKey <- liftEffect $ Pairing.adoptKey language
     origin <- liftEffect Sync.origin
     syncedAt <- liftEffect $ Storage.loadSyncedAt language.code
@@ -307,7 +310,7 @@ update state = case _ of
       forkVoid $ liftEffect do
         Storage.saveLanguage language.code
         -- So the address bar is copyable straight after a switch.
-        Route.replace $ Language.pathFor language
+        Route.replace $ Page.pathFor $ Page.Cards language
       fork do
         let index = DeckIndex.index language.deck
         -- The key is per device, not per language, so a switch carries it

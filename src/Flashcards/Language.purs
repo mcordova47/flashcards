@@ -1,5 +1,9 @@
 -- | Everything that differs between one language and the next, in one place.
 -- |
+-- | It no longer reads paths. `Flashcards.Page` does that, because a path
+-- | names a page before it names a language and this module could only ever
+-- | see the second of those.
+-- |
 -- | Both decks are compiled into the bundle rather than fetched. Together they
 -- | are a few tens of kilobytes, and switching language has to work with no
 -- | signal like everything else here.
@@ -8,20 +12,15 @@ module Flashcards.Language
   , all
   , byCode
   , default
-  , fromPath
   , german
-  , pathFor
-  , resolve
   , spanish
   )
   where
 
 import Prelude
 
-import Control.Alt ((<|>))
 import Data.Array as Array
-import Data.Maybe (Maybe(..), fromMaybe)
-import Data.String as String
+import Data.Maybe (Maybe)
 import Flashcards.Data.Deck.German as German
 import Flashcards.Data.Deck.Spanish as Spanish
 import Flashcards.Types.Card (Card)
@@ -82,18 +81,3 @@ default = spanish
 
 byCode :: String -> Maybe Language
 byCode code = Array.find (\l -> l.code == code) all
-
--- | The language a path names, if it names one. Bare `/` names nothing on
--- | purpose, so it can defer to whatever the reader last chose.
-fromPath :: String -> Maybe Language
-fromPath = byCode <<< String.trim <<< String.replaceAll (String.Pattern "/") (String.Replacement "")
-
-pathFor :: Language -> String
-pathFor language = "/" <> language.code
-
--- | An explicit path wins, so a shared link opens what it says regardless of
--- | what the reader was studying. Failing that, their own saved choice, so the
--- | installed app reopens where they left off. Failing that, the default.
-resolve :: String -> Maybe String -> Language
-resolve path saved =
-  fromMaybe default $ fromPath path <|> (byCode =<< saved)

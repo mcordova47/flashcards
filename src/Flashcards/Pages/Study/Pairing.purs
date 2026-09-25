@@ -31,7 +31,7 @@ import Effect.Class (liftEffect)
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Styled as H
 import Flashcards.Language (Language)
-import Flashcards.Language as Language
+import Flashcards.Page as Page
 import Flashcards.Pages.Study.Model (Message(..), State, noticing)
 import Flashcards.Route as Route
 import Flashcards.Sync as Sync
@@ -210,7 +210,7 @@ adoptKey language = Sync.keyFromLink <$> Route.search >>= case _ of
     -- Take it back out of the address bar. It is the only secret this app
     -- has, and leaving it there puts it in history and in whatever gets
     -- shared next.
-    Route.replace $ Language.pathFor language
+    Route.replace $ Page.pathFor $ Page.Cards language
     pure key
   Nothing -> Sync.loadKey >>= case _ of
     Just key ->

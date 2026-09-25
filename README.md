@@ -49,11 +49,26 @@ Spanish ones.
 Rank means different things in the two decks. Spanish is ordered by frequency;
 German is a course list, A1 then A2. The progress sheet says which.
 
-The path names the language: `/de` opens German for whoever you send it to,
-whatever they were last studying. Bare `/` deliberately does not, deferring to
-the reader's own saved choice, so the installed app reopens where they left off
-rather than resetting every time. Switching rewrites the path so the address
-bar stays copyable.
+The path names a **page** first and a language second — `/es` and `/de` are the
+flashcards, `/verbs` is something else entirely. `Flashcards.Page` owns that;
+`Flashcards.Language` used to, and could only ever see the second half, so
+`/verbs` stripped its slashes, failed to look up as a language code, fell
+through to the saved choice and quietly served the flashcards. The catch-all
+returns 200 for every path, so nothing anywhere said otherwise.
+
+A `/de` link opens German for whoever you send it to, whatever they were last
+studying. Bare `/` deliberately names nothing, deferring to the reader's own
+saved choice, so the installed app reopens where they left off rather than
+resetting every time. A path naming a page we do not have falls back and
+**puts the address bar right**, rather than leaving it claiming to be somewhere
+that does not exist. Switching language rewrites the path so the address stays
+copyable.
+
+Nothing links one page to the other, so nothing navigates between them:
+`EntryPoints.Index` reads the path once and mounts what it finds. A page change
+is a page load. That is why there is no router and no notion of "which page" in
+any component's state, and it is what keeps one bundle, one service worker and
+one installed app.
 
 Adding a third is a row in the `LANGUAGES` table in `tools/sync-deck.mjs`, a
 CSV, and an entry in `Flashcards.Language`.
@@ -616,7 +631,9 @@ tools/deck-source.mjs                the language table, shared by both
 netlify/functions/progress.mjs       the blob store, and all of the server
 scanner.js                           the QR decoder, bundled on its own
 src/Flashcards/
+  Page.purs                          which page a path names
   Pages/Study.purs                   the card, the loop, the wiring
+  Pages/Verbs.purs                   the drills (#8) - a placeholder so far
   Pages/Study/Model.purs             one State and one Message, for all of it
   Pages/Study/Pairing.purs           getting a key from one device to another
   Pages/Study/{Panel,Progress}.purs  the ••• menu, and the sheet it opens
