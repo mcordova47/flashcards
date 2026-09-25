@@ -4,7 +4,9 @@
 -- | one codec and one validation path rather than two that drift — see
 -- | `Flashcards.Types.Progress`.
 module Flashcards.Payload
-  ( parse
+  ( Adoption
+  , adopt
+  , parse
   , serialize
   )
   where
@@ -16,10 +18,61 @@ import Data.Argonaut.Parser (jsonParser)
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
-import Flashcards.Deck (Index)
-import Flashcards.Deck as Deck
-import Flashcards.Types.Progress (Progress)
+import Data.Array as Array
+import Data.Tuple.Nested ((/\))
+import Flashcards.Types.Card (Rank, Slug)
+import Flashcards.Types.Progress (Progress, Saved)
 import Flashcards.Types.Progress as Progress
+
+type Adoption =
+  { progress :: Progress
+  -- | Whether anything had to be placed by rank, which is to say the payload
+  -- | predates v5 and is worth rewriting in the current shape.
+  , migrated :: Boolean
+  -- | Whether that placement can be believed. False only when there were ranks
+  -- | to place *and* the deck has moved since they were written.
+  , sound :: Boolean
+  }
+
+-- | Resolve a decoded payload onto this deck.
+-- |
+-- | v5 entries name their card by slug, which means the same word in every
+-- | version of the deck, so there is nothing to resolve and nothing that can go
+-- | wrong. Older entries name it by rank — a position — and turning a position
+-- | back into a word is only sound while the deck has not moved since. That is
+-- | precisely what the fingerprint attests, so it is required for those and
+-- | irrelevant for the rest: the fingerprint's last act is to certify its own
+-- | retirement.
+-- |
+-- | The resolver is how a rank becomes a slug, and it is a function rather
+-- | than a deck so that nothing here has to know what a card is: the
+-- | flashcards pass `Deck.slugAt`, and a page with no legacy payloads to place
+-- | passes `const Nothing` and is done.
+-- |
+-- | A slug that is not in the deck is kept. It costs a few bytes, everything
+-- | that reads progress walks the deck rather than the history, and a backup
+-- | restored onto a stale bundle would otherwise quietly lose the newest words.
+-- | A rank that is not in the deck can only be dropped — there is no word to
+-- | attach it to.
+adopt :: String -> (Rank -> Maybe Slug) -> Saved -> Adoption
+adopt fingerprint slugAt saved =
+  { progress: Progress.fromEntries $ Array.mapMaybe place saved.cards
+  , migrated
+  , sound: not migrated || knownDeck
+  }
+  where
+    migrated = Array.any (\c -> c.slug == Nothing) saved.cards
+
+    -- v1 carried no fingerprint and predates every renumbering, so an absent
+    -- one is as good as a match.
+    knownDeck = saved.deck == Nothing || saved.deck == Just fingerprint
+
+    place c = case c.slug of
+      Just slug -> Just $ slug /\ c.progress
+      Nothing -> do
+        rank <- c.rank
+        slug <- slugAt rank
+        pure $ slug /\ c.progress
 
 serialize :: String -> String -> Progress -> String
 serialize language deck = stringify <<< Progress.toJson language deck
@@ -41,13 +94,13 @@ serialize language deck = stringify <<< Progress.toJson language deck
 -- | The reasons are phrased for a reader because nothing stops a future caller
 -- | showing them; today the only one is `Flashcards.Sync`, which stays quiet
 -- | and leaves the blob alone.
-parse :: String -> String -> Index -> String -> Either String Progress
-parse language deck idx raw = do
+parse :: String -> String -> (Rank -> Maybe Slug) -> String -> Either String Progress
+parse language deck slugAt raw = do
   json <- lmap (const "That isn't valid JSON.") $ jsonParser raw
   saved <- lmap (const "That isn't Palabras progress.") $ Progress.fromJson json
   case saved.language of
     Just other | other /= language -> Left "That progress is for a different language."
     _ -> do
-      let adopted = Deck.adopt deck idx saved
+      let adopted = adopt deck slugAt saved
       if adopted.sound then Right adopted.progress
       else Left "That progress predates a deck change, so its words can't be matched up."

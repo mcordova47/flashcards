@@ -11,6 +11,7 @@
 module Flashcards.Sync
   ( Remote(..)
   , Scan(..)
+  , adoptKey
   , canScan
   , canShare
   , clearPasted
@@ -41,6 +42,7 @@ import Data.String as String
 import Data.String.CodePoints as CodePoints
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, EffectFn4, mkEffectFn1, runEffectFn1, runEffectFn2, runEffectFn3, runEffectFn4)
+import Flashcards.Route as Route
 import Web.HTML (window)
 import Web.HTML.Window (localStorage)
 import Web.Storage.Storage as Storage
@@ -70,6 +72,30 @@ syncKey :: String
 syncKey = "flashcards.sync-key"
 
 foreign import generateKey :: Effect String
+
+-- | This device's sync key: the one a pairing link carried, else the one
+-- | already saved here, else a fresh one. Generated on first run rather than
+-- | on first sync, so there is always a link to hand out.
+-- |
+-- | Takes the path to restore afterwards, because a pairing link has to come
+-- | back out of the address bar and only the caller knows which page it is on.
+-- | Shared rather than per page: both pages use one key, so pairing done for
+-- | either is pairing done for both.
+adoptKey :: String -> Effect String
+adoptKey path = keyFromLink <$> Route.search >>= case _ of
+  Just key -> do
+    saveKey key
+    -- It is the only secret this app has, and leaving it in the address bar
+    -- puts it in history and in whatever gets shared next.
+    Route.replace path
+    pure key
+  Nothing -> loadKey >>= case _ of
+    Just key ->
+      pure key
+    Nothing -> do
+      key <- generateKey
+      saveKey key
+      pure key
 
 loadKey :: Effect (Maybe String)
 loadKey = do

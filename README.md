@@ -522,6 +522,47 @@ its own angle, so it turns edge-on and all but vanishes before broadsiding
 again. A rectangle spinning in the plane of the screen stays the same size,
 which is what makes it read as a brick.
 
+## A second page
+
+`/verbs` is the verb drills, and it shares the scheduler and nothing else.
+
+What transfers is everything that does not know what an item is: `Scheduler`,
+`Types.Progress` and its merge rule, `Payload`, `Storage`, `Sync`, `Milestone`.
+What does not is the card model — recognition graduating to production,
+colliding glosses, a canonical answer — all of which are about a word with a
+gloss, and a conjugation has none of those.
+
+Three things had to give up knowing about cards before a second page could use
+them, and each was carrying the dependency for one line:
+
+- **`Scheduler.buildSession`** took `Array Card` and read `.slug` from it.
+  It takes `Array Slug`.
+- **`Payload.adopt`** took a `Deck.Index` to turn a pre-v5 rank into a slug.
+  It takes `Rank -> Maybe Slug`, so the flashcards pass `Deck.slugAt` and a
+  page with no legacy payloads passes `const Nothing`. `adopt` moved from
+  `Deck` to `Payload` on the way, which is where placing a payload belongs.
+- **`Sync.adoptKey`** lived in the flashcards' pairing sheet. It is about the
+  key, and both pages want one, so it is in `Sync`.
+
+**One pairing key, both pages.** Progress is per namespace — `flashcards.es.v1`,
+`flashcards.verbs.v1`, and a blob each on the server — but the key that
+identifies the device is not. A device paired for the flashcards is already
+paired for the drills. The endpoint's namespace pattern widened from `[a-z]{2}`
+to admit `verbs`, and stays bounded so one key still cannot become unlimited
+storage.
+
+An exercise is `{ slug, prompt, hint, answer }` with `answer` being `Checked`
+or `SelfGraded`. The page owns the session loop once; each drill type is a
+module producing exercises, which is what lets them be built separately rather
+than as branches of one screen.
+
+Typed answers ignore case, surrounding space, a trailing full stop — and
+accents. `tenia` for `tenía` counts, and the accented form is shown back. A
+missing accent is a real mistake but not the one being drilled, and being
+failed for one on a phone is how an app stops being opened. Which is the
+opposite of how slugs treat accents, where the accent is the entire difference
+between two words.
+
 ## The study model
 
 Cards are shown **Spanish → English** and graded by hand: tap to flip, then
@@ -631,9 +672,10 @@ tools/deck-source.mjs                the language table, shared by both
 netlify/functions/progress.mjs       the blob store, and all of the server
 scanner.js                           the QR decoder, bundled on its own
 src/Flashcards/
+  Exercise.purs                      what every verb drill has in common
   Page.purs                          which page a path names
   Pages/Study.purs                   the card, the loop, the wiring
-  Pages/Verbs.purs                   the drills (#8) - a placeholder so far
+  Pages/Verbs.purs                   the drills (#8), one exercise so far
   Pages/Study/Model.purs             one State and one Message, for all of it
   Pages/Study/Pairing.purs           getting a key from one device to another
   Pages/Study/{Panel,Progress}.purs  the ••• menu, and the sheet it opens

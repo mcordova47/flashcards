@@ -54,6 +54,8 @@ export const deckFingerprint = (code = "es") =>
 export const formatVersion = () =>
   Number(readConstant("src/Flashcards/Types/Progress.purs", /currentVersion = (\d+)/))
 
+// The flashcards' key, which is the default only because most suites are
+// about them. `open` and `stored` take another for any other page.
 export const storageKey = "flashcards.es.v1"
 
 // The shipped Spanish deck, read from the CSV the generator reads. Fixtures
@@ -226,7 +228,7 @@ export const run = async (name, body, { headless = "new", slowMo } = {}) => {
 
   // Every page starts from a clean slate: pages in one browser share an
   // origin's storage, and a previous block's progress will leak otherwise.
-  const open = async ({ stub, seed, scheme, viewport, path = "/" } = {}) => {
+  const open = async ({ stub, seed, scheme, viewport, path = "/", key = storageKey } = {}) => {
     const page = await browser.newPage()
     await page.setViewport(viewport ?? { width: 390, height: 844, deviceScaleFactor: 2 })
     if (scheme) await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: scheme }])
@@ -235,7 +237,7 @@ export const run = async (name, body, { headless = "new", slowMo } = {}) => {
     page.on("pageerror", e => page.errors.push(String(e)))
     await page.goto(base + path, { waitUntil: "networkidle0" })
     await page.evaluate(() => localStorage.clear())
-    if (seed) await page.evaluate((k, s) => localStorage.setItem(k, JSON.stringify(s)), storageKey, seed)
+    if (seed) await page.evaluate((k, s) => localStorage.setItem(k, JSON.stringify(s)), key, seed)
     // Navigate again rather than reload: a pairing link takes itself back out
     // of the address bar once adopted, so reloading would land on the stripped
     // URL and the second run would see no link at all.
@@ -254,7 +256,7 @@ export const run = async (name, body, { headless = "new", slowMo } = {}) => {
       await page.mouse.click(Math.round(page.viewport().width / 2), y)
       await wait(90)
     }
-    page.stored = () => page.evaluate(k => JSON.parse(localStorage.getItem(k) ?? "null"), storageKey)
+    page.stored = (which = key) => page.evaluate(k => JSON.parse(localStorage.getItem(k) ?? "null"), which)
     page.spoken = () => page.evaluate(() => window.__spoken.filter(u => u.text.trim() !== ""))
     page.byText = async (sel, label) => {
       for (const h of await page.$$(sel)) {

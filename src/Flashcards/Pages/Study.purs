@@ -53,13 +53,13 @@ init :: Language -> Transition Message State
 init opening = do
   fork do
     let language = opening
-    syncKey <- liftEffect $ Pairing.adoptKey language
+    syncKey <- liftEffect $ Sync.adoptKey $ Page.pathFor $ Page.Cards language
     origin <- liftEffect Sync.origin
     syncedAt <- liftEffect $ Storage.loadSyncedAt language.code
     canShare <- liftEffect Sync.canShare
     canScan <- liftEffect Sync.canScan
     let index = DeckIndex.index language.deck
-    progress <- liftEffect $ Storage.load language.code language.fingerprint index
+    progress <- liftEffect $ Storage.load language.code language.fingerprint (DeckIndex.slugAt index)
     canSpeak <- liftEffect Speech.supported
     savedAccent <- liftEffect $ Storage.loadAccent language.code
     savedVoice <- liftEffect $ Storage.loadVoice language.code
@@ -315,12 +315,13 @@ update state = case _ of
         let index = DeckIndex.index language.deck
         -- The key is per device, not per language, so a switch carries it
         -- across rather than pairing again.
-        syncKey <- liftEffect $ maybe (Pairing.adoptKey language) pure state.syncKey
+        syncKey <- liftEffect $
+          maybe (Sync.adoptKey $ Page.pathFor $ Page.Cards language) pure state.syncKey
         origin <- liftEffect Sync.origin
         syncedAt <- liftEffect $ Storage.loadSyncedAt language.code
         canShare <- liftEffect Sync.canShare
         canScan <- liftEffect Sync.canScan
-        progress <- liftEffect $ Storage.load language.code language.fingerprint index
+        progress <- liftEffect $ Storage.load language.code language.fingerprint (DeckIndex.slugAt index)
         savedAccent <- liftEffect $ Storage.loadAccent language.code
         savedVoice <- liftEffect $ Storage.loadVoice language.code
         now <- liftEffect Now.now
@@ -363,7 +364,7 @@ update state = case _ of
           pure state { offline = false }
 
         Sync.Found body ->
-          case Payload.parse state.language.code state.language.fingerprint state.index body of
+          case Payload.parse state.language.code state.language.fingerprint (DeckIndex.slugAt state.index) body of
             -- A blob this device cannot read is not one it should overwrite.
             -- The network did its part, so this is not an offline problem and
             -- must not be reported as one; the panel is left saying "not
@@ -458,7 +459,7 @@ settle savedAccent savedVoice allVoices state =
 
 startSession :: Array Card -> Progress -> Instant -> Screen
 startSession deck progress now =
-  case Scheduler.buildSession deck progress now Scheduler.sessionSize of
+  case Scheduler.buildSession (map _.slug deck) progress now Scheduler.sessionSize of
     [] -> Complete { answered: 0, gotIt: 0, again: 0, at: now, began: standing }
     queue ->
       Studying

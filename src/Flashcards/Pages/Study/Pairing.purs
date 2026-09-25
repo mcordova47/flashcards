@@ -8,8 +8,7 @@
 -- | one. The exchange itself stays in `Flashcards.Pages.Study`, which is core
 -- | behaviour running on every load; this is only how the key gets here.
 module Flashcards.Pages.Study.Pairing
-  ( adoptKey
-  , close
+  ( close
   , copied
   , copyLink
   , linkPasted
@@ -26,14 +25,10 @@ module Flashcards.Pages.Study.Pairing
 import Prelude
 
 import Data.Maybe (Maybe(..))
-import Effect (Effect)
 import Effect.Class (liftEffect)
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Styled as H
-import Flashcards.Language (Language)
-import Flashcards.Page as Page
 import Flashcards.Pages.Study.Model (Message(..), State, noticing)
-import Flashcards.Route as Route
 import Flashcards.Sync as Sync
 
 open :: State -> Transition Message State
@@ -199,23 +194,3 @@ view state dispatch =
             }
         , H.button_ "grade pair-use" { onClick: dispatch <| UseLink } "Use this link"
         ]
-
--- | This device's sync key: the one a pairing link carried, else the one
--- | already saved here, else a fresh one. Generated on first run rather than
--- | on first sync, so there is always a link to hand out.
-adoptKey :: Language -> Effect String
-adoptKey language = Sync.keyFromLink <$> Route.search >>= case _ of
-  Just key -> do
-    Sync.saveKey key
-    -- Take it back out of the address bar. It is the only secret this app
-    -- has, and leaving it there puts it in history and in whatever gets
-    -- shared next.
-    Route.replace $ Page.pathFor $ Page.Cards language
-    pure key
-  Nothing -> Sync.loadKey >>= case _ of
-    Just key ->
-      pure key
-    Nothing -> do
-      key <- Sync.generateKey
-      Sync.saveKey key
-      pure key

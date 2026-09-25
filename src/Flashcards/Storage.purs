@@ -33,16 +33,17 @@ import Data.Number as Number
 import Data.Time.Duration (Milliseconds(..))
 import Effect (Effect)
 import Effect.Class.Console as Console
-import Flashcards.Deck (Index)
-import Flashcards.Deck as Deck
+import Flashcards.Payload as Payload
+import Flashcards.Types.Card (Rank, Slug)
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 import Web.HTML (window)
 import Web.HTML.Window (localStorage)
 import Web.Storage.Storage as Storage
 
--- | Keyed by language and schema version from day one, which is why adding a
--- | second deck needed no migration: it is simply a different key.
+-- | Keyed by namespace and schema version from day one, which is why adding a
+-- | second deck needed no migration, and why a second *page* needs none
+-- | either: each is simply a different key. `es`, `de`, `verbs`.
 progressKey :: String -> String
 progressKey code = "flashcards." <> code <> ".v1"
 
@@ -58,16 +59,17 @@ accentKey code = "flashcards." <> code <> ".accent"
 voiceKey :: String -> String
 voiceKey code = "flashcards." <> code <> ".voice"
 
--- | Takes the deck and its fingerprint, because progress written before v5
--- | names its cards by position and only the deck can say which word that was.
--- | See `Flashcards.Deck.adopt`.
+-- | Takes a way to turn a rank into a slug, because progress written before v5
+-- | names its cards by position and only the deck can say which word stood
+-- | there. A function rather than a deck, so this module does not have to know
+-- | what a card is — see `Flashcards.Payload.adopt`.
 -- |
 -- | It loads even when the fingerprint says that placement is unreliable: this
 -- | is your own history on your own device, and it is what the app has been
 -- | showing you all along, so discarding it now would be a loss and not a fix.
 -- | Import applies the stricter rule — see `Flashcards.Backup`.
-load :: String -> String -> Index -> Effect Progress
-load code deck idx = do
+load :: String -> String -> (Rank -> Maybe Slug) -> Effect Progress
+load code deck slugAt = do
   storage <- localStorage =<< window
   Storage.getItem (progressKey code) storage >>= case _ of
     Nothing -> pure Progress.empty
@@ -76,7 +78,7 @@ load code deck idx = do
       Right json -> case Progress.fromJson json of
         Left err -> recover $ "saved progress could not be read: " <> printJsonDecodeError err
         Right saved -> do
-          let adopted = Deck.adopt deck idx saved
+          let adopted = Payload.adopt deck slugAt saved
           unless adopted.sound $
             Console.warn "saved progress predates a deck change and is keyed by position; some words may have picked up another's history"
           -- Rewrite it keyed by slug straight away, so this happens once

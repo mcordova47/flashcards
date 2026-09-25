@@ -9,7 +9,9 @@ import Effect (Effect)
 import Test.Flashcards.AccentSpec as AccentSpec
 import Test.Flashcards.DeckSpec as DeckSpec
 import Test.Flashcards.PageSpec as PageSpec
+import Test.Flashcards.ExerciseSpec as ExerciseSpec
 import Test.Flashcards.MilestoneSpec as MilestoneSpec
+import Test.Flashcards.PayloadSpec as PayloadSpec
 import Test.Flashcards.ProgressSpec as ProgressSpec
 import Test.Flashcards.SchedulerSpec as SchedulerSpec
 import Test.Flashcards.StatsSpec as StatsSpec
@@ -24,6 +26,8 @@ main = runSpecAndExitProcess [ consoleReporter ] do
   AccentSpec.spec
   StatsSpec.spec
   DeckSpec.spec
+  PayloadSpec.spec
   PageSpec.spec
   SyncSpec.spec
   MilestoneSpec.spec
+  ExerciseSpec.spec

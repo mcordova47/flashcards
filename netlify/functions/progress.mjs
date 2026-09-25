@@ -1,7 +1,7 @@
 // The whole server: a dumb blob store, one key at a time.
 //
-//   GET  /api/progress/<key>/<lang>   the stored blob, or 404
-//   PUT  /api/progress/<key>/<lang>   replaces it
+//   GET  /api/progress/<key>/<namespace>   the stored blob, or 404
+//   PUT  /api/progress/<key>/<namespace>   replaces it
 //
 // It does not merge. The client does GET -> Progress.merge -> PUT, so the
 // merge rule lives in exactly one place — `Flashcards.Types.Progress`, where
@@ -14,19 +14,20 @@
 
 import { getStore } from "@netlify/blobs"
 
-export const config = { path: "/api/progress/:key/:language" }
+export const config = { path: "/api/progress/:key/:namespace" }
 
 // 32 characters from a 36-character alphabet is about 165 bits, which is not
 // guessable. Anchored, so a key cannot smuggle a path segment into the store.
 const KEY = /^[a-z0-9]{32}$/
 
-// One blob per language, because progress is per-language and each blob is
-// then byte-identical to the backup file - the same codec, validated the same
+// One blob per namespace. Progress is per-language for the flashcards, and
+// the verb drills are a namespace of their own, so each blob stays
+// byte-identical to what its page holds - the same codec, validated the same
 // way, with nothing here that has to agree with the client about shape.
 //
-// The server does not know which languages exist and should not; the cap is
-// only so that one key cannot be turned into unlimited storage.
-const LANGUAGE = /^[a-z]{2}$/
+// The server does not know what namespaces exist and should not. The pattern
+// is bounded only so that one key cannot be turned into unlimited storage.
+const NAMESPACE = /^[a-z][a-z0-9-]{1,15}$/
 
 // A thousand cards is roughly 120 KB. This leaves room for a deck several
 // times larger before anyone notices, and stops the endpoint being free
@@ -44,15 +45,15 @@ const json = (status, body) =>
 // Netlify to be running.
 export const handle = async (request, store) => {
   // Counted from the end, rather than a fixed offset from the start, because
-  // the request can arrive as either `/api/progress/<key>/<lang>` or, if it
-  // came through the redirect in netlify.toml rather than `config.path`,
-  // `/.netlify/functions/progress/<key>/<lang>`. Both end the same way.
+  // the request can arrive as either `/api/progress/<key>/<namespace>` or, if
+  // it came through the redirect in netlify.toml rather than `config.path`,
+  // `/.netlify/functions/progress/<key>/<namespace>`. Both end the same way.
   const segments = new URL(request.url).pathname.split("/").map(decodeURIComponent)
-  const [key, language] = segments.slice(-2)
+  const [key, namespace] = segments.slice(-2)
   if (!KEY.test(key ?? "")) return json(400, { error: "not a valid key" })
-  if (!LANGUAGE.test(language ?? "")) return json(400, { error: "not a valid language" })
+  if (!NAMESPACE.test(namespace ?? "")) return json(400, { error: "not a valid namespace" })
 
-  const at = `${key}.${language}`
+  const at = `${key}.${namespace}`
 
   if (request.method === "GET") {
     const blob = await store.get(at)

@@ -45,8 +45,15 @@ export default async ({ check, open, base, blobs }) => {
 
   // --- what it refuses ---
   check("a key of the wrong shape", (await fetch(at("nope"))).status, 400)
-  check("a language that is not one", (await fetch(at(KEY, "deutsch"))).status, 400)
-  check("or a language with a path in it", (await fetch(at(KEY, "..%2Fes"))).status, 400)
+  // The namespace is bounded rather than enumerated: the server does not know
+  // which pages exist, and widening it from two letters is what let the verb
+  // drills have a blob of their own. It stays bounded so that one key cannot
+  // become unlimited storage.
+  check("a namespace the page could plausibly want", (await fetch(at(KEY, "verbs"))).status, 404)
+  check("but not one with a capital in it", (await fetch(at(KEY, "Verbs"))).status, 400)
+  check("nor one long enough to be a place to hide things",
+    (await fetch(at(KEY, "a".repeat(17)))).status, 400)
+  check("nor one with a path in it", (await fetch(at(KEY, "..%2Fes"))).status, 400)
   check("a key with a path in it", (await fetch(at("..%2F..%2Fetc%2Fpasswd"))).status, 400)
   check("an uppercase key, so one key is one blob",
     (await fetch(at(KEY.toUpperCase()))).status, 400)

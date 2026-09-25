@@ -97,9 +97,10 @@ export default async ({ check, open }) => {
   // fall through to the saved choice and quietly serve the flashcards. The
   // catch-all returns 200 for every path, so nothing anywhere said otherwise.
   const verbs = await open({ path: "/verbs" })
-  await verbs.waitForSelector(".done-title")
+  await verbs.waitForSelector(".prompt")
+  await wait(400)
   check("a page that is not a language is not the flashcards",
-    await verbs.text(".done-title"), "Verbs")
+    await verbs.text(".prompt"), "ser · preterite · yo")
   check("and keeps the path it was asked for", new URL(verbs.url()).pathname, "/verbs")
   check("no page errors", verbs.errors, [])
   await verbs.close()

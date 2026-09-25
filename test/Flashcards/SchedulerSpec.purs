@@ -11,7 +11,7 @@ import Data.Maybe (Maybe(..), fromJust)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Scheduler as Scheduler
-import Flashcards.Types.Card (Card, Rank(..), Slug(..))
+import Flashcards.Types.Card (Slug(..))
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
@@ -29,10 +29,10 @@ at ms = unsafePartial $ fromJust $ instant $ Milliseconds ms
 now :: Instant
 now = at $ 100.0 * day
 
--- | The English and Spanish sides are irrelevant to scheduling.
-deck :: Array Card
-deck = Array.range 1 50 <#> \n ->
-  { rank: Rank n, slug: slugAt n, english: "en" <> show n, word: "es" <> show n, example: "" }
+-- | Slugs and nothing else: the scheduler has never needed to know what an
+-- | item is, and since it takes them directly there is no card to invent.
+deck :: Array Slug
+deck = slugAt <$> Array.range 1 50
 
 -- | The slug of the card at rank `n`, which is how progress and the session
 -- | queue name it. `word` is the same string; the deck derives one from the

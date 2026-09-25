@@ -24,7 +24,7 @@ import Data.DateTime.Instant (Instant, instant, unInstant)
 import Data.Maybe (Maybe(..), fromMaybe, isJust, isNothing)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
-import Flashcards.Types.Card (Card, Slug)
+import Flashcards.Types.Card (Slug)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
@@ -118,14 +118,19 @@ intervalFor box = Milliseconds $ day * case box of
   where
     day = 86400000.0
 
--- | Due reviews first, most overdue first; then brand-new words in frequency
--- | order. The deck is never shuffled — its order *is* the curriculum, so the
--- | next new word is always the most common one you do not yet know.
-buildSession :: Array Card -> Progress -> Instant -> Int -> Array Slug
-buildSession deck progress now size =
+-- | Due reviews first, most overdue first; then brand-new items in the order
+-- | they were given. The list is never shuffled — its order *is* the
+-- | curriculum, so for the flashcards the next new word is always the most
+-- | common one you do not yet know.
+-- |
+-- | Takes slugs rather than cards, because nothing here needs to know what an
+-- | item is. That is what lets a second page schedule conjugations with the
+-- | same scheduler rather than a copy of it.
+buildSession :: Array Slug -> Progress -> Instant -> Int -> Array Slug
+buildSession items progress now size =
   Array.take size $ map _.slug dueCards <> map _.slug newCards
   where
-    annotated = deck <#> \card -> { slug: card.slug, state: Progress.lookup card.slug progress }
+    annotated = items <#> \slug -> { slug, state: Progress.lookup slug progress }
 
     dueCards =
       annotated
