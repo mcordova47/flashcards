@@ -1,7 +1,7 @@
 // The conjugation table, what a row of it is allowed to be, and what a regular
 // verb would have put in it. Shared by tools/check-verbs.mjs, which proves the
-// table, tools/sync-verbs.mjs, which generates from it, and
-// tools/check-paraphrase.mjs, which checks sentences against it.
+// table, tools/sync-verbs.mjs, which generates from it, and the tools that
+// check sentences against it: check-paraphrase and the sentence-source trio.
 
 import fs from "fs"
 import { parseCsv } from "./deck-source.mjs"

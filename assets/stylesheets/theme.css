@@ -781,6 +781,62 @@ body {
   color: var(--faint);
 }
 
+/* --- verb drills --- */
+
+.verb-sentence {
+  margin: 0;
+  font-size: clamp(1.75rem, 8vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.verb-target {
+  margin: 0;
+}
+
+/* The answer box sits in the sentence where the verb goes. Wrapping, so a
+   long sentence on a phone breaks around the box rather than pushing it off
+   the edge; and the spans collapse when empty, so a verb that comes first or
+   last needs nothing special. */
+.verb-frame {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.35em;
+  max-width: 100%;
+  font-size: clamp(1.125rem, 5vw, 1.375rem);
+  color: var(--muted);
+}
+
+.verb-before:empty,
+.verb-after:empty {
+  display: none;
+}
+
+.verb-answer {
+  width: 7.5em;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.3em 0.5em;
+  border: none;
+  border-bottom: 2px solid var(--track);
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  text-align: center;
+}
+
+.verb-answer:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.verb-answer::placeholder {
+  color: var(--faint);
+}
+
 /* --- milestones --- */
 
 .milestone {

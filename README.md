@@ -28,12 +28,14 @@ npm start        # http://localhost:8000
 | `npm start` | Dev server, rebuilds on change |
 | `npm run build` | Compile and bundle into `public/` |
 | `npm test` | Unit specs — the pure core |
-| `npm run verify` | The paraphrase check, then browser suites against a real Chrome |
+| `npm run verify` | The paraphrase and sentence checks, then browser suites against a real Chrome |
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
 | `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
 | `npm run sync-verbs` | Regenerate the conjugation module from `data/es-verbs.csv` |
+| `npm run sync-sentences` | Regenerate the tense-shift sentence module from `data/es-sentences.csv` |
 | `npm run check-verbs` | Print every cell that deviates from the regular pattern — the review of the table |
 | `npm run check-paraphrase` | Prove every paraphrase model answer uses the form it claims, in deck vocabulary |
+| `npm run check-sentences` | Prove every tense-shift sentence against the table, in deck vocabulary |
 | `npm run rename` | Report words whose spelling changed, and pin the ones that should keep their history |
 | `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
 
@@ -554,13 +556,22 @@ paired for the drills. The endpoint's namespace pattern widened from `[a-z]{2}`
 to admit `verbs`, and stays bounded so one key still cannot become unlimited
 storage.
 
-An exercise is `{ slug, prompt, hint, answer }` with `answer` being `Checked`
-or `SelfGraded`. The page owns the session loop once; each drill type is a
-module producing exercises, which is what lets them be built separately rather
-than as branches of one screen.
+An exercise is `{ slug, prompt, hint, frame, answer }` with `answer` being
+`Checked` or `SelfGraded`, and `frame` the words either side of the answer
+box. The page owns the session loop once; each drill type is a module
+producing exercises, which is what lets them be built separately rather than
+as branches of one screen.
 
-Typed answers ignore case, surrounding space, a trailing full stop — and
-accents. `tenia` for `tenía` counts, and the accented form is shown back. A
+**One item, many questions.** A flashcard slug resolves to one card; a drill's
+resolves to a `Pool`, and `Exercise.pick` chooses from it round-robin by the
+item's `seen`. That makes the question a function of progress, deliberately:
+`seen` moves only on a grade, so a reload asks the same thing and every later
+sighting asks the next. The page holds what it picked, because grading moves
+`seen` and picking again would change the question under the answer.
+
+Typed answers ignore case, surrounding space, terminal punctuation — and
+accents. `tenia` for `tenía` counts, and `matches` returns `Unaccented` rather
+than `Exact` so the page can show the accented form back. A
 missing accent is a real mistake but not the one being drilled, and being
 failed for one on a phone is how an app stops being opened. Which is the
 opposite of how slugs treat accents, where the accent is the entire difference
@@ -603,7 +614,45 @@ part of `npm run verify`. `sync-verbs` refuses those same structural faults
 before it writes anything.
 
 It also lists the verb × tense items that are wholly regular, nearly all of
-them imperfects, for #16 to decide about. Printed, not acted on.
+them imperfects. Whether to stop scheduling those is #21. Printed, not acted
+on.
+
+### The tense shift
+
+A sentence, a tense to move it to, and the verb typed in the box where it
+goes: `no [ pude ] dormir`. `data/es-sentences.csv` writes the verb in
+brackets and says which verb, tense and person it is; `sync-sentences` generates
+`Flashcards.Data.Sentences.Spanish` from it, and `Flashcards.Verbs.Shift` turns
+table + sentence + target into an exercise.
+
+Only the verb is typed. Retyping the rest carries no information, and a typo
+in it would fail an answer that was right. Present, preterite and imperfect
+only: the subjunctive is a mood, and `tenga mucho trabajo` is an order, not the
+same sentence at another time.
+
+**The bank decides which items exist.** Each sentence yields its verb in the
+tenses it is not already in, so an item exists only if some sentence reaches
+it, and it needs two for a later sighting to ask a different one. Fourteen
+sentences over seven verbs, all written in the present, gives fourteen items —
+each verb's preterite and imperfect — with two sentences each. A verb's
+present would need sentences written in a past tense.
+
+`check-sentences` confirms every bracketed word is what the table has for its
+tag, and holds the rest of each sentence to the deck's vocabulary by the same
+rule as `check-paraphrase` — the two share `tools/deck-vocabulary.mjs`.
+Unlike `check-verbs` it fails, and `verify` runs it: the comparison is exact,
+so a disagreement is a mistake, not an irregularity.
+
+It also lists any item with only one sentence, and any answer that only an
+accent tells from another form of the same verb and person — `llegué` and
+`llegue`, `busqué` and `busque`. `matches` forgives accents, so a 1s sentence
+for either would leave it unable to tell a phone typo from a mood error.
+Nothing in the bank does that today; the list is there so the bank does not
+grow into it.
+
+`sync-sentences` refuses the structural faults — no brackets, capitals or
+punctuation, a tense a shift cannot reach, or a verb the table spells
+differently, which is how `ir` stays `ir` and not the deck's `ir(se)`.
 
 ### The paraphrase corpus
 
@@ -736,6 +785,7 @@ a backup file.
 data/es-1000.csv                     committed snapshot of the sheet
 data/es-verbs.csv                    38 irregular verbs, 760 conjugated cells
 data/es-paraphrase.csv               41 prompts for #10, each with one trap
+data/es-sentences.csv                the tense-shift sentences, verb in brackets
 tools/sync-deck.mjs                  sheet -> CSV -> generated module
 tools/rename.mjs                     pins a slug when a word is respelled
 tools/deck-source.mjs                the language table, shared by both
@@ -743,6 +793,11 @@ tools/sync-verbs.mjs                 conjugation CSV -> generated module
 tools/check-verbs.mjs                prints what deviates; the list IS the review
 tools/verb-source.mjs                what a row may be, and the regular forms
 tools/check-paraphrase.mjs           forms and vocabulary; a gate, run by verify
+tools/verb-source.mjs                what a row may be, shared by both
+tools/sentence-source.mjs            what a sentence row may be
+tools/sync-sentences.mjs             sentence CSV -> generated module
+tools/check-sentences.mjs            forms and vocabulary; a gate, run by verify
+tools/deck-vocabulary.mjs            what counts as a deck word, for both corpora
 netlify/functions/progress.mjs       the blob store, and all of the server
 scanner.js                           the QR decoder, bundled on its own
 src/Flashcards/
@@ -750,6 +805,7 @@ src/Flashcards/
   Page.purs                          which page a path names
   Pages/Study.purs                   the card, the loop, the wiring
   Pages/Verbs.purs                   the drills (#8), one exercise so far
+  Verbs/Shift.purs                   the tense shift (#16), pure
   Pages/Study/Model.purs             one State and one Message, for all of it
   Pages/Study/Pairing.purs           getting a key from one device to another
   Pages/Study/{Panel,Progress}.purs  the ••• menu, and the sheet it opens

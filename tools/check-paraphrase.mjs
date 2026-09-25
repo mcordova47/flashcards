@@ -9,13 +9,11 @@
 //
 // It also holds the corpus to the deck's vocabulary: every word of every model
 // answer must be a deck word, an inflection of one, or named in that row's
-// Notes. Inflections are recognised generously - gender, number, and the
-// regular conjugations of deck verbs - because this only decides whether a
-// word is *known*, never whether it is spelled right. Not generously enough
-// for a stem change outside the table: `entiende` is refused although
-// `entender` is a deck word, which is why the message says "regular
-// inflection" and a Note like "entiende is a stem change; entender is rank
-// 275" is an honest way past it.
+// Notes. What counts as an inflection is tools/deck-vocabulary.mjs, shared
+// with the tense-shift sentences. It stops short of a stem change outside the
+// table: `entiende` is refused although `entender` is a deck word, which is
+// why the message says "regular inflection" and a Note like "entiende is a
+// stem change; entender is rank 275" is an honest way past it.
 //
 // Exact means exact. Not `Exercise.matches`, which strips accents because
 // that is right for grading a phone keyboard - here it would let `leí` pass
@@ -23,10 +21,10 @@
 
 import fs from "fs"
 import { parseCsv } from "./deck-source.mjs"
-import { TENSES, PERSONS, ENDINGS, loadTable, regular } from "./verb-source.mjs"
+import { TENSES, PERSONS, loadTable } from "./verb-source.mjs"
+import { knownWords, unexplained, words } from "./deck-vocabulary.mjs"
 
 const CSV = "data/es-paraphrase.csv"
-const DECK = "data/es-1000.csv"
 const HEADER = ["Prompt", "Model", "Verb", "Tense", "Person", "Trap", "Against", "Notes"]
 const TRAPS = ["verb", "tense"]
 
@@ -38,32 +36,7 @@ if (tableErrors.length) {
 
 const table = new Map(verbs.map(v => [v.infinitive, v.cells]))
 const tenses = TENSES.map(t => t.name), persons = PERSONS.map(p => p.name)
-const words = sentence => sentence.toLowerCase().split(/[^a-zñáéíóúü]+/).filter(Boolean)
-
-// Every word the deck teaches, split out of entries like `el / la`,
-// `ir(se)` and `llamar(se)`, plus every form in the conjugation table and
-// every regular form of every deck verb.
-const known = new Set(verbs.flatMap(v => [...v.cells.values()]))
-for (const [, , spanish] of parseCsv(fs.readFileSync(DECK, "utf-8")).slice(1)) {
-  for (const word of words((spanish ?? "").replace(/\(se\)/g, ""))) {
-    known.add(word)
-    if (!ENDINGS[word.slice(-2).replace("í", "i")]) continue
-    for (const tense of tenses) for (const person of persons) known.add(regular(word, tense, person))
-  }
-}
-
-// What a word might be an inflection of: `hermanas` of `hermano`, `esta` of
-// `este`, `al` of `a`. Returns every candidate, so the caller can accept a
-// Note that names any of them.
-const CONTRACTIONS = { al: "a", del: "de" }
-const lemmas = word => {
-  const bare = [word, word.replace(/es$/, ""), word.replace(/s$/, "")]
-  return [...new Set([
-    ...bare,
-    ...bare.filter(w => w.endsWith("a")).flatMap(w => [w.slice(0, -1) + "o", w.slice(0, -1) + "e"]),
-    ...(CONTRACTIONS[word] ? [CONTRACTIONS[word]] : []),
-  ])]
-}
+const known = knownWords(verbs)
 
 const errors = []
 const counts = new Map()
@@ -103,10 +76,8 @@ body.forEach((cells, i) => {
   if (form && !words(model).includes(form)) fail(`expected ${verb} ${tense} ${person}, ${form}, to appear`)
 
   // Outside the deck is allowed, silently is not.
-  for (const word of words(model)) {
-    const candidates = lemmas(word)
-    if (candidates.some(w => known.has(w))) continue
-    if (!candidates.some(w => words(notes).includes(w))) fail(`${word} is not a deck word or a regular inflection of one; say why in Notes`)
+  for (const word of unexplained(known, model, notes)) {
+    fail(`${word} is not a deck word or a regular inflection of one; say why in Notes`)
   }
 
   const confusion = [trap === "verb" ? verb : tense, against].sort().join(" / ")

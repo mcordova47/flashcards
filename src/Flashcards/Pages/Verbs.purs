@@ -10,7 +10,8 @@
 -- | key, the same codec, the same format version. The *pairing* key is shared,
 -- | so a device paired for the flashcards is already paired for this.
 -- |
--- | One placeholder exercise so far. #16 brings the first real one.
+-- | One exercise so far, the tense shift (#16). The page knows it only as the
+-- | pools it yields: another exercise type adds pools, not a branch here.
 module Flashcards.Pages.Verbs
   ( module Model
   , init
@@ -28,28 +29,26 @@ import Effect.Now as Now
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Events as E
 import Elmish.HTML.Styled as H
-import Flashcards.Exercise (Answer(..), Exercise, matches)
+import Flashcards.Data.Sentences.Spanish (sentences)
+import Flashcards.Data.Verbs.Spanish (table)
+import Flashcards.Exercise (Answer(..), Pool, Verdict(..), matches, pick)
+import Flashcards.Exercise as Exercise
+import Flashcards.Page as Page
 import Flashcards.Pages.Verbs.Model (Message(..), State, namespace)
 import Flashcards.Pages.Verbs.Model (Message, State) as Model
-import Flashcards.Page as Page
 import Flashcards.Payload as Payload
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Storage as Storage
 import Flashcards.Sync as Sync
-import Flashcards.Types.Card (Slug(..))
+import Flashcards.Types.Card (Slug)
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress as Progress
+import Flashcards.Verbs.Shift as Shift
 
--- | Standing in for #12's table and #16's builder, so that the page can be
--- | finished and proved before either exists.
-placeholder :: Array Exercise
-placeholder =
-  [ { slug: Slug "ser.preterite"
-    , prompt: "ser · preterite · yo"
-    , hint: "I was"
-    , answer: Checked "fui"
-    }
-  ]
+-- | Every item there is, in the order new ones are introduced. Static, so
+-- | built once for the life of the page.
+items :: Array Pool
+items = Exercise.pools $ Shift.exercises table sentences
 
 -- | No deck, so nothing can be placed by rank — and nothing needs to be. This
 -- | namespace has no payloads older than v5, because it has no payloads older
@@ -66,6 +65,8 @@ init = do
   pure
     { progress: Progress.empty
     , queue: []
+    , shown: Nothing
+    , answered: 0
     , typed: ""
     , verdict: Nothing
     , syncKey: Nothing
@@ -84,8 +85,8 @@ init = do
 -- | lacks a slug, so for these payloads it is never compared.
 -- |
 -- | #12 does give the table a fingerprint, and it is deliberately not used
--- | here: wiring it in would pull all 760 cells into the bundle to compute a
--- | value nothing reads.
+-- | here. The table's cells are in the bundle now, since the tense shift
+-- | reads them, but a value nothing compares is still not worth writing.
 fingerprint :: String
 fingerprint = "none"
 
@@ -93,43 +94,54 @@ update :: State -> Message -> Transition Message State
 update state = case _ of
   Loaded { progress, syncKey } -> do
     fork $ pure Sync
-    pure state
-      { progress = progress
-      , syncKey = syncKey
-      , queue = map _.slug placeholder
+    fork $ liftEffect $ Started <$> Now.now
+    pure state { progress = progress, syncKey = syncKey }
+
+  Started now ->
+    pure $ asking state
+      { queue = Scheduler.buildSession (map _.slug items) state.progress now Scheduler.sessionSize
+      , answered = 0
       , loaded = true
       }
 
   Typed text ->
     pure state { typed = text }
 
-  Answer -> case current state of
-    Nothing ->
-      pure state
-    Just exercise -> do
+  Answer -> case state.shown, state.verdict of
+    Just exercise, Nothing -> do
       let
-        right = case exercise.answer of
+        verdict = case exercise.answer of
           Checked expected -> matches expected state.typed
-          SelfGraded _ -> true
-        grade = if right then GotIt else Again
+          -- Nothing self-grades yet. #10 brings the first that does, and
+          -- with it a reveal of its own.
+          SelfGraded _ -> Exact
+        grade = if verdict == Wrong then Again else GotIt
       fork $ liftEffect $ Graded grade <$> Now.now
-      pure state { verdict = Just right }
+      pure state { verdict = Just verdict }
+    _, _ ->
+      pure state
 
-  Graded grade now -> case current state of
+  Graded grade now -> case Array.head state.queue of
     Nothing ->
       pure state
-    Just exercise -> do
+    Just slug -> do
       let
         progress =
-          Progress.insert exercise.slug
+          Progress.insert slug
             (Scheduler.applyGrade grade now Scheduler.RecognitionOnly $
-               Progress.lookup exercise.slug state.progress)
+               Progress.lookup slug state.progress)
             state.progress
+        -- As on the study page: a miss comes round again before the session
+        -- ends, and `pick` makes it a different sentence when it does.
+        queue = case grade of
+          Again -> Scheduler.requeue slug 0 state.queue
+          GotIt -> state.queue
       forkVoid $ liftEffect $ Storage.save namespace fingerprint progress
-      pure state { progress = progress }
+      when (Array.length queue <= 1) $ fork $ pure Sync
+      pure state { progress = progress, queue = queue, answered = state.answered + 1 }
 
   Next ->
-    pure state { typed = "", verdict = Nothing, queue = Array.drop 1 state.queue }
+    pure $ asking state { typed = "", verdict = Nothing, queue = Array.drop 1 state.queue }
 
   Sync -> case state.syncKey of
     Nothing ->
@@ -140,10 +152,7 @@ update state = case _ of
       pure state
 
   -- Deliberately simpler than the study page's exchange: no language can
-  -- change under it and there is no session to rebuild, so what is left is
-  -- the exchange itself. Worth extracting once #16 gives this page a real
-  -- session and there is something to see varying — extracting it now would
-  -- be guessing at what the two have in common.
+  -- change under it, so what is left is the exchange itself and the rebuild.
   Synced remote -> case state.syncKey of
     Nothing ->
       pure state
@@ -167,22 +176,35 @@ update state = case _ of
             forkVoid $ liftEffect $ Storage.save namespace fingerprint merged
             if merged /= incoming then push merged
             else fork $ pure $ Pushed merged true
+            -- The session was built from the older history. Rebuild it, as
+            -- the study page does, but only before anything has been
+            -- answered or typed, so nothing is taken back off the screen.
+            when (merged /= state.progress && untouched state) $
+              fork $ liftEffect $ Started <$> Now.now
             pure state { progress = merged }
 
   Pushed progress ok ->
     if ok then pure state { sent = Just progress, offline = false }
     else pure state { offline = true }
 
-current :: State -> Maybe Exercise
-current state = do
-  slug <- Array.head state.queue
-  Array.find (\e -> e.slug == slug) placeholder
+-- | Fixes which exercise the first item in the queue asks, from the progress
+-- | as it stands before that item is graded.
+asking :: State -> State
+asking state = state { shown = exercise }
+  where
+    exercise = do
+      slug <- Array.head state.queue
+      pool <- Array.find (\p -> p.slug == slug) items
+      pure $ pick (Progress.lookup slug state.progress) pool
+
+untouched :: State -> Boolean
+untouched state = state.answered == 0 && state.typed == "" && state.verdict == Nothing
 
 view :: State -> Dispatch Message -> ReactElement
 view state dispatch =
   H.div "app"
   [ H.div "topbar" [ H.div "pips" H.empty, H.span "panel-toggle" synced ]
-  , case current state of
+  , case state.shown of
       Nothing ->
         H.div "done-body"
         [ H.h1 "done-title" "Verbs"
@@ -190,16 +212,23 @@ view state dispatch =
         ]
       Just exercise ->
         H.div "done-body"
-        [ H.p "direction" exercise.hint
-        , H.h1 "prompt" exercise.prompt
-        , H.input_ "pair-paste verb-answer"
-            { placeholder: "…", spellCheck: false, autoCapitalize: "none", value: state.typed
-            , onChange: dispatch <| Typed <<< E.inputText
-            }
+        [ H.h1 "verb-sentence" exercise.prompt
+        , H.p "direction verb-target" $ "→ " <> exercise.hint
+        -- The box sits where the verb goes, so a lone input is never read as
+        -- "retype the sentence". It has to work wherever the verb falls:
+        -- first, last or in the middle.
+        , H.div "verb-frame"
+          [ H.span "verb-before" exercise.frame.before
+          , H.input_ "verb-answer"
+              { placeholder: "…", spellCheck: false, autoCapitalize: "none"
+              , value: state.typed
+              , onChange: dispatch <| Typed <<< E.inputText
+              }
+          , H.span "verb-after" exercise.frame.after
+          ]
         , case state.verdict of
             Nothing -> H.empty
-            Just true -> H.p "milestone flourish" "Right."
-            Just false -> H.p "milestone remark" $ said exercise
+            Just verdict -> said exercise verdict
         ]
   , H.div "controls"
     [ case state.verdict of
@@ -210,6 +239,20 @@ view state dispatch =
   where
     synced = if isJust state.sent && not state.offline then "synced" else ""
 
-    said exercise = case exercise.answer of
-      Checked expected -> expected
-      SelfGraded m -> m.model
+    said exercise verdict = case exercise.answer of
+      SelfGraded m ->
+        H.p "milestone remark" m.model
+      Checked expected ->
+        let sentence = exercise.frame.before <> expected <> exercise.frame.after
+        in case verdict of
+          Exact ->
+            H.p "milestone flourish" $ "✓ " <> sentence
+          -- Counted, and said so, with the accent shown back: it is a real
+          -- mistake, just not the one being drilled.
+          Unaccented ->
+            H.fragment
+            [ H.p "milestone flourish" $ "✓ " <> sentence
+            , H.p "milestone remark verb-accent" $ "right — " <> expected
+            ]
+          Wrong ->
+            H.p "milestone remark" sentence
