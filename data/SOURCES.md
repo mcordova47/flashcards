@@ -32,3 +32,15 @@ generator ignores them; the examples are the obvious raw material for #3.
 
 [sheet]: https://docs.google.com/spreadsheets/d/1vz4CgmSxP7fFmoa-uzjXPmHckkjSfl2evmRyG5EsH5w/edit
 [owl]: https://onewholearns.com/vocabulary/top-1000
+
+## `es-paraphrase.csv` — Spanish paraphrase prompts
+
+Written by hand for #17. Each row is an English prompt, a model answer, the
+verb, tense and person the answer uses, and the one trap the prompt exists to
+spring: a wrong verb (ser/estar, saber/conocer) or a wrong tense
+(preterite/imperfect, subjunctive/present). The rubric is generated from those
+columns, so the model answer is a worked example, not the only right answer.
+
+`npm run check-paraphrase` proves every model answer uses the form it claims,
+by looking it up in `es-verbs.csv`, and refuses any word outside `es-1000.csv`
+that the row's `Notes` does not explain.

@@ -28,11 +28,12 @@ npm start        # http://localhost:8000
 | `npm start` | Dev server, rebuilds on change |
 | `npm run build` | Compile and bundle into `public/` |
 | `npm test` | Unit specs — the pure core |
-| `npm run verify` | Browser suites against a real Chrome |
+| `npm run verify` | The paraphrase check, then browser suites against a real Chrome |
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
 | `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
 | `npm run sync-verbs` | Regenerate the conjugation module from `data/es-verbs.csv` |
 | `npm run check-verbs` | Print every cell that deviates from the regular pattern — the review of the table |
+| `npm run check-paraphrase` | Prove every paraphrase model answer uses the form it claims, in deck vocabulary |
 | `npm run rename` | Report words whose spelling changed, and pin the ones that should keep their history |
 | `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
 
@@ -604,6 +605,32 @@ before it writes anything.
 It also lists the verb × tense items that are wholly regular, nearly all of
 them imperfects, for #16 to decide about. Printed, not acted on.
 
+### The paraphrase corpus
+
+`data/es-paraphrase.csv` holds the prompts for #10: *how would you tell me the
+door is open?* with a model answer, the verb, tense and person that answer
+uses, and the one trap the prompt exists to spring — a wrong verb (ser/estar,
+saber/conocer) or a wrong tense (preterite/imperfect, subjunctive/present).
+The rubric is generated from those columns, so the model answer is a worked
+example rather than the only right answer. Written by hand in #17.
+
+Unlike `check-verbs`, `check-paraphrase` is a gate, and `npm run verify` runs
+it first. It fails a row whose model answer does not contain the exact form the
+conjugation table gives for its verb, tense and person — accents included,
+since `lei` for `leí` is precisely what it exists to catch. It fails a verb
+trap outside the present, where the learner would be choosing a tense as well.
+And it fails any word that is neither in the deck nor a regular inflection of a
+deck word, unless the row's `Notes` names it: the vocabulary rule is the one
+most likely to slip, because nothing else would notice. "Regular" matters — a
+stem-changing deck verb outside the table, like `entender`, is refused as
+`entiende`, and wants a Note saying it is a stem change rather than one
+claiming it is not in the deck.
+
+What it does not enforce is the other half of "one trap": a tense trap may
+still put a confusable verb in front of the learner. Four rows do, on purpose —
+*supe* and *conocí* are there for what their preterites mean — and each says so
+in `Notes`.
+
 ## The study model
 
 Cards are shown **Spanish → English** and graded by hand: tap to flip, then
@@ -708,12 +735,14 @@ a backup file.
 ```
 data/es-1000.csv                     committed snapshot of the sheet
 data/es-verbs.csv                    38 irregular verbs, 760 conjugated cells
+data/es-paraphrase.csv               41 prompts for #10, each with one trap
 tools/sync-deck.mjs                  sheet -> CSV -> generated module
 tools/rename.mjs                     pins a slug when a word is respelled
 tools/deck-source.mjs                the language table, shared by both
 tools/sync-verbs.mjs                 conjugation CSV -> generated module
 tools/check-verbs.mjs                prints what deviates; the list IS the review
-tools/verb-source.mjs                what a row may be, shared by both
+tools/verb-source.mjs                what a row may be, and the regular forms
+tools/check-paraphrase.mjs           forms and vocabulary; a gate, run by verify
 netlify/functions/progress.mjs       the blob store, and all of the server
 scanner.js                           the QR decoder, bundled on its own
 src/Flashcards/
