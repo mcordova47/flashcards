@@ -97,6 +97,57 @@ applyGrade   :: Grade -> Instant -> Maybe CardProgress -> CardProgress
 touches `localStorage`. Corrupt or future-versioned data starts you over rather
 than crashing — losing a streak beats a white screen.
 
+## The rules underneath
+
+Nearly every decision below is an instance of one of these. If something is not
+written down, work from here — and if the answer you get disagrees with the
+code, one of the two is wrong and it is worth finding out which.
+
+**Local-first. The network is an optimisation, never a dependency.** Everything
+works with no signal; sync, pronunciation and the QR decoder are things that
+happen when they can. Nothing waits on a request to let you answer a card.
+
+**Never discard someone's history. Where the right answer is unknown, keep it
+and say so.** Progress whose fingerprint no longer matches is placed anyway and
+warned about, because that placement is what the app has been showing all
+along. A slug the deck has never heard of is kept. A blob this device cannot
+read is left exactly where it is rather than overwritten.
+
+**Silence is for the network. Everything else reports where it can be acted
+on.** A failed sync says nothing on the card screen — interrupting a review to
+mention a dropped request would be worse than the request — and says everything
+in the panel, which is where you go to ask.
+
+**Prefer a rule that cannot drift to a flag that must be maintained.** "Is
+everything synced" compares the progress against what was last sent, rather
+than setting a dirty bit that has to be cleared everywhere it could go stale. A
+milestone is a subtraction between two standings, not a stored "already
+celebrated". The failure mode of the flag version is a line that claims to be
+up to date while quietly not being, which is the one thing it exists to rule
+out.
+
+**Where a machine cannot tell two intentions apart, it warns and the reader
+decides.** A slug that no longer matches its word is either a rename or a
+mistake and they are identical from here, so `sync-deck` warns rather than
+failing. `rename` reports what changed and waits to be told which it was. A
+fetch prints what it is about to overwrite and refuses to guess whether the
+sheet or the snapshot is right.
+
+**Test the thing that ships.** The browser suites call the real endpoint
+handler against an in-memory store rather than a reimplementation of it. The QR
+test decodes the SVG that actually ships, because a transposed grid still looks
+exactly like a QR code. Both decoders are exercised, because Chrome would
+otherwise only ever run the one iPhones never take.
+
+**Refuse the future, read the past.** Every payload an older version wrote
+stays readable, and absent fields take their starting value rather than an
+invented one. Only a version from the future is rejected, because that is the
+only one whose meaning cannot be known.
+
+**State facts, not praise.** "Nothing due for another 4 hours." "You've now
+mastered 200 words." The app can be pleased without being the sort that tells
+you how well you are doing.
+
 ## Progress
 
 `•••` → **See your progress** opens a sheet with three figures, a chart, and a
@@ -586,13 +637,15 @@ indefinitely.
 
 ## Roadmap
 
-- **Now** — ES→EN, self-graded, Leitner, `localStorage`, installable and
-  offline, cross-device sync with a visible state, pronunciation, deployed.
-- **Next** — undo the last grade, the only action in the app you cannot
-  currently take back.
-- **Later** — example sentences generated at build time under a
-  high-frequency-vocabulary constraint, EN→ES with every valid answer shown on
-  the reveal, a progress screen, more languages, FSRS scheduling.
+- **Now** — Spanish and German, recognition graduating to production, Leitner,
+  installable and offline, cross-device sync with a visible state and pairing
+  by link, code or camera, undo, a progress sheet with leech drilling,
+  milestones, pronunciation. Deployed.
+- **Next** — a second page for verb drills, sharing the scheduler and not the
+  card model: see #8, which is the decision record, and its children, which are
+  the work.
+- **Later** — example sentences under a high-frequency-vocabulary constraint
+  (#3), more languages, FSRS scheduling.
 
 ## Notes
 
