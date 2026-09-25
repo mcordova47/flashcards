@@ -16,6 +16,7 @@ import Test.Flashcards.ProgressSpec as ProgressSpec
 import Test.Flashcards.SchedulerSpec as SchedulerSpec
 import Test.Flashcards.StatsSpec as StatsSpec
 import Test.Flashcards.SyncSpec as SyncSpec
+import Test.Flashcards.VerbsSpec as VerbsSpec
 import Test.Spec.Runner.Node (runSpecAndExitProcess)
 import Test.Spec.Reporter.Console (consoleReporter)
 
@@ -31,3 +32,4 @@ main = runSpecAndExitProcess [ consoleReporter ] do
   SyncSpec.spec
   MilestoneSpec.spec
   ExerciseSpec.spec
+  VerbsSpec.spec

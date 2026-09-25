@@ -10,6 +10,8 @@
     "test": "spago test",
     "verify": "npm run build && node test/browser/run.mjs",
     "sync-deck": "node tools/sync-deck.mjs",
+    "sync-verbs": "node tools/sync-verbs.mjs",
+    "check-verbs": "node tools/check-verbs.mjs",
     "rename": "node tools/rename.mjs",
     "preview": "node tools/preview-milestones.mjs"
   },
