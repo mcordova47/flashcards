@@ -153,6 +153,17 @@ failing. `rename` reports what changed and waits to be told which it was. A
 fetch prints what it is about to overwrite and refuses to guess whether the
 sheet or the snapshot is right.
 
+**Machine-check correctness before; judge register in use.** There is one
+reader and he wrote the content, so a review that means reading the answers
+first spends the very thing it protects — the first sighting of an item is the
+most informative one there is, and a proofread spends all of them at once. So
+the checks prove what a check can: that a model answer uses the form it claims,
+that a sentence agrees with the conjugation table, that every word is deck
+vocabulary or explained in a note. Whether it sounds like a person is judged at
+the reveal, having just tried to produce it, which is the better moment for
+that judgment anyway. A stiff sentence teaches the right grammar in the
+meantime; a spoiled item does not come back.
+
 **Test the thing that ships.** The browser suites call the real endpoint
 handler against an in-memory store rather than a reimplementation of it. The QR
 test decodes the SVG that actually ships, because a transposed grid still looks
