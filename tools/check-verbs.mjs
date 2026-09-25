@@ -11,68 +11,7 @@
 // Exits non-zero only for structural failures - a gap, a duplicate, an unknown
 // tense. Deviations are the point, not a failure.
 
-import { TENSES, PERSONS, loadTable, CSV } from "./verb-source.mjs"
-
-// Present, preterite, imperfect and present subjunctive, by person, for each
-// class. The subjunctive is built on the infinitive's stem rather than on the
-// yo form, so `tenga` is reported: the rule that derives it is the thing a
-// learner has to know.
-const ENDINGS = {
-  ar: {
-    present: ["o", "as", "a", "amos", "an"],
-    preterite: ["é", "aste", "ó", "amos", "aron"],
-    imperfect: ["aba", "abas", "aba", "ábamos", "aban"],
-    subjunctive: ["e", "es", "e", "emos", "en"],
-  },
-  er: {
-    present: ["o", "es", "e", "emos", "en"],
-    preterite: ["í", "iste", "ió", "imos", "ieron"],
-    imperfect: ["ía", "ías", "ía", "íamos", "ían"],
-    subjunctive: ["a", "as", "a", "amos", "an"],
-  },
-  ir: {
-    present: ["o", "es", "e", "imos", "en"],
-    preterite: ["í", "iste", "ió", "imos", "ieron"],
-    imperfect: ["ía", "ías", "ía", "íamos", "ían"],
-    subjunctive: ["a", "as", "a", "amos", "an"],
-  },
-}
-
-const STRONG = "aeoáéó"
-const ACCENTED = "áéíóú"
-const PLAIN = { á: "a", é: "e", í: "i", ó: "o", ú: "u" }
-
-// Syllables, as far as a written accent cares. Adjacent vowels share a
-// syllable unless both are strong (a, e, o) or the weak one carries the
-// accent - so `vió` is one syllable, which is the whole reason the 2010 rules
-// write it `vio`, while `oí` is two.
-const syllables = word => {
-  let count = 0, previous = null
-  for (const c of word) {
-    if (!"aeiouáéíóúü".includes(c)) { previous = null; continue }
-    const hiatus = previous !== null
-      && ((STRONG.includes(previous) && STRONG.includes(c))
-          || "íú".includes(previous) || "íú".includes(c))
-    if (previous === null || hiatus) count++
-    previous = c
-  }
-  return count
-}
-
-// A monosyllable takes no written accent (vio, dio, fue, vi), except for the
-// diacritic ones that tell two words apart - and those are exactly what should
-// show up as deviations, since `dé` is not the regular `de`.
-const orthography = word =>
-  syllables(word) === 1 ? [...word].map(c => PLAIN[c] ?? c).join("") : word
-
-export const regular = (infinitive, tense, person) => {
-  // `oír` and `reír` are -ir verbs whose infinitive carries a hiatus accent.
-  const cls = infinitive.slice(-2).replace("í", "i")
-  const stem = infinitive.slice(0, -2)
-  const endings = ENDINGS[cls]
-  if (!endings) return null
-  return orthography(stem + endings[tense][PERSONS.findIndex(p => p.name === person)])
-}
+import { TENSES, PERSONS, ENDINGS, loadTable, regular, CSV } from "./verb-source.mjs"
 
 const { verbs, errors } = loadTable()
 
