@@ -36,16 +36,27 @@ for (const lang of chosen) {
     const body = await res.text()
     if (!body.startsWith("Order,")) fail("the tab did not return the expected CSV header")
     const previous = fs.existsSync(lang.csv) ? fs.readFileSync(lang.csv, "utf-8") : ""
-    // The sheet exports CRLF. Normalise, or every fetch rewrites every line
-    // and buries the real change.
-    const normalised = body.replace(/\r\n/g, "\n")
+    // The sheet exports CRLF and no trailing newline. Normalise both, or
+    // every fetch rewrites every line, or reports one phantom difference at
+    // the end of the file for ever.
+    const normalised = body.replace(/\r\n/g, "\n").replace(/\n*$/, "\n")
     fs.writeFileSync(lang.csv, normalised)
+
+    // Say *what* differs, not just how much. The sheet overwrites the
+    // snapshot wholesale, so a row that has been improved here and never
+    // pushed back comes silently undone - which is how four glosses that were
+    // disambiguated with some care went back to being ambiguous.
     const was = previous.split("\n"), now = normalised.split("\n")
-    const differing = now.filter((line, i) => line !== was[i]).length
-    // Loud, because the sheet overwrites local edits and decks get edited in
-    // both places.
+    const differing = now
+      .map((line, i) => ({ line, before: was[i] }))
+      .filter(row => row.line !== row.before && (row.line || row.before))
     console.log(`  wrote ${lang.csv}`
-      + (differing ? ` - ${differing} row(s) differ from the local snapshot` : " - unchanged"))
+      + (differing.length ? ` - ${differing.length} row(s) differ from the local snapshot` : " - unchanged"))
+    for (const { line, before } of differing.slice(0, 20)) {
+      console.log(`    - ${before ?? "(absent)"}`)
+      console.log(`    + ${line || "(absent)"}`)
+    }
+    if (differing.length > 20) console.log(`    ... and ${differing.length - 20} more`)
 
     // A pinned slug is the only thing tying a renamed card to its history, and
     // the sheet overwrites the snapshot wholesale. Losing one is silent - the
