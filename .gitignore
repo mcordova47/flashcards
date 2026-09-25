@@ -4,6 +4,7 @@
 /preview/
 /.spago
 /generated-docs/
+/.claude/worktrees/
 /.psc*
 /.purs*
 /.psa*
