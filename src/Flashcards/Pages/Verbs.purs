@@ -74,10 +74,20 @@ init = do
     , loaded: false
     }
 
--- | Nothing is generated from a deck yet, so there is nothing for a
--- | fingerprint to certify. #12 gives the table one.
+-- | There is nothing for a fingerprint to certify here, and there never will
+-- | be.
+-- |
+-- | What one attests is that a rank still names the word it named when the
+-- | payload was written — which matters only for entries keyed by rank, and
+-- | this namespace has none: it was born at v5 and `byRank` above is `const
+-- | Nothing`. `Payload.adopt` reaches for the fingerprint only when some entry
+-- | lacks a slug, so for these payloads it is never compared.
+-- |
+-- | #12 does give the table a fingerprint, and it is deliberately not used
+-- | here: wiring it in would pull all 760 cells into the bundle to compute a
+-- | value nothing reads.
 fingerprint :: String
-fingerprint = "placeholder"
+fingerprint = "none"
 
 update :: State -> Message -> Transition Message State
 update state = case _ of
