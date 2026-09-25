@@ -31,6 +31,8 @@ npm start        # http://localhost:8000
 | `npm run verify` | Browser suites against a real Chrome |
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
 | `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
+| `npm run sync-verbs` | Regenerate the conjugation module from `data/es-verbs.csv` |
+| `npm run check-verbs` | Print every cell that deviates from the regular pattern — the review of the table |
 | `npm run rename` | Report words whose spelling changed, and pin the ones that should keep their history |
 | `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
 
@@ -563,6 +565,45 @@ failed for one on a phone is how an app stops being opened. Which is the
 opposite of how slugs treat accents, where the accent is the entire difference
 between two words.
 
+### The conjugation table
+
+`data/es-verbs.csv` holds 38 irregular verbs by present, preterite, imperfect
+and present subjunctive, by five persons — no *vosotros*, since the deck
+prefers es-MX, and *usted* and *ustedes* ride on the third persons. 760 cells,
+generated into `Flashcards.Data.Verbs.Spanish` by `sync-verbs`.
+
+Nobody reads 760 cells, so `check-verbs` works out what the *regular* form
+would be for each and prints only the ones that differ. **That list is the
+review.** Every line in it should be an irregularity with a name — suppletion,
+a strong preterite, a stem change, a *yo* form the subjunctive inherits, or
+orthography: `llegué`, `sigo`, `leyó`, the diacritic on `dé`. A deviation that
+is not one of those is an error in the table, and a verb with no deviations at
+all is a verb that should not be in the table.
+
+The regular form gets the 2010 monosyllable rule applied before it is
+compared, or `ver`'s entirely regular preterite would be reported for writing
+`vio`. `dar` still is reported, because `di, dio` is an `-ar` verb taking
+`-er` endings, which is the irregularity and not the accent. The comparison is
+exact: `Exercise.matches` forgives accents, which is right for a phone and
+wrong for a table whose whole job is to store them.
+
+**What it cannot see.** It prints only what *differs*, so a cell whose true
+form is irregular but which was written as the regular one is invisible — put
+`traducí` where `traduje` belongs and nothing is printed for that cell. A
+wholly regular verb is caught by name, and a wholly regular tense shows up in
+the regular-items list, but a single regularised cell inside an otherwise
+irregular tense shows up as nothing at all. That is what the hand-written
+assertions in `VerbsSpec` are for, and why adding a verb wants a second look
+at its paradigm rather than a clean run.
+
+It exits non-zero only for structural damage — a gap, a duplicate, a cell out
+of order — so it is a review to read rather than a gate to pass, and it is not
+part of `npm run verify`. `sync-verbs` refuses those same structural faults
+before it writes anything.
+
+It also lists the verb × tense items that are wholly regular, nearly all of
+them imperfects, for #16 to decide about. Printed, not acted on.
+
 ## The study model
 
 Cards are shown **Spanish → English** and graded by hand: tap to flip, then
@@ -666,9 +707,13 @@ a backup file.
 
 ```
 data/es-1000.csv                     committed snapshot of the sheet
+data/es-verbs.csv                    38 irregular verbs, 760 conjugated cells
 tools/sync-deck.mjs                  sheet -> CSV -> generated module
 tools/rename.mjs                     pins a slug when a word is respelled
 tools/deck-source.mjs                the language table, shared by both
+tools/sync-verbs.mjs                 conjugation CSV -> generated module
+tools/check-verbs.mjs                prints what deviates; the list IS the review
+tools/verb-source.mjs                what a row may be, shared by both
 netlify/functions/progress.mjs       the blob store, and all of the server
 scanner.js                           the QR decoder, bundled on its own
 src/Flashcards/
@@ -684,7 +729,9 @@ src/Flashcards/
   Payload.purs                       the bytes progress travels as
   Sync.purs                          the other device's bytes
   Types/{Card,Grade,Progress}.purs
+  Verbs/Table.purs                   what a conjugation table is made of
   Data/Deck/Spanish.purs             GENERATED - do not edit
+  Data/Verbs/Spanish.purs            GENERATED - do not edit
 test/Flashcards/SchedulerSpec.purs
 ```
 
