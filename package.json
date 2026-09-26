@@ -13,6 +13,7 @@
     "sync-verbs": "node tools/sync-verbs.mjs",
     "sync-sentences": "node tools/sync-sentences.mjs",
     "check-verbs": "node tools/check-verbs.mjs",
+    "sync-paraphrase": "node tools/sync-paraphrase.mjs",
     "check-paraphrase": "node tools/check-paraphrase.mjs",
     "check-sentences": "node tools/check-sentences.mjs",
     "rename": "node tools/rename.mjs",

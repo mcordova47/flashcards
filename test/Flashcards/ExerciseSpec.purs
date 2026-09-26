@@ -54,7 +54,9 @@ spec = do
   describe "an item with more than one way to ask it" do
     let
       ask slug prompt =
-        { slug: Slug slug, prompt, hint: "", frame: { before: "", after: "" }, answer: Checked "" } :: Exercise
+        { slug: Slug slug, prompt, hint: ""
+        , answer: Checked { expected: "", frame: { before: "", after: "" } }
+        } :: Exercise
       bank =
         [ ask "tener.preterite" "tengo mucho trabajo"
         , ask "tener.imperfect" "tengo mucho trabajo"

@@ -1,10 +1,13 @@
 -- | What the verb drills are, as distinct from what they do.
 module Flashcards.Pages.Verbs.Model
   ( Message(..)
+  , Phase(..)
   , State
   , namespace
   )
   where
+
+import Prelude
 
 import Data.DateTime.Instant (Instant)
 import Data.Maybe (Maybe)
@@ -34,8 +37,8 @@ type State =
   -- | back off the screen.
   , answered :: Int
   , typed :: String
-  -- | `Nothing` until the answer has been checked.
-  , verdict :: Maybe Verdict
+  -- | How far the current question has got.
+  , phase :: Phase
   , syncKey :: Maybe String
   -- | What the server is known to hold. See the study page, where the same
   -- | comparison decides whether the panel may claim to be up to date.
@@ -44,11 +47,34 @@ type State =
   , loaded :: Boolean
   }
 
+-- | Where the current question has got to.
+-- |
+-- | One field rather than a flag each, because the two kinds of answer end
+-- | differently — a typed one is graded by the comparison, a self-graded one
+-- | by the reader — and two booleans would have to be kept agreeing.
+data Phase
+  -- | Waiting: for something typed, or for a tap to reveal.
+  = Asked
+  -- | Typed and compared, and the grade followed from that.
+  | Compared Verdict
+  -- | Revealed, and waiting for the reader to say how it went.
+  | Revealed
+  -- | Self-graded, and the grade on its way to `Graded`. Here so that a
+  -- | second tap on *Again* or *Got it* cannot grade twice — the typed side
+  -- | gets that from `Compared`, which it reaches immediately; this side has
+  -- | to wait for the clock, and would otherwise stay tappable meanwhile.
+  | Judging
+
+derive instance Eq Phase
+
 data Message
   = Loaded { progress :: Progress, syncKey :: Maybe String }
   | Started Instant
   | Typed String
+  -- | Check what was typed, or reveal what a self-graded answer was.
   | Answer
+  -- | How the reader says they did, where nothing can check it for them.
+  | Judge Grade
   | Graded Grade Instant
   | Next
   | Sync

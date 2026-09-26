@@ -29,13 +29,15 @@ import Effect.Now as Now
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Events as E
 import Elmish.HTML.Styled as H
+import Flashcards.Data.Paraphrase.Spanish (prompts)
 import Flashcards.Data.Sentences.Spanish (sentences)
 import Flashcards.Data.Verbs.Spanish (table)
 import Flashcards.Exercise (Answer(..), Pool, Verdict(..), matches, pick)
 import Flashcards.Exercise as Exercise
 import Flashcards.Page as Page
-import Flashcards.Pages.Verbs.Model (Message(..), State, namespace)
-import Flashcards.Pages.Verbs.Model (Message, State) as Model
+import Flashcards.Pages.Verbs.Model (Message(..), Phase(..), State, namespace)
+import Flashcards.Pages.Verbs.Model (Message, Phase, State) as Model
+import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Payload as Payload
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Storage as Storage
@@ -47,8 +49,14 @@ import Flashcards.Verbs.Shift as Shift
 
 -- | Every item there is, in the order new ones are introduced. Static, so
 -- | built once for the life of the page.
+-- |
+-- | Two exercise types, one list. The page does not know which is which — it
+-- | reads `Answer`, and the shift and the paraphrase differ by which
+-- | constructor they produce. Shift items come first because they are the
+-- | easier question, and the order of this list is the curriculum.
 items :: Array Pool
-items = Exercise.pools $ Shift.exercises table sentences
+items = Exercise.pools $
+  Shift.exercises table sentences <> Paraphrase.exercises prompts
 
 -- | No deck, so nothing can be placed by rank — and nothing needs to be. This
 -- | namespace has no payloads older than v5, because it has no payloads older
@@ -68,7 +76,7 @@ init = do
     , shown: Nothing
     , answered: 0
     , typed: ""
-    , verdict: Nothing
+    , phase: Asked
     , syncKey: Nothing
     , sent: Nothing
     , offline: false
@@ -107,18 +115,27 @@ update state = case _ of
   Typed text ->
     pure state { typed = text }
 
-  Answer -> case state.shown, state.verdict of
-    Just exercise, Nothing -> do
-      let
-        verdict = case exercise.answer of
-          Checked expected -> matches expected state.typed
-          -- Nothing self-grades yet. #10 brings the first that does, and
-          -- with it a reveal of its own.
-          SelfGraded _ -> Exact
-        grade = if verdict == Wrong then Again else GotIt
-      fork $ liftEffect $ Graded grade <$> Now.now
-      pure state { verdict = Just verdict }
+  -- Both kinds of answer arrive here, and part company over whether anything
+  -- can decide them. A typed one is compared and graded on the spot; a
+  -- self-graded one is only revealed, and waits for `Judge`.
+  Answer -> case state.shown, state.phase of
+    Just exercise, Asked -> case exercise.answer of
+      Checked { expected } -> do
+        let
+          verdict = matches expected state.typed
+          grade = if verdict == Wrong then Again else GotIt
+        fork $ liftEffect $ Graded grade <$> Now.now
+        pure state { phase = Compared verdict }
+      SelfGraded _ ->
+        pure state { phase = Revealed }
     _, _ ->
+      pure state
+
+  Judge grade -> case state.phase of
+    Revealed -> do
+      fork $ liftEffect $ Graded grade <$> Now.now
+      pure state { phase = Judging }
+    _ ->
       pure state
 
   Graded grade now -> case Array.head state.queue of
@@ -136,12 +153,18 @@ update state = case _ of
         queue = case grade of
           Again -> Scheduler.requeue slug 0 state.queue
           GotIt -> state.queue
+        graded = state { progress = progress, queue = queue, answered = state.answered + 1 }
       forkVoid $ liftEffect $ Storage.save namespace fingerprint progress
       when (Array.length queue <= 1) $ fork $ pure Sync
-      pure state { progress = progress, queue = queue, answered = state.answered + 1 }
+      -- A self-graded answer has no reveal left to read — the reader has just
+      -- read it, and said how it went — so its grade is also its `Next`. A
+      -- typed one stops on the comparison, which is the thing to look at.
+      pure $ case state.phase of
+        Judging -> advance graded
+        _ -> graded
 
   Next ->
-    pure $ asking state { typed = "", verdict = Nothing, queue = Array.drop 1 state.queue }
+    pure $ advance state
 
   Sync -> case state.syncKey of
     Nothing ->
@@ -197,8 +220,12 @@ asking state = state { shown = exercise }
       pool <- Array.find (\p -> p.slug == slug) items
       pure $ pick (Progress.lookup slug state.progress) pool
 
+-- | On to the next question, whatever is left of the queue.
+advance :: State -> State
+advance state = asking state { typed = "", phase = Asked, queue = Array.drop 1 state.queue }
+
 untouched :: State -> Boolean
-untouched state = state.answered == 0 && state.typed == "" && state.verdict == Nothing
+untouched state = state.answered == 0 && state.typed == "" && state.phase == Asked
 
 view :: State -> Dispatch Message -> ReactElement
 view state dispatch =
@@ -211,48 +238,74 @@ view state dispatch =
         , H.p "done-stats" $ if state.loaded then "Nothing left to drill." else ""
         ]
       Just exercise ->
-        H.div "done-body"
-        [ H.h1 "verb-sentence" exercise.prompt
-        , H.p "direction verb-target" $ "→ " <> exercise.hint
-        -- The box sits where the verb goes, so a lone input is never read as
-        -- "retype the sentence". It has to work wherever the verb falls:
-        -- first, last or in the middle.
-        , H.div "verb-frame"
-          [ H.span "verb-before" exercise.frame.before
-          , H.input_ "verb-answer"
-              { placeholder: "…", spellCheck: false, autoCapitalize: "none"
-              , value: state.typed
-              , onChange: dispatch <| Typed <<< E.inputText
-              }
-          , H.span "verb-after" exercise.frame.after
-          ]
-        , case state.verdict of
-            Nothing -> H.empty
-            Just verdict -> said exercise verdict
-        ]
-  , H.div "controls"
-    [ case state.verdict of
-        Nothing -> H.button_ "grade got-it" { onClick: dispatch <| Answer } "Check"
-        _ -> H.button_ "grade got-it" { onClick: dispatch <| Next } "Next"
-    ]
+        H.div "done-body" $ case exercise.answer of
+          Checked { expected, frame } ->
+            [ H.h1 "verb-sentence" exercise.prompt
+            , H.p "direction verb-target" $ "→ " <> exercise.hint
+            -- The box sits where the verb goes, so a lone input is never read
+            -- as "retype the sentence". It has to work wherever the verb
+            -- falls: first, last or in the middle.
+            , H.div "verb-frame"
+              [ H.span "verb-before" frame.before
+              , H.input_ "verb-answer"
+                  { placeholder: "…", spellCheck: false, autoCapitalize: "none"
+                  , value: state.typed
+                  , onChange: dispatch <| Typed <<< E.inputText
+                  }
+              , H.span "verb-after" frame.after
+              ]
+            , case state.phase of
+                Compared verdict -> compared frame expected verdict
+                _ -> H.empty
+            ]
+          SelfGraded { model, rubric } ->
+            [ H.h1 "verb-prompt" exercise.prompt
+            , case state.phase of
+                Asked -> H.empty
+                Compared _ -> H.empty
+                _ ->
+                  H.fragment
+                  [ H.p "verb-model" model
+                  -- Why the answer is what it is, which is the whole exercise:
+                  -- many sentences are right and only these properties are
+                  -- required, so this is what there is to grade against.
+                  , H.div "verb-rubric" $ rubric <#> H.p "verb-check"
+                  ]
+            ]
+  , H.div "controls" controls
   ]
   where
     synced = if isJust state.sent && not state.offline then "synced" else ""
 
-    said exercise verdict = case exercise.answer of
-      SelfGraded m ->
-        H.p "milestone remark" m.model
-      Checked expected ->
-        let sentence = exercise.frame.before <> expected <> exercise.frame.after
-        in case verdict of
-          Exact ->
-            H.p "milestone flourish" $ "✓ " <> sentence
-          -- Counted, and said so, with the accent shown back: it is a real
-          -- mistake, just not the one being drilled.
-          Unaccented ->
-            H.fragment
-            [ H.p "milestone flourish" $ "✓ " <> sentence
-            , H.p "milestone remark verb-accent" $ "right — " <> expected
-            ]
-          Wrong ->
-            H.p "milestone remark" sentence
+    controls = case state.phase of
+      Compared _ ->
+        [ H.button_ "grade got-it" { onClick: dispatch <| Next } "Next" ]
+      -- Nothing checked this, so nothing can say how it went but the reader.
+      Asked ->
+        [ H.button_ "grade got-it" { onClick: dispatch <| Answer } ask ]
+      -- `Revealed` and `Judging` look the same on purpose: the buttons stay
+      -- put across the frame between the tap and the grade landing, and
+      -- `Judge` ignores the second tap rather than the view hiding it.
+      _ ->
+        [ H.button_ "grade again" { onClick: dispatch <| Judge Again } "Again"
+        , H.button_ "grade got-it" { onClick: dispatch <| Judge GotIt } "Got it"
+        ]
+
+    ask = case _.answer <$> state.shown of
+      Just (SelfGraded _) -> "Reveal"
+      _ -> "Check"
+
+    compared frame expected verdict =
+      let sentence = frame.before <> expected <> frame.after
+      in case verdict of
+        Exact ->
+          H.p "milestone flourish" $ "✓ " <> sentence
+        -- Counted, and said so, with the accent shown back: it is a real
+        -- mistake, just not the one being drilled.
+        Unaccented ->
+          H.fragment
+          [ H.p "milestone flourish" $ "✓ " <> sentence
+          , H.p "milestone remark verb-accent" $ "right — " <> expected
+          ]
+        Wrong ->
+          H.p "milestone remark" sentence

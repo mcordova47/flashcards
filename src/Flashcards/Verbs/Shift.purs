@@ -55,8 +55,10 @@ exercise table sentence target
         { slug: Slug $ sentence.infinitive <> "." <> name target
         , prompt: sentence.before <> sentence.form <> sentence.after
         , hint: name target
-        , frame: { before: sentence.before, after: sentence.after }
-        , answer: Checked expected
+        , answer: Checked
+            { expected
+            , frame: { before: sentence.before, after: sentence.after }
+            }
         }
 
 -- | Every exercise the bank yields: each sentence into every tense it is not

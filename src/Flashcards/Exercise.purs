@@ -36,8 +36,9 @@ import Flashcards.Types.Progress (CardProgress)
 type Rubric = Array String
 
 data Answer
-  -- | Typed, compared, and the grade follows from the comparison.
-  = Checked String
+  -- | Typed, compared, and the grade follows from the comparison. `frame` is
+  -- | the words shown either side of the box, which only a typed answer has.
+  = Checked { expected :: String, frame :: Frame }
   -- | Revealed, and the reader grades themselves against the reasons.
   | SelfGraded { model :: String, rubric :: Rubric }
 
@@ -58,7 +59,6 @@ type Exercise =
   { slug :: Slug
   , prompt :: String
   , hint :: String
-  , frame :: Frame
   , answer :: Answer
   }
 

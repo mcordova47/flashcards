@@ -27,7 +27,7 @@ spec = do
           e.slug `shouldEqual` Slug "tener.preterite"
           e.prompt `shouldEqual` "tengo mucho trabajo"
           e.hint `shouldEqual` "preterite"
-          e.frame `shouldEqual` { before: "", after: " mucho trabajo" }
+          frameOf e `shouldEqual` Just { before: "", after: " mucho trabajo" }
           expected e `shouldEqual` Just "tuve"
 
     it "takes the form from the table, accent and all" do
@@ -37,7 +37,7 @@ spec = do
       case exercise table puedo Preterite of
         Nothing -> fail "no exercise"
         Just e -> do
-          e.frame `shouldEqual` { before: "no ", after: " dormir" }
+          frameOf e `shouldEqual` Just { before: "no ", after: " dormir" }
           expected e `shouldEqual` Just "pude"
 
     it "and one that is not in the present to start with" do
@@ -84,7 +84,12 @@ spec = do
 
 expected :: Exercise -> Maybe String
 expected e = case e.answer of
-  Checked form -> Just form
+  Checked c -> Just c.expected
+  SelfGraded _ -> Nothing
+
+frameOf :: Exercise -> Maybe { before :: String, after :: String }
+frameOf e = case e.answer of
+  Checked c -> Just c.frame
   SelfGraded _ -> Nothing
 
 sentence :: String -> String -> String -> String -> Tense -> Person -> Sentence

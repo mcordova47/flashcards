@@ -34,6 +34,7 @@ npm start        # http://localhost:8000
 | `npm run sync-verbs` | Regenerate the conjugation module from `data/es-verbs.csv` |
 | `npm run sync-sentences` | Regenerate the tense-shift sentence module from `data/es-sentences.csv` |
 | `npm run check-verbs` | Print every cell that deviates from the regular pattern — the review of the table |
+| `npm run sync-paraphrase` | Regenerate the paraphrase prompt module from `data/es-paraphrase.csv` |
 | `npm run check-paraphrase` | Prove every paraphrase model answer uses the form it claims, in deck vocabulary |
 | `npm run check-sentences` | Prove every tense-shift sentence against the table, in deck vocabulary |
 | `npm run rename` | Report words whose spelling changed, and pin the ones that should keep their history |
@@ -567,11 +568,21 @@ paired for the drills. The endpoint's namespace pattern widened from `[a-z]{2}`
 to admit `verbs`, and stays bounded so one key still cannot become unlimited
 storage.
 
-An exercise is `{ slug, prompt, hint, frame, answer }` with `answer` being
-`Checked` or `SelfGraded`, and `frame` the words either side of the answer
-box. The page owns the session loop once; each drill type is a module
+An exercise is `{ slug, prompt, hint, answer }`, where `answer` is either
+`Checked { expected, frame }` — a typed answer, with the words shown either
+side of the box — or `SelfGraded { model, rubric }`. The frame belongs to the
+typed answer rather than to the exercise, because only a typed answer has
+one. The page owns the session loop once; each drill type is a module
 producing exercises, which is what lets them be built separately rather than
 as branches of one screen.
+
+**Two interactions, one loop.** A `Checked` answer is compared and graded on
+the spot, and stops on the comparison so there is something to read. A
+`SelfGraded` one is revealed and then waits: nothing compared it, so nothing
+can grade it but the reader, and their *Again* or *Got it* is also the move to
+the next question — the reveal has just been read. `State.phase` is one field
+rather than a flag each, because the two endings would otherwise have to be
+kept agreeing.
 
 **One item, many questions.** A flashcard slug resolves to one card; a drill's
 resolves to a `Pool`, and `Exercise.pick` chooses from it round-robin by the
@@ -665,7 +676,7 @@ grow into it.
 punctuation, a tense a shift cannot reach, or a verb the table spells
 differently, which is how `ir` stays `ir` and not the deck's `ir(se)`.
 
-### The paraphrase corpus
+### The paraphrase
 
 `data/es-paraphrase.csv` holds the prompts for #10: *how would you tell me the
 door is open?* with a model answer, the verb, tense and person that answer
@@ -690,6 +701,38 @@ What it does not enforce is the other half of "one trap": a tense trap may
 still put a confusable verb in front of the learner. Four rows do, on purpose —
 *supe* and *conocí* are there for what their preterites mean — and each says so
 in `Notes`.
+
+**The rubric is derived, not written.** `Flashcards.Verbs.Paraphrase` turns a
+row into three lines, and only the trap is phrased as a choice:
+
+```
+La puerta está abierta.
+
+  ·  estar, not ser
+  ·  present
+  ·  third person singular
+```
+
+Saying *"present, not preterite"* on a prompt whose tense was never in doubt
+teaches a confusion that was not there, and buries the line that matters. So
+the trap gets the *X, not Y*, and the other two are stated as fact.
+
+This is what makes self-grading honest. *Did I get it right* is vague on a
+question with many right answers; *did I use ser* is not.
+
+**Its items are `paraphrase.<id>`, deliberately not `verb.tense`.** The tense
+shift already uses that space, over six of the same verbs in tenses it
+reaches, so one space would have a paraphrase credit a shift and the other way
+about — and producing a whole sentence from English is not the skill of moving
+one verb. The `Id` column is frozen when the row is written and never derived
+from the prompt or the model, because #22 expects those to be reworded in use
+and a reworded row is the same item. The same reason a card is keyed by slug
+and not by rank.
+
+One prompt is one item, rather than one item per confusion: prompts that
+spring the same trap are not equally hard, and sharing a box would let the
+easy one answer for the difficult one. `ParaphraseSpec` holds both decisions —
+that every prompt has its own item, and that no item collides with the shift.
 
 ## The study model
 
@@ -803,8 +846,9 @@ tools/deck-source.mjs                the language table, shared by both
 tools/sync-verbs.mjs                 conjugation CSV -> generated module
 tools/check-verbs.mjs                prints what deviates; the list IS the review
 tools/verb-source.mjs                what a row may be, and the regular forms
+tools/paraphrase-source.mjs          what a paraphrase row may be
+tools/sync-paraphrase.mjs            paraphrase CSV -> generated module
 tools/check-paraphrase.mjs           forms and vocabulary; a gate, run by verify
-tools/verb-source.mjs                what a row may be, shared by both
 tools/sentence-source.mjs            what a sentence row may be
 tools/sync-sentences.mjs             sentence CSV -> generated module
 tools/check-sentences.mjs            forms and vocabulary; a gate, run by verify
@@ -815,8 +859,9 @@ src/Flashcards/
   Exercise.purs                      what every verb drill has in common
   Page.purs                          which page a path names
   Pages/Study.purs                   the card, the loop, the wiring
-  Pages/Verbs.purs                   the drills (#8), one exercise so far
+  Pages/Verbs.purs                   the drills (#8); both exercises, one loop
   Verbs/Shift.purs                   the tense shift (#16), pure
+  Verbs/Paraphrase.purs              the paraphrase and its rubric (#10), pure
   Pages/Study/Model.purs             one State and one Message, for all of it
   Pages/Study/Pairing.purs           getting a key from one device to another
   Pages/Study/{Panel,Progress}.purs  the ••• menu, and the sheet it opens

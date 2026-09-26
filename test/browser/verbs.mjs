@@ -11,6 +11,20 @@ const VERBS = "flashcards.verbs.v1"
 // the table rather than restating them.
 const rows = file => parseCsv(fs.readFileSync(path.join(REPO, file), "utf-8")).slice(1).filter(r => r.length > 1)
 const table = new Map(rows("data/es-verbs.csv").map(([inf, tense, person, form]) => [`${inf}.${tense}.${person}`, form]))
+const corpus = rows("data/es-paraphrase.csv").map(
+  ([id, prompt, model, verb, tense, person, trap, against]) =>
+    ({ id, prompt, model, verb, tense, person, trap, against }))
+
+// Every item the tense shift yields, so a seed can put them all behind us and
+// leave the paraphrase prompts at the front of the session.
+const shiftSlugs = () => {
+  const out = new Set()
+  for (const s of bank) for (const t of ["present", "preterite", "imperfect"]) {
+    if (t !== s.tense) out.add(`${s.infinitive}.${t}`)
+  }
+  return [...out]
+}
+
 const bank = rows("data/es-sentences.csv").map(([text, infinitive, tense, person]) => {
   const [, before, form, after] = text.match(/^(.*)\[(.*)\](.*)$/)
   return { plain: before + form + after, before, after, infinitive, tense, person }
@@ -115,4 +129,69 @@ export default async ({ check, open, blobs }) => {
     [...blobs.keys()].includes(`${shared}.es`), false)
   check("no page errors", paired.errors, [])
   await paired.close()
+
+  // --- the paraphrase, which nothing can check ---
+  // The shift items are put behind us so the session opens on the corpus;
+  // both exercise types share one queue, and the page tells them apart by
+  // which `Answer` they carry rather than by which page they are on.
+  const later = Date.now() + 30 * 86400000
+  const done = await open({ path: "/verbs", key: VERBS, seed: {
+    version: formatVersion(), language: "verbs", deck: "none",
+    cards: shiftSlugs().map(slug =>
+      ({ slug, box: 5, seen: 3, missed: 0, lapses: 0, direction: "recognition", due: later })),
+  } })
+  await done.waitForSelector(".verb-prompt")
+  await wait(400)
+
+  const opener = corpus[0]
+  check("asks the corpus in its own order", await done.text(".verb-prompt"), opener.prompt)
+  check("with no sentence to move", await done.text(".verb-sentence"), null)
+  check("and nothing given away before the reveal", await done.text(".verb-model"), null)
+
+  await done.tap(".grade")
+  check("revealing a model answer, not the answer", await done.text(".verb-model"), opener.model)
+  const lines = await done.$$eval(".verb-check", els => els.map(e => e.textContent))
+  check("with the rubric that says why it is that",
+    lines, [`${opener.verb}, not ${opener.against}`, opener.tense, "third person singular"])
+
+  // Nothing compared it, so the reader says how it went.
+  check("and two buttons, because nothing else can grade it",
+    (await done.$$(".grade")).length, 2)
+  await (await done.byText(".grade", "Got it")).click()
+  await wait(200)
+
+  stored = await done.stored()
+  const graded = stored.cards.find(c => c.slug === `paraphrase.${opener.id}`)
+  check("graded under the frozen id", graded?.seen, 1)
+  check("as got", graded?.missed, 0)
+  check("shares no item with the tense shift",
+    stored.cards.filter(c => !c.slug.startsWith("paraphrase.") && c.seen < 3).length, 0)
+  check("and moves straight on, the reveal already read",
+    await done.text(".verb-prompt"), corpus[1].prompt)
+
+  // Two taps in one tick, before the first grade can land. The typed side is
+  // safe because `Answer` moves to `Compared` at once; this side has to wait
+  // for the clock, so `Judging` is what stops the second.
+  await done.tap(".grade")
+  const twice = corpus[1]
+  await done.evaluate(() => {
+    const b = [...document.querySelectorAll(".grade")].find(e => e.textContent === "Got it")
+    b.click(); b.click()
+  })
+  await wait(250)
+  stored = await done.stored()
+  check("a double tap grades once, not twice",
+    stored.cards.filter(c => c.slug.startsWith("paraphrase.")).map(c => [c.slug, c.seen]),
+    [["paraphrase." + corpus[0].id, 1], ["paraphrase." + twice.id, 1]])
+  check("and the next question is the next one",
+    await done.text(".verb-prompt"), corpus[2].prompt)
+
+  await done.tap(".grade")
+  await (await done.byText(".grade", "Again")).click()
+  await wait(200)
+  stored = await done.stored()
+  check("a self-graded miss is a miss",
+    stored.cards.find(c => c.slug === `paraphrase.${corpus[2].id}`)?.missed, 1)
+  check("no page errors", done.errors, [])
+  await done.close()
 }
