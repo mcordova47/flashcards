@@ -21,6 +21,7 @@ import Elmish (Dispatch, ReactElement, (<|))
 import Elmish.HTML.Styled as H
 import Flashcards.Accent as Accent
 import Flashcards.Language as Language
+import Flashcards.Page as Page
 import Flashcards.Pages.Study.Model (Message(..), State)
 import Flashcards.Stats as Stats
 import Flashcards.Types.Progress as Progress
@@ -35,6 +36,10 @@ view state dispatch =
     , voicePicker
     , H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
     , H.button_ "panel-item" { onClick: dispatch <| ShowPairing } "Sync another device"
+    -- An anchor, not a message: a page change is a page load here, so this
+    -- needs no router and puts no notion of "which page" into any state. It
+    -- is also the only way to find the drills at all.
+    , H.a_ "panel-item" { href: Page.pathFor Page.Verbs } "Verb drills"
     , H.p "panel-note" $
         show (Progress.seenCount state.progress) <> " of "
           <> show (Array.length state.language.deck) <> " words seen"

@@ -8,11 +8,15 @@
 -- | the flashcards. The SPA catch-all returns 200 for every path, so there was
 -- | nothing anywhere to say otherwise.
 -- |
--- | The pages are deliberately not linked to each other in the app, so nothing
--- | ever navigates between them: `EntryPoints.Index` reads the path once and
--- | mounts what it finds. That is why there is no router here and no page in
--- | any component's state — a page change is a page load, which is also how it
--- | keeps one bundle, one service worker and one installed app.
+-- | The pages link to each other with anchors and nothing else:
+-- | `EntryPoints.Index` reads the path once and mounts what it finds. That is
+-- | why there is no router here and no page in any component's state — a page
+-- | change is a page load, which is also how it keeps one bundle, one service
+-- | worker and one installed app.
+-- |
+-- | They were unlinked at first, which was a mistake rather than a stance. The
+-- | drills could only be reached by typing the URL, and the manifest's
+-- | `start_url` is `/`, so an installed app could never open them at all.
 module Flashcards.Page
   ( Page(..)
   , fromPath

@@ -102,6 +102,9 @@ export default async ({ check, open }) => {
   check("a page that is not a language is not the flashcards",
     await verbs.text(".prompt"), null)
   check("and keeps the path it was asked for", new URL(verbs.url()).pathname, "/verbs")
+  // The only way to find the drills, and the only way back.
+  check("reachable from the cards' menu, and reachable back",
+    await verbs.$eval(".page-back", e => e.getAttribute("href")), "/")
   check("no page errors", verbs.errors, [])
   await verbs.close()
 

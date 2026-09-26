@@ -561,11 +561,20 @@ them, and each was carrying the dependency for one line:
 - **`Sync.adoptKey`** lived in the flashcards' pairing sheet. It is about the
   key, and both pages want one, so it is in `Sync`.
 
-**Finding pairing from the drills.** `/verbs` carries a *Sync a device* link,
-the only link between the two pages, and an ordinary anchor — a page change is
-a page load here, so it needs no router and leaves nothing in any component's
-state. It points at `/?sync`, which opens the pairing sheet rather than
-dropping you on the cards to hunt through the ••• menu. That is a different
+**The pages link to each other, with anchors and nothing else.** *Verb
+drills* sits in the cards' ••• menu and *Flashcards* in the drills' top bar,
+and both are plain `<a href>` — a page change is a page load here, so they
+need no router and leave no notion of "which page" in any component's state.
+
+They were not linked at first, which was a mistake rather than a stance: the
+drills could only be reached by typing the URL, and on iOS the manifest's
+`start_url` is `/`, so an installed app could never open them at all. The way
+back points at `/` rather than `/es`, so it lands on whichever language was
+last chosen rather than overriding it.
+
+**Finding pairing from the drills.** `/verbs` also carries a *Sync a device*
+link, pointing at `/?sync`, which opens the pairing sheet rather than dropping
+you on the cards to hunt through the ••• menu. That is a different
 word from `?pair=` on purpose: one hands over a key and the other asks to be
 shown one, and a link that means two things depending on whether it has a
 value is a link that gets pasted wrong. The query is cleared as soon as it is

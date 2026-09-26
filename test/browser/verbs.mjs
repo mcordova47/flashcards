@@ -166,6 +166,11 @@ export default async ({ check, open, blobs }) => {
     await keys.$eval(".sync-pair", e => [e.tagName, e.getAttribute("href")]),
     ["A", "/?sync"])
 
+  // The way back. `/` rather than `/es`, so it lands on whichever language
+  // was last chosen rather than overriding it.
+  check("and a way back to the cards",
+    await keys.$eval(".page-back", e => [e.tagName, e.getAttribute("href")]), ["A", "/"])
+
   // The box is focused on arrival and again on every question, so typing can
   // start without aiming at it - and so no button is holding focus when the
   // next Enter lands.

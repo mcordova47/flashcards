@@ -261,7 +261,10 @@ view state dispatch =
   -- is requeued, so the row grows by one when you get something wrong — which
   -- is the truth about how much is left.
   [ H.div "topbar"
-    [ H.div "pips" $ case state.shown of
+    -- Back the way you came. The cards are `/`, not `/es`, so this lands on
+    -- whichever language was last chosen rather than overriding it.
+    [ H.a_ "page-back" { href: "/" } "Flashcards"
+    , H.div "pips" $ case state.shown of
         -- No session, no row: between sessions there is nothing to be part of
         -- the way through, and a full row on the done screen says "here is
         -- how far you got" about something already over.

@@ -298,8 +298,13 @@ body {
   box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.22);
 }
 
+/* A button everywhere but the drills link, which is an anchor because a page
+   change is a page load here. The panel is a column flexbox, so both stretch
+   the same; the underline and the visited colour are the only differences an
+   anchor brings, and both go. */
 .panel-item {
   appearance: none;
+  text-decoration: none;
   border: 0;
   border-radius: 12px;
   background: var(--ghost);
@@ -916,6 +921,15 @@ body {
   letter-spacing: 0.08em;
   line-height: 1;
   padding: 0.4rem 0.2rem 0.4rem 0.5rem;
+}
+
+.page-back {
+  color: var(--faint);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  white-space: nowrap;
+  padding: 0.4rem 0.5rem 0.4rem 0.2rem;
 }
 
 .sync-pair {
