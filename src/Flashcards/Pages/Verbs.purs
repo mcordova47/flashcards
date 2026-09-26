@@ -26,6 +26,8 @@ import Data.Either (Either(..))
 import Data.Maybe (Maybe(..), isJust)
 import Effect.Class (liftEffect)
 import Effect.Now as Now
+import Data.Foldable (for_)
+import Data.String as String
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Events as E
 import Elmish.HTML.Styled as H
@@ -34,12 +36,14 @@ import Flashcards.Data.Sentences.Spanish (sentences)
 import Flashcards.Data.Verbs.Spanish (table)
 import Flashcards.Exercise (Answer(..), Pool, Verdict(..), matches, pick)
 import Flashcards.Exercise as Exercise
+import Flashcards.Keys (onKeyDown)
 import Flashcards.Page as Page
 import Flashcards.Pages.Verbs.Model (Message(..), Phase(..), State, namespace)
 import Flashcards.Pages.Verbs.Model (Message, Phase, State) as Model
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Payload as Payload
 import Flashcards.Scheduler as Scheduler
+import Flashcards.Stats as Stats
 import Flashcards.Storage as Storage
 import Flashcards.Sync as Sync
 import Flashcards.Types.Card (Slug)
@@ -66,6 +70,12 @@ byRank _ = Nothing
 
 init :: Transition Message State
 init = do
+  -- Only `Enter` and the two grade keys: the listener is on the window, so it
+  -- fires while the answer box has focus, and anything that types a character
+  -- would be typed and acted on at once. `Judge` is ignored unless something
+  -- is revealed, which is what makes 1 and 2 safe to press mid-answer.
+  forks \{ dispatch } ->
+    liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
   fork do
     syncKey <- liftEffect $ Sync.adoptKey $ Page.pathFor Page.Verbs
     progress <- liftEffect $ Storage.load namespace fingerprint byRank
@@ -74,8 +84,9 @@ init = do
     { progress: Progress.empty
     , queue: []
     , shown: Nothing
-    , answered: 0
     , typed: ""
+    , got: 0
+    , again: 0
     , phase: Asked
     , syncKey: Nothing
     , sent: Nothing
@@ -108,7 +119,8 @@ update state = case _ of
   Started now ->
     pure $ asking state
       { queue = Scheduler.buildSession (map _.slug items) state.progress now Scheduler.sessionSize
-      , answered = 0
+      , got = 0
+      , again = 0
       , loaded = true
       }
 
@@ -128,6 +140,9 @@ update state = case _ of
         pure state { phase = Compared verdict }
       SelfGraded _ ->
         pure state { phase = Revealed }
+    -- Enter again, having read the comparison, is the same as tapping Next.
+    _, Compared _ ->
+      pure $ advance state
     _, _ ->
       pure state
 
@@ -153,7 +168,12 @@ update state = case _ of
         queue = case grade of
           Again -> Scheduler.requeue slug 0 state.queue
           GotIt -> state.queue
-        graded = state { progress = progress, queue = queue, answered = state.answered + 1 }
+        graded = state
+          { progress = progress
+          , queue = queue
+          , got = state.got + (if grade == GotIt then 1 else 0)
+          , again = state.again + (if grade == Again then 1 else 0)
+          }
       forkVoid $ liftEffect $ Storage.save namespace fingerprint progress
       when (Array.length queue <= 1) $ fork $ pure Sync
       -- A self-graded answer has no reveal left to read — the reader has just
@@ -220,22 +240,39 @@ asking state = state { shown = exercise }
       pool <- Array.find (\p -> p.slug == slug) items
       pure $ pick (Progress.lookup slug state.progress) pool
 
+keyMessage :: String -> Maybe Message
+keyMessage = case _ of
+  "Enter" -> Just Answer
+  "1" -> Just $ Judge Again
+  "2" -> Just $ Judge GotIt
+  _ -> Nothing
+
 -- | On to the next question, whatever is left of the queue.
 advance :: State -> State
 advance state = asking state { typed = "", phase = Asked, queue = Array.drop 1 state.queue }
 
 untouched :: State -> Boolean
-untouched state = state.answered == 0 && state.typed == "" && state.phase == Asked
+untouched state = state.got + state.again == 0 && state.typed == "" && state.phase == Asked
 
 view :: State -> Dispatch Message -> ReactElement
 view state dispatch =
   H.div "app"
-  [ H.div "topbar" [ H.div "pips" H.empty, H.span "panel-toggle" synced ]
+  -- One pip per question in the session, filled as they are answered. A miss
+  -- is requeued, so the row grows by one when you get something wrong — which
+  -- is the truth about how much is left.
+  [ H.div "topbar"
+    [ H.div "pips" $ Array.range 0 (total - 1) <#> \i ->
+        H.div_ ("pip" <> if i < state.got + state.again then " done" else "") { key: show i } H.empty
+    , H.span "sync-state" synced
+    ]
   , case state.shown of
       Nothing ->
         H.div "done-body"
         [ H.h1 "done-title" "Verbs"
-        , H.p "done-stats" $ if state.loaded then "Nothing left to drill." else ""
+        , H.p "done-stats" $
+            if not state.loaded then ""
+            else if state.got + state.again == 0 then "Nothing left to drill."
+            else tally
         ]
       Just exercise ->
         H.div "done-body" $ case exercise.answer of
@@ -247,7 +284,7 @@ view state dispatch =
             -- falls: first, last or in the middle.
             , H.div "verb-frame"
               [ H.span "verb-before" frame.before
-              , H.input_ "verb-answer"
+              , H.input_ ("verb-answer" <> mark)
                   { placeholder: "…", spellCheck: false, autoCapitalize: "none"
                   , value: state.typed
                   , onChange: dispatch <| Typed <<< E.inputText
@@ -277,6 +314,13 @@ view state dispatch =
   where
     synced = if isJust state.sent && not state.offline then "synced" else ""
 
+    total = state.got + state.again + Array.length state.queue
+
+    tally =
+      Stats.plural (state.got + state.again) "exercise" <> " · "
+        <> show state.got <> " got it · "
+        <> show state.again <> " again"
+
     controls = case state.phase of
       Compared _ ->
         [ H.button_ "grade got-it" { onClick: dispatch <| Next } "Next" ]
@@ -295,6 +339,13 @@ view state dispatch =
       Just (SelfGraded _) -> "Reveal"
       _ -> "Check"
 
+    -- The box itself carries the answer, so the verdict is visible where the
+    -- eye already is rather than only in a line underneath.
+    mark = case state.phase of
+      Compared Wrong -> " wrong"
+      Compared _ -> " right"
+      _ -> ""
+
     compared frame expected verdict =
       let sentence = frame.before <> expected <> frame.after
       in case verdict of
@@ -307,5 +358,12 @@ view state dispatch =
           [ H.p "milestone flourish" $ "✓ " <> sentence
           , H.p "milestone remark verb-accent" $ "right — " <> expected
           ]
+        -- The one worth looking at, so it is not the quietest thing on the
+        -- screen. What was typed is echoed back, because the difference
+        -- between it and the answer is the whole lesson.
         Wrong ->
-          H.p "milestone remark" sentence
+          H.fragment
+          [ H.p "milestone verb-wrong" $ "✗ " <> sentence
+          , if String.trim state.typed == "" then H.empty
+            else H.p "milestone remark verb-attempt" $ "you wrote — " <> String.trim state.typed
+          ]

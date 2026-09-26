@@ -576,6 +576,28 @@ one. The page owns the session loop once; each drill type is a module
 producing exercises, which is what lets them be built separately rather than
 as branches of one screen.
 
+**The screen says how it is going.** Pips across the top, one per question,
+filling as they are answered — and the row grows by one when you miss
+something, because a miss is requeued and that is the truth about how much is
+left. At the end, the session's own tally. There is deliberately no *23 of 55*:
+the deck is a finite thing you can finish, but the drills grow whenever a
+sentence or a prompt is added, so a percentage would fall every time the app
+got better and would invite grinding the number rather than answering the
+questions.
+
+**A wrong answer is not the quietest thing on the screen.** It was, once —
+faint grey, where a right one got the accent colour and an animation, which is
+backwards for the one you need to read. Now the answer box itself marks up,
+thicker and coloured, so the verdict is where the eye already is; `--wrong` is
+cool where `--accent` is warm, so the two never read as the same signal; and
+what was typed is echoed back, the gap between it and the answer being the
+lesson.
+
+**Enter, and 1 and 2.** `Flashcards.Keys` puts the listener on the window, so
+it fires while the answer box has focus — which is why the drills map only
+keys that do not type a character. Enter checks, Enter again moves on, and on
+a revealed paraphrase 1 and 2 are *Again* and *Got it*, as on the cards.
+
 **Two interactions, one loop.** A `Checked` answer is compared and graded on
 the spot, and stops on the comparison so there is something to read. A
 `SelfGraded` one is revealed and then waits: nothing compared it, so nothing
@@ -857,6 +879,7 @@ netlify/functions/progress.mjs       the blob store, and all of the server
 scanner.js                           the QR decoder, bundled on its own
 src/Flashcards/
   Exercise.purs                      what every verb drill has in common
+  Keys.purs                          keys on the window, for both pages
   Page.purs                          which page a path names
   Pages/Study.purs                   the card, the loop, the wiring
   Pages/Verbs.purs                   the drills (#8); both exercises, one loop

@@ -9,6 +9,7 @@
   --track: #e7e2da;
   --ghost: #ece7df;
   --ghost-fg: #3d3d47;
+  --wrong: #9f1239;
   --mastered: #c2410c;
   --familiar: #e2926a;
   --learning: #cfc6bb;
@@ -26,6 +27,7 @@
     --track: #26262f;
     --ghost: #22222b;
     --ghost-fg: #d6d4d0;
+    --wrong: #fb7185;
     --mastered: #f97316;
     --familiar: #9a5327;
     --learning: #4a4a56;
@@ -873,6 +875,44 @@ body {
 .verb-answer:focus {
   outline: none;
   border-bottom-color: var(--accent);
+}
+
+/* The verdict where the eye already is. Thicker as well as coloured, so it
+   carries at a glance and does not depend on telling two hues apart. */
+.verb-answer.right,
+.verb-answer.right:focus {
+  border-bottom-width: 3px;
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+}
+
+.verb-answer.wrong,
+.verb-answer.wrong:focus {
+  border-bottom-width: 3px;
+  border-bottom-color: var(--wrong);
+  color: var(--wrong);
+}
+
+/* A wrong answer is the one worth reading, so it is not set quieter than a
+   right one. Same size as the flourish, different colour. */
+.milestone.verb-wrong {
+  color: var(--wrong);
+  font-weight: 600;
+  animation: milestone-in 520ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.verb-attempt {
+  margin-top: 0.35rem;
+}
+
+/* Status, not a control: the study page's ••• is a button and this is a word
+   that says whether the server has it. */
+.sync-state {
+  color: var(--faint);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 0.4rem 0.2rem 0.4rem 0.5rem;
 }
 
 .verb-answer::placeholder {

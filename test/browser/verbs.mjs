@@ -87,7 +87,10 @@ export default async ({ check, open, blobs }) => {
   await next(page)
   const missed = await asked(page)
   await answer(page, "nada")
-  check("a wrong answer shows the right one", await page.text(".milestone"), missed.full)
+  check("a wrong answer shows the right one", await page.text(".milestone"), `✗ ${missed.full}`)
+  check("echoing back what was typed", await page.text(".verb-attempt"), "you wrote — nada")
+  check("and marking the box it was typed into",
+    await page.$eval(".verb-answer", e => e.className.includes("wrong")), true)
   stored = await page.stored()
   check("graded as missed", stored.cards.find(c => c.slug === missed.slug)?.missed, 1)
 
@@ -129,6 +132,36 @@ export default async ({ check, open, blobs }) => {
     [...blobs.keys()].includes(`${shared}.es`), false)
   check("no page errors", paired.errors, [])
   await paired.close()
+
+  // --- the keyboard, for a drill that is mostly typing ---
+  const keys = await open({ path: "/verbs", key: VERBS })
+  await keys.waitForSelector(".verb-sentence")
+  await wait(400)
+  const typed = await asked(keys)
+  const pips = await keys.$$eval(".pip", els => els.length)
+  check("a pip for every question in the session", pips, 20)
+  check("none of them done yet",
+    await keys.$$eval(".pip.done", els => els.length), 0)
+
+  await keys.type(".verb-answer", typed.form)
+  await keys.keyboard.press("Enter")
+  await wait(150)
+  check("enter checks the answer", await keys.text(".milestone"), `✓ ${typed.full}`)
+  check("filling a pip", await keys.$$eval(".pip.done", els => els.length), 1)
+  await keys.keyboard.press("Enter")
+  await wait(150)
+  // Not by the sentence: two items of the same verb draw on the same
+  // sentences, so only the target moves. The cleared verdict is the proof.
+  const next2 = await asked(keys)
+  check("and enter again moves on", await keys.text(".milestone"), null)
+  check("to the next item", next2.slug !== typed.slug, true)
+
+  // Status, not a control: the study page's ••• opens a panel, this says
+  // whether the server has it.
+  check("the sync state is not a button",
+    await keys.$eval(".sync-state", e => e.tagName), "SPAN")
+  check("no page errors", keys.errors, [])
+  await keys.close()
 
   // --- the paraphrase, which nothing can check ---
   // The shift items are put behind us so the session opens on the corpus;

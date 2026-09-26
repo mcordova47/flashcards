@@ -32,10 +32,11 @@ type State =
   -- | recomputed, because grading moves `seen` and `Exercise.pick` would then
   -- | change the question under the answer.
   , shown :: Maybe Exercise
-  -- | How many have been graded this session. Until one has, a sync that
-  -- | brings history in can rebuild the session without taking anything
-  -- | back off the screen.
-  , answered :: Int
+  -- | This session's tally. Their sum is how many have been graded, and
+  -- | until that is zero a sync bringing history in can rebuild the session
+  -- | without taking anything back off the screen.
+  , got :: Int
+  , again :: Int
   , typed :: String
   -- | How far the current question has got.
   , phase :: Phase
