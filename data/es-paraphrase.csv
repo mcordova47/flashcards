@@ -1,42 +1,42 @@
-Prompt,Model,Verb,Tense,Person,Trap,Against,Notes
-"How would you tell me the door is open?","La puerta está abierta.",estar,present,3s,verb,ser,
-"How would you tell me you're sick today?","Hoy estoy enfermo.",estar,present,1s,verb,ser,
-"How would you tell me your brother is tall?","Mi hermano es alto.",ser,present,3s,verb,estar,
-"How would you tell me the party is at your house?","La fiesta es en mi casa.",ser,present,3s,verb,estar,"An event takes ser for where it happens: this reads as a location and is not one, which is the trap"
-"How would you tell me you're at home?","Estoy en casa.",estar,present,1s,verb,ser,
-"How would you ask me where I am?","¿Dónde estás?",estar,present,2s,verb,ser,
-"How would you tell me your sister is a doctor?","Mi hermana es médica.",ser,present,3s,verb,estar,
-"How would you tell me the children are bored?","Los niños están aburridos.",estar,present,3p,verb,ser,"aburrido is outside the deck, kept because the trap is the word: son aburridos means they are boring"
-"How would you tell me we're ready?","Estamos listos.",estar,present,1p,verb,ser,"listo is outside the deck, kept because the trap is the word: somos listos means we are clever"
-"How would you tell me it's one o'clock?","Es la una.",ser,present,3s,verb,estar,"Singular because it is one o'clock: son las dos from two onwards"
-"How would you tell me you're from Mexico?","Soy de México.",ser,present,1s,verb,estar,"México is a proper noun, not vocabulary"
-"How would you tell me the food is really good today?","Hoy la comida está muy buena.",estar,present,3s,verb,ser,
-"How would you tell me the city is far from here?","La ciudad está lejos de aquí.",estar,present,3s,verb,ser,
-"How would you tell me you went to the store every week?","Iba a la tienda cada semana.",ir,imperfect,1s,tense,preterite,
-"How would you tell me you went to Mexico last year?","El año pasado fui a México.",ir,preterite,1s,tense,imperfect,"México is a proper noun, not vocabulary; fui is also ser's preterite, which the context settles"
-"How would you tell me you had a dog as a kid?","De niño, tenía un perro.",tener,imperfect,1s,tense,preterite,
-"How would you tell me your sister had a son yesterday?","Ayer mi hermana tuvo un hijo.",tener,preterite,3s,tense,imperfect,
-"How would you tell me you played in the street every day as a kid?","De niño, jugaba en la calle todos los días.",jugar,imperfect,1s,tense,preterite,
-"How would you tell me you played for two hours yesterday?","Ayer jugué dos horas.",jugar,preterite,1s,tense,imperfect,
-"How would you tell me you were reading when I called?","Leía cuando me llamaste.",leer,imperfect,1s,tense,preterite,"llamaste is a second, preterite decision the rubric does not mention; kept because the two side by side are the clearest contrast in the set"
-"How would you tell me you read the whole book last night?","Anoche leí todo el libro.",leer,preterite,1s,tense,imperfect,
-"How would you tell me you slept badly last night?","Anoche dormí mal.",dormir,preterite,1s,tense,imperfect,
-"How would you tell me you found out the truth yesterday?","Ayer supe la verdad.",saber,preterite,1s,tense,imperfect,"The preterite of saber means found out, which is the lesson; saber, not conocer, because a truth is a fact, so the verb is not a second decision"
-"How would you tell me you already knew the answer?","Ya sabía la respuesta.",saber,imperfect,1s,tense,preterite,"saber, not conocer, because an answer is a fact, so the verb is not a second decision"
-"How would you tell me you met my brother at a party?","Conocí a tu hermano en una fiesta.",conocer,preterite,1s,tense,imperfect,"The preterite of conocer means met, which is the lesson; conocer, not saber, because it is a person, so the verb is not a second decision"
-"How would you tell me your grandparents always came on Sundays?","Mis abuelos siempre venían los domingos.",venir,imperfect,3p,tense,preterite,domingo is outside the deck; the habitual day is what makes it imperfect
-"How would you tell me you want your brother to come?","Quiero que venga mi hermano.",venir,subjunctive,3s,tense,present,
-"How would you tell me you hope we can go?","Espero que podamos ir.",poder,subjunctive,1p,tense,present,
-"How would you ask me to tell you the truth?","Quiero que me digas la verdad.",decir,subjunctive,2s,tense,present,
-"How would you tell me you'll call me when you get home?","Te llamo cuando llegue a casa.",llegar,subjunctive,1s,tense,present,
-"How would you tell me it's important that they do their homework?","Es importante que hagan la tarea.",hacer,subjunctive,3p,tense,present,
-"How would you tell me you don't think it's true?","No creo que sea verdad.",ser,subjunctive,3s,tense,present,"sea is ser, and estar is never a choice with verdad, so the verb is not a second decision"
-"How would you tell me you want him to set the table?","Quiero que ponga la mesa.",poner,subjunctive,3s,tense,present,
-"How would you tell me you'll do it when you have time?","Lo hago cuando tenga tiempo.",tener,subjunctive,1s,tense,present,
-"How would you tell me you know this city?","Conozco esta ciudad.",conocer,present,1s,verb,saber,
-"How would you tell me you know how to drive?","Sé conducir.",saber,present,1s,verb,conocer,
-"How would you ask me if I know your sister?","¿Conoces a mi hermana?",conocer,present,2s,verb,saber,
-"How would you ask me if I know where the hotel is?","¿Sabes dónde está el hotel?",saber,present,2s,verb,conocer,
-"How would you tell me nobody knows his name?","Nadie sabe su nombre.",saber,present,3s,verb,conocer,
-"How would you tell me your parents know my family?","Tus padres conocen a mi familia.",conocer,present,3p,verb,saber,
-"How would you tell me we know it's late?","Sabemos que es tarde.",saber,present,1p,verb,conocer,
+Id,Prompt,Model,Verb,Tense,Person,Trap,Against,Notes
+door-open,"How would you tell me the door is open?","La puerta está abierta.",estar,present,3s,verb,ser,
+sick-today,"How might you say you're sick today?","Hoy estoy enfermo.",estar,present,1s,verb,ser,
+brother-tall,"How would you tell me your brother is tall?","Mi hermano es alto.",ser,present,3s,verb,estar,
+party-house,"How would you say the party is at your house?","La fiesta es en mi casa.",ser,present,3s,verb,estar,"An event takes ser for where it happens: this reads as a location and is not one, which is the trap"
+at-home,"How would you tell me you're at home?","Estoy en casa.",estar,present,1s,verb,ser,
+where-am-i,"How might you ask me where I am?","¿Dónde estás?",estar,present,2s,verb,ser,
+sister-doctor,"How would you tell me your sister is a doctor?","Mi hermana es médica.",ser,present,3s,verb,estar,
+children-bored,"How might you say the children are bored?","Los niños están aburridos.",estar,present,3p,verb,ser,"aburrido is outside the deck, kept because the trap is the word: son aburridos means they are boring"
+we-ready,"How would you tell me we're ready?","Estamos listos.",estar,present,1p,verb,ser,"listo is outside the deck, kept because the trap is the word: somos listos means we are clever"
+one-o-clock,"How would you say it's one o'clock?","Es la una.",ser,present,3s,verb,estar,"Singular because it is one o'clock: son las dos from two onwards"
+from-mexico,"How would you tell me you're from Mexico?","Soy de México.",ser,present,1s,verb,estar,"México is a proper noun, not vocabulary"
+food-good,"How might you say the food is really good today?","Hoy la comida está muy buena.",estar,present,3s,verb,ser,
+city-far,"How would you tell me the city is far from here?","La ciudad está lejos de aquí.",estar,present,3s,verb,ser,
+went-store-weekly,"How would you tell me you went to the store every week?","Iba a la tienda cada semana.",ir,imperfect,1s,tense,preterite,
+went-mexico,"How might you say you went to Mexico last year?","El año pasado fui a México.",ir,preterite,1s,tense,imperfect,"México is a proper noun, not vocabulary; fui is also ser's preterite, which the context settles"
+had-dog,"How would you tell me you had a dog as a kid?","De niño, tenía un perro.",tener,imperfect,1s,tense,preterite,
+sister-had-son,"How would you say your sister had a son yesterday?","Ayer mi hermana tuvo un hijo.",tener,preterite,3s,tense,imperfect,
+played-street,"How would you tell me you played in the street every day as a kid?","De niño, jugaba en la calle todos los días.",jugar,imperfect,1s,tense,preterite,
+played-two-hours,"How might you say you played for two hours yesterday?","Ayer jugué dos horas.",jugar,preterite,1s,tense,imperfect,
+reading-when-called,"How would you tell me you were reading when I called?","Leía cuando me llamaste.",leer,imperfect,1s,tense,preterite,"llamaste is a second, preterite decision the rubric does not mention; kept because the two side by side are the clearest contrast in the set"
+read-whole-book,"How would you tell me you read the whole book last night?","Anoche leí todo el libro.",leer,preterite,1s,tense,imperfect,
+slept-badly,"How would you say you slept badly last night?","Anoche dormí mal.",dormir,preterite,1s,tense,imperfect,
+found-out-truth,"How would you tell me you found out the truth yesterday?","Ayer supe la verdad.",saber,preterite,1s,tense,imperfect,"The preterite of saber means found out, which is the lesson; saber, not conocer, because a truth is a fact, so the verb is not a second decision"
+already-knew-answer,"How might you say you already knew the answer?","Ya sabía la respuesta.",saber,imperfect,1s,tense,preterite,"saber, not conocer, because an answer is a fact, so the verb is not a second decision"
+met-brother-party,"How would you tell me you met my brother at a party?","Conocí a tu hermano en una fiesta.",conocer,preterite,1s,tense,imperfect,"The preterite of conocer means met, which is the lesson; conocer, not saber, because it is a person, so the verb is not a second decision"
+grandparents-came,"How would you tell me your grandparents always came on Sundays?","Mis abuelos siempre venían los domingos.",venir,imperfect,3p,tense,preterite,domingo is outside the deck; the habitual day is what makes it imperfect
+want-brother-come,"How might you say you want your brother to come?","Quiero que venga mi hermano.",venir,subjunctive,3s,tense,present,
+hope-we-can-go,"How would you tell me you hope we can go?","Espero que podamos ir.",poder,subjunctive,1p,tense,present,
+tell-me-truth,"How would you ask me to tell you the truth?","Quiero que me digas la verdad.",decir,subjunctive,2s,tense,present,
+call-when-home,"How would you say you'll call me when you get home?","Te llamo cuando llegue a casa.",llegar,subjunctive,1s,tense,present,
+important-homework,"How would you tell me it's important that they do their homework?","Es importante que hagan la tarea.",hacer,subjunctive,3p,tense,present,
+dont-think-true,"How might you say you don't think it's true?","No creo que sea verdad.",ser,subjunctive,3s,tense,present,"sea is ser, and estar is never a choice with verdad, so the verb is not a second decision"
+want-him-set,"How would you tell me you want him to set the table?","Quiero que ponga la mesa.",poner,subjunctive,3s,tense,present,
+do-when-time,"How would you tell me you'll do it when you have time?","Lo hago cuando tenga tiempo.",tener,subjunctive,1s,tense,present,
+know-this-city,"How might you say you know this city?","Conozco esta ciudad.",conocer,present,1s,verb,saber,
+know-drive,"How would you tell me you know how to drive?","Sé conducir.",saber,present,1s,verb,conocer,
+know-sister,"How would you ask me if I know your sister?","¿Conoces a mi hermana?",conocer,present,2s,verb,saber,
+know-where-hotel,"How might you ask me if I know where the hotel is?","¿Sabes dónde está el hotel?",saber,present,2s,verb,conocer,
+nobody-knows-name,"How would you tell me nobody knows his name?","Nadie sabe su nombre.",saber,present,3s,verb,conocer,
+parents-know-family,"How would you say my parents know your family?","Tus padres conocen a mi familia.",conocer,present,3p,verb,saber,
+we-know-late,"How would you tell me we know it's late?","Sabemos que es tarde.",saber,present,1p,verb,conocer,
