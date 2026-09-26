@@ -576,8 +576,9 @@ one. The page owns the session loop once; each drill type is a module
 producing exercises, which is what lets them be built separately rather than
 as branches of one screen.
 
-**The screen says how it is going.** Pips across the top, one per question,
-filling as they are answered — and the row grows by one when you miss
+**The screen says how it is going.** Pips across the top while a session is
+running — and only then, since between sessions there is nothing to be partway
+through. One per question, filling as they are answered — and the row grows by one when you miss
 something, because a miss is requeued and that is the truth about how much is
 left. At the end, the session's own tally. There is deliberately no *23 of 55*:
 the deck is a finite thing you can finish, but the drills grow whenever a
@@ -597,6 +598,16 @@ lesson.
 it fires while the answer box has focus — which is why the drills map only
 keys that do not type a character. Enter checks, Enter again moves on, and on
 a revealed paraphrase 1 and 2 are *Again* and *Got it*, as on the cards.
+
+The box is focused on arrival and again on every question, keyed by the tally
+so each question gets a fresh one. That is a convenience and also the fix for
+something worse: **a focused button treats Enter as a click**, so the button
+you last tapped fires again alongside whatever the page maps the key to, and a
+question goes by unread. Keeping focus in the box handles the typed side;
+`Keys` handles the rest, refusing Enter and Space to a focused button because
+both pages map both keys and the page knows what they mean where the button
+only knows it was pressed. On a reveal there is no box at all, so without that
+the Enter after *Reveal* lands on *Again*.
 
 **Two interactions, one loop.** A `Checked` answer is compared and graded on
 the spot, and stops on the comparison so there is something to read. A

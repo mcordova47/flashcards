@@ -261,8 +261,13 @@ view state dispatch =
   -- is requeued, so the row grows by one when you get something wrong — which
   -- is the truth about how much is left.
   [ H.div "topbar"
-    [ H.div "pips" $ Array.range 0 (total - 1) <#> \i ->
-        H.div_ ("pip" <> if i < state.got + state.again then " done" else "") { key: show i } H.empty
+    [ H.div "pips" $ case state.shown of
+        -- No session, no row: between sessions there is nothing to be part of
+        -- the way through, and a full row on the done screen says "here is
+        -- how far you got" about something already over.
+        Nothing -> []
+        Just _ -> Array.range 0 (total - 1) <#> \i ->
+          H.div_ ("pip" <> if i < state.got + state.again then " done" else "") { key: show i } H.empty
     , H.span "sync-state" synced
     ]
   , case state.shown of
@@ -284,8 +289,14 @@ view state dispatch =
             -- falls: first, last or in the middle.
             , H.div "verb-frame"
               [ H.span "verb-before" frame.before
+              -- Keyed by the tally, which moves on every graded question, so
+              -- each one gets a fresh box and `autoFocus` fires again. Keeping
+              -- focus here is also what stops a tapped button holding it and
+              -- taking the next Enter for itself.
               , H.input_ ("verb-answer" <> mark)
-                  { placeholder: "…", spellCheck: false, autoCapitalize: "none"
+                  { key: show (state.got + state.again)
+                  , placeholder: "…", spellCheck: false, autoCapitalize: "none"
+                  , autoFocus: true
                   , value: state.typed
                   , onChange: dispatch <| Typed <<< E.inputText
                   }

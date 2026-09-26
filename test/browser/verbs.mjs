@@ -160,6 +160,24 @@ export default async ({ check, open, blobs }) => {
   // whether the server has it.
   check("the sync state is not a button",
     await keys.$eval(".sync-state", e => e.tagName), "SPAN")
+
+  // The box is focused on arrival and again on every question, so typing can
+  // start without aiming at it - and so no button is holding focus when the
+  // next Enter lands.
+  check("the answer box has focus to begin with",
+    await keys.evaluate(() => document.activeElement?.className.includes("verb-answer")), true)
+
+  // Tapping a button leaves it focused, and a focused button takes Enter as a
+  // click. Without that being stopped this grades the next question unseen.
+  const before = await asked(keys)
+  await keys.tap(".grade")
+  await keys.keyboard.press("Enter")
+  await wait(200)
+  const after = await asked(keys)
+  check("a tapped button does not take the next Enter as well",
+    after.slug !== before.slug, true)
+  check("landing one question on, not two",
+    (await keys.stored()).cards.filter(c => c.seen > 0).length, 2)
   check("no page errors", keys.errors, [])
   await keys.close()
 
@@ -190,6 +208,16 @@ export default async ({ check, open, blobs }) => {
   // Nothing compared it, so the reader says how it went.
   check("and two buttons, because nothing else can grade it",
     (await done.$$(".grade")).length, 2)
+
+  // There is no box to hold focus here, so the tapped Reveal button still has
+  // it - and a focused button takes Enter as a click, which would land on
+  // Again. Enter means "check or reveal", and there is nothing left to
+  // reveal, so it should do nothing at all.
+  await done.keyboard.press("Enter")
+  await wait(200)
+  check("enter on a reveal grades nothing",
+    (await done.stored())?.cards?.some(c => c.slug === `paraphrase.${opener.id}`) ?? false, false)
+  check("and leaves the answer up", await done.text(".verb-model"), opener.model)
   await (await done.byText(".grade", "Got it")).click()
   await wait(200)
 
