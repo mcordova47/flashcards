@@ -17,7 +17,7 @@ prompts =
     , verb: "estar", tense: Present, person: Sg3
     , trap: OnVerb, against: "ser"
     }
-  , { id: "sick-today", asked: "How might you say you're sick today?"
+  , { id: "sick-today", asked: "How might you tell me you're sick today?"
     , model: "Hoy estoy enfermo."
     , verb: "estar", tense: Present, person: Sg1
     , trap: OnVerb, against: "ser"
@@ -27,7 +27,7 @@ prompts =
     , verb: "ser", tense: Present, person: Sg3
     , trap: OnVerb, against: "estar"
     }
-  , { id: "party-house", asked: "How would you say the party is at your house?"
+  , { id: "party-house", asked: "How would you tell me the party is at your house?"
     , model: "La fiesta es en mi casa."
     , verb: "ser", tense: Present, person: Sg3
     , trap: OnVerb, against: "estar"
@@ -82,7 +82,7 @@ prompts =
     , verb: "ir", tense: Imperfect, person: Sg1
     , trap: OnTense, against: "preterite"
     }
-  , { id: "went-mexico", asked: "How might you say you went to Mexico last year?"
+  , { id: "went-mexico", asked: "How might you tell me you went to Mexico last year?"
     , model: "El año pasado fui a México."
     , verb: "ir", tense: Preterite, person: Sg1
     , trap: OnTense, against: "imperfect"
@@ -92,7 +92,7 @@ prompts =
     , verb: "tener", tense: Imperfect, person: Sg1
     , trap: OnTense, against: "preterite"
     }
-  , { id: "sister-had-son", asked: "How would you say your sister had a son yesterday?"
+  , { id: "sister-had-son", asked: "How would you tell me your sister had a son yesterday?"
     , model: "Ayer mi hermana tuvo un hijo."
     , verb: "tener", tense: Preterite, person: Sg3
     , trap: OnTense, against: "imperfect"
@@ -102,7 +102,7 @@ prompts =
     , verb: "jugar", tense: Imperfect, person: Sg1
     , trap: OnTense, against: "preterite"
     }
-  , { id: "played-two-hours", asked: "How might you say you played for two hours yesterday?"
+  , { id: "played-two-hours", asked: "How might you tell me you played for two hours yesterday?"
     , model: "Ayer jugué dos horas."
     , verb: "jugar", tense: Preterite, person: Sg1
     , trap: OnTense, against: "imperfect"
@@ -117,7 +117,7 @@ prompts =
     , verb: "leer", tense: Preterite, person: Sg1
     , trap: OnTense, against: "imperfect"
     }
-  , { id: "slept-badly", asked: "How would you say you slept badly last night?"
+  , { id: "slept-badly", asked: "How would you tell me you slept badly last night?"
     , model: "Anoche dormí mal."
     , verb: "dormir", tense: Preterite, person: Sg1
     , trap: OnTense, against: "imperfect"
@@ -127,7 +127,7 @@ prompts =
     , verb: "saber", tense: Preterite, person: Sg1
     , trap: OnTense, against: "imperfect"
     }
-  , { id: "already-knew-answer", asked: "How might you say you already knew the answer?"
+  , { id: "already-knew-answer", asked: "How might you tell me you already knew the answer?"
     , model: "Ya sabía la respuesta."
     , verb: "saber", tense: Imperfect, person: Sg1
     , trap: OnTense, against: "preterite"
@@ -142,7 +142,7 @@ prompts =
     , verb: "venir", tense: Imperfect, person: Pl3
     , trap: OnTense, against: "preterite"
     }
-  , { id: "want-brother-come", asked: "How might you say you want your brother to come?"
+  , { id: "want-brother-come", asked: "How might you tell me you want your brother to come?"
     , model: "Quiero que venga mi hermano."
     , verb: "venir", tense: Subjunctive, person: Sg3
     , trap: OnTense, against: "present"
@@ -157,7 +157,7 @@ prompts =
     , verb: "decir", tense: Subjunctive, person: Sg2
     , trap: OnTense, against: "present"
     }
-  , { id: "call-when-home", asked: "How would you say you'll call me when you get home?"
+  , { id: "call-when-home", asked: "How would you tell me you'll call me when you get home?"
     , model: "Te llamo cuando llegue a casa."
     , verb: "llegar", tense: Subjunctive, person: Sg1
     , trap: OnTense, against: "present"
@@ -167,7 +167,7 @@ prompts =
     , verb: "hacer", tense: Subjunctive, person: Pl3
     , trap: OnTense, against: "present"
     }
-  , { id: "dont-think-true", asked: "How might you say you don't think it's true?"
+  , { id: "dont-think-true", asked: "How might you tell me you don't think it's true?"
     , model: "No creo que sea verdad."
     , verb: "ser", tense: Subjunctive, person: Sg3
     , trap: OnTense, against: "present"
@@ -182,7 +182,7 @@ prompts =
     , verb: "tener", tense: Subjunctive, person: Sg1
     , trap: OnTense, against: "present"
     }
-  , { id: "know-this-city", asked: "How might you say you know this city?"
+  , { id: "know-this-city", asked: "How might you tell me you know this city?"
     , model: "Conozco esta ciudad."
     , verb: "conocer", tense: Present, person: Sg1
     , trap: OnVerb, against: "saber"
@@ -207,7 +207,7 @@ prompts =
     , verb: "saber", tense: Present, person: Sg3
     , trap: OnVerb, against: "conocer"
     }
-  , { id: "parents-know-family", asked: "How would you say my parents know your family?"
+  , { id: "parents-know-family", asked: "How would you tell me my parents know your family?"
     , model: "Tus padres conocen a mi familia."
     , verb: "conocer", tense: Present, person: Pl3
     , trap: OnVerb, against: "saber"
