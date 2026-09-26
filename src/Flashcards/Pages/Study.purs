@@ -64,6 +64,13 @@ init opening = do
     savedVoice <- liftEffect $ Storage.loadVoice language.code
     now <- liftEffect Now.now
     pure $ Loaded { progress, now, canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt, canShare, canScan }
+  -- `/?sync` opens the sheet, which is how the drills send anyone here who
+  -- wants a second device. Cleared straight away, or a reload would reopen it.
+  forks \{ dispatch } -> liftEffect do
+    asked <- Sync.wantsPairing
+    when asked do
+      Route.replace =<< Route.current
+      dispatch ShowPairing
   forks \{ dispatch } ->
     liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
   forks \{ dispatch } ->

@@ -561,6 +561,22 @@ them, and each was carrying the dependency for one line:
 - **`Sync.adoptKey`** lived in the flashcards' pairing sheet. It is about the
   key, and both pages want one, so it is in `Sync`.
 
+**Finding pairing from the drills.** `/verbs` carries a *Sync a device* link,
+the only link between the two pages, and an ordinary anchor — a page change is
+a page load here, so it needs no router and leaves nothing in any component's
+state. It points at `/?sync`, which opens the pairing sheet rather than
+dropping you on the cards to hunt through the ••• menu. That is a different
+word from `?pair=` on purpose: one hands over a key and the other asks to be
+shown one, and a link that means two things depending on whether it has a
+value is a link that gets pasted wrong. The query is cleared as soon as it is
+read, or a reload would reopen the sheet over whatever you were doing.
+
+The indicator beside it says **backed up**, not *synced*. `Sync.adoptKey`
+makes a key on first run if the device has not got one, so there is no state
+in which you are unpaired — the word only ever meant "the server has what is
+here", never "something else shares it". Which is also why the link is not
+conditional on anything.
+
 **One pairing key, both pages.** Progress is per namespace — `flashcards.es.v1`,
 `flashcards.verbs.v1`, and a blob each on the server — but the key that
 identifies the device is not. A device paired for the flashcards is already

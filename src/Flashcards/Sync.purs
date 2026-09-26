@@ -30,6 +30,7 @@ module Flashcards.Sync
   , startScan
   , stopScan
   , syncKey
+  , wantsPairing
   )
   where
 
@@ -96,6 +97,20 @@ adoptKey path = keyFromLink <$> Route.search >>= case _ of
       key <- generateKey
       saveKey key
       pure key
+
+-- | Whether the address bar is asking for the pairing sheet: `/?sync`, which
+-- | is what the drills link to.
+-- |
+-- | A separate word from `?pair=`, not a valueless version of it. One hands
+-- | over a key and the other asks to be shown one, and a link that means two
+-- | things depending on whether it has a value is a link that gets pasted
+-- | wrong.
+wantsPairing :: Effect Boolean
+wantsPairing = asked <$> Route.search
+  where
+    asked raw =
+      Array.elem "sync" $ String.split (String.Pattern "&") $
+        String.replaceAll (String.Pattern "?") (String.Replacement "&") $ String.trim raw
 
 loadKey :: Effect (Maybe String)
 loadKey = do

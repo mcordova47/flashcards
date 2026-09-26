@@ -158,8 +158,13 @@ export default async ({ check, open, blobs }) => {
 
   // Status, not a control: the study page's ••• opens a panel, this says
   // whether the server has it.
+  // Status, not a control. Beside it, the one link between the two pages:
+  // pairing is whole-app, both pages share the key, and it lives over there.
   check("the sync state is not a button",
-    await keys.$eval(".sync-state", e => e.tagName), "SPAN")
+    await keys.$eval(".sync-state", e => e.tagName), "DIV")
+  check("with a link to where pairing is",
+    await keys.$eval(".sync-pair", e => [e.tagName, e.getAttribute("href")]),
+    ["A", "/?sync"])
 
   // The box is focused on arrival and again on every question, so typing can
   // start without aiming at it - and so no button is holding focus when the

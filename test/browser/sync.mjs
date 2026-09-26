@@ -427,4 +427,23 @@ export default async ({ check, open, base, blobs }) => {
   check("and studying carries on regardless", sightings(await phone.stored()), before + 1)
   await phone.setOfflineMode(false)
   await phone.close()
+
+  // --- /?sync opens the sheet, which is what the drills link to ---
+  // A separate word from ?pair=: one hands over a key, the other asks to be
+  // shown one.
+  const asked = await open({ path: "/?sync" })
+  await asked.waitForSelector(".sheet-title")
+  check("asking for /?sync opens the pairing sheet",
+    await asked.text(".sheet-title"), "Sync another device")
+  check("with this device's link in it",
+    /\?pair=[a-z0-9]{32}$/.test(await asked.$eval(".pair-link", e => e.value)), true)
+  // Or a reload would reopen it over whatever you were doing.
+  check("and the address bar left clean", new URL(asked.url()).search, "")
+  check("no page errors", asked.errors, [])
+  await asked.close()
+
+  const plain = await open({ path: "/" })
+  await plain.waitForSelector(".prompt")
+  check("without it, no sheet", await plain.text(".sheet-title"), null)
+  await plain.close()
 }

@@ -268,7 +268,14 @@ view state dispatch =
         Nothing -> []
         Just _ -> Array.range 0 (total - 1) <#> \i ->
           H.div_ ("pip" <> if i < state.got + state.again then " done" else "") { key: show i } H.empty
-    , H.span "sync-state" synced
+    -- The only link between the two pages, and it is an ordinary one: a page
+    -- change is a page load here, so this needs no router and leaves nothing
+    -- in any component's state. Pairing lives on the cards page and is one
+    -- thing for the whole app — both pages use the same key.
+    , H.div "sync-state"
+      [ H.span "" synced
+      , H.a_ "sync-pair" { href: "/?sync" } "Sync a device"
+      ]
     ]
   , case state.shown of
       Nothing ->
@@ -323,7 +330,10 @@ view state dispatch =
   , H.div "controls" controls
   ]
   where
-    synced = if isJust state.sent && not state.offline then "synced" else ""
+    -- "Backed up", not "paired": every device makes itself a key on first
+    -- run, so this says the server has what is here, never that anything else
+    -- shares it. Which is why the link beside it is not conditional.
+    synced = if isJust state.sent && not state.offline then "backed up" else ""
 
     total = state.got + state.again + Array.length state.queue
 
