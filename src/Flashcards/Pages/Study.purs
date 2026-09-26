@@ -16,15 +16,14 @@ import Data.Either (Either(..))
 import Data.Foldable (for_, intercalate)
 import Data.Int as Int
 import Data.Maybe (Maybe(..), fromMaybe, isJust, maybe)
-import Effect (Effect)
 import Effect.Class (liftEffect)
 import Effect.Now as Now
-import Effect.Uncurried (EffectFn1, mkEffectFn1, runEffectFn1)
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Styled as H
 import Flashcards.Accent as Accent
 import Flashcards.Confetti as Confetti
 import Flashcards.Deck as DeckIndex
+import Flashcards.Keys (onKeyDown)
 import Flashcards.Language (Language)
 import Flashcards.Language as Language
 import Flashcards.Page as Page
@@ -663,7 +662,3 @@ keyMessage = case _ of
   "z" -> Just Undo
   _ -> Nothing
 
-onKeyDown :: (String -> Effect Unit) -> Effect Unit
-onKeyDown handler = runEffectFn1 onKeyDown_ $ mkEffectFn1 handler
-
-foreign import onKeyDown_ :: EffectFn1 (EffectFn1 String Unit) Unit
