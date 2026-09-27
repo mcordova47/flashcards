@@ -40,6 +40,10 @@ type State =
   , typed :: String
   -- | How far the current question has got.
   , phase :: Phase
+  -- | Whether the ••• menu is open. The drills have one for the same reason
+  -- | the cards do: the top bar is for the session, and anything that is not
+  -- | part of it goes behind the dots.
+  , panel :: Boolean
   , syncKey :: Maybe String
   -- | What the server is known to hold. See the study page, where the same
   -- | comparison decides whether the panel may claim to be up to date.
@@ -76,6 +80,7 @@ data Message
   | Answer
   -- | How the reader says they did, where nothing can check it for them.
   | Judge Grade
+  | TogglePanel
   | Graded Grade Instant
   | Next
   | Sync

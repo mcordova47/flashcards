@@ -103,8 +103,9 @@ export default async ({ check, open }) => {
     await verbs.text(".prompt"), null)
   check("and keeps the path it was asked for", new URL(verbs.url()).pathname, "/verbs")
   // The only way to find the drills, and the only way back.
-  check("reachable from the cards' menu, and reachable back",
-    await verbs.$eval(".page-back", e => e.getAttribute("href")), "/")
+  await verbs.tap(".panel-toggle")
+  check("reachable from the cards menu, and reachable back",
+    await verbs.$eval("a.panel-item", e => e.getAttribute("href")), "/")
   check("no page errors", verbs.errors, [])
   await verbs.close()
 

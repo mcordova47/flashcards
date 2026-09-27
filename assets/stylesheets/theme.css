@@ -912,33 +912,6 @@ body {
 
 /* Status, not a control: the study page's ••• is a button and this is a word
    that says whether the server has it. */
-.sync-state {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  color: var(--faint);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  padding: 0.4rem 0.2rem 0.4rem 0.5rem;
-}
-
-.page-back {
-  color: var(--faint);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  white-space: nowrap;
-  padding: 0.4rem 0.5rem 0.4rem 0.2rem;
-}
-
-.sync-pair {
-  color: var(--muted);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  white-space: nowrap;
-}
-
 .verb-answer::placeholder {
   color: var(--faint);
 }

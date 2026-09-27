@@ -158,19 +158,6 @@ export default async ({ check, open, blobs }) => {
 
   // Status, not a control: the study page's ••• opens a panel, this says
   // whether the server has it.
-  // Status, not a control. Beside it, the one link between the two pages:
-  // pairing is whole-app, both pages share the key, and it lives over there.
-  check("the sync state is not a button",
-    await keys.$eval(".sync-state", e => e.tagName), "DIV")
-  check("with a link to where pairing is",
-    await keys.$eval(".sync-pair", e => [e.tagName, e.getAttribute("href")]),
-    ["A", "/?sync"])
-
-  // The way back. `/` rather than `/es`, so it lands on whichever language
-  // was last chosen rather than overriding it.
-  check("and a way back to the cards",
-    await keys.$eval(".page-back", e => [e.tagName, e.getAttribute("href")]), ["A", "/"])
-
   // The box is focused on arrival and again on every question, so typing can
   // start without aiming at it - and so no button is holding focus when the
   // next Enter lands.
@@ -188,6 +175,21 @@ export default async ({ check, open, blobs }) => {
     after.slug !== before.slug, true)
   check("landing one question on, not two",
     (await keys.stored()).cards.filter(c => c.seen > 0).length, 2)
+  // The top bar is for the session; everything else is behind the dots, as
+  // on the cards. Both are anchors: a page change is a page load here.
+  check("nothing but pips and the dots in the top bar",
+    await keys.$$eval(".topbar > *", es => es.map(e => e.className)), ["pips", "panel-toggle"])
+  await keys.tap(".panel-toggle")
+  check("the menu goes back to the cards",
+    await keys.$eval("a.panel-item", e => [e.tagName, e.getAttribute("href")]), ["A", "/"])
+  check("and to where pairing is",
+    await keys.$$eval("a.panel-item", es => es.map(e => e.getAttribute("href"))), ["/", "/?sync"])
+  // "Backed up", not "synced": a key is made on first run, so it never meant
+  // that anything else shares this.
+  check("saying what the server has, not who else has it",
+    await keys.text(".panel-note"), "Backed up")
+  await keys.dismiss()
+
   check("no page errors", keys.errors, [])
   await keys.close()
 

@@ -87,6 +87,7 @@ init = do
     , typed: ""
     , got: 0
     , again: 0
+    , panel: false
     , phase: Asked
     , syncKey: Nothing
     , sent: Nothing
@@ -145,6 +146,9 @@ update state = case _ of
       pure $ advance state
     _, _ ->
       pure state
+
+  TogglePanel ->
+    pure state { panel = not state.panel }
 
   Judge grade -> case state.phase of
     Revealed -> do
@@ -261,24 +265,14 @@ view state dispatch =
   -- is requeued, so the row grows by one when you get something wrong — which
   -- is the truth about how much is left.
   [ H.div "topbar"
-    -- Back the way you came. The cards are `/`, not `/es`, so this lands on
-    -- whichever language was last chosen rather than overriding it.
-    [ H.a_ "page-back" { href: "/" } "Flashcards"
-    , H.div "pips" $ case state.shown of
+    [ H.div "pips" $ case state.shown of
         -- No session, no row: between sessions there is nothing to be part of
         -- the way through, and a full row on the done screen says "here is
         -- how far you got" about something already over.
         Nothing -> []
         Just _ -> Array.range 0 (total - 1) <#> \i ->
           H.div_ ("pip" <> if i < state.got + state.again then " done" else "") { key: show i } H.empty
-    -- The only link between the two pages, and it is an ordinary one: a page
-    -- change is a page load here, so this needs no router and leaves nothing
-    -- in any component's state. Pairing lives on the cards page and is one
-    -- thing for the whole app — both pages use the same key.
-    , H.div "sync-state"
-      [ H.span "" synced
-      , H.a_ "sync-pair" { href: "/?sync" } "Sync a device"
-      ]
+    , H.button_ "panel-toggle" { onClick: dispatch <| TogglePanel, title: "Menu" } "•••"
     ]
   , case state.shown of
       Nothing ->
@@ -331,12 +325,29 @@ view state dispatch =
                   ]
             ]
   , H.div "controls" controls
+  , if state.panel then panel else H.empty
   ]
   where
-    -- "Backed up", not "paired": every device makes itself a key on first
+    -- Both anchors: a page change is a page load here, so they need no router
+    -- and leave no notion of "which page" in any state. Pairing lives on the
+    -- cards page and is one thing for the whole app — both pages use one key.
+    panel =
+      H.fragment
+      [ H.div_ "backdrop" { onClick: dispatch <| TogglePanel } H.empty
+      , H.div "panel"
+        [ H.a_ "panel-item" { href: "/" } "Flashcards"
+        , H.a_ "panel-item" { href: "/?sync" } "Sync a device"
+        , H.p "panel-note" syncNote
+        ]
+      ]
+
+    -- "Backed up", not "synced": every device makes itself a key on first
     -- run, so this says the server has what is here, never that anything else
-    -- shares it. Which is why the link beside it is not conditional.
-    synced = if isJust state.sent && not state.offline then "backed up" else ""
+    -- shares it.
+    syncNote
+      | state.offline = "Not backed up — no connection"
+      | isJust state.sent = "Backed up"
+      | otherwise = "Not backed up yet"
 
     total = state.got + state.again + Array.length state.queue
 

@@ -152,8 +152,8 @@ prompts =
     , verb: "poder", tense: Subjunctive, person: Pl1
     , trap: OnTense, against: "present"
     }
-  , { id: "tell-me-truth", asked: "How would you ask me to tell you the truth?"
-    , model: "Quiero que me digas la verdad."
+  , { id: "tell-me-truth", asked: "How would you tell me you don't think I'm telling you everything?"
+    , model: "No creo que me digas todo."
     , verb: "decir", tense: Subjunctive, person: Sg2
     , trap: OnTense, against: "present"
     }
