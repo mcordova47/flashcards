@@ -1,0 +1,66 @@
+# Refuses a broken push. Netlify still builds and deploys on its own; this
+# only says whether what it deployed should have been merged. See #23.
+name: check
+
+on: push
+
+jobs:
+  # Seconds, no browser. The drift check is the one thing nothing else covers:
+  # the app reads the generated modules, people read the CSVs, and a commit
+  # that edits one without the other would otherwise ship the old cells.
+  data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+
+      # Every generator is deterministic, so a module regenerated from its CSV
+      # is byte-identical unless one of them is stale. Run before anything else
+      # can touch the tree.
+      - name: Generated modules match their CSVs
+        run: |
+          npm run -s sync
+          if [ -n "$(git status --porcelain)" ]; then
+            git status --short
+            git diff
+            echo "::error::A generated module is out of date with its CSV. Run \`npm run sync\` and commit the result."
+            exit 1
+          fi
+
+      # Structural only: deviations from the regular pattern are its output,
+      # not a failure, and it exits zero for them.
+      - run: npm run -s check-verbs
+      - run: npm run -s check-paraphrase
+      - run: npm run -s check-sentences
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .spago
+            ~/.cache/spago-nodejs
+          key: spago-${{ hashFiles('spago.lock') }}
+      - run: npm test
+
+  # About three minutes. ubuntu-latest ships Chrome at /usr/bin/google-chrome,
+  # which the harness already looks for.
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .spago
+            ~/.cache/spago-nodejs
+          key: spago-${{ hashFiles('spago.lock') }}
+      - run: npm run build
+      - run: node test/browser/run.mjs

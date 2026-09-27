@@ -41,8 +41,20 @@ if (!chosen.length) {
   process.exit(1)
 }
 
+// A suite that throws gets one more go; one that fails a check does not. The
+// only flake seen so far is Puppeteer's "detached Frame" under load, which
+// throws, and passes when the suite runs alone. A check that fails is the app
+// being wrong, and retrying it would teach people to ignore red. The retry is
+// printed, so a suite that keeps needing one is visible rather than hidden.
 let failed = 0
-for (const [, suite] of chosen) failed += await run(suite.name, suite.default)
+for (const [, suite] of chosen) {
+  let result = await run(suite.name, suite.default)
+  if (result.threw) {
+    console.log(`  ↻ retrying "${suite.name}" once, since it threw`)
+    result = await run(suite.name, suite.default)
+  }
+  failed += result.failed
+}
 
 console.log(failed
   ? `\n${failed} check(s) failed`

@@ -29,6 +29,7 @@ npm start        # http://localhost:8000
 | `npm run build` | Compile and bundle into `public/` |
 | `npm test` | Unit specs — the pure core |
 | `npm run verify` | The paraphrase and sentence checks, then browser suites against a real Chrome |
+| `npm run sync` | Regenerate every data module from its CSV — what CI checks is already done |
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
 | `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
 | `npm run sync-verbs` | Regenerate the conjugation module from `data/es-verbs.csv` |
@@ -93,6 +94,36 @@ and shifting the ones a test clicked by index.
 It uses `puppeteer-core`, which drives the Chrome you already have rather than
 downloading one. If yours lives somewhere unusual, set `CHROME=/path/to/chrome`.
 Run a single suite with `npm run verify -- speech`.
+
+### What runs where
+
+Every push runs [`.github/workflows/check.yml`](.github/workflows/check.yml),
+in two jobs:
+
+- **data**, in seconds: regenerate every data module and fail if anything
+  changed, then `check-verbs`, `check-paraphrase`, `check-sentences` and
+  `npm test`.
+- **browser**, in about three minutes: build, then every browser suite against
+  the Chrome the runner ships with.
+
+The first step of **data** is the one nothing else covers. The app reads the
+generated modules and people read the CSVs, so a commit that edits
+`data/es-verbs.csv` and forgets `npm run sync-verbs` would ship the old cells
+with a diff that looks right. Every generator is deterministic, so
+regenerating from a current CSV changes nothing, and any change at all means
+one of them is stale. The fix is `npm run sync` and commit what it writes.
+
+`check-verbs` gates only on structure — a gap, a duplicate, an unknown tense.
+The deviations it prints are the review of the table, not a failure.
+
+A browser suite that *throws* is run once more; one that fails a check is not.
+The only flake seen so far is Puppeteer's `detached Frame` under load, which
+throws, and passes when the suite runs alone. Retrying a failed check would
+hide the app being wrong. The retry is printed, so a suite that keeps needing
+one shows up in the log.
+
+Netlify still builds and deploys on push, independently. CI does not gate the
+deploy; it says whether a push should have been made.
 
 ## How it works
 

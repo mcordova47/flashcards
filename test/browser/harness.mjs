@@ -268,14 +268,16 @@ export const run = async (name, body, { headless = "new", slowMo } = {}) => {
   }
 
   console.log(`\n${name}`)
+  let threw = false
   try {
     await body({ base, browser, check, open, downloads, blobs })
   } catch (e) {
     failed++
+    threw = true
     console.log(`  ✗ suite threw: ${e.message}`)
   } finally {
     await browser.close()
     server.close()
   }
-  return failed
+  return { failed, threw }
 }
