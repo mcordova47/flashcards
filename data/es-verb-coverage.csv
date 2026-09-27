@@ -1,0 +1,761 @@
+Infinitive,Rank,Tense,Person,Form,Deviates,Recommend,Why
+ser,31,present,1s,soy,yes,drill,irregular; the form has to be memorised
+ser,31,present,2s,eres,yes,drill,irregular; the form has to be memorised
+ser,31,present,3s,es,yes,drill,irregular; the form has to be memorised
+ser,31,present,1p,somos,yes,drill,irregular; the form has to be memorised
+ser,31,present,3p,son,yes,drill,irregular; the form has to be memorised
+ser,31,preterite,1s,fui,yes,drill,irregular; the form has to be memorised
+ser,31,preterite,2s,fuiste,yes,drill,irregular; the form has to be memorised
+ser,31,preterite,3s,fue,yes,drill,irregular; the form has to be memorised
+ser,31,preterite,1p,fuimos,yes,drill,irregular; the form has to be memorised
+ser,31,preterite,3p,fueron,yes,drill,irregular; the form has to be memorised
+ser,31,imperfect,1s,era,yes,drill,irregular; the form has to be memorised
+ser,31,imperfect,2s,eras,yes,drill,irregular; the form has to be memorised
+ser,31,imperfect,3s,era,yes,drill,irregular; the form has to be memorised
+ser,31,imperfect,1p,éramos,yes,drill,irregular; the form has to be memorised
+ser,31,imperfect,3p,eran,yes,drill,irregular; the form has to be memorised
+ser,31,subjunctive,1s,sea,yes,drill,irregular; the form has to be memorised
+ser,31,subjunctive,2s,seas,yes,drill,irregular; the form has to be memorised
+ser,31,subjunctive,3s,sea,yes,drill,irregular; the form has to be memorised
+ser,31,subjunctive,1p,seamos,yes,drill,irregular; the form has to be memorised
+ser,31,subjunctive,3p,sean,yes,drill,irregular; the form has to be memorised
+estar,32,present,1s,estoy,yes,drill,irregular; the form has to be memorised
+estar,32,present,2s,estás,yes,drill,irregular; the form has to be memorised
+estar,32,present,3s,está,yes,drill,irregular; the form has to be memorised
+estar,32,present,1p,estamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+estar,32,present,3p,están,yes,drill,irregular; the form has to be memorised
+estar,32,preterite,1s,estuve,yes,drill,irregular; the form has to be memorised
+estar,32,preterite,2s,estuviste,yes,drill,irregular; the form has to be memorised
+estar,32,preterite,3s,estuvo,yes,drill,irregular; the form has to be memorised
+estar,32,preterite,1p,estuvimos,yes,drill,irregular; the form has to be memorised
+estar,32,preterite,3p,estuvieron,yes,drill,irregular; the form has to be memorised
+estar,32,imperfect,1s,estaba,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+estar,32,imperfect,2s,estabas,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+estar,32,imperfect,3s,estaba,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+estar,32,imperfect,1p,estábamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+estar,32,imperfect,3p,estaban,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+estar,32,subjunctive,1s,esté,yes,drill,irregular; the form has to be memorised
+estar,32,subjunctive,2s,estés,yes,drill,irregular; the form has to be memorised
+estar,32,subjunctive,3s,esté,yes,drill,irregular; the form has to be memorised
+estar,32,subjunctive,1p,estemos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+estar,32,subjunctive,3p,estén,yes,drill,irregular; the form has to be memorised
+ir,21,present,1s,voy,yes,drill,irregular; the form has to be memorised
+ir,21,present,2s,vas,yes,drill,irregular; the form has to be memorised
+ir,21,present,3s,va,yes,drill,irregular; the form has to be memorised
+ir,21,present,1p,vamos,yes,drill,irregular; the form has to be memorised
+ir,21,present,3p,van,yes,drill,irregular; the form has to be memorised
+ir,21,preterite,1s,fui,yes,drill,irregular; the form has to be memorised
+ir,21,preterite,2s,fuiste,yes,drill,irregular; the form has to be memorised
+ir,21,preterite,3s,fue,yes,drill,irregular; the form has to be memorised
+ir,21,preterite,1p,fuimos,yes,drill,irregular; the form has to be memorised
+ir,21,preterite,3p,fueron,yes,drill,irregular; the form has to be memorised
+ir,21,imperfect,1s,iba,yes,drill,irregular; the form has to be memorised
+ir,21,imperfect,2s,ibas,yes,drill,irregular; the form has to be memorised
+ir,21,imperfect,3s,iba,yes,drill,irregular; the form has to be memorised
+ir,21,imperfect,1p,íbamos,yes,drill,irregular; the form has to be memorised
+ir,21,imperfect,3p,iban,yes,drill,irregular; the form has to be memorised
+ir,21,subjunctive,1s,vaya,yes,drill,irregular; the form has to be memorised
+ir,21,subjunctive,2s,vayas,yes,drill,irregular; the form has to be memorised
+ir,21,subjunctive,3s,vaya,yes,drill,irregular; the form has to be memorised
+ir,21,subjunctive,1p,vayamos,yes,drill,irregular; the form has to be memorised
+ir,21,subjunctive,3p,vayan,yes,drill,irregular; the form has to be memorised
+tener,9,present,1s,tengo,yes,drill,irregular; the form has to be memorised
+tener,9,present,2s,tienes,yes,drill,irregular; the form has to be memorised
+tener,9,present,3s,tiene,yes,drill,irregular; the form has to be memorised
+tener,9,present,1p,tenemos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+tener,9,present,3p,tienen,yes,drill,irregular; the form has to be memorised
+tener,9,preterite,1s,tuve,yes,drill,irregular; the form has to be memorised
+tener,9,preterite,2s,tuviste,yes,drill,irregular; the form has to be memorised
+tener,9,preterite,3s,tuvo,yes,drill,irregular; the form has to be memorised
+tener,9,preterite,1p,tuvimos,yes,drill,irregular; the form has to be memorised
+tener,9,preterite,3p,tuvieron,yes,drill,irregular; the form has to be memorised
+tener,9,imperfect,1s,tenía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+tener,9,imperfect,2s,tenías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+tener,9,imperfect,3s,tenía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+tener,9,imperfect,1p,teníamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+tener,9,imperfect,3p,tenían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+tener,9,subjunctive,1s,tenga,yes,drill,irregular; the form has to be memorised
+tener,9,subjunctive,2s,tengas,yes,drill,irregular; the form has to be memorised
+tener,9,subjunctive,3s,tenga,yes,drill,irregular; the form has to be memorised
+tener,9,subjunctive,1p,tengamos,yes,drill,irregular; the form has to be memorised
+tener,9,subjunctive,3p,tengan,yes,drill,irregular; the form has to be memorised
+hacer,43,present,1s,hago,yes,drill,irregular; the form has to be memorised
+hacer,43,present,2s,haces,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+hacer,43,present,3s,hace,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+hacer,43,present,1p,hacemos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+hacer,43,present,3p,hacen,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+hacer,43,preterite,1s,hice,yes,drill,irregular; the form has to be memorised
+hacer,43,preterite,2s,hiciste,yes,drill,irregular; the form has to be memorised
+hacer,43,preterite,3s,hizo,yes,drill,irregular; the form has to be memorised
+hacer,43,preterite,1p,hicimos,yes,drill,irregular; the form has to be memorised
+hacer,43,preterite,3p,hicieron,yes,drill,irregular; the form has to be memorised
+hacer,43,imperfect,1s,hacía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+hacer,43,imperfect,2s,hacías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+hacer,43,imperfect,3s,hacía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+hacer,43,imperfect,1p,hacíamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+hacer,43,imperfect,3p,hacían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+hacer,43,subjunctive,1s,haga,yes,drill,irregular; the form has to be memorised
+hacer,43,subjunctive,2s,hagas,yes,drill,irregular; the form has to be memorised
+hacer,43,subjunctive,3s,haga,yes,drill,irregular; the form has to be memorised
+hacer,43,subjunctive,1p,hagamos,yes,drill,irregular; the form has to be memorised
+hacer,43,subjunctive,3p,hagan,yes,drill,irregular; the form has to be memorised
+poder,6,present,1s,puedo,yes,drill,irregular; the form has to be memorised
+poder,6,present,2s,puedes,yes,drill,irregular; the form has to be memorised
+poder,6,present,3s,puede,yes,drill,irregular; the form has to be memorised
+poder,6,present,1p,podemos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poder,6,present,3p,pueden,yes,drill,irregular; the form has to be memorised
+poder,6,preterite,1s,pude,yes,drill,irregular; the form has to be memorised
+poder,6,preterite,2s,pudiste,yes,drill,irregular; the form has to be memorised
+poder,6,preterite,3s,pudo,yes,drill,irregular; the form has to be memorised
+poder,6,preterite,1p,pudimos,yes,drill,irregular; the form has to be memorised
+poder,6,preterite,3p,pudieron,yes,drill,irregular; the form has to be memorised
+poder,6,imperfect,1s,podía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poder,6,imperfect,2s,podías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poder,6,imperfect,3s,podía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poder,6,imperfect,1p,podíamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poder,6,imperfect,3p,podían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poder,6,subjunctive,1s,pueda,yes,drill,irregular; the form has to be memorised
+poder,6,subjunctive,2s,puedas,yes,drill,irregular; the form has to be memorised
+poder,6,subjunctive,3s,pueda,yes,drill,irregular; the form has to be memorised
+poder,6,subjunctive,1p,podamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poder,6,subjunctive,3p,puedan,yes,drill,irregular; the form has to be memorised
+decir,23,present,1s,digo,yes,drill,irregular; the form has to be memorised
+decir,23,present,2s,dices,yes,drill,irregular; the form has to be memorised
+decir,23,present,3s,dice,yes,drill,irregular; the form has to be memorised
+decir,23,present,1p,decimos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+decir,23,present,3p,dicen,yes,drill,irregular; the form has to be memorised
+decir,23,preterite,1s,dije,yes,drill,irregular; the form has to be memorised
+decir,23,preterite,2s,dijiste,yes,drill,irregular; the form has to be memorised
+decir,23,preterite,3s,dijo,yes,drill,irregular; the form has to be memorised
+decir,23,preterite,1p,dijimos,yes,drill,irregular; the form has to be memorised
+decir,23,preterite,3p,dijeron,yes,drill,irregular; the form has to be memorised
+decir,23,imperfect,1s,decía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+decir,23,imperfect,2s,decías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+decir,23,imperfect,3s,decía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+decir,23,imperfect,1p,decíamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+decir,23,imperfect,3p,decían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+decir,23,subjunctive,1s,diga,yes,drill,irregular; the form has to be memorised
+decir,23,subjunctive,2s,digas,yes,drill,irregular; the form has to be memorised
+decir,23,subjunctive,3s,diga,yes,drill,irregular; the form has to be memorised
+decir,23,subjunctive,1p,digamos,yes,drill,irregular; the form has to be memorised
+decir,23,subjunctive,3p,digan,yes,drill,irregular; the form has to be memorised
+poner,84,present,1s,pongo,yes,drill,irregular; the form has to be memorised
+poner,84,present,2s,pones,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poner,84,present,3s,pone,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poner,84,present,1p,ponemos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poner,84,present,3p,ponen,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poner,84,preterite,1s,puse,yes,drill,irregular; the form has to be memorised
+poner,84,preterite,2s,pusiste,yes,drill,irregular; the form has to be memorised
+poner,84,preterite,3s,puso,yes,drill,irregular; the form has to be memorised
+poner,84,preterite,1p,pusimos,yes,drill,irregular; the form has to be memorised
+poner,84,preterite,3p,pusieron,yes,drill,irregular; the form has to be memorised
+poner,84,imperfect,1s,ponía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poner,84,imperfect,2s,ponías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poner,84,imperfect,3s,ponía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poner,84,imperfect,1p,poníamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poner,84,imperfect,3p,ponían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+poner,84,subjunctive,1s,ponga,yes,drill,irregular; the form has to be memorised
+poner,84,subjunctive,2s,pongas,yes,drill,irregular; the form has to be memorised
+poner,84,subjunctive,3s,ponga,yes,drill,irregular; the form has to be memorised
+poner,84,subjunctive,1p,pongamos,yes,drill,irregular; the form has to be memorised
+poner,84,subjunctive,3p,pongan,yes,drill,irregular; the form has to be memorised
+venir,29,present,1s,vengo,yes,drill,irregular; the form has to be memorised
+venir,29,present,2s,vienes,yes,drill,irregular; the form has to be memorised
+venir,29,present,3s,viene,yes,drill,irregular; the form has to be memorised
+venir,29,present,1p,venimos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+venir,29,present,3p,vienen,yes,drill,irregular; the form has to be memorised
+venir,29,preterite,1s,vine,yes,drill,irregular; the form has to be memorised
+venir,29,preterite,2s,viniste,yes,drill,irregular; the form has to be memorised
+venir,29,preterite,3s,vino,yes,drill,irregular; the form has to be memorised
+venir,29,preterite,1p,vinimos,yes,drill,irregular; the form has to be memorised
+venir,29,preterite,3p,vinieron,yes,drill,irregular; the form has to be memorised
+venir,29,imperfect,1s,venía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+venir,29,imperfect,2s,venías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+venir,29,imperfect,3s,venía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+venir,29,imperfect,1p,veníamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+venir,29,imperfect,3p,venían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+venir,29,subjunctive,1s,venga,yes,drill,irregular; the form has to be memorised
+venir,29,subjunctive,2s,vengas,yes,drill,irregular; the form has to be memorised
+venir,29,subjunctive,3s,venga,yes,drill,irregular; the form has to be memorised
+venir,29,subjunctive,1p,vengamos,yes,drill,irregular; the form has to be memorised
+venir,29,subjunctive,3p,vengan,yes,drill,irregular; the form has to be memorised
+querer,2,present,1s,quiero,yes,drill,irregular; the form has to be memorised
+querer,2,present,2s,quieres,yes,drill,irregular; the form has to be memorised
+querer,2,present,3s,quiere,yes,drill,irregular; the form has to be memorised
+querer,2,present,1p,queremos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+querer,2,present,3p,quieren,yes,drill,irregular; the form has to be memorised
+querer,2,preterite,1s,quise,yes,drill,irregular; the form has to be memorised
+querer,2,preterite,2s,quisiste,yes,drill,irregular; the form has to be memorised
+querer,2,preterite,3s,quiso,yes,drill,irregular; the form has to be memorised
+querer,2,preterite,1p,quisimos,yes,drill,irregular; the form has to be memorised
+querer,2,preterite,3p,quisieron,yes,drill,irregular; the form has to be memorised
+querer,2,imperfect,1s,quería,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+querer,2,imperfect,2s,querías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+querer,2,imperfect,3s,quería,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+querer,2,imperfect,1p,queríamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+querer,2,imperfect,3p,querían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+querer,2,subjunctive,1s,quiera,yes,drill,irregular; the form has to be memorised
+querer,2,subjunctive,2s,quieras,yes,drill,irregular; the form has to be memorised
+querer,2,subjunctive,3s,quiera,yes,drill,irregular; the form has to be memorised
+querer,2,subjunctive,1p,queramos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+querer,2,subjunctive,3p,quieran,yes,drill,irregular; the form has to be memorised
+saber,41,present,1s,sé,yes,drill,irregular; the form has to be memorised
+saber,41,present,2s,sabes,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+saber,41,present,3s,sabe,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+saber,41,present,1p,sabemos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+saber,41,present,3p,saben,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+saber,41,preterite,1s,supe,yes,drill,irregular; the form has to be memorised
+saber,41,preterite,2s,supiste,yes,drill,irregular; the form has to be memorised
+saber,41,preterite,3s,supo,yes,drill,irregular; the form has to be memorised
+saber,41,preterite,1p,supimos,yes,drill,irregular; the form has to be memorised
+saber,41,preterite,3p,supieron,yes,drill,irregular; the form has to be memorised
+saber,41,imperfect,1s,sabía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+saber,41,imperfect,2s,sabías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+saber,41,imperfect,3s,sabía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+saber,41,imperfect,1p,sabíamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+saber,41,imperfect,3p,sabían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+saber,41,subjunctive,1s,sepa,yes,drill,irregular; the form has to be memorised
+saber,41,subjunctive,2s,sepas,yes,drill,irregular; the form has to be memorised
+saber,41,subjunctive,3s,sepa,yes,drill,irregular; the form has to be memorised
+saber,41,subjunctive,1p,sepamos,yes,drill,irregular; the form has to be memorised
+saber,41,subjunctive,3p,sepan,yes,drill,irregular; the form has to be memorised
+ver,19,present,1s,veo,yes,drill,irregular; the form has to be memorised
+ver,19,present,2s,ves,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+ver,19,present,3s,ve,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+ver,19,present,1p,vemos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+ver,19,present,3p,ven,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+ver,19,preterite,1s,vi,,drill,"regular endings, but the accent rule makes it look wrong"
+ver,19,preterite,2s,viste,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+ver,19,preterite,3s,vio,,drill,"regular endings, but the accent rule makes it look wrong"
+ver,19,preterite,1p,vimos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+ver,19,preterite,3p,vieron,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+ver,19,imperfect,1s,veía,yes,drill,irregular; the form has to be memorised
+ver,19,imperfect,2s,veías,yes,drill,irregular; the form has to be memorised
+ver,19,imperfect,3s,veía,yes,drill,irregular; the form has to be memorised
+ver,19,imperfect,1p,veíamos,yes,drill,irregular; the form has to be memorised
+ver,19,imperfect,3p,veían,yes,drill,irregular; the form has to be memorised
+ver,19,subjunctive,1s,vea,yes,drill,irregular; the form has to be memorised
+ver,19,subjunctive,2s,veas,yes,drill,irregular; the form has to be memorised
+ver,19,subjunctive,3s,vea,yes,drill,irregular; the form has to be memorised
+ver,19,subjunctive,1p,veamos,yes,drill,irregular; the form has to be memorised
+ver,19,subjunctive,3p,vean,yes,drill,irregular; the form has to be memorised
+dar,67,present,1s,doy,yes,drill,irregular; the form has to be memorised
+dar,67,present,2s,das,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+dar,67,present,3s,da,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+dar,67,present,1p,damos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+dar,67,present,3p,dan,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+dar,67,preterite,1s,di,yes,drill,irregular; the form has to be memorised
+dar,67,preterite,2s,diste,yes,drill,irregular; the form has to be memorised
+dar,67,preterite,3s,dio,yes,drill,irregular; the form has to be memorised
+dar,67,preterite,1p,dimos,yes,drill,irregular; the form has to be memorised
+dar,67,preterite,3p,dieron,yes,drill,irregular; the form has to be memorised
+dar,67,imperfect,1s,daba,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+dar,67,imperfect,2s,dabas,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+dar,67,imperfect,3s,daba,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+dar,67,imperfect,1p,dábamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+dar,67,imperfect,3p,daban,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+dar,67,subjunctive,1s,dé,yes,drill,irregular; the form has to be memorised
+dar,67,subjunctive,2s,des,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+dar,67,subjunctive,3s,dé,yes,drill,irregular; the form has to be memorised
+dar,67,subjunctive,1p,demos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+dar,67,subjunctive,3p,den,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,present,1s,salgo,yes,drill,irregular; the form has to be memorised
+salir,145,present,2s,sales,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,present,3s,sale,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,present,1p,salimos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,present,3p,salen,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,preterite,1s,salí,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,preterite,2s,saliste,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,preterite,3s,salió,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,preterite,1p,salimos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,preterite,3p,salieron,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,imperfect,1s,salía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,imperfect,2s,salías,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,imperfect,3s,salía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,imperfect,1p,salíamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,imperfect,3p,salían,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+salir,145,subjunctive,1s,salga,yes,drill,irregular; the form has to be memorised
+salir,145,subjunctive,2s,salgas,yes,drill,irregular; the form has to be memorised
+salir,145,subjunctive,3s,salga,yes,drill,irregular; the form has to be memorised
+salir,145,subjunctive,1p,salgamos,yes,drill,irregular; the form has to be memorised
+salir,145,subjunctive,3p,salgan,yes,drill,irregular; the form has to be memorised
+traer,324,present,1s,traigo,yes,drill,irregular; the form has to be memorised
+traer,324,present,2s,traes,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+traer,324,present,3s,trae,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+traer,324,present,1p,traemos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+traer,324,present,3p,traen,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+traer,324,preterite,1s,traje,yes,drill,irregular; the form has to be memorised
+traer,324,preterite,2s,trajiste,yes,drill,irregular; the form has to be memorised
+traer,324,preterite,3s,trajo,yes,drill,irregular; the form has to be memorised
+traer,324,preterite,1p,trajimos,yes,drill,irregular; the form has to be memorised
+traer,324,preterite,3p,trajeron,yes,drill,irregular; the form has to be memorised
+traer,324,imperfect,1s,traía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+traer,324,imperfect,2s,traías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+traer,324,imperfect,3s,traía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+traer,324,imperfect,1p,traíamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+traer,324,imperfect,3p,traían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+traer,324,subjunctive,1s,traiga,yes,drill,irregular; the form has to be memorised
+traer,324,subjunctive,2s,traigas,yes,drill,irregular; the form has to be memorised
+traer,324,subjunctive,3s,traiga,yes,drill,irregular; the form has to be memorised
+traer,324,subjunctive,1p,traigamos,yes,drill,irregular; the form has to be memorised
+traer,324,subjunctive,3p,traigan,yes,drill,irregular; the form has to be memorised
+caber,750,present,1s,quepo,yes,later,"irregular; the form has to be memorised; rank 750, so rarely met"
+caber,750,present,2s,cabes,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 750, so rarely met"
+caber,750,present,3s,cabe,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 750, so rarely met"
+caber,750,present,1p,cabemos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 750, so rarely met"
+caber,750,present,3p,caben,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 750, so rarely met"
+caber,750,preterite,1s,cupe,yes,later,"irregular; the form has to be memorised; rank 750, so rarely met"
+caber,750,preterite,2s,cupiste,yes,later,"irregular; the form has to be memorised; rank 750, so rarely met"
+caber,750,preterite,3s,cupo,yes,later,"irregular; the form has to be memorised; rank 750, so rarely met"
+caber,750,preterite,1p,cupimos,yes,later,"irregular; the form has to be memorised; rank 750, so rarely met"
+caber,750,preterite,3p,cupieron,yes,later,"irregular; the form has to be memorised; rank 750, so rarely met"
+caber,750,imperfect,1s,cabía,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 750, so rarely met"
+caber,750,imperfect,2s,cabías,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 750, so rarely met"
+caber,750,imperfect,3s,cabía,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 750, so rarely met"
+caber,750,imperfect,1p,cabíamos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 750, so rarely met"
+caber,750,imperfect,3p,cabían,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 750, so rarely met"
+caber,750,subjunctive,1s,quepa,yes,later,"irregular; the form has to be memorised; rank 750, so rarely met"
+caber,750,subjunctive,2s,quepas,yes,later,"irregular; the form has to be memorised; rank 750, so rarely met"
+caber,750,subjunctive,3s,quepa,yes,later,"irregular; the form has to be memorised; rank 750, so rarely met"
+caber,750,subjunctive,1p,quepamos,yes,later,"irregular; the form has to be memorised; rank 750, so rarely met"
+caber,750,subjunctive,3p,quepan,yes,later,"irregular; the form has to be memorised; rank 750, so rarely met"
+valer,425,present,1s,valgo,yes,drill,irregular; the form has to be memorised
+valer,425,present,2s,vales,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,present,3s,vale,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,present,1p,valemos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,present,3p,valen,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,preterite,1s,valí,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,preterite,2s,valiste,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,preterite,3s,valió,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,preterite,1p,valimos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,preterite,3p,valieron,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,imperfect,1s,valía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,imperfect,2s,valías,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,imperfect,3s,valía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,imperfect,1p,valíamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,imperfect,3p,valían,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+valer,425,subjunctive,1s,valga,yes,drill,irregular; the form has to be memorised
+valer,425,subjunctive,2s,valgas,yes,drill,irregular; the form has to be memorised
+valer,425,subjunctive,3s,valga,yes,drill,irregular; the form has to be memorised
+valer,425,subjunctive,1p,valgamos,yes,drill,irregular; the form has to be memorised
+valer,425,subjunctive,3p,valgan,yes,drill,irregular; the form has to be memorised
+oír,293,present,1s,oigo,yes,drill,irregular; the form has to be memorised
+oír,293,present,2s,oyes,yes,drill,irregular; the form has to be memorised
+oír,293,present,3s,oye,yes,drill,irregular; the form has to be memorised
+oír,293,present,1p,oímos,yes,drill,irregular; the form has to be memorised
+oír,293,present,3p,oyen,yes,drill,irregular; the form has to be memorised
+oír,293,preterite,1s,oí,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+oír,293,preterite,2s,oíste,yes,drill,irregular; the form has to be memorised
+oír,293,preterite,3s,oyó,yes,drill,irregular; the form has to be memorised
+oír,293,preterite,1p,oímos,yes,drill,irregular; the form has to be memorised
+oír,293,preterite,3p,oyeron,yes,drill,irregular; the form has to be memorised
+oír,293,imperfect,1s,oía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+oír,293,imperfect,2s,oías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+oír,293,imperfect,3s,oía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+oír,293,imperfect,1p,oíamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+oír,293,imperfect,3p,oían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+oír,293,subjunctive,1s,oiga,yes,drill,irregular; the form has to be memorised
+oír,293,subjunctive,2s,oigas,yes,drill,irregular; the form has to be memorised
+oír,293,subjunctive,3s,oiga,yes,drill,irregular; the form has to be memorised
+oír,293,subjunctive,1p,oigamos,yes,drill,irregular; the form has to be memorised
+oír,293,subjunctive,3p,oigan,yes,drill,irregular; the form has to be memorised
+conducir,934,present,1s,conduzco,yes,later,"irregular; the form has to be memorised; rank 934, so rarely met"
+conducir,934,present,2s,conduces,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 934, so rarely met"
+conducir,934,present,3s,conduce,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 934, so rarely met"
+conducir,934,present,1p,conducimos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 934, so rarely met"
+conducir,934,present,3p,conducen,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 934, so rarely met"
+conducir,934,preterite,1s,conduje,yes,later,"irregular; the form has to be memorised; rank 934, so rarely met"
+conducir,934,preterite,2s,condujiste,yes,later,"irregular; the form has to be memorised; rank 934, so rarely met"
+conducir,934,preterite,3s,condujo,yes,later,"irregular; the form has to be memorised; rank 934, so rarely met"
+conducir,934,preterite,1p,condujimos,yes,later,"irregular; the form has to be memorised; rank 934, so rarely met"
+conducir,934,preterite,3p,condujeron,yes,later,"irregular; the form has to be memorised; rank 934, so rarely met"
+conducir,934,imperfect,1s,conducía,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 934, so rarely met"
+conducir,934,imperfect,2s,conducías,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 934, so rarely met"
+conducir,934,imperfect,3s,conducía,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 934, so rarely met"
+conducir,934,imperfect,1p,conducíamos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 934, so rarely met"
+conducir,934,imperfect,3p,conducían,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 934, so rarely met"
+conducir,934,subjunctive,1s,conduzca,yes,later,"irregular; the form has to be memorised; rank 934, so rarely met"
+conducir,934,subjunctive,2s,conduzcas,yes,later,"irregular; the form has to be memorised; rank 934, so rarely met"
+conducir,934,subjunctive,3s,conduzca,yes,later,"irregular; the form has to be memorised; rank 934, so rarely met"
+conducir,934,subjunctive,1p,conduzcamos,yes,later,"irregular; the form has to be memorised; rank 934, so rarely met"
+conducir,934,subjunctive,3p,conduzcan,yes,later,"irregular; the form has to be memorised; rank 934, so rarely met"
+pensar,140,present,1s,pienso,yes,drill,irregular; the form has to be memorised
+pensar,140,present,2s,piensas,yes,drill,irregular; the form has to be memorised
+pensar,140,present,3s,piensa,yes,drill,irregular; the form has to be memorised
+pensar,140,present,1p,pensamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,present,3p,piensan,yes,drill,irregular; the form has to be memorised
+pensar,140,preterite,1s,pensé,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,preterite,2s,pensaste,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,preterite,3s,pensó,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,preterite,1p,pensamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,preterite,3p,pensaron,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,imperfect,1s,pensaba,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,imperfect,2s,pensabas,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,imperfect,3s,pensaba,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,imperfect,1p,pensábamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,imperfect,3p,pensaban,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,subjunctive,1s,piense,yes,drill,irregular; the form has to be memorised
+pensar,140,subjunctive,2s,pienses,yes,drill,irregular; the form has to be memorised
+pensar,140,subjunctive,3s,piense,yes,drill,irregular; the form has to be memorised
+pensar,140,subjunctive,1p,pensemos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+pensar,140,subjunctive,3p,piensen,yes,drill,irregular; the form has to be memorised
+volver,146,present,1s,vuelvo,yes,drill,irregular; the form has to be memorised
+volver,146,present,2s,vuelves,yes,drill,irregular; the form has to be memorised
+volver,146,present,3s,vuelve,yes,drill,irregular; the form has to be memorised
+volver,146,present,1p,volvemos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,present,3p,vuelven,yes,drill,irregular; the form has to be memorised
+volver,146,preterite,1s,volví,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,preterite,2s,volviste,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,preterite,3s,volvió,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,preterite,1p,volvimos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,preterite,3p,volvieron,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,imperfect,1s,volvía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,imperfect,2s,volvías,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,imperfect,3s,volvía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,imperfect,1p,volvíamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,imperfect,3p,volvían,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,subjunctive,1s,vuelva,yes,drill,irregular; the form has to be memorised
+volver,146,subjunctive,2s,vuelvas,yes,drill,irregular; the form has to be memorised
+volver,146,subjunctive,3s,vuelva,yes,drill,irregular; the form has to be memorised
+volver,146,subjunctive,1p,volvamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+volver,146,subjunctive,3p,vuelvan,yes,drill,irregular; the form has to be memorised
+pedir,98,present,1s,pido,yes,drill,irregular; the form has to be memorised
+pedir,98,present,2s,pides,yes,drill,irregular; the form has to be memorised
+pedir,98,present,3s,pide,yes,drill,irregular; the form has to be memorised
+pedir,98,present,1p,pedimos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+pedir,98,present,3p,piden,yes,drill,irregular; the form has to be memorised
+pedir,98,preterite,1s,pedí,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+pedir,98,preterite,2s,pediste,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+pedir,98,preterite,3s,pidió,yes,drill,irregular; the form has to be memorised
+pedir,98,preterite,1p,pedimos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+pedir,98,preterite,3p,pidieron,yes,drill,irregular; the form has to be memorised
+pedir,98,imperfect,1s,pedía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+pedir,98,imperfect,2s,pedías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+pedir,98,imperfect,3s,pedía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+pedir,98,imperfect,1p,pedíamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+pedir,98,imperfect,3p,pedían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+pedir,98,subjunctive,1s,pida,yes,drill,irregular; the form has to be memorised
+pedir,98,subjunctive,2s,pidas,yes,drill,irregular; the form has to be memorised
+pedir,98,subjunctive,3s,pida,yes,drill,irregular; the form has to be memorised
+pedir,98,subjunctive,1p,pidamos,yes,drill,irregular; the form has to be memorised
+pedir,98,subjunctive,3p,pidan,yes,drill,irregular; the form has to be memorised
+dormir,537,present,1s,duermo,yes,later,"irregular; the form has to be memorised; rank 537, so rarely met"
+dormir,537,present,2s,duermes,yes,later,"irregular; the form has to be memorised; rank 537, so rarely met"
+dormir,537,present,3s,duerme,yes,later,"irregular; the form has to be memorised; rank 537, so rarely met"
+dormir,537,present,1p,dormimos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 537, so rarely met"
+dormir,537,present,3p,duermen,yes,later,"irregular; the form has to be memorised; rank 537, so rarely met"
+dormir,537,preterite,1s,dormí,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 537, so rarely met"
+dormir,537,preterite,2s,dormiste,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 537, so rarely met"
+dormir,537,preterite,3s,durmió,yes,later,"irregular; the form has to be memorised; rank 537, so rarely met"
+dormir,537,preterite,1p,dormimos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 537, so rarely met"
+dormir,537,preterite,3p,durmieron,yes,later,"irregular; the form has to be memorised; rank 537, so rarely met"
+dormir,537,imperfect,1s,dormía,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 537, so rarely met"
+dormir,537,imperfect,2s,dormías,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 537, so rarely met"
+dormir,537,imperfect,3s,dormía,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 537, so rarely met"
+dormir,537,imperfect,1p,dormíamos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 537, so rarely met"
+dormir,537,imperfect,3p,dormían,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 537, so rarely met"
+dormir,537,subjunctive,1s,duerma,yes,later,"irregular; the form has to be memorised; rank 537, so rarely met"
+dormir,537,subjunctive,2s,duermas,yes,later,"irregular; the form has to be memorised; rank 537, so rarely met"
+dormir,537,subjunctive,3s,duerma,yes,later,"irregular; the form has to be memorised; rank 537, so rarely met"
+dormir,537,subjunctive,1p,durmamos,yes,later,"irregular; the form has to be memorised; rank 537, so rarely met"
+dormir,537,subjunctive,3p,duerman,yes,later,"irregular; the form has to be memorised; rank 537, so rarely met"
+jugar,390,present,1s,juego,yes,drill,irregular; the form has to be memorised
+jugar,390,present,2s,juegas,yes,drill,irregular; the form has to be memorised
+jugar,390,present,3s,juega,yes,drill,irregular; the form has to be memorised
+jugar,390,present,1p,jugamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+jugar,390,present,3p,juegan,yes,drill,irregular; the form has to be memorised
+jugar,390,preterite,1s,jugué,yes,drill,irregular; the form has to be memorised
+jugar,390,preterite,2s,jugaste,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+jugar,390,preterite,3s,jugó,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+jugar,390,preterite,1p,jugamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+jugar,390,preterite,3p,jugaron,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+jugar,390,imperfect,1s,jugaba,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+jugar,390,imperfect,2s,jugabas,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+jugar,390,imperfect,3s,jugaba,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+jugar,390,imperfect,1p,jugábamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+jugar,390,imperfect,3p,jugaban,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+jugar,390,subjunctive,1s,juegue,yes,drill,irregular; the form has to be memorised
+jugar,390,subjunctive,2s,juegues,yes,drill,irregular; the form has to be memorised
+jugar,390,subjunctive,3s,juegue,yes,drill,irregular; the form has to be memorised
+jugar,390,subjunctive,1p,juguemos,yes,drill,irregular; the form has to be memorised
+jugar,390,subjunctive,3p,jueguen,yes,drill,irregular; the form has to be memorised
+llegar,45,present,1s,llego,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,present,2s,llegas,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,present,3s,llega,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,present,1p,llegamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,present,3p,llegan,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,preterite,1s,llegué,yes,drill,irregular; the form has to be memorised
+llegar,45,preterite,2s,llegaste,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,preterite,3s,llegó,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,preterite,1p,llegamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,preterite,3p,llegaron,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,imperfect,1s,llegaba,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,imperfect,2s,llegabas,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,imperfect,3s,llegaba,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,imperfect,1p,llegábamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,imperfect,3p,llegaban,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+llegar,45,subjunctive,1s,llegue,yes,drill,irregular; the form has to be memorised
+llegar,45,subjunctive,2s,llegues,yes,drill,irregular; the form has to be memorised
+llegar,45,subjunctive,3s,llegue,yes,drill,irregular; the form has to be memorised
+llegar,45,subjunctive,1p,lleguemos,yes,drill,irregular; the form has to be memorised
+llegar,45,subjunctive,3p,lleguen,yes,drill,irregular; the form has to be memorised
+buscar,204,present,1s,busco,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,present,2s,buscas,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,present,3s,busca,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,present,1p,buscamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,present,3p,buscan,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,preterite,1s,busqué,yes,drill,irregular; the form has to be memorised
+buscar,204,preterite,2s,buscaste,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,preterite,3s,buscó,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,preterite,1p,buscamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,preterite,3p,buscaron,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,imperfect,1s,buscaba,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,imperfect,2s,buscabas,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,imperfect,3s,buscaba,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,imperfect,1p,buscábamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,imperfect,3p,buscaban,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+buscar,204,subjunctive,1s,busque,yes,drill,irregular; the form has to be memorised
+buscar,204,subjunctive,2s,busques,yes,drill,irregular; the form has to be memorised
+buscar,204,subjunctive,3s,busque,yes,drill,irregular; the form has to be memorised
+buscar,204,subjunctive,1p,busquemos,yes,drill,irregular; the form has to be memorised
+buscar,204,subjunctive,3p,busquen,yes,drill,irregular; the form has to be memorised
+empezar,191,present,1s,empiezo,yes,drill,irregular; the form has to be memorised
+empezar,191,present,2s,empiezas,yes,drill,irregular; the form has to be memorised
+empezar,191,present,3s,empieza,yes,drill,irregular; the form has to be memorised
+empezar,191,present,1p,empezamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+empezar,191,present,3p,empiezan,yes,drill,irregular; the form has to be memorised
+empezar,191,preterite,1s,empecé,yes,drill,irregular; the form has to be memorised
+empezar,191,preterite,2s,empezaste,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+empezar,191,preterite,3s,empezó,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+empezar,191,preterite,1p,empezamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+empezar,191,preterite,3p,empezaron,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+empezar,191,imperfect,1s,empezaba,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+empezar,191,imperfect,2s,empezabas,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+empezar,191,imperfect,3s,empezaba,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+empezar,191,imperfect,1p,empezábamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+empezar,191,imperfect,3p,empezaban,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+empezar,191,subjunctive,1s,empiece,yes,drill,irregular; the form has to be memorised
+empezar,191,subjunctive,2s,empieces,yes,drill,irregular; the form has to be memorised
+empezar,191,subjunctive,3s,empiece,yes,drill,irregular; the form has to be memorised
+empezar,191,subjunctive,1p,empecemos,yes,drill,irregular; the form has to be memorised
+empezar,191,subjunctive,3p,empiecen,yes,drill,irregular; the form has to be memorised
+andar,579,present,1s,ando,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,present,2s,andas,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,present,3s,anda,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,present,1p,andamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,present,3p,andan,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,preterite,1s,anduve,yes,later,"irregular; the form has to be memorised; rank 579, so rarely met"
+andar,579,preterite,2s,anduviste,yes,later,"irregular; the form has to be memorised; rank 579, so rarely met"
+andar,579,preterite,3s,anduvo,yes,later,"irregular; the form has to be memorised; rank 579, so rarely met"
+andar,579,preterite,1p,anduvimos,yes,later,"irregular; the form has to be memorised; rank 579, so rarely met"
+andar,579,preterite,3p,anduvieron,yes,later,"irregular; the form has to be memorised; rank 579, so rarely met"
+andar,579,imperfect,1s,andaba,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,imperfect,2s,andabas,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,imperfect,3s,andaba,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,imperfect,1p,andábamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,imperfect,3p,andaban,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,subjunctive,1s,ande,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,subjunctive,2s,andes,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,subjunctive,3s,ande,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,subjunctive,1p,andemos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+andar,579,subjunctive,3p,anden,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+caer,274,present,1s,caigo,yes,drill,irregular; the form has to be memorised
+caer,274,present,2s,caes,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+caer,274,present,3s,cae,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+caer,274,present,1p,caemos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+caer,274,present,3p,caen,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+caer,274,preterite,1s,caí,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+caer,274,preterite,2s,caíste,yes,drill,irregular; the form has to be memorised
+caer,274,preterite,3s,cayó,yes,drill,irregular; the form has to be memorised
+caer,274,preterite,1p,caímos,yes,drill,irregular; the form has to be memorised
+caer,274,preterite,3p,cayeron,yes,drill,irregular; the form has to be memorised
+caer,274,imperfect,1s,caía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+caer,274,imperfect,2s,caías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+caer,274,imperfect,3s,caía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+caer,274,imperfect,1p,caíamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+caer,274,imperfect,3p,caían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+caer,274,subjunctive,1s,caiga,yes,drill,irregular; the form has to be memorised
+caer,274,subjunctive,2s,caigas,yes,drill,irregular; the form has to be memorised
+caer,274,subjunctive,3s,caiga,yes,drill,irregular; the form has to be memorised
+caer,274,subjunctive,1p,caigamos,yes,drill,irregular; the form has to be memorised
+caer,274,subjunctive,3p,caigan,yes,drill,irregular; the form has to be memorised
+conocer,42,present,1s,conozco,yes,drill,irregular; the form has to be memorised
+conocer,42,present,2s,conoces,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,present,3s,conoce,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,present,1p,conocemos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,present,3p,conocen,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,preterite,1s,conocí,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,preterite,2s,conociste,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,preterite,3s,conoció,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,preterite,1p,conocimos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,preterite,3p,conocieron,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,imperfect,1s,conocía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,imperfect,2s,conocías,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,imperfect,3s,conocía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,imperfect,1p,conocíamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,imperfect,3p,conocían,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+conocer,42,subjunctive,1s,conozca,yes,drill,irregular; the form has to be memorised
+conocer,42,subjunctive,2s,conozcas,yes,drill,irregular; the form has to be memorised
+conocer,42,subjunctive,3s,conozca,yes,drill,irregular; the form has to be memorised
+conocer,42,subjunctive,1p,conozcamos,yes,drill,irregular; the form has to be memorised
+conocer,42,subjunctive,3p,conozcan,yes,drill,irregular; the form has to be memorised
+leer,273,present,1s,leo,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,present,2s,lees,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,present,3s,lee,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,present,1p,leemos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,present,3p,leen,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,preterite,1s,leí,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,preterite,2s,leíste,yes,drill,irregular; the form has to be memorised
+leer,273,preterite,3s,leyó,yes,drill,irregular; the form has to be memorised
+leer,273,preterite,1p,leímos,yes,drill,irregular; the form has to be memorised
+leer,273,preterite,3p,leyeron,yes,drill,irregular; the form has to be memorised
+leer,273,imperfect,1s,leía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,imperfect,2s,leías,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,imperfect,3s,leía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,imperfect,1p,leíamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,imperfect,3p,leían,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,subjunctive,1s,lea,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,subjunctive,2s,leas,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,subjunctive,3s,lea,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,subjunctive,1p,leamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+leer,273,subjunctive,3p,lean,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+construir,566,present,1s,construyo,yes,later,"irregular; the form has to be memorised; rank 566, so rarely met"
+construir,566,present,2s,construyes,yes,later,"irregular; the form has to be memorised; rank 566, so rarely met"
+construir,566,present,3s,construye,yes,later,"irregular; the form has to be memorised; rank 566, so rarely met"
+construir,566,present,1p,construimos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 566, so rarely met"
+construir,566,present,3p,construyen,yes,later,"irregular; the form has to be memorised; rank 566, so rarely met"
+construir,566,preterite,1s,construí,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 566, so rarely met"
+construir,566,preterite,2s,construiste,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 566, so rarely met"
+construir,566,preterite,3s,construyó,yes,later,"irregular; the form has to be memorised; rank 566, so rarely met"
+construir,566,preterite,1p,construimos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 566, so rarely met"
+construir,566,preterite,3p,construyeron,yes,later,"irregular; the form has to be memorised; rank 566, so rarely met"
+construir,566,imperfect,1s,construía,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 566, so rarely met"
+construir,566,imperfect,2s,construías,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 566, so rarely met"
+construir,566,imperfect,3s,construía,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 566, so rarely met"
+construir,566,imperfect,1p,construíamos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 566, so rarely met"
+construir,566,imperfect,3p,construían,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 566, so rarely met"
+construir,566,subjunctive,1s,construya,yes,later,"irregular; the form has to be memorised; rank 566, so rarely met"
+construir,566,subjunctive,2s,construyas,yes,later,"irregular; the form has to be memorised; rank 566, so rarely met"
+construir,566,subjunctive,3s,construya,yes,later,"irregular; the form has to be memorised; rank 566, so rarely met"
+construir,566,subjunctive,1p,construyamos,yes,later,"irregular; the form has to be memorised; rank 566, so rarely met"
+construir,566,subjunctive,3p,construyan,yes,later,"irregular; the form has to be memorised; rank 566, so rarely met"
+reír,,present,1s,río,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,present,2s,ríes,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,present,3s,ríe,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,present,1p,reímos,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,present,3p,ríen,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,preterite,1s,reí,,later,"regular, but the verb is not, so this is where it gets over-corrected; the deck does not teach this verb"
+reír,,preterite,2s,reíste,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,preterite,3s,rio,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,preterite,1p,reímos,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,preterite,3p,rieron,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,imperfect,1s,reía,,later,"regular, but the verb is not, so this is where it gets over-corrected; the deck does not teach this verb"
+reír,,imperfect,2s,reías,,later,"regular, but the verb is not, so this is where it gets over-corrected; the deck does not teach this verb"
+reír,,imperfect,3s,reía,,later,"regular, but the verb is not, so this is where it gets over-corrected; the deck does not teach this verb"
+reír,,imperfect,1p,reíamos,,later,"regular, but the verb is not, so this is where it gets over-corrected; the deck does not teach this verb"
+reír,,imperfect,3p,reían,,later,"regular, but the verb is not, so this is where it gets over-corrected; the deck does not teach this verb"
+reír,,subjunctive,1s,ría,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,subjunctive,2s,rías,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,subjunctive,3s,ría,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,subjunctive,1p,riamos,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+reír,,subjunctive,3p,rían,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+seguir,135,present,1s,sigo,yes,drill,irregular; the form has to be memorised
+seguir,135,present,2s,sigues,yes,drill,irregular; the form has to be memorised
+seguir,135,present,3s,sigue,yes,drill,irregular; the form has to be memorised
+seguir,135,present,1p,seguimos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+seguir,135,present,3p,siguen,yes,drill,irregular; the form has to be memorised
+seguir,135,preterite,1s,seguí,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+seguir,135,preterite,2s,seguiste,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+seguir,135,preterite,3s,siguió,yes,drill,irregular; the form has to be memorised
+seguir,135,preterite,1p,seguimos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+seguir,135,preterite,3p,siguieron,yes,drill,irregular; the form has to be memorised
+seguir,135,imperfect,1s,seguía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+seguir,135,imperfect,2s,seguías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+seguir,135,imperfect,3s,seguía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+seguir,135,imperfect,1p,seguíamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+seguir,135,imperfect,3p,seguían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+seguir,135,subjunctive,1s,siga,yes,drill,irregular; the form has to be memorised
+seguir,135,subjunctive,2s,sigas,yes,drill,irregular; the form has to be memorised
+seguir,135,subjunctive,3s,siga,yes,drill,irregular; the form has to be memorised
+seguir,135,subjunctive,1p,sigamos,yes,drill,irregular; the form has to be memorised
+seguir,135,subjunctive,3p,sigan,yes,drill,irregular; the form has to be memorised
+sentir,159,present,1s,siento,yes,drill,irregular; the form has to be memorised
+sentir,159,present,2s,sientes,yes,drill,irregular; the form has to be memorised
+sentir,159,present,3s,siente,yes,drill,irregular; the form has to be memorised
+sentir,159,present,1p,sentimos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+sentir,159,present,3p,sienten,yes,drill,irregular; the form has to be memorised
+sentir,159,preterite,1s,sentí,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+sentir,159,preterite,2s,sentiste,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+sentir,159,preterite,3s,sintió,yes,drill,irregular; the form has to be memorised
+sentir,159,preterite,1p,sentimos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+sentir,159,preterite,3p,sintieron,yes,drill,irregular; the form has to be memorised
+sentir,159,imperfect,1s,sentía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+sentir,159,imperfect,2s,sentías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+sentir,159,imperfect,3s,sentía,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+sentir,159,imperfect,1p,sentíamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+sentir,159,imperfect,3p,sentían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+sentir,159,subjunctive,1s,sienta,yes,drill,irregular; the form has to be memorised
+sentir,159,subjunctive,2s,sientas,yes,drill,irregular; the form has to be memorised
+sentir,159,subjunctive,3s,sienta,yes,drill,irregular; the form has to be memorised
+sentir,159,subjunctive,1p,sintamos,yes,drill,irregular; the form has to be memorised
+sentir,159,subjunctive,3p,sientan,yes,drill,irregular; the form has to be memorised
+morir,326,present,1s,muero,yes,drill,irregular; the form has to be memorised
+morir,326,present,2s,mueres,yes,drill,irregular; the form has to be memorised
+morir,326,present,3s,muere,yes,drill,irregular; the form has to be memorised
+morir,326,present,1p,morimos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+morir,326,present,3p,mueren,yes,drill,irregular; the form has to be memorised
+morir,326,preterite,1s,morí,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+morir,326,preterite,2s,moriste,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+morir,326,preterite,3s,murió,yes,drill,irregular; the form has to be memorised
+morir,326,preterite,1p,morimos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+morir,326,preterite,3p,murieron,yes,drill,irregular; the form has to be memorised
+morir,326,imperfect,1s,moría,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+morir,326,imperfect,2s,morías,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+morir,326,imperfect,3s,moría,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+morir,326,imperfect,1p,moríamos,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+morir,326,imperfect,3p,morían,,drill,"regular, but the verb is not, so this is where it gets over-corrected"
+morir,326,subjunctive,1s,muera,yes,drill,irregular; the form has to be memorised
+morir,326,subjunctive,2s,mueras,yes,drill,irregular; the form has to be memorised
+morir,326,subjunctive,3s,muera,yes,drill,irregular; the form has to be memorised
+morir,326,subjunctive,1p,muramos,yes,drill,irregular; the form has to be memorised
+morir,326,subjunctive,3p,mueran,yes,drill,irregular; the form has to be memorised
+oler,,present,1s,huelo,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+oler,,present,2s,hueles,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+oler,,present,3s,huele,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+oler,,present,1p,olemos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,present,3p,huelen,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+oler,,preterite,1s,olí,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,preterite,2s,oliste,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,preterite,3s,olió,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,preterite,1p,olimos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,preterite,3p,olieron,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,imperfect,1s,olía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,imperfect,2s,olías,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,imperfect,3s,olía,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,imperfect,1p,olíamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,imperfect,3p,olían,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,subjunctive,1s,huela,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+oler,,subjunctive,2s,huelas,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+oler,,subjunctive,3s,huela,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+oler,,subjunctive,1p,olamos,,skip,"regular, on a verb that is regular here; this is the ending rule, not a fact"
+oler,,subjunctive,3p,huelan,yes,later,irregular; the form has to be memorised; the deck does not teach this verb
+elegir,534,present,1s,elijo,yes,later,"irregular; the form has to be memorised; rank 534, so rarely met"
+elegir,534,present,2s,eliges,yes,later,"irregular; the form has to be memorised; rank 534, so rarely met"
+elegir,534,present,3s,elige,yes,later,"irregular; the form has to be memorised; rank 534, so rarely met"
+elegir,534,present,1p,elegimos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 534, so rarely met"
+elegir,534,present,3p,eligen,yes,later,"irregular; the form has to be memorised; rank 534, so rarely met"
+elegir,534,preterite,1s,elegí,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 534, so rarely met"
+elegir,534,preterite,2s,elegiste,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 534, so rarely met"
+elegir,534,preterite,3s,eligió,yes,later,"irregular; the form has to be memorised; rank 534, so rarely met"
+elegir,534,preterite,1p,elegimos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 534, so rarely met"
+elegir,534,preterite,3p,eligieron,yes,later,"irregular; the form has to be memorised; rank 534, so rarely met"
+elegir,534,imperfect,1s,elegía,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 534, so rarely met"
+elegir,534,imperfect,2s,elegías,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 534, so rarely met"
+elegir,534,imperfect,3s,elegía,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 534, so rarely met"
+elegir,534,imperfect,1p,elegíamos,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 534, so rarely met"
+elegir,534,imperfect,3p,elegían,,later,"regular, but the verb is not, so this is where it gets over-corrected; rank 534, so rarely met"
+elegir,534,subjunctive,1s,elija,yes,later,"irregular; the form has to be memorised; rank 534, so rarely met"
+elegir,534,subjunctive,2s,elijas,yes,later,"irregular; the form has to be memorised; rank 534, so rarely met"
+elegir,534,subjunctive,3s,elija,yes,later,"irregular; the form has to be memorised; rank 534, so rarely met"
+elegir,534,subjunctive,1p,elijamos,yes,later,"irregular; the form has to be memorised; rank 534, so rarely met"
+elegir,534,subjunctive,3p,elijan,yes,later,"irregular; the form has to be memorised; rank 534, so rarely met"

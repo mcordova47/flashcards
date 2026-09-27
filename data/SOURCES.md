@@ -44,3 +44,16 @@ columns, so the model answer is a worked example, not the only right answer.
 `npm run check-paraphrase` proves every model answer uses the form it claims,
 by looking it up in `es-verbs.csv`, and refuses any word outside `es-1000.csv`
 that the row's `Notes` does not explain.
+
+## `es-verb-coverage.csv` — a recommendation per cell
+
+**Derived, and an argument rather than a fact.** `npm run verb-coverage`
+regenerates it from `es-verbs.csv` and `es-1000.csv`; nothing reads it at
+runtime and nothing breaks if it is stale.
+
+It exists for #27, which asks which of the table's 760 cells are worth
+drilling. Each row says *drill*, *later* or *skip*, and why. The reasoning is
+in `tools/verb-coverage.mjs` — four rules in the order they apply, and two
+numbers that are the arguable part: rank 500 as the line between a verb you
+meet and one you do not, and 10 of 20 deviations as the line above which a
+verb reads as irregular enough that its regular tenses get distrusted.

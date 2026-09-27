@@ -35,6 +35,7 @@ npm start        # http://localhost:8000
 | `npm run sync-verbs` | Regenerate the conjugation module from `data/es-verbs.csv` |
 | `npm run sync-sentences` | Regenerate the shift sentence module from `data/es-sentences.csv` |
 | `npm run check-verbs` | Print every cell that deviates from the regular pattern — the review of the table |
+| `npm run verb-coverage` | Recommend, for every cell, whether it is worth drilling — the input to #27 |
 | `npm run sync-paraphrase` | Regenerate the paraphrase prompt module from `data/es-paraphrase.csv` |
 | `npm run check-paraphrase` | Prove every paraphrase model answer uses the form it claims, in deck vocabulary |
 | `npm run check-sentences` | Prove every shift sentence against the table, in deck vocabulary |
