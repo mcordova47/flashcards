@@ -122,6 +122,11 @@ throws, and passes when the suite runs alone. Retrying a failed check would
 hide the app being wrong. The retry is printed, so a suite that keeps needing
 one shows up in the log.
 
+One path runs only locally. Chrome decodes QR codes natively only where the
+operating system lends it a decoder, which Linux does not, so in CI the
+pairing-by-camera checks run against the bundled decoder alone, and the log
+says the platform's was skipped. `npm run verify` on a Mac runs both.
+
 Netlify still builds and deploys on push, independently. CI does not gate the
 deploy; it says whether a push should have been made.
 

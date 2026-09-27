@@ -330,7 +330,22 @@ export default async ({ check, open, base, blobs }) => {
       ],
     })
     try {
-      for (const native of [true, false]) {
+      // Chrome has a QR decoder only where the operating system lends it one -
+      // macOS, ChromeOS, Android - and not on Linux, which is where CI runs.
+      // There the first pass would quietly take the bundled path twice and
+      // then fail for fetching scan.js, which is the app behaving correctly.
+      // Ask, and say so when the platform path cannot be tried.
+      // On the app's origin: about:blank is not a secure context, and
+      // BarcodeDetector is not exposed outside one.
+      const probe = await eyes.newPage()
+      await probe.goto(base + "/", { waitUntil: "networkidle0" })
+      const platform = await probe.evaluate(async () =>
+        typeof BarcodeDetector !== "undefined" &&
+        (await BarcodeDetector.getSupportedFormats().catch(() => [])).includes("qr_code"))
+      await probe.close()
+      if (!platform) console.log("  - the platform's decoder: skipped, this Chrome has none")
+
+      for (const native of platform ? [true, false] : [false]) {
         const how = native ? "the platform's decoder" : "the bundled decoder"
         const page = await eyes.newPage()
         const errors = []
