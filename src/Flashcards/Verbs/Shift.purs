@@ -7,6 +7,7 @@ module Flashcards.Verbs.Shift
   ( Sentence
   , exercise
   , exercises
+  , name
   , tenses
   )
   where
@@ -32,6 +33,11 @@ type Sentence =
   , infinitive :: String
   , tense :: Tense
   , person :: Person
+  -- | Whether the verb alone carries the person, so the person shift can ask
+  -- | it: nothing else in the sentence agrees with the subject. Authored, not
+  -- | inferred — `enfermo` agrees and `trabajo` does not, and nothing here
+  -- | knows an adjective from a noun. See #25.
+  , personShift :: Boolean
   }
 
 -- | What a sentence can be moved between. Not the subjunctive: it is a mood,

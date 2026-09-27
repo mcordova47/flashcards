@@ -10,8 +10,9 @@
 -- | key, the same codec, the same format version. The *pairing* key is shared,
 -- | so a device paired for the flashcards is already paired for this.
 -- |
--- | One exercise so far, the tense shift (#16). The page knows it only as the
--- | pools it yields: another exercise type adds pools, not a branch here.
+-- | Three exercises so far: the tense shift (#16), the person shift (#25) and
+-- | the paraphrase (#10). The page knows them only as the pools they yield:
+-- | another exercise type adds pools, not a branch here.
 module Flashcards.Pages.Verbs
   ( module Model
   , init
@@ -41,6 +42,7 @@ import Flashcards.Page as Page
 import Flashcards.Pages.Verbs.Model (Message(..), Phase(..), State, namespace)
 import Flashcards.Pages.Verbs.Model (Message, Phase, State) as Model
 import Flashcards.Verbs.Paraphrase as Paraphrase
+import Flashcards.Verbs.PersonShift as PersonShift
 import Flashcards.Payload as Payload
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
@@ -54,13 +56,15 @@ import Flashcards.Verbs.Shift as Shift
 -- | Every item there is, in the order new ones are introduced. Static, so
 -- | built once for the life of the page.
 -- |
--- | Two exercise types, one list. The page does not know which is which — it
--- | reads `Answer`, and the shift and the paraphrase differ by which
--- | constructor they produce. Shift items come first because they are the
+-- | Three exercise types, one list. The page does not know which is which — it
+-- | reads `Answer`, and the shifts and the paraphrase differ by which
+-- | constructor they produce. The shifts come first because they are the
 -- | easier question, and the order of this list is the curriculum.
 items :: Array Pool
 items = Exercise.pools $
-  Shift.exercises table sentences <> Paraphrase.exercises prompts
+  Shift.exercises table sentences
+    <> PersonShift.exercises table sentences
+    <> Paraphrase.exercises prompts
 
 -- | No deck, so nothing can be placed by rank — and nothing needs to be. This
 -- | namespace has no payloads older than v5, because it has no payloads older

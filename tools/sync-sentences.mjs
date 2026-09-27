@@ -1,4 +1,4 @@
-// Generates the tense-shift sentence module from its committed CSV.
+// Generates the shift sentence module from its committed CSV.
 //
 //   node tools/sync-sentences.mjs
 //
@@ -27,7 +27,8 @@ if (errors.length) {
 // Leading commas, as the deck modules write them.
 const entries = sentences
   .map(s => `{ before: ${JSON.stringify(s.before)}, form: ${JSON.stringify(s.form)}, after: ${JSON.stringify(s.after)}`
-           + `, infinitive: "${s.infinitive}", tense: ${s.tense.constructor}, person: ${s.person.constructor} }`)
+           + `, infinitive: "${s.infinitive}", tense: ${s.tense.constructor}, person: ${s.person.constructor}`
+           + `, personShift: ${s.personShift} }`)
   .join("\n  , ")
 
 const out = "src/Flashcards/Data/Sentences/Spanish.purs"

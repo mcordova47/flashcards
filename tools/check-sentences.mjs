@@ -1,4 +1,4 @@
-// Checks the tense-shift sentences against the conjugation table.
+// Checks the shift sentences against the conjugation table.
 //
 //   node tools/check-sentences.mjs
 //
@@ -15,7 +15,15 @@
 // words the learner has not met is a second exercise hiding in the first.
 //
 // It also lists every item whose pool has fewer than two sentences, since a
-// later sighting of those has no different sentence to ask. See #16.
+// later sighting of those has no different sentence to ask. See #16. For the
+// person shift that takes three source persons per verb and tense, not two:
+// a sentence cannot be asked into the person it is already in, so with two
+// the persons they are in each have a pool of one. See #25.
+//
+// And it refuses two sentences of one verb around the same words, `[hacemos]
+// la comida` and `[hacen] la comida`. They are two rows and one string: the
+// pool is there so an item cannot be passed by remembering one, and asking
+// both is asking the same thing twice.
 //
 // And every question whose answer, with its accents taken off, is another
 // cell of the same verb and person: `llegué` and `llegue`, `busqué` and
@@ -23,7 +31,7 @@
 // cannot tell a phone typo from a mood error. Listed rather than refused -
 // the answer is still right - but it is a question worth not asking.
 
-import { loadTable } from "./verb-source.mjs"
+import { PERSONS, loadTable } from "./verb-source.mjs"
 import { CSV, SHIFTABLE, loadSentences } from "./sentence-source.mjs"
 import { knownWords, unexplained } from "./deck-vocabulary.mjs"
 
@@ -47,16 +55,36 @@ for (const s of sentences) {
   }
 }
 
+const frames = new Map()
+for (const s of sentences) {
+  const frame = `${s.infinitive} ${s.before}[]${s.after}`
+  const other = frames.get(frame)
+  if (other) {
+    wrong++
+    console.log(`x line ${s.line}: [${s.form}] is line ${other.line}'s [${other.form}] with only the verb moved; a pool of the two asks one string`)
+  } else frames.set(frame, s)
+}
+
+const count = (pools, slug) => pools.set(slug, (pools.get(slug) ?? 0) + 1)
+
 // Mirrors Flashcards.Verbs.Shift.exercises: every sentence, into every
 // shiftable tense it is not already in.
 const pools = new Map()
 for (const s of sentences) {
-  for (const target of SHIFTABLE.filter(t => t !== s.tense.name)) {
-    const slug = `${s.infinitive}.${target}`
-    pools.set(slug, (pools.get(slug) ?? 0) + 1)
-  }
+  for (const target of SHIFTABLE.filter(t => t !== s.tense.name)) count(pools, `${s.infinitive}.${target}`)
 }
 const thin = [...pools].filter(([, n]) => n < 2)
+
+// Mirrors Flashcards.Verbs.PersonShift.exercises: every sentence marked for
+// it, into every person it is not already in.
+const shiftable = sentences.filter(s => s.personShift)
+const personPools = new Map()
+for (const s of shiftable) {
+  for (const target of PERSONS.filter(p => p.name !== s.person.name)) {
+    count(personPools, `person.${s.infinitive}.${s.tense.name}.${target.name}`)
+  }
+}
+const personThin = [...personPools].filter(([, n]) => n < 2)
 
 // As Exercise.matches flattens.
 const bare = form => form.normalize("NFD").replace(/[\u0301\u0308]/g, "").normalize("NFC")
@@ -79,6 +107,11 @@ console.log(`${sentences.length} sentences over ${verbCount} verbs, ${pools.size
 if (thin.length) {
   console.log(`${thin.length} item(s) with one sentence, so a later sighting asks the same one:`)
   console.log(`  ${thin.map(([slug]) => slug).join(" ")}`)
+}
+console.log(`${shiftable.length} of them take a person shift, ${personPools.size} items`)
+if (personThin.length) {
+  console.log(`${personThin.length} person-shift item(s) with one sentence:`)
+  console.log(`  ${personThin.map(([slug]) => slug).join(" ")}`)
 }
 if (blurred.size) {
   console.log(`${blurred.size} answer(s) that only an accent tells from another form of the verb:`)

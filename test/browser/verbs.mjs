@@ -16,7 +16,7 @@ const corpus = rows("data/es-paraphrase.csv").map(
     ({ id, prompt, model, verb, tense, person, trap, against }))
 
 // Every item the tense shift yields, so a seed can put them all behind us and
-// leave the paraphrase prompts at the front of the session.
+// leave the person shift at the front of the session.
 const shiftSlugs = () => {
   const out = new Set()
   for (const s of bank) for (const t of ["present", "preterite", "imperfect"]) {
@@ -25,18 +25,37 @@ const shiftSlugs = () => {
   return [...out]
 }
 
-const bank = rows("data/es-sentences.csv").map(([text, infinitive, tense, person]) => {
+// As the page names a person, `→ nosotros`.
+const PRONOUNS = { yo: "1s", tú: "2s", él: "3s", nosotros: "1p", ellos: "3p" }
+
+// And every item the person shift yields, for a seed that leaves the
+// paraphrase prompts at the front.
+const personSlugs = () => {
+  const out = new Set()
+  for (const s of bank.filter(s => s.personShift)) for (const p of Object.values(PRONOUNS)) {
+    if (p !== s.person) out.add(`person.${s.infinitive}.${s.tense}.${p}`)
+  }
+  return [...out]
+}
+
+const bank = rows("data/es-sentences.csv").map(([text, infinitive, tense, person, personShift]) => {
   const [, before, form, after] = text.match(/^(.*)\[(.*)\](.*)$/)
-  return { plain: before + form + after, before, after, infinitive, tense, person }
+  return { plain: before + form + after, before, after, infinitive, tense, person, personShift: personShift === "yes" }
 })
 
-// What the page is asking, and what the answer to it is.
+// What the page is asking, and what the answer to it is. A pronoun is a
+// person shift and holds the tense; anything else is a tense, and holds the
+// person.
 const asked = async page => {
   const plain = await page.text(".verb-sentence")
   const target = (await page.text(".verb-target")).replace(/^→ /, "")
   const s = bank.find(s => s.plain === plain)
-  const form = table.get(`${s.infinitive}.${target}.${s.person}`)
-  return { ...s, target, form, slug: `${s.infinitive}.${target}`, full: s.before + form + s.after }
+  const person = PRONOUNS[target]
+  const [tense, slug] = person
+    ? [s.tense, `person.${s.infinitive}.${s.tense}.${person}`]
+    : [target, `${s.infinitive}.${target}`]
+  const form = table.get(`${s.infinitive}.${tense}.${person ?? s.person}`)
+  return { ...s, target, form, slug, full: s.before + form + s.after }
 }
 
 const answer = async (page, typed) => {
@@ -193,16 +212,63 @@ export default async ({ check, open, blobs }) => {
   check("no page errors", keys.errors, [])
   await keys.close()
 
+  // --- the person shift: the same sentences, the tense held still ---
+  // The tense shift is put behind us so the session opens on the first
+  // sentence marked for a person shift, moved into the first person it is
+  // not already in.
+  const later = Date.now() + 30 * 86400000
+  const behind = slugs => ({
+    version: formatVersion(), language: "verbs", deck: "none",
+    cards: slugs.map(slug =>
+      ({ slug, box: 5, seen: 3, missed: 0, lapses: 0, direction: "recognition", due: later })),
+  })
+  const persons = await open({ path: "/verbs", key: VERBS, seed: behind(shiftSlugs()) })
+  await persons.waitForSelector(".verb-sentence")
+  await wait(400)
+
+  const opening = bank.find(s => s.personShift)
+  const moved = await asked(persons)
+  check("asks the first sentence marked for it", moved.plain, opening.plain)
+  check("into a person it is not in, named by a pronoun",
+    PRONOUNS[moved.target] !== undefined && PRONOUNS[moved.target] !== opening.person, true)
+  check("with the box where the verb goes",
+    [await persons.text(".verb-before"), await persons.text(".verb-after")], [moved.before, moved.after])
+
+  await answer(persons, moved.form)
+  check("a right answer shows the sentence moved", await persons.text(".milestone"), `✓ ${moved.full}`)
+  stored = await persons.stored()
+  let personCard = stored.cards.find(c => c.slug === moved.slug)
+  check("keyed by verb, tense and person, in its own space", moved.slug.startsWith("person."), true)
+  check("graded as got", personCard?.missed, 0)
+  check("and crediting no tense-shift item",
+    stored.cards.filter(c => !c.slug.startsWith("person.") && c.seen !== 3).length, 0)
+
+  await next(persons)
+  const personMissed = await asked(persons)
+  await answer(persons, "nada")
+  check("a wrong answer shows the right one", await persons.text(".milestone"), `✗ ${personMissed.full}`)
+  stored = await persons.stored()
+  check("graded as missed", stored.cards.find(c => c.slug === personMissed.slug)?.missed, 1)
+
+  // Comes round again within the session, and from a different sentence:
+  // the pool is why the bank needs three persons per verb and tense.
+  let personAgain = null
+  for (let i = 0; i < 10 && !personAgain; i++) {
+    await next(persons)
+    item = await asked(persons)
+    if (item.slug === personMissed.slug) personAgain = item
+    else await answer(persons, item.form)
+  }
+  check("the missed item comes round again", personAgain?.slug, personMissed.slug)
+  check("asking a different sentence", personAgain && personAgain.plain !== personMissed.plain, true)
+  check("no page errors", persons.errors, [])
+  await persons.close()
+
   // --- the paraphrase, which nothing can check ---
   // The shift items are put behind us so the session opens on the corpus;
-  // both exercise types share one queue, and the page tells them apart by
+  // every exercise type shares one queue, and the page tells them apart by
   // which `Answer` they carry rather than by which page they are on.
-  const later = Date.now() + 30 * 86400000
-  const done = await open({ path: "/verbs", key: VERBS, seed: {
-    version: formatVersion(), language: "verbs", deck: "none",
-    cards: shiftSlugs().map(slug =>
-      ({ slug, box: 5, seen: 3, missed: 0, lapses: 0, direction: "recognition", due: later })),
-  } })
+  const done = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs()]) })
   await done.waitForSelector(".verb-prompt")
   await wait(400)
 
@@ -237,7 +303,7 @@ export default async ({ check, open, blobs }) => {
   const graded = stored.cards.find(c => c.slug === `paraphrase.${opener.id}`)
   check("graded under the frozen id", graded?.seen, 1)
   check("as got", graded?.missed, 0)
-  check("shares no item with the tense shift",
+  check("shares no item with either shift",
     stored.cards.filter(c => !c.slug.startsWith("paraphrase.") && c.seen < 3).length, 0)
   check("and moves straight on, the reveal already read",
     await done.text(".verb-prompt"), corpus[1].prompt)

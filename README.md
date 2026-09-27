@@ -33,11 +33,11 @@ npm start        # http://localhost:8000
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
 | `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
 | `npm run sync-verbs` | Regenerate the conjugation module from `data/es-verbs.csv` |
-| `npm run sync-sentences` | Regenerate the tense-shift sentence module from `data/es-sentences.csv` |
+| `npm run sync-sentences` | Regenerate the shift sentence module from `data/es-sentences.csv` |
 | `npm run check-verbs` | Print every cell that deviates from the regular pattern — the review of the table |
 | `npm run sync-paraphrase` | Regenerate the paraphrase prompt module from `data/es-paraphrase.csv` |
 | `npm run check-paraphrase` | Prove every paraphrase model answer uses the form it claims, in deck vocabulary |
-| `npm run check-sentences` | Prove every tense-shift sentence against the table, in deck vocabulary |
+| `npm run check-sentences` | Prove every shift sentence against the table, in deck vocabulary |
 | `npm run rename` | Report words whose spelling changed, and pin the ones that should keep their history |
 | `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
 
@@ -750,10 +750,10 @@ same sentence at another time.
 
 **The bank decides which items exist.** Each sentence yields its verb in the
 tenses it is not already in, so an item exists only if some sentence reaches
-it, and it needs two for a later sighting to ask a different one. Fourteen
-sentences over seven verbs, all written in the present, gives fourteen items —
-each verb's preterite and imperfect — with two sentences each. A verb's
-present would need sentences written in a past tense.
+it, and it needs two for a later sighting to ask a different one. The bank's
+sentences are over seven verbs and all written in the present, so they give
+fourteen items — each verb's preterite and imperfect — with at least two
+sentences each. A verb's present would need sentences written in a past tense.
 
 `check-sentences` confirms every bracketed word is what the table has for its
 tag, and holds the rest of each sentence to the deck's vocabulary by the same
@@ -768,9 +768,35 @@ for either would leave it unable to tell a phone typo from a mood error.
 Nothing in the bank does that today; the list is there so the bank does not
 grow into it.
 
+It fails two sentences of one verb around the same words — `[hacemos] la
+comida` and `[hacen] la comida`. That is one string in two rows, and a pool of
+them asks the same question twice.
+
 `sync-sentences` refuses the structural faults — no brackets, capitals or
 punctuation, a tense a shift cannot reach, or a verb the table spells
 differently, which is how `ir` stays `ir` and not the deck's `ir(se)`.
+
+### The person shift
+
+The same bank, turned the other way (#25): `[tengo] mucho trabajo` →
+*nosotros* → `tenemos`, the tense held still. `Flashcards.Verbs.PersonShift`
+is a sibling of `Shift` rather than a mode of it, and its items are
+`person.tener.present.1p` — namespaced, like the paraphrase's, since over the
+same verb and tense it is a different question.
+
+**A sentence takes one only if its `Person shift` column says `yes`.** Moving
+the subject moves everything that agrees with it: `[estoy] muy enfermo` has no
+subject and still cannot become `estamos muy enfermo`. Nothing here knows an
+adjective from a noun, so whoever writes the row decides, and the rule is
+*nothing else in the sentence agrees with the subject* — not merely "no
+subject". The half that can be checked is: `sync-sentences` and
+`check-sentences` refuse a marked row with anything but `no` before its verb,
+since `ella [tiene] mucho trabajo` would ask for `ella tenemos`.
+
+**It takes three persons per verb and tense, not two.** A sentence cannot be
+asked into the person it is already in, so two sentences leave the persons
+they are in with one sentence each. `check-sentences` counts the person-shift
+items and lists any with only one sentence.
 
 ### The paraphrase
 

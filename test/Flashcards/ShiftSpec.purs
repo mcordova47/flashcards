@@ -94,4 +94,4 @@ frameOf e = case e.answer of
 
 sentence :: String -> String -> String -> String -> Tense -> Person -> Sentence
 sentence before form after infinitive tense person =
-  { before, form, after, infinitive, tense, person }
+  { before, form, after, infinitive, tense, person, personShift: false }
