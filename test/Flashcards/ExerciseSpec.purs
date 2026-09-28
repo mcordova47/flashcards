@@ -55,7 +55,7 @@ spec = do
     let
       ask slug prompt =
         { slug: Slug slug, label: slug, prompt, hint: ""
-        , answer: Checked { expected: "", frame: { before: "", after: "" } }
+        , answer: Checked { expected: "", frame: { before: "", after: "" }, note: "" }
         } :: Exercise
       bank =
         [ ask "tener.preterite" "tengo mucho trabajo"

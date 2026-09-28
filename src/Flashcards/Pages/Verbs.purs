@@ -10,9 +10,10 @@
 -- | key, the same codec, the same format version. The *pairing* key is shared,
 -- | so a device paired for the flashcards is already paired for this.
 -- |
--- | Four exercises so far: the tense shift (#16), the person shift (#25),
--- | por / para (#18) and the paraphrase (#10). The page knows them only as the
--- | pools they yield: another exercise type adds pools, not a branch here.
+-- | Five exercises so far: the tense shift (#16), the person shift (#25),
+-- | por / para (#18), error correction (#26) and the paraphrase (#10). The
+-- | page knows them only as the pools they yield: another exercise type adds
+-- | pools, not a branch here.
 module Flashcards.Pages.Verbs
   ( module Model
   , init
@@ -36,7 +37,7 @@ import Elmish.HTML.Styled as H
 import Flashcards.Data.Paraphrase.Spanish (prompts)
 import Flashcards.Data.PorPara.Spanish (sentences) as PorPara
 import Flashcards.Data.Sentences.Spanish (sentences)
-import Flashcards.Data.Verbs.Spanish (table)
+import Flashcards.Data.Verbs.Spanish (deviations, table)
 import Flashcards.Exercise (Answer(..), Pool, Verdict(..), matches, pick)
 import Flashcards.Exercise as Exercise
 import Flashcards.Keys (onKeyDown)
@@ -44,6 +45,7 @@ import Flashcards.Page as Page
 import Flashcards.Pages.Verbs.Model (Message(..), Phase(..), State, namespace)
 import Flashcards.Pages.Verbs.Model (Message, Phase, State) as Model
 import Flashcards.Pages.Verbs.Progress as ProgressSheet
+import Flashcards.Verbs.Correction as Correction
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.PersonShift as PersonShift
 import Flashcards.Verbs.PorPara (exercises) as PorPara
@@ -60,15 +62,18 @@ import Flashcards.Verbs.Shift as Shift
 -- | Every item there is, in the order new ones are introduced. Static, so
 -- | built once for the life of the page.
 -- |
--- | Four exercise types, one list. The page does not know which is which — it
+-- | Five exercise types, one list. The page does not know which is which — it
 -- | reads `Answer`, and the checked drills and the paraphrase differ by which
 -- | constructor they produce. The checked ones come first because they are
--- | the easier question, and the order of this list is the curriculum.
+-- | the easier question, and among them the shifts and por / para come before
+-- | error correction: they name what to decide, where a correction asks you
+-- | to see what is wrong. The order of this list is the curriculum.
 items :: Array Pool
 items = Exercise.pools $
   Shift.exercises table sentences
     <> PersonShift.exercises table sentences
     <> PorPara.exercises PorPara.sentences
+    <> Correction.exercises table deviations sentences
     <> Paraphrase.exercises prompts
 
 -- | Every item, named. Every exercise of a pool carries the same label, so the
@@ -309,7 +314,7 @@ view state dispatch =
         ]
       Just exercise ->
         H.div "done-body" $ case exercise.answer of
-          Checked { expected, frame } ->
+          Checked { expected, frame, note } ->
             [ H.h1 "verb-sentence" exercise.prompt
             , H.p "direction verb-target" $ "→ " <> exercise.hint
             -- The box sits where the verb goes, so a lone input is never read
@@ -332,6 +337,9 @@ view state dispatch =
               ]
             , case state.phase of
                 Compared verdict -> compared frame expected verdict
+                _ -> H.empty
+            , case state.phase of
+                Compared _ | note /= "" -> H.p "milestone remark verb-note" note
                 _ -> H.empty
             ]
           SelfGraded { model, rubric } ->

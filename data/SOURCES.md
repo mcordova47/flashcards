@@ -47,13 +47,15 @@ that the row's `Notes` does not explain.
 
 ## `es-por-para.csv` — por / para sentences
 
-Written by hand for #18. Each row is a Spanish sentence with `por` or `para`
-in brackets, the English that says which sense it is, and which of four
-contrasts it belongs to. Three sentences a side, six a contrast.
+Written by hand for #18 and #43. Each row is a Spanish sentence with `por`
+or `para` in brackets, the English that says which sense it is, and the item
+it belongs to: one of four contrasts, three sentences a side, or one of two
+senses with no opposite, three sentences all answered `por`.
 
 `npm run check-por-para` refuses any word outside `es-1000.csv` that the row's
-`Notes` does not explain, and any contrast without at least two sentences on
-each side.
+`Notes` does not explain, any contrast without at least two sentences on each
+side, and any sense without two sentences of its own preposition or with one
+of the other.
 
 ## `es-verb-coverage.csv` — a recommendation per cell
 

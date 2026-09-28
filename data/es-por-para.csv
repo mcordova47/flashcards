@@ -1,4 +1,4 @@
-Sentence,English,Contrast,Notes
+Sentence,English,Item,Notes
 lo hice [por] ti,I did it because of you.,cause-purpose,"ti: what tú becomes after a preposition, and the pair with para ti needs it"
 estudio [para] aprender,I study in order to learn.,cause-purpose,
 lo hice [para] ti,I did it for your benefit.,cause-purpose,"ti: what tú becomes after a preposition, and the pair with por ti needs it"
@@ -23,3 +23,9 @@ hay una carta [para] ti,There's a letter for you.,exchange-recipient,"ti: what t
 te doy mi libro [por] el tuyo,I'll give you my book in exchange for yours.,exchange-recipient,
 pago mucho [por] esta casa,I pay a lot for this house.,exchange-recipient,
 compré comida [para] mi madre,I bought my mother some food.,exchange-recipient,
+trabajo cinco días [por] semana,I work five days a week.,per,
+llamo a mi madre dos veces [por] semana,I call my mother twice a week.,per,"veces: the plural of vez, which the checker cannot see through the z becoming c"
+nos vemos una vez [por] mes,We see each other once a month.,per,
+hablamos [por] teléfono,We talked on the phone.,means,
+lo escuché [por] la radio,I heard it on the radio.,means,
+lo supe [por] mi hermano,I found out through my brother.,means,

@@ -22,11 +22,23 @@ a rule that contradicted its own worked example, a constraint no checker could
 actually enforce. Every one of those was caught by whoever picked the issue up,
 not by whoever wrote it.
 
-So before building: say what you think is wrong, or say that it holds. **Say it
-in a comment on the issue — do not edit the body.** Whoever reviews decides
-whether you are right and edits it if you are, because a correction can itself
-be wrong and because editing replaces the whole body, so two of you at once
-would clobber each other.
+**Where the argument goes depends on what it would change.**
+
+If you would build the *same thing* either way — the issue is stale, its
+reasoning is loose, a step is unnecessary, the whole thing is not worth doing —
+then build it your way and **put the disagreement in the pull request**. That
+is where it can be read against the code it is about, and it does not leave you
+waiting on an answer.
+
+If you would build something *materially different* — different data, a
+different item model, a different shape — say so first, in a comment on the
+issue, and wait. Authoring forty rows against the wrong rule and redoing them
+is the expensive failure; every disagreement that has mattered here was of this
+kind.
+
+Either way: **do not edit the issue body.** Whoever reviews decides and edits
+it afterwards, because a correction can itself be wrong, and because editing
+replaces the whole body, so two of you at once would clobber each other.
 
 A faithful implementation of a flawed issue costs more than an argument.
 
