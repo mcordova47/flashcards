@@ -21,16 +21,43 @@ contains, and `main` catches anything that gets in another way. Two branches
 that each pass alone can break together — the drift check especially, since a
 regenerated module is only stale relative to whatever else landed.
 
-## Worktrees, and the stash you must not touch
+## A worktree each
 
-Agents often work in a git worktree under `.claude/worktrees/`, which is
-ignored. **The stash stack is shared across every worktree of a repository.**
+```
+npm run worktree <name>
+```
+
+Makes `.claude/worktrees/<name>` on a new branch off `origin/main`, installs
+into it, and prints the path. Work there, not in the shared checkout.
+
+**This is about correctness, not tidiness.** `public/` is written by the build
+and read by the browser harness; `output/` is the PureScript build. Both are
+gitignored, which means that in one shared checkout they are *one copy shared
+by everyone working in it*. Two people running `npm run verify` at once have
+one's build landing underneath the other's test run, and the result looks like
+a flaky suite rather than a collision.
+
+It also removes the footgun of a shared `HEAD`. Committing onto somebody
+else's branch because you did not check what you were on has happened twice
+here, both times by the one person whose pushes the branch protection does not
+stop.
+
+About 320MB each, nearly all `node_modules` and `output`. Remove one when its
+branch has merged:
+
+```
+git worktree remove .claude/worktrees/<name>
+```
+
+## The stash you must not touch
+
+**The stash stack is shared across every worktree of a repository**, which the
+separate checkouts do not fix.
+
 A bare `git stash` followed by `git stash pop` can therefore take someone
-else's work, and has nearly done so here.
-
-Set work aside with a throwaway commit instead. If you must stash, name it —
-`git stash push -u -m "<tag>"` — and restore it by its own SHA with
-`git stash apply`, not `pop`.
+else's work, and has nearly done so here. Set work aside with a throwaway
+commit instead. If you must stash, name it — `git stash push -u -m "<tag>"` —
+and restore it by its own SHA with `git stash apply`, not `pop`.
 
 ## One commit, one deliverable
 

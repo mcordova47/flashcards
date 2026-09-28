@@ -36,8 +36,16 @@ obvious which.
 
 ## Doing it
 
-Branch off `main` — `git switch -c <short-name>`. `main` is protected and
-direct pushes are refused.
+Work in a worktree of your own:
+
+```
+npm run worktree <short-name>
+```
+
+It branches off `origin/main`, installs, and prints a path to work in. Not
+optional politeness — the shared checkout has one `public/` and one `output/`
+between everyone in it, so a build of yours lands under someone else's test
+run. `main` is protected and direct pushes are refused.
 
 Follow `CONTRIBUTING.md`: one commit per deliverable, enabling refactors first,
 `npm run verify` and `npm test` before you propose anything.
