@@ -274,7 +274,7 @@ export default async ({ check, open, blobs }) => {
   await persons.close()
 
   // --- por / para: a preposition in the gap, the English saying which ---
-  // Everything else is put behind us, so the session is the four contrasts
+  // Everything else is put behind us, so the session is the por / para items
   // and nothing else, and a miss is requeued among them.
   const pp = await open({ path: "/verbs", key: VERBS,
     seed: behind([...shiftSlugs(), ...personSlugs(), ...corpus.map(c => `paraphrase.${c.id}`)]) })

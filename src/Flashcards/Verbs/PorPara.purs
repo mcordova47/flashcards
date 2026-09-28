@@ -15,27 +15,37 @@ module Flashcards.Verbs.PorPara
   , exercises
   , label
   , slug
+  , takes
   , word
   )
   where
 
 import Prelude
 
+import Data.Maybe (Maybe(..))
 import Flashcards.Exercise (Answer(..), Exercise)
 import Flashcards.Types.Card (Slug(..))
 
--- | What gets scheduled: one of the pairs of senses that English says with
--- | one word and Spanish splits. Not a sentence, or the learner passes by
--- | remembering that *this* one takes `por`; and not one side of a pair,
--- | because the mistake worth spacing is taking one side for the other.
+-- | What gets scheduled. Mostly a contrast: one of the pairs of senses that
+-- | English says with one word and Spanish splits. Not a sentence, or the
+-- | learner passes by remembering that *this* one takes `por`; and not one
+-- | side of a pair, because the mistake worth spacing is taking one side for
+-- | the other.
 -- |
--- | Each has a pool of sentences, some answered by each side, and
--- | `Exercise.pick` turns it.
+-- | And a few senses with no opposite, which are a difficulty without being a
+-- | contrast (#43). *Twice a week* has no `para` reading to be mistaken for,
+-- | but nothing in the English says `por` either. What these teach is which
+-- | preposition the sense takes, and once that is learned they climb the
+-- | boxes and get out of the way.
+-- |
+-- | Each has a pool of sentences and `Exercise.pick` turns it.
 data Item
   = CausePurpose
   | DurationDeadline
   | ThroughTowards
   | ExchangeRecipient
+  | Per
+  | Means
 
 derive instance Eq Item
 
@@ -44,6 +54,8 @@ instance Show Item where
   show DurationDeadline = "DurationDeadline"
   show ThroughTowards = "ThroughTowards"
   show ExchangeRecipient = "ExchangeRecipient"
+  show Per = "Per"
+  show Means = "Means"
 
 data Preposition
   = Por
@@ -68,6 +80,21 @@ type Sentence =
   , item :: Item
   }
 
+-- | The one preposition a sense takes, or `Nothing` for a contrast, which
+-- | takes both. `tools/por-para-source.mjs` says the same, and
+-- | `check-por-para` holds the bank to it.
+-- |
+-- | Not shown: the hint is `por / para` either way, because it is the answer
+-- | space, and a hint that told a sense from a contrast would be the answer.
+takes :: Item -> Maybe Preposition
+takes = case _ of
+  CausePurpose -> Nothing
+  DurationDeadline -> Nothing
+  ThroughTowards -> Nothing
+  ExchangeRecipient -> Nothing
+  Per -> Just Por
+  Means -> Just Por
+
 -- | As it is typed.
 word :: Preposition -> String
 word = case _ of
@@ -82,6 +109,8 @@ slug c = Slug $ "porpara." <> case c of
   DurationDeadline -> "duration-deadline"
   ThroughTowards -> "through-towards"
   ExchangeRecipient -> "exchange-recipient"
+  Per -> "per"
+  Means -> "means"
 
 -- | As the progress sheet names it, `por / para · cause vs purpose`.
 label :: Item -> String
@@ -90,6 +119,8 @@ label c = "por / para · " <> case c of
   DurationDeadline -> "duration vs deadline"
   ThroughTowards -> "through vs towards"
   ExchangeRecipient -> "exchange vs recipient"
+  Per -> "per"
+  Means -> "by means of"
 
 -- | The English as the question, and the Spanish with a box where the
 -- | preposition goes.
@@ -110,6 +141,6 @@ exercise s =
   }
 
 -- | Every exercise the bank yields, in its order: one per sentence, several
--- | per contrast.
+-- | per item.
 exercises :: Array Sentence -> Array Exercise
 exercises = map exercise

@@ -3,7 +3,7 @@
 // tools/check-por-para.mjs, which holds them to the deck. See #18.
 //
 // A row is a sentence with the preposition in brackets, the English that
-// says which sense it is, the contrast it belongs to, and a note for anything
+// says which sense it is, the item it belongs to, and a note for anything
 // that needs one:
 //
 //   lo hice [por] ti,I did it because of you.,cause-purpose,"ti: ..."
@@ -16,13 +16,27 @@ import { parseCsv } from "./deck-source.mjs"
 
 export const CSV = "data/es-por-para.csv"
 
-// Each item's id, as the CSV and the slug spell it, and its constructor in
-// Flashcards.Verbs.PorPara, which this has to agree with.
+// Each item's id, as the CSV and the slug spell it, its constructor in
+// Flashcards.Verbs.PorPara, which this has to agree with, and what it is.
+//
+// Most are contrasts, two senses that English says with one word, and are
+// asked both ways. A few are senses with no opposite (#43): `dos veces por
+// semana` has no `para semana` to be mistaken for, but still invites `para`
+// from someone who has not met the rule. Those name the one preposition they
+// take, as `takes`.
+//
+// The kind is here and not a column of the CSV because it belongs to the item,
+// not the sentence - every row of `per` takes `por` by definition - and a
+// column could disagree with itself within one pool. And an item without
+// `takes` is a contrast, so a contrast that loses a side is still refused: the
+// only way to a one-sided pool is to say, here, that it is meant to be one.
 export const ITEMS = {
-  "cause-purpose": "CausePurpose",
-  "duration-deadline": "DurationDeadline",
-  "through-towards": "ThroughTowards",
-  "exchange-recipient": "ExchangeRecipient",
+  "cause-purpose": { constructor: "CausePurpose" },
+  "duration-deadline": { constructor: "DurationDeadline" },
+  "through-towards": { constructor: "ThroughTowards" },
+  "exchange-recipient": { constructor: "ExchangeRecipient" },
+  "per": { constructor: "Per", takes: "por" },
+  "means": { constructor: "Means", takes: "por" },
 }
 
 export const PREPOSITIONS = { por: "Por", para: "Para" }
@@ -36,11 +50,11 @@ const SHAPE = /^((?:[^\[\]]+ )?)\[([^\[\]]+)\]((?: [^\[\]]+)?)$/
 
 // Reads the bank and refuses anything structurally wrong: a sentence without
 // exactly one bracketed word, a bracketed word that is neither por nor para,
-// a character the page does not expect, a contrast that is not one, or
+// a character the page does not expect, an item that is not one, or
 // English that another row already asks.
 //
-// Whether the rest is deck vocabulary, and whether each contrast has both
-// sides, is tools/check-por-para.mjs.
+// Whether the rest is deck vocabulary, and whether each item has the sides it
+// should, is tools/check-por-para.mjs.
 export const loadRows = () => {
   const errors = []
   const [header, ...body] = parseCsv(fs.readFileSync(CSV, "utf-8"))
