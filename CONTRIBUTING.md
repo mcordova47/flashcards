@@ -21,6 +21,17 @@ contains, and `main` catches anything that gets in another way. Two branches
 that each pass alone can break together — the drift check especially, since a
 regenerated module is only stale relative to whatever else landed.
 
+## Worktrees, and the stash you must not touch
+
+Agents often work in a git worktree under `.claude/worktrees/`, which is
+ignored. **The stash stack is shared across every worktree of a repository.**
+A bare `git stash` followed by `git stash pop` can therefore take someone
+else's work, and has nearly done so here.
+
+Set work aside with a throwaway commit instead. If you must stash, name it —
+`git stash push -u -m "<tag>"` — and restore it by its own SHA with
+`git stash apply`, not `pop`.
+
 ## One commit, one deliverable
 
 Not one commit per session and not one per file. A refactor that enables a
@@ -52,15 +63,27 @@ a *check* is not retried, and that is the app being wrong.
 If you changed a CSV, run `npm run sync` and commit what it writes, or CI will
 refuse the push and tell you to.
 
-## Tests that prove something
+## Prove the claims
 
-A regression test that passes without the fix proves nothing. This has caught
-us twice: a guard against a double-tap, and a keyboard fix that autofocus was
-already covering. **Remove the fix, watch the test fail, put it back.** It
-takes a minute and it is the difference between a test and a comment.
+Every claim in a commit message or a pull request is a thing to check, not a
+thing to assert. *No behaviour change*, *the test covers it* and *nothing else
+calls this* have each been wrong here, each stated in good faith.
 
-The same goes for a checker rule: plant the thing it refuses and watch it
-refuse.
+**A regression test that passes without the fix proves nothing.** Remove the
+fix, watch the test fail, put it back. This has caught us twice — a guard
+against a double tap, and a keyboard fix that autofocus was already masking.
+Both tests were written honestly and proved nothing.
+
+**A refactor that should produce identical output can be shown to.** Run the
+tool before and after and diff; `git archive HEAD` into a temporary directory
+gives you the before without touching the working tree. Regenerate a generated
+file and confirm it is byte-identical.
+
+**A new rule in a checker can be planted against.** Put in the thing it is
+meant to refuse and watch it refuse.
+
+**A changed signature has callers you have not thought of.** Search for all of
+them, including tools and scripts that no test suite runs.
 
 ## Issues carry the reasoning
 
