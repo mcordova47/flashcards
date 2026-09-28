@@ -191,6 +191,28 @@ export default async ({ check, open, blobs }) => {
 
   // Status, not a control: the study page's ••• opens a panel, this says
   // whether the server has it.
+  // An empty box is not an answer. Enter is mapped and the box is focused from
+  // the moment a question arrives, so without the guard a stray one marks the
+  // item missed before it has been read.
+  const untouched = await asked(keys)
+  check("nothing typed, so nothing to check",
+    await keys.$eval(".grade", e => e.disabled), true)
+  await keys.keyboard.press("Enter")
+  await wait(200)
+  check("and enter does not grade it either",
+    (await keys.stored())?.cards?.some(c => c.slug === untouched.slug) ?? false, false)
+  // Not that the question is still up — it would be either way, with a verdict
+  // under it. That there is no verdict is what tells them apart.
+  check("and says nothing about an answer nobody gave",
+    await keys.text(".milestone"), null)
+  // A space is not an answer either. Cleared with the keyboard rather than by
+  // setting `value`, which React would not hear and which would leave the
+  // model holding whitespace the box no longer shows.
+  await keys.type(".verb-answer", "  ")
+  check("nor is whitespace", await keys.$eval(".grade", e => e.disabled), true)
+  await keys.keyboard.press("Backspace")
+  await keys.keyboard.press("Backspace")
+
   // The box is focused on arrival and again on every question, so typing can
   // start without aiming at it - and so no button is holding focus when the
   // next Enter lands.
@@ -200,6 +222,8 @@ export default async ({ check, open, blobs }) => {
   // Tapping a button leaves it focused, and a focused button takes Enter as a
   // click. Without that being stopped this grades the next question unseen.
   const before = await asked(keys)
+  // Something typed, or the button is disabled and there is no tap to test.
+  await keys.type(".verb-answer", "nada")
   await keys.tap(".grade")
   await keys.keyboard.press("Enter")
   await wait(200)
