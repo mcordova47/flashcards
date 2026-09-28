@@ -15,6 +15,7 @@
     "sync-sentences": "node tools/sync-sentences.mjs",
     "check-verbs": "node tools/check-verbs.mjs",
     "verb-coverage": "node tools/verb-coverage.mjs",
+    "worktree": "node tools/worktree.mjs",
     "sync-paraphrase": "node tools/sync-paraphrase.mjs",
     "check-paraphrase": "node tools/check-paraphrase.mjs",
     "check-sentences": "node tools/check-sentences.mjs",
