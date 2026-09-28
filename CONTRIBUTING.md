@@ -89,11 +89,19 @@ them, including tools and scripts that no test suite runs.
 
 An issue is where a decision gets argued and written down, so that the next
 person — or the next agent — starts from the conclusion rather than the
-question. When a review changes one, the issue gets edited, not just replied
-to: a correction below a wrong example is a trap for whoever reads it next.
+question.
 
-Where an issue turns out to be wrong, say so in it. Several here carry a
-"settled after review" section doing exactly that.
+**Whoever finds an issue wrong says so in a comment. Whoever reviews decides,
+and edits the body.** Not the finder, for two reasons. A correction can itself
+be wrong, and a comment is cheap to disagree with where an edit is work to
+undo. And `gh issue edit` replaces the whole body, so two people correcting
+one issue at once would clobber each other without either noticing.
+
+The body does get edited in the end, though, and that part of the original
+rule stands: a correction left only in a comment below a wrong example is a
+trap for whoever reads the example next. Several issues here carry a "settled
+after review" section recording what changed and why, which is what it looks
+like once the decision has been made.
 
 ## Review is a separate pass
 

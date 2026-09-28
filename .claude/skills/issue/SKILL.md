@@ -22,9 +22,13 @@ a rule that contradicted its own worked example, a constraint no checker could
 actually enforce. Every one of those was caught by whoever picked the issue up,
 not by whoever wrote it.
 
-So before building: say what you think is wrong, or say that it holds. If it is
-wrong, the issue gets fixed first. A faithful implementation of a flawed issue
-costs more than an argument.
+So before building: say what you think is wrong, or say that it holds. **Say it
+in a comment on the issue — do not edit the body.** Whoever reviews decides
+whether you are right and edits it if you are, because a correction can itself
+be wrong and because editing replaces the whole body, so two of you at once
+would clobber each other.
+
+A faithful implementation of a flawed issue costs more than an argument.
 
 **If the issue has open questions**, ask whether they are yours to answer or to
 bring back. Several here are deliberately left open and it is not always
