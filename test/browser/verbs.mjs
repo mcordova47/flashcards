@@ -40,9 +40,9 @@ const personSlugs = () => {
 
 // The por / para bank, by the English it asks, which is unique to a row even
 // where two rows share their Spanish.
-const porPara = rows("data/es-por-para.csv").map(([text, english, contrast]) => {
+const porPara = rows("data/es-por-para.csv").map(([text, english, item]) => {
   const [, before, answer, after] = text.match(/^(.*)\[(.*)\](.*)$/)
-  return { before, answer, after, english, contrast, slug: `porpara.${contrast}`, full: before + answer + after }
+  return { before, answer, after, english, item, slug: `porpara.${item}`, full: before + answer + after }
 })
 const porParaSlugs = () => [...new Set(porPara.map(r => r.slug))]
 const otherWord = w => w === "por" ? "para" : "por"
@@ -279,7 +279,7 @@ export default async ({ check, open, blobs }) => {
   await persons.close()
 
   // --- por / para: a preposition in the gap, the English saying which ---
-  // Everything else is put behind us, so the session is the four contrasts
+  // Everything else is put behind us, so the session is the por / para items
   // and nothing else, and a miss is requeued among them.
   const pp = await open({ path: "/verbs", key: VERBS,
     seed: behind([...shiftSlugs(), ...personSlugs(), ...errorSlugs, ...corpus.map(c => `paraphrase.${c.id}`)]) })

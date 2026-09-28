@@ -11,9 +11,14 @@
 // it. A contrast whose pool is all `por` is a drill that can be passed by
 // always typing `por`; and with one sentence of a side, every sighting of
 // that side is the same string, which is what the pool is there to prevent.
+//
+// A sense with no opposite (#43) is held to the half of that which still
+// means something: at least two sentences, all answered the way the sense
+// takes. One answered the other way is not a second side but a misfiled
+// sentence, and is refused as one.
 
 import { loadTable } from "./verb-source.mjs"
-import { CONTRASTS, CSV, PREPOSITIONS, loadRows } from "./por-para-source.mjs"
+import { CSV, ITEMS, PREPOSITIONS, loadRows } from "./por-para-source.mjs"
 import { knownWords, unexplained } from "./deck-vocabulary.mjs"
 
 const { verbs, errors: tableErrors } = loadTable()
@@ -30,13 +35,26 @@ for (const r of rows) {
   }
 }
 
-console.log(`${rows.length} sentences over ${Object.keys(CONTRASTS).length} contrasts:`)
-for (const contrast of Object.keys(CONTRASTS)) {
-  const counts = Object.keys(PREPOSITIONS).map(p => [p, rows.filter(r => r.contrast === contrast && r.answer === p).length])
-  console.log(`  ${contrast.padEnd(20)} ${counts.map(([p, n]) => `${n} ${p}`).join(", ")}`)
-  for (const [p, n] of counts.filter(([, n]) => n < 2)) {
+const senses = Object.values(ITEMS).filter(i => i.takes).length
+console.log(`${rows.length} sentences over ${Object.keys(ITEMS).length - senses} contrasts and ${senses} one-sided senses:`)
+for (const [item, { takes }] of Object.entries(ITEMS)) {
+  const counts = Object.keys(PREPOSITIONS).map(p => [p, rows.filter(r => r.item === item && r.answer === p).length])
+  console.log(`  ${item.padEnd(20)} ${counts.map(([p, n]) => `${n} ${p}`).join(", ")}${takes ? `  (takes only ${takes})` : ""}`)
+  if (!takes) {
+    for (const [p, n] of counts.filter(([, n]) => n < 2)) {
+      wrong++
+      console.error(`x ${item} has ${n} sentence(s) answered ${p}; it needs at least two of each side`)
+    }
+    continue
+  }
+  const [, n] = counts.find(([p]) => p === takes)
+  if (n < 2) {
     wrong++
-    console.error(`x ${contrast} has ${n} sentence(s) answered ${p}; it needs at least two of each side`)
+    console.error(`x ${item} has ${n} sentence(s) answered ${takes}; it needs at least two`)
+  }
+  for (const r of rows.filter(r => r.item === item && r.answer !== takes)) {
+    wrong++
+    console.error(`x line ${r.line} (${r.text}): ${item} takes only ${takes}, so a sentence answered ${r.answer} is in the wrong item`)
   }
 }
 

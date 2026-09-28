@@ -3,11 +3,11 @@
 //   node tools/sync-por-para.mjs
 //
 // Refuses a row that is structurally wrong. Whether it is written in deck
-// vocabulary, and whether every contrast has both sides, is
+// vocabulary, and whether every item has the sides it should, is
 // tools/check-por-para.mjs.
 
 import fs from "fs"
-import { CONTRASTS, CSV, PREPOSITIONS, loadRows } from "./por-para-source.mjs"
+import { CSV, ITEMS, PREPOSITIONS, loadRows } from "./por-para-source.mjs"
 
 const { rows, errors } = loadRows()
 if (errors.length) {
@@ -19,7 +19,7 @@ if (errors.length) {
 // Leading commas, as the deck modules write them.
 const entries = rows
   .map(r => `{ before: ${JSON.stringify(r.before)}, answer: ${PREPOSITIONS[r.answer]}, after: ${JSON.stringify(r.after)}`
-          + `\n    , english: ${JSON.stringify(r.english)}, contrast: ${CONTRASTS[r.contrast]}\n    }`)
+          + `\n    , english: ${JSON.stringify(r.english)}, item: ${ITEMS[r.item].constructor}\n    }`)
   .join("\n  , ")
 
 const out = "src/Flashcards/Data/PorPara/Spanish.purs"
@@ -32,10 +32,10 @@ module Flashcards.Data.PorPara.Spanish
   )
   where
 
-import Flashcards.Verbs.PorPara (Contrast(..), Preposition(..), Sentence)
+import Flashcards.Verbs.PorPara (Item(..), Preposition(..), Sentence)
 
--- | In the bank's order, which is the order their contrasts are first asked
--- | in, and the order each contrast's pool is turned.
+-- | In the bank's order, which is the order their items are first asked
+-- | in, and the order each item's pool is turned.
 sentences :: Array Sentence
 sentences =
   [ ${entries}
