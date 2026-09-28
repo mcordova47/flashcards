@@ -31,6 +31,9 @@ deck :: Array Card
 deck = Array.range 1 20 <#> \n ->
   { rank: Rank n, slug: slugAt n, english: "en" <> show n, word: "es" <> show n, example: "" }
 
+slugs :: Array Slug
+slugs = map _.slug deck
+
 -- | The slug of the card at rank `n`. Progress is keyed by slug, so the
 -- | helpers below take a rank only because it is the readable way to name a
 -- | card in a synthetic deck.
@@ -127,12 +130,12 @@ spec = do
 
   describe "overview" do
     it "has no accuracy to report before anything is answered" do
-      (Stats.overview now deck Progress.empty).accuracy `shouldEqual` Nothing
+      (Stats.overview now slugs Progress.empty).accuracy `shouldEqual` Nothing
 
     it "computes accuracy from every wrong answer, not just lapses" do
       -- 10 answers, 3 of them wrong.
       let progress = Progress.empty # card 1 2 10 3 1 5.0
-      (Stats.overview now deck progress).accuracy `shouldEqual` Just 70.0
+      (Stats.overview now slugs progress).accuracy `shouldEqual` Just 70.0
 
     it "counts what is due now separately from tomorrow" do
       let
@@ -140,23 +143,23 @@ spec = do
           # card 1 1 1 0 0 (-1.0)
           # card 2 1 1 0 0 0.5
           # card 3 1 1 0 0 3.0
-        o = Stats.overview now deck progress
+        o = Stats.overview now slugs progress
       o.dueNow `shouldEqual` 1
       o.dueTomorrow `shouldEqual` 1
 
     it "counts only words that can be produced as mastered" do
       let progress = Progress.empty # producing 1 3 9 1 0 30.0 # card 2 3 1 0 0 5.0
-      (Stats.overview now deck progress).mastered `shouldEqual` 1
+      (Stats.overview now slugs progress).mastered `shouldEqual` 1
 
     it "counts how many words have graduated to production" do
       let progress = Progress.empty # producing 1 1 9 1 0 30.0 # card 2 3 1 0 0 5.0
-      (Stats.overview now deck progress).producing `shouldEqual` 1
+      (Stats.overview now slugs progress).producing `shouldEqual` 1
 
     it "ignores history for words no longer in the deck" do
       -- A word that is not in the deck must not inflate the totals.
       let progress = Progress.empty # card 1 2 4 1 0 5.0 # card 999 5 50 20 9 5.0
-      (Stats.overview now deck progress).answers `shouldEqual` 4
-      (Stats.overview now deck progress).seen `shouldEqual` 1
+      (Stats.overview now slugs progress).answers `shouldEqual` 4
+      (Stats.overview now slugs progress).seen `shouldEqual` 1
 
   describe "how long until the next card" do
     it "measures to the soonest card still ahead" do
@@ -165,18 +168,18 @@ spec = do
           # card 1 1 1 0 0 3.0
           # card 2 1 1 0 0 0.25
           # card 3 1 1 0 0 9.0
-      Stats.nextDueIn now deck progress `shouldEqual` Just (Milliseconds $ 0.25 * day)
+      Stats.nextDueIn now slugs progress `shouldEqual` Just (Milliseconds $ 0.25 * day)
 
     it "ignores cards already waiting for you" do
       let progress = Progress.empty # card 1 1 1 0 0 (-2.0) # card 2 1 1 0 0 5.0
-      Stats.nextDueIn now deck progress `shouldEqual` Just (Milliseconds $ 5.0 * day)
+      Stats.nextDueIn now slugs progress `shouldEqual` Just (Milliseconds $ 5.0 * day)
 
     it "has nothing to report when everything is already due" do
       let progress = Progress.empty # card 1 1 1 0 0 (-2.0)
-      Stats.nextDueIn now deck progress `shouldEqual` Nothing
+      Stats.nextDueIn now slugs progress `shouldEqual` Nothing
 
     it "has nothing to report on an untouched deck" do
-      Stats.nextDueIn now deck Progress.empty `shouldEqual` Nothing
+      Stats.nextDueIn now slugs Progress.empty `shouldEqual` Nothing
 
   describe "describing a wait" do
     it "does not bother with seconds" do

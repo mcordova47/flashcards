@@ -1,6 +1,10 @@
--- | Everything the progress screen shows, as pure functions of the deck, the
+-- | Everything the progress screen shows, as pure functions of the items, the
 -- | saved progress, and the current time. No `Effect`, no formatting, no view
 -- | concerns — the screen renders what this returns.
+-- |
+-- | Only `bands` knows what a card is. Everything else takes slugs, or records
+-- | that merely have one, so that a page scheduling something other than words
+-- | can have the same figures without a copy of them.
 module Flashcards.Stats
   ( Band
   , Counts
@@ -30,10 +34,13 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Scheduler (maxBox, struggling)
-import Flashcards.Types.Card (Card, Rank, Slug, rankToInt)
+import Flashcards.Types.Card (Card, Slug, rankToInt)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
 import Flashcards.Types.Progress as Progress
+import Prim.Row (class Lacks)
+import Record as Record
+import Type.Proxy (Proxy(..))
 
 -- | Four buckets rather than six boxes: the boxes are a scheduling detail, and
 -- | a stacked bar with six segments reads as noise.
@@ -79,13 +86,9 @@ type Overview =
   , producing :: Int
   }
 
-type Leech =
-  { slug :: Slug
-  , rank :: Rank
-  , word :: String
-  , english :: String
-  , lapses :: Int
-  }
+-- | Whatever the caller described the item with, plus how often it lapsed.
+-- | For the flashcards that is the whole card; a drill brings its own label.
+type Leech r = { slug :: Slug, lapses :: Int | r }
 
 -- | One bar per hundred words. Fine enough to show the frontier moving,
 -- | coarse enough to fit on a phone.
@@ -116,10 +119,10 @@ masteryOf = case _ of
       | cp.box >= 3 -> Mastered
       | otherwise -> Familiar
 
-tally :: Progress -> Array Card -> Counts
+tally :: Progress -> Array Slug -> Counts
 tally progress = Array.foldl add { unseen: 0, learning: 0, familiar: 0, mastered: 0 }
   where
-    add acc card = case masteryOf $ Progress.lookup card.slug progress of
+    add acc slug = case masteryOf $ Progress.lookup slug progress of
       Unseen -> acc { unseen = acc.unseen + 1 }
       Learning -> acc { learning = acc.learning + 1 }
       Familiar -> acc { familiar = acc.familiar + 1 }
@@ -128,6 +131,11 @@ tally progress = Array.foldl add { unseen: 0, learning: 0, familiar: 0, mastered
 -- | The deck sliced into frequency bands. Because the deck is ordered by
 -- | frequency, the shape of this is the story: a solid left edge decaying
 -- | rightwards, with the boundary marking how far you have got.
+-- |
+-- | The one function here that takes cards, and deliberately: it is *by rank*,
+-- | and rank is the deck's curriculum. Nothing else has one to band by — the
+-- | drills are a verb × tense table, not a list — so generalising this would
+-- | only invent a rank for them. See #29 for what they get instead.
 bands :: Int -> Array Card -> Progress -> Array Band
 bands size deck progress =
   Array.range 0 (count - 1) <#> \i ->
@@ -137,17 +145,17 @@ bands size deck progress =
     in
       { from
       , to: min to total
-      , counts: tally progress $ Array.filter (within from to) deck
+      , counts: tally progress $ map _.slug $ Array.filter (within from to) deck
       }
   where
     total = Array.length deck
     count = max 1 $ (total + size - 1) / size
     within from to card = rankToInt card.rank >= from && rankToInt card.rank <= to
 
-overview :: Instant -> Array Card -> Progress -> Overview
-overview now deck progress =
+overview :: Instant -> Array Slug -> Progress -> Overview
+overview now items progress =
   { seen: Array.length tracked
-  , total: Array.length deck
+  , total: Array.length items
   , mastered: Array.length $ Array.filter (\cp -> masteryOf (Just cp) == Mastered) tracked
   , answers
   , misses
@@ -159,9 +167,9 @@ overview now deck progress =
   , producing: Array.length $ Array.filter (\cp -> cp.direction == Production) tracked
   }
   where
-    -- Only cards still in the deck count, so a resynced deck cannot leave
+    -- Only items still offered count, so a resynced deck cannot leave
     -- orphaned history inflating the totals.
-    tracked = Array.mapMaybe (\card -> Progress.lookup card.slug progress) deck
+    tracked = Array.mapMaybe (\slug -> Progress.lookup slug progress) items
     answers = sum $ map _.seen tracked
     misses = sum $ map _.missed tracked
     tomorrow = plusDays 1.0 now
@@ -179,27 +187,38 @@ overview now deck progress =
 -- | says "keeps slipping", present tense, so the card has to still be down
 -- | there: see `Scheduler.struggling`. Recover and it leaves the list, and the
 -- | count keeps meaning exactly what it says.
-leeches :: Int -> Array Card -> Progress -> Array Leech
-leeches threshold deck progress =
-  Array.sortBy mostLapsedFirst $ Array.mapMaybe toLeech deck
+-- |
+-- | Only the slug is read. Whatever else the item carries comes back out
+-- | untouched, so the caller decides how a leech is labelled — a word and its
+-- | gloss for the flashcards — and the order it is given in breaks ties.
+leeches
+  :: forall r
+   . Lacks "lapses" r
+  => Int
+  -> Array { slug :: Slug | r }
+  -> Progress
+  -> Array (Leech r)
+leeches threshold items progress =
+  Array.sortBy mostLapsedFirst $ Array.mapMaybe toLeech items
   where
-    toLeech card = do
-      cp <- Progress.lookup card.slug progress
+    toLeech item = do
+      cp <- Progress.lookup item.slug progress
       guard $ cp.lapses >= threshold && struggling cp
-      pure { slug: card.slug, rank: card.rank, word: card.word, english: card.english, lapses: cp.lapses }
+      pure $ Record.insert (Proxy :: _ "lapses") cp.lapses item
 
-    -- Stable sort, so equal counts stay in frequency order.
+    -- Stable sort, so equal counts stay in the order given: frequency, for
+    -- the flashcards.
     mostLapsedFirst a b = compare b.lapses a.lapses
 
--- | How long until the soonest card falls due. `Nothing` when nothing is
+-- | How long until the soonest item falls due. `Nothing` when nothing is
 -- | scheduled ahead at all — an untouched deck, or one where everything is
 -- | already waiting for you.
-nextDueIn :: Instant -> Array Card -> Progress -> Maybe Milliseconds
-nextDueIn now deck progress = do
+nextDueIn :: Instant -> Array Slug -> Progress -> Maybe Milliseconds
+nextDueIn now items progress = do
   soonest <- minimum $ Array.filter (_ > now) $ map _.due tracked
   pure $ Milliseconds $ unwrap (unInstant soonest) - unwrap (unInstant now)
   where
-    tracked = Array.mapMaybe (\card -> Progress.lookup card.slug progress) deck
+    tracked = Array.mapMaybe (\slug -> Progress.lookup slug progress) items
 
 -- | A wait in round human units — "4 hours", "1 day". Deliberately coarse:
 -- | the exact minute is noise when the answer is "come back this evening".

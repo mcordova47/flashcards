@@ -74,7 +74,7 @@ view language now progress dispatch =
     ]
   ]
   where
-    o = Stats.overview now language.deck progress
+    o = Stats.overview now (map _.slug language.deck) progress
     percent = 100.0 * Int.toNumber o.seen / Int.toNumber o.total
     slipping = Stats.leeches Stats.leechThreshold language.deck progress
 
