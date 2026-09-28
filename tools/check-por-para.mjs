@@ -26,7 +26,7 @@ let wrong = 0
 for (const r of rows) {
   for (const word of unexplained(known, r.before + r.after, r.notes)) {
     wrong++
-    console.log(`x line ${r.line} (${r.text}): ${word} is not a deck word or a regular inflection of one; say why in Notes`)
+    console.error(`x line ${r.line} (${r.text}): ${word} is not a deck word or a regular inflection of one; say why in Notes`)
   }
 }
 
@@ -36,7 +36,7 @@ for (const contrast of Object.keys(CONTRASTS)) {
   console.log(`  ${contrast.padEnd(20)} ${counts.map(([p, n]) => `${n} ${p}`).join(", ")}`)
   for (const [p, n] of counts.filter(([, n]) => n < 2)) {
     wrong++
-    console.log(`x ${contrast} has ${n} sentence(s) answered ${p}; it needs at least two of each side`)
+    console.error(`x ${contrast} has ${n} sentence(s) answered ${p}; it needs at least two of each side`)
   }
 }
 
