@@ -82,6 +82,9 @@ rubric p =
 exercise :: Prompt -> Exercise
 exercise p =
   { slug: Slug $ "paraphrase." <> p.id
+  -- The prompt, not the id: `door-open` is for the file, and the English is
+  -- what the reader will recognise having been asked.
+  , label: p.asked
   , prompt: p.asked
   -- Nothing to say before the reveal. The prompt is the whole question, and a
   -- hint here would name the trap, which is the answer.

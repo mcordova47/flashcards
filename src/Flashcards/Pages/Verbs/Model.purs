@@ -44,6 +44,10 @@ type State =
   -- | the cards do: the top bar is for the session, and anything that is not
   -- | part of it goes behind the dots.
   , panel :: Boolean
+  -- | When the progress sheet was opened, if it is open. The moment is fixed
+  -- | on opening, as on the cards, so *due tomorrow* does not move under you
+  -- | while you read it.
+  , statsAt :: Maybe Instant
   , syncKey :: Maybe String
   -- | What the server is known to hold. See the study page, where the same
   -- | comparison decides whether the panel may claim to be up to date.
@@ -81,6 +85,9 @@ data Message
   -- | How the reader says they did, where nothing can check it for them.
   | Judge Grade
   | TogglePanel
+  | ShowStats
+  | StatsAt Instant
+  | HideStats
   | Graded Grade Instant
   | Next
   | Sync

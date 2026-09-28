@@ -57,6 +57,11 @@ type Exercise =
   -- | chosen at session time — see `pick` — so the same item cannot be passed
   -- | by memorising one string.
   { slug :: Slug
+  -- | The item as a person would name it, for the progress sheet's list of
+  -- | what keeps slipping: `tener · preterite` for `tener.preterite`. Spelled
+  -- | by whichever module spelled the slug, which is the one that knows what
+  -- | it means, and the same for every exercise of a pool.
+  , label :: String
   , prompt :: String
   , hint :: String
   , answer :: Answer

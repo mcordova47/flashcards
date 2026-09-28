@@ -23,6 +23,7 @@ module Flashcards.Pages.Verbs
 import Prelude
 
 import Data.Array as Array
+import Data.Array.NonEmpty as NonEmpty
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..), isJust)
 import Effect.Class (liftEffect)
@@ -41,6 +42,7 @@ import Flashcards.Keys (onKeyDown)
 import Flashcards.Page as Page
 import Flashcards.Pages.Verbs.Model (Message(..), Phase(..), State, namespace)
 import Flashcards.Pages.Verbs.Model (Message, Phase, State) as Model
+import Flashcards.Pages.Verbs.Progress as ProgressSheet
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.PersonShift as PersonShift
 import Flashcards.Payload as Payload
@@ -65,6 +67,11 @@ items = Exercise.pools $
   Shift.exercises table sentences
     <> PersonShift.exercises table sentences
     <> Paraphrase.exercises prompts
+
+-- | Every item, named. Every exercise of a pool carries the same label, so the
+-- | first one's will do.
+labelled :: Array { slug :: Slug, label :: String }
+labelled = items <#> \pool -> { slug: pool.slug, label: (NonEmpty.head pool.exercises).label }
 
 -- | No deck, so nothing can be placed by rank — and nothing needs to be. This
 -- | namespace has no payloads older than v5, because it has no payloads older
@@ -92,6 +99,7 @@ init = do
     , got: 0
     , again: 0
     , panel: false
+    , statsAt: Nothing
     , phase: Asked
     , syncKey: Nothing
     , sent: Nothing
@@ -153,6 +161,16 @@ update state = case _ of
 
   TogglePanel ->
     pure state { panel = not state.panel }
+
+  ShowStats -> do
+    fork $ liftEffect $ StatsAt <$> Now.now
+    pure state
+
+  StatsAt now ->
+    pure state { statsAt = Just now, panel = false }
+
+  HideStats ->
+    pure state { statsAt = Nothing }
 
   Judge grade -> case state.phase of
     Revealed -> do
@@ -330,6 +348,9 @@ view state dispatch =
             ]
   , H.div "controls" controls
   , if state.panel then panel else H.empty
+  , case state.statsAt of
+      Nothing -> H.empty
+      Just now -> ProgressSheet.view labelled now state.progress dispatch
   ]
   where
     -- Both anchors: a page change is a page load here, so they need no router
@@ -339,7 +360,8 @@ view state dispatch =
       H.fragment
       [ H.div_ "backdrop" { onClick: dispatch <| TogglePanel } H.empty
       , H.div "panel"
-        [ H.a_ "panel-item" { href: "/" } "Flashcards"
+        [ H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
+        , H.a_ "panel-item" { href: "/" } "Flashcards"
         , H.a_ "panel-item" { href: "/?sync" } "Sync a device"
         , H.p "panel-note" syncNote
         ]

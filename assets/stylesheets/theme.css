@@ -629,6 +629,12 @@ body {
   font-size: 0.875rem;
 }
 
+/* The drills have one label where the cards have a word and a gloss, so it
+   takes the gloss's room and pushes the count to the edge as the gloss does. */
+.leech-label {
+  flex: 1;
+}
+
 .leech-count {
   color: var(--faint);
   font-size: 0.8125rem;

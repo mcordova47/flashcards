@@ -25,6 +25,7 @@ spec = do
         Nothing -> fail "no exercise"
         Just e -> do
           e.slug `shouldEqual` Slug "tener.preterite"
+          e.label `shouldEqual` "tener · preterite"
           e.prompt `shouldEqual` "tengo mucho trabajo"
           e.hint `shouldEqual` "preterite"
           frameOf e `shouldEqual` Just { before: "", after: " mucho trabajo" }

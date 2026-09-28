@@ -333,4 +333,82 @@ export default async ({ check, open, blobs }) => {
     stored.cards.find(c => c.slug === `paraphrase.${corpus[2].id}`)?.missed, 1)
   check("no page errors", done.errors, [])
   await done.close()
+
+  // --- the progress sheet ---
+  // One of each kind slipping, one that slipped and recovered, and history
+  // for an item the bank no longer yields, which must count for nothing.
+  const DAY = 86400000
+  const shifts = shiftSlugs(), people = personSlugs()
+  const entry = (slug, box, seen, missed, lapses, dueIn) =>
+    ({ slug, box, seen, missed, lapses, direction: "recognition", due: Date.now() + dueIn * DAY })
+  const worked = {
+    version: formatVersion(), language: "verbs", deck: "none",
+    cards: [
+      entry(shifts[0], 5, 6, 0, 0, 30),
+      entry(shifts[1], 5, 6, 0, 0, 30),
+      entry(shifts[2], 5, 6, 0, 0, 30),
+      entry(shifts[3], 1, 2, 1, 0, 0.5),
+      entry(shifts[4], 1, 2, 1, 0, 0.5),
+      entry(shifts[5], 0, 9, 5, 4, -0.1),
+      entry(people[0], 1, 7, 3, 3, 0.2),
+      entry(`paraphrase.${corpus[0].id}`, 0, 12, 8, 6, -0.1),
+      entry(shifts[6], 4, 10, 4, 5, 10),
+      entry("gone.preterite", 0, 100, 100, 9, -1),
+    ],
+  }
+  const openSheet = async p => {
+    await p.tap(".panel-toggle")
+    ;(await p.byText(".panel-item", "See your progress")).click()
+    await wait(250)
+  }
+
+  const sheet = await open({ path: "/verbs", key: VERBS, seed: worked })
+  await sheet.waitForSelector(".verb-sentence")
+  await wait(400)
+  await openSheet(sheet)
+  check("the menu opens a progress sheet", await sheet.text(".sheet-title"), "Progress")
+  check("and closes behind it", await sheet.$(".panel"), null)
+
+  // 38 right of 60, leaving out the hundred answers to an item that is gone.
+  const tiles = await sheet.$$eval(".tile", es => es.map(e => e.textContent))
+  check("accuracy over the items the bank still yields", tiles[0], "63%correct")
+  check("mastered is a count", tiles[1], "3mastered")
+  check("and it says what is coming tomorrow", tiles[2], "3due tomorrow")
+  check("with the raw numbers behind the percentage", await sheet.text(".tiles-note"),
+    "60 answers · 22 wrong · 2 due now")
+
+  // As the page would name each: a tense shift by verb and tense, a person
+  // shift by the pronoun it asked for, a paraphrase by its English.
+  const CODES = Object.fromEntries(Object.entries(PRONOUNS).map(([p, c]) => [c, p]))
+  const [, pInf, pTense, pCode] = people[0].split(".")
+  const listed = await sheet.$$eval(".leech", es => es.map(e =>
+    [e.querySelector(".leech-label").textContent, e.querySelector(".leech-count").textContent]))
+  check("what keeps slipping, worst first, each kind named as what it is", listed, [
+    [corpus[0].prompt, "6"],
+    [shifts[5].replace(".", " · "), "4"],
+    [`${pInf} · ${pTense} · ${CODES[pCode]}`, "3"],
+  ])
+
+  // #29: the drills grow whenever a sentence is added, so a share of them
+  // would fall every time the app got better.
+  const body = await sheet.text(".sheet-body")
+  check("no fraction of a total anywhere on it",
+    [/\bof\b/.test(body), await sheet.$(".deck-progress"), await sheet.$(".bands")], [false, null, null])
+
+  await sheet.tap(".sheet-close")
+  check("and it closes", await sheet.$(".sheet"), null)
+  check("no page errors", sheet.errors, [])
+  await sheet.close()
+
+  // Nothing answered is nothing to divide, not 0% or 100%.
+  const fresh = await open({ path: "/verbs", key: VERBS })
+  await fresh.waitForSelector(".verb-sentence")
+  await wait(400)
+  await openSheet(fresh)
+  check("an untouched page claims no accuracy",
+    (await fresh.$$eval(".tile", es => es.map(e => e.textContent)))[0], "—correct")
+  check("says so", await fresh.text(".tiles-note"), "No answers yet.")
+  check("and lists nothing as slipping", await fresh.$(".leeches"), null)
+  check("no page errors", fresh.errors, [])
+  await fresh.close()
 }
