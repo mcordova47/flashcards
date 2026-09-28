@@ -484,7 +484,7 @@ standingOf now deck progress =
   , total: o.total
   }
   where
-    o = Stats.overview now deck progress
+    o = Stats.overview now (map _.slug deck) progress
 
 view :: State -> Dispatch Message -> ReactElement
 view state dispatch =
@@ -631,8 +631,9 @@ completeView undoable language progress summary dispatch =
       Milestone.Flourish -> "flourish"
       Milestone.Remark -> "remark"
 
-    dueNow = (Stats.overview summary.at language.deck progress).dueNow
-    waitFor = Stats.describeDuration <$> Stats.nextDueIn summary.at language.deck progress
+    slugs = map _.slug language.deck
+    dueNow = (Stats.overview summary.at slugs progress).dueNow
+    waitFor = Stats.describeDuration <$> Stats.nextDueIn summary.at slugs progress
 
     title = if caughtUp then "All caught up" else language.done
 

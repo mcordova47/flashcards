@@ -21,6 +21,7 @@
             "now",
             "ordered-collections",
             "prelude",
+            "record",
             "strings",
             "tuples",
             "web-html",
