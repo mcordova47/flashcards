@@ -72,6 +72,10 @@ type Deviation =
   }
 
 -- | The form in one cell, if the table has that verb.
+-- |
+-- | A scan, not an index like `Flashcards.Deck`'s. The deck's is queried on
+-- | every grade and every render; this runs while the drills' `items` are
+-- | built and never after, and an index is for lookups that repeat. See #20.
 formOf :: String -> Tense -> Person -> Array Cell -> Maybe String
 formOf infinitive tense person =
   map _.form <<< Array.find \c -> c.infinitive == infinitive && c.tense == tense && c.person == person

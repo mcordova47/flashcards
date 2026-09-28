@@ -124,9 +124,8 @@ init = do
 -- | Nothing`. `Payload.adopt` reaches for the fingerprint only when some entry
 -- | lacks a slug, so for these payloads it is never compared.
 -- |
--- | #12 does give the table a fingerprint, and it is deliberately not used
--- | here. The table's cells are in the bundle now, since the tense shift
--- | reads them, but a value nothing compares is still not worth writing.
+-- | #12 generated one for the table anyway, for a later use that, for the
+-- | reason above, never comes. #20 took it out.
 fingerprint :: String
 fingerprint = "none"
 

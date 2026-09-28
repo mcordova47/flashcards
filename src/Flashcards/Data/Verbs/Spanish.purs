@@ -3,16 +3,11 @@
 -- | Source: data/es-verbs.csv (38 verbs, 760 cells, irregular verbs only).
 module Flashcards.Data.Verbs.Spanish
   ( deviations
-  , fingerprint
   , table
   )
   where
 
 import Flashcards.Verbs.Table (Cell, Deviation, Person(..), Tense(..))
-
--- | Content hash of every cell.
-fingerprint :: String
-fingerprint = "ae2942884f69"
 
 -- | One entry per cell, grouped by verb, then tense, then person.
 table :: Array Cell
