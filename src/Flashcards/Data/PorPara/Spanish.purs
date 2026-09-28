@@ -6,82 +6,82 @@ module Flashcards.Data.PorPara.Spanish
   )
   where
 
-import Flashcards.Verbs.PorPara (Contrast(..), Preposition(..), Sentence)
+import Flashcards.Verbs.PorPara (Item(..), Preposition(..), Sentence)
 
--- | In the bank's order, which is the order their contrasts are first asked
--- | in, and the order each contrast's pool is turned.
+-- | In the bank's order, which is the order their items are first asked
+-- | in, and the order each item's pool is turned.
 sentences :: Array Sentence
 sentences =
   [ { before: "lo hice ", answer: Por, after: " ti"
-    , english: "I did it because of you.", contrast: CausePurpose
+    , english: "I did it because of you.", item: CausePurpose
     }
   , { before: "estudio ", answer: Para, after: " aprender"
-    , english: "I study in order to learn.", contrast: CausePurpose
+    , english: "I study in order to learn.", item: CausePurpose
     }
   , { before: "lo hice ", answer: Para, after: " ti"
-    , english: "I did it for your benefit.", contrast: CausePurpose
+    , english: "I did it for your benefit.", item: CausePurpose
     }
   , { before: "gracias ", answer: Por, after: " la comida"
-    , english: "Thank you for the food.", contrast: CausePurpose
+    , english: "Thank you for the food.", item: CausePurpose
     }
   , { before: "", answer: Por, after: " eso no vine"
-    , english: "That's why I didn't come.", contrast: CausePurpose
+    , english: "That's why I didn't come.", item: CausePurpose
     }
   , { before: "trabajo ", answer: Para, after: " vivir"
-    , english: "I work in order to live.", contrast: CausePurpose
+    , english: "I work in order to live.", item: CausePurpose
     }
   , { before: "estudio ", answer: Por, after: " la noche"
-    , english: "I study at night.", contrast: DurationDeadline
+    , english: "I study at night.", item: DurationDeadline
     }
   , { before: "lo necesito ", answer: Para, after: " mañana"
-    , english: "I need it by tomorrow.", contrast: DurationDeadline
+    , english: "I need it by tomorrow.", item: DurationDeadline
     }
   , { before: "tengo que terminar ", answer: Para, after: " el fin de semana"
-    , english: "I have to finish by the weekend.", contrast: DurationDeadline
+    , english: "I have to finish by the weekend.", item: DurationDeadline
     }
   , { before: "lo pensé ", answer: Por, after: " un momento"
-    , english: "I thought about it for a moment.", contrast: DurationDeadline
+    , english: "I thought about it for a moment.", item: DurationDeadline
     }
   , { before: "trabajo ", answer: Por, after: " la mañana"
-    , english: "I work in the mornings.", contrast: DurationDeadline
+    , english: "I work in the mornings.", item: DurationDeadline
     }
   , { before: "llego ", answer: Para, after: " la cena"
-    , english: "I'll be there in time for dinner.", contrast: DurationDeadline
+    , english: "I'll be there in time for dinner.", item: DurationDeadline
     }
   , { before: "caminamos ", answer: Por, after: " la ciudad"
-    , english: "We walked around the city.", contrast: ThroughTowards
+    , english: "We walked around the city.", item: ThroughTowards
     }
   , { before: "salgo ", answer: Para, after: " el hospital"
-    , english: "I'm leaving for the hospital.", contrast: ThroughTowards
+    , english: "I'm leaving for the hospital.", item: ThroughTowards
     }
   , { before: "vamos ", answer: Para, after: " casa"
-    , english: "We're heading home.", contrast: ThroughTowards
+    , english: "We're heading home.", item: ThroughTowards
     }
   , { before: "el tren pasa ", answer: Por, after: " el pueblo"
-    , english: "The train goes through the town.", contrast: ThroughTowards
+    , english: "The train goes through the town.", item: ThroughTowards
     }
   , { before: "caminaba ", answer: Por, after: " la calle"
-    , english: "I was walking down the street.", contrast: ThroughTowards
+    , english: "I was walking down the street.", item: ThroughTowards
     }
   , { before: "el tren sale ", answer: Para, after: " el norte"
-    , english: "The train leaves for the north.", contrast: ThroughTowards
+    , english: "The train leaves for the north.", item: ThroughTowards
     }
   , { before: "lo vendí ", answer: Por, after: " poco dinero"
-    , english: "I sold it for very little money.", contrast: ExchangeRecipient
+    , english: "I sold it for very little money.", item: ExchangeRecipient
     }
   , { before: "este libro es ", answer: Para, after: " mi hermano"
-    , english: "This book is for my brother.", contrast: ExchangeRecipient
+    , english: "This book is for my brother.", item: ExchangeRecipient
     }
   , { before: "hay una carta ", answer: Para, after: " ti"
-    , english: "There's a letter for you.", contrast: ExchangeRecipient
+    , english: "There's a letter for you.", item: ExchangeRecipient
     }
   , { before: "te doy mi libro ", answer: Por, after: " el tuyo"
-    , english: "I'll give you my book in exchange for yours.", contrast: ExchangeRecipient
+    , english: "I'll give you my book in exchange for yours.", item: ExchangeRecipient
     }
   , { before: "pago mucho ", answer: Por, after: " esta casa"
-    , english: "I pay a lot for this house.", contrast: ExchangeRecipient
+    , english: "I pay a lot for this house.", item: ExchangeRecipient
     }
   , { before: "compré comida ", answer: Para, after: " mi madre"
-    , english: "I bought my mother some food.", contrast: ExchangeRecipient
+    , english: "I bought my mother some food.", item: ExchangeRecipient
     }
   ]

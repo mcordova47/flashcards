@@ -13,7 +13,7 @@
 // that side is the same string, which is what the pool is there to prevent.
 
 import { loadTable } from "./verb-source.mjs"
-import { CONTRASTS, CSV, PREPOSITIONS, loadRows } from "./por-para-source.mjs"
+import { ITEMS, CSV, PREPOSITIONS, loadRows } from "./por-para-source.mjs"
 import { knownWords, unexplained } from "./deck-vocabulary.mjs"
 
 const { verbs, errors: tableErrors } = loadTable()
@@ -30,9 +30,9 @@ for (const r of rows) {
   }
 }
 
-console.log(`${rows.length} sentences over ${Object.keys(CONTRASTS).length} contrasts:`)
-for (const contrast of Object.keys(CONTRASTS)) {
-  const counts = Object.keys(PREPOSITIONS).map(p => [p, rows.filter(r => r.contrast === contrast && r.answer === p).length])
+console.log(`${rows.length} sentences over ${Object.keys(ITEMS).length} contrasts:`)
+for (const contrast of Object.keys(ITEMS)) {
+  const counts = Object.keys(PREPOSITIONS).map(p => [p, rows.filter(r => r.item === contrast && r.answer === p).length])
   console.log(`  ${contrast.padEnd(20)} ${counts.map(([p, n]) => `${n} ${p}`).join(", ")}`)
   for (const [p, n] of counts.filter(([, n]) => n < 2)) {
     wrong++

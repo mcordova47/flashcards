@@ -8,7 +8,7 @@
 -- | Pure, and given its sentences rather than importing them, so the spec can
 -- | ask about a sentence the bank does not have.
 module Flashcards.Verbs.PorPara
-  ( Contrast(..)
+  ( Item(..)
   , Preposition(..)
   , Sentence
   , exercise
@@ -31,15 +31,15 @@ import Flashcards.Types.Card (Slug(..))
 -- |
 -- | Each has a pool of sentences, some answered by each side, and
 -- | `Exercise.pick` turns it.
-data Contrast
+data Item
   = CausePurpose
   | DurationDeadline
   | ThroughTowards
   | ExchangeRecipient
 
-derive instance Eq Contrast
+derive instance Eq Item
 
-instance Show Contrast where
+instance Show Item where
   show CausePurpose = "CausePurpose"
   show DurationDeadline = "DurationDeadline"
   show ThroughTowards = "ThroughTowards"
@@ -65,7 +65,7 @@ type Sentence =
   , answer :: Preposition
   , after :: String
   , english :: String
-  , contrast :: Contrast
+  , item :: Item
   }
 
 -- | As it is typed.
@@ -76,7 +76,7 @@ word = case _ of
 
 -- | `porpara.cause-purpose`. Namespaced, as the person shift's and the
 -- | paraphrase's are, though no other exercise could spell one of these.
-slug :: Contrast -> Slug
+slug :: Item -> Slug
 slug c = Slug $ "porpara." <> case c of
   CausePurpose -> "cause-purpose"
   DurationDeadline -> "duration-deadline"
@@ -84,7 +84,7 @@ slug c = Slug $ "porpara." <> case c of
   ExchangeRecipient -> "exchange-recipient"
 
 -- | As the progress sheet names it, `por / para · cause vs purpose`.
-label :: Contrast -> String
+label :: Item -> String
 label c = "por / para · " <> case c of
   CausePurpose -> "cause vs purpose"
   DurationDeadline -> "duration vs deadline"
@@ -99,8 +99,8 @@ label c = "por / para · " <> case c of
 -- | it.
 exercise :: Sentence -> Exercise
 exercise s =
-  { slug: slug s.contrast
-  , label: label s.contrast
+  { slug: slug s.item
+  , label: label s.item
   , prompt: s.english
   , hint: "por / para"
   , answer: Checked

@@ -19,7 +19,7 @@ import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (CardProgress)
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.PersonShift as PersonShift
-import Flashcards.Verbs.PorPara (Contrast(..), Preposition(..), exercise, exercises)
+import Flashcards.Verbs.PorPara (Item(..), Preposition(..), exercise, exercises)
 import Flashcards.Verbs.Shift as Shift
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
@@ -84,7 +84,7 @@ spec = do
   where
     causeOfYou =
       { before: "lo hice ", answer: Por, after: " ti"
-      , english: "I did it because of you.", contrast: CausePurpose
+      , english: "I did it because of you.", item: CausePurpose
       }
 
 seenTimes :: Int -> CardProgress

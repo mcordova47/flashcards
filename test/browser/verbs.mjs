@@ -40,9 +40,9 @@ const personSlugs = () => {
 
 // The por / para bank, by the English it asks, which is unique to a row even
 // where two rows share their Spanish.
-const porPara = rows("data/es-por-para.csv").map(([text, english, contrast]) => {
+const porPara = rows("data/es-por-para.csv").map(([text, english, item]) => {
   const [, before, answer, after] = text.match(/^(.*)\[(.*)\](.*)$/)
-  return { before, answer, after, english, contrast, slug: `porpara.${contrast}`, full: before + answer + after }
+  return { before, answer, after, english, item, slug: `porpara.${item}`, full: before + answer + after }
 })
 const porParaSlugs = () => [...new Set(porPara.map(r => r.slug))]
 const otherWord = w => w === "por" ? "para" : "por"

@@ -16,9 +16,9 @@ import { parseCsv } from "./deck-source.mjs"
 
 export const CSV = "data/es-por-para.csv"
 
-// Each contrast's id, as the CSV and the slug spell it, and its constructor in
+// Each item's id, as the CSV and the slug spell it, and its constructor in
 // Flashcards.Verbs.PorPara, which this has to agree with.
-export const CONTRASTS = {
+export const ITEMS = {
   "cause-purpose": "CausePurpose",
   "duration-deadline": "DurationDeadline",
   "through-towards": "ThroughTowards",
@@ -27,7 +27,7 @@ export const CONTRASTS = {
 
 export const PREPOSITIONS = { por: "Por", para: "Para" }
 
-const HEADER = ["Sentence", "English", "Contrast", "Notes"]
+const HEADER = ["Sentence", "English", "Item", "Notes"]
 
 // Lowercase and unpunctuated, as the shift sentences are: the frame is
 // scaffolding either side of a box, not a sentence to be read as prose.
@@ -57,7 +57,7 @@ export const loadRows = () => {
       errors.push(`line ${line} has ${cells.length} fields, not ${HEADER.length}`)
       return
     }
-    const [text, english, contrast, notes] = cells
+    const [text, english, item, notes] = cells
     const shape = text.match(SHAPE)
     const plain = text.replace(/[\[\]]/g, "")
 
@@ -65,7 +65,7 @@ export const loadRows = () => {
     else if (!PREPOSITIONS[shape[2]]) errors.push(`line ${line}: [${shape[2]}] is not por or para`)
     if (!WORDS.test(plain)) errors.push(`line ${line}: ${JSON.stringify(plain)} is not lowercase words separated by single spaces`)
     if (!english) errors.push(`line ${line}: a row needs the English that says which sense it is`)
-    if (!CONTRASTS[contrast]) errors.push(`line ${line}: ${JSON.stringify(contrast)} is not one of ${Object.keys(CONTRASTS).join(", ")}`)
+    if (!ITEMS[item]) errors.push(`line ${line}: ${JSON.stringify(item)} is not one of ${Object.keys(ITEMS).join(", ")}`)
     // The English is the prompt, so two rows with the same English are one
     // question - and if their answers differ, a question with two answers.
     // The same *Spanish* is allowed, and is the point of a minimal pair:
@@ -74,7 +74,7 @@ export const loadRows = () => {
     seen.set(english, line)
 
     if (shape) {
-      rows.push({ line, text, before: shape[1], answer: shape[2], after: shape[3], english, contrast, notes })
+      rows.push({ line, text, before: shape[1], answer: shape[2], after: shape[3], english, item, notes })
     }
   })
 
