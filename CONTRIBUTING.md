@@ -24,11 +24,15 @@ regenerated module is only stale relative to whatever else landed.
 ## A worktree each
 
 ```
-npm run worktree <name>
+npm run worktree <branch>
 ```
 
-Makes `.claude/worktrees/<name>` on a new branch off `origin/main`, installs
-into it, and prints the path. Work there, not in the shared checkout.
+Makes `.claude/worktrees/<branch>`, installs into it, and prints the path.
+Work there, not in the shared checkout.
+
+A branch that already exists — here or on the remote — is checked out, which
+is how you read someone else's work without disturbing your own. One that does
+not is cut from `origin/main`. It says which it did.
 
 **This is about correctness, not tidiness.** `public/` is written by the build
 and read by the browser harness; `output/` is the PureScript build. Both are
@@ -133,6 +137,7 @@ like once the decision has been made.
 ## Review is a separate pass
 
 Work gets reviewed by someone who did not write it, and the review checks
-claims rather than reading them. Regenerate the thing that is supposed to be
+claims rather than reading them. `npm run worktree <their-branch>` gives you
+somewhere to run it that is not wherever you happened to be standing. Regenerate the thing that is supposed to be
 byte-identical. Plant the failure the new rule is supposed to catch. Run the
 one caller that the test suite does not cover.
