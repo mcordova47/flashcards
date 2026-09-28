@@ -883,6 +883,13 @@ body {
   color: var(--faint);
 }
 
+/* Nothing typed yet, so there is nothing to check. Dimmed rather than hidden:
+   the button is where it will be, and the box beside it says what it wants. */
+.grade:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 .verb-answer:focus {
   outline: none;
   border-bottom-color: var(--accent);

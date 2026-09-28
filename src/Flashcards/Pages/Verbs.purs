@@ -152,6 +152,13 @@ update state = case _ of
   -- self-graded one is only revealed, and waits for `Judge`.
   Answer -> case state.shown, state.phase of
     Just exercise, Asked -> case exercise.answer of
+      -- An empty box is not an answer. `Enter` is mapped and the box is
+      -- focused from the moment a question arrives, so without this a stray
+      -- one marks the item missed before it has been read. A reader who means
+      -- "I do not know" has `Again` on the reveal, which is the same thing
+      -- said on purpose.
+      Checked _ | String.trim state.typed == "" ->
+        pure state
       Checked { expected } -> do
         let
           verdict = matches expected state.typed
@@ -397,7 +404,7 @@ view state dispatch =
         [ H.button_ "grade got-it" { onClick: dispatch <| Next } "Next" ]
       -- Nothing checked this, so nothing can say how it went but the reader.
       Asked ->
-        [ H.button_ "grade got-it" { onClick: dispatch <| Answer } ask ]
+        [ H.button_ "grade got-it" { onClick: dispatch <| Answer, disabled: not answerable } ask ]
       -- `Revealed` and `Judging` look the same on purpose: the buttons stay
       -- put across the frame between the tap and the grade landing, and
       -- `Judge` ignores the second tap rather than the view hiding it.
@@ -405,6 +412,11 @@ view state dispatch =
         [ H.button_ "grade again" { onClick: dispatch <| Judge Again } "Again"
         , H.button_ "grade got-it" { onClick: dispatch <| Judge GotIt } "Got it"
         ]
+
+    -- A typed question needs something typed; a reveal needs nothing.
+    answerable = case _.answer <$> state.shown of
+      Just (Checked _) -> String.trim state.typed /= ""
+      _ -> true
 
     ask = case _.answer <$> state.shown of
       Just (SelfGraded _) -> "Reveal"
