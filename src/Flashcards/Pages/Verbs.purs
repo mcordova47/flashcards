@@ -310,7 +310,7 @@ view state dispatch =
         ]
       Just exercise ->
         H.div "done-body" $ case exercise.answer of
-          Checked { expected, frame } ->
+          Checked { expected, frame, note } ->
             [ H.h1 "verb-sentence" exercise.prompt
             , H.p "direction verb-target" $ "→ " <> exercise.hint
             -- The box sits where the verb goes, so a lone input is never read
@@ -333,6 +333,9 @@ view state dispatch =
               ]
             , case state.phase of
                 Compared verdict -> compared frame expected verdict
+                _ -> H.empty
+            , case state.phase of
+                Compared _ | note /= "" -> H.p "milestone remark verb-note" note
                 _ -> H.empty
             ]
           SelfGraded { model, rubric } ->

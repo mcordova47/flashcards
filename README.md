@@ -635,8 +635,9 @@ to admit `verbs`, and stays bounded so one key still cannot become unlimited
 storage.
 
 An exercise is `{ slug, prompt, hint, answer }`, where `answer` is either
-`Checked { expected, frame }` — a typed answer, with the words shown either
-side of the box — or `SelfGraded { model, rubric }`. The frame belongs to the
+`Checked { expected, frame, note }` — a typed answer, with the words shown
+either side of the box and anything to say once it is compared — or
+`SelfGraded { model, rubric }`. The frame belongs to the
 typed answer rather than to the exercise, because only a typed answer has
 one. The page owns the session loop once; each drill type is a module
 producing exercises, which is what lets them be built separately rather than
