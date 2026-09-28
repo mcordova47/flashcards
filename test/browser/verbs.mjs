@@ -47,6 +47,10 @@ const porPara = rows("data/es-por-para.csv").map(([text, english, item]) => {
 const porParaSlugs = () => [...new Set(porPara.map(r => r.slug))]
 const otherWord = w => w === "por" ? "para" : "por"
 
+// Error correction's items are its kinds, so there are four and they are
+// named rather than derived.
+const errorSlugs = ["regularised", "strong-weak", "strong-imperfect", "boot"].map(k => `error.${k}`)
+
 const bank = rows("data/es-sentences.csv").map(([text, infinitive, tense, person, personShift]) => {
   const [, before, form, after] = text.match(/^(.*)\[(.*)\](.*)$/)
   return { plain: before + form + after, before, after, infinitive, tense, person, personShift: personShift === "yes" }
@@ -89,6 +93,7 @@ export default async ({ check, open, blobs }) => {
   // --- a right answer grades GotIt ---
   await answer(page, first.form)
   check("a right answer shows the sentence moved", await page.text(".milestone"), `✓ ${first.full}`)
+  check("with nothing to add, since the prompt named the tense", await page.text(".verb-note"), null)
 
   let stored = await page.stored()
   check("and is written under the page's own key", stored.cards.length, 1)
@@ -277,7 +282,7 @@ export default async ({ check, open, blobs }) => {
   // Everything else is put behind us, so the session is the por / para items
   // and nothing else, and a miss is requeued among them.
   const pp = await open({ path: "/verbs", key: VERBS,
-    seed: behind([...shiftSlugs(), ...personSlugs(), ...corpus.map(c => `paraphrase.${c.id}`)]) })
+    seed: behind([...shiftSlugs(), ...personSlugs(), ...errorSlugs, ...corpus.map(c => `paraphrase.${c.id}`)]) })
   await pp.waitForSelector(".verb-sentence")
   await wait(400)
   const ppAsked = async () => {
@@ -317,12 +322,84 @@ export default async ({ check, open, blobs }) => {
     ppAgain?.english, porPara.filter(r => r.slug === ppMissed.slug)[1].english)
   check("no page errors", pp.errors, [])
   await pp.close()
+  // --- error correction: a sentence broken on purpose ---
+  // The shifts and por / para are put behind us, so the session opens on the
+  // first kind.
+  // The sentence on screen is not in the bank - its verb is broken - so it
+  // is found by the words either side of the box.
+  const fixing = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs(), ...porParaSlugs()]) })
+  await fixing.waitForSelector(".verb-sentence")
+  await wait(400)
+
+  const broken = async () => {
+    const shown = await fixing.text(".verb-sentence")
+    const before = await fixing.text(".verb-before") ?? "", after = await fixing.text(".verb-after") ?? ""
+    const s = bank.find(s => s.before === before && s.after === after)
+    const tense = (await fixing.text(".verb-target")).replace(/^→ fix it · /, "")
+    const form = table.get(`${s.infinitive}.${tense}.${s.person}`)
+    return { shown, typo: shown.slice(before.length, shown.length - after.length), form, full: before + form + after }
+  }
+
+  const opening1 = await broken()
+  check("asks a sentence the bank does not have", bank.some(s => s.plain === opening1.shown), false)
+  check("naming the tense, and that it wants fixing", await fixing.text(".verb-target"), "→ fix it · present")
+  check("broken as the first kind breaks it", opening1.shown, "teno mucho trabajo")
+  check("and saying nothing yet of what is wrong", await fixing.text(".verb-note"), null)
+  await answer(fixing, opening1.form)
+  check("a right fix shows the sentence mended", await fixing.text(".milestone"), `✓ ${opening1.full}`)
+  check("and then says what the mistake was", await fixing.text(".verb-note"),
+    "an irregular verb, conjugated as though it were regular")
+  stored = await fixing.stored()
+  check("keyed by the kind, not the verb",
+    stored.cards.filter(c => c.slug.startsWith("error.")).map(c => [c.slug, c.missed]), [["error.regularised", 0]])
+
+  // The one that forgiveness makes dangerous: typed back as shown, it must
+  // be wrong. The generator refuses every error that differs from its fix
+  // only by an accent, which is what makes this hold for every item.
+  await next(fixing)
+  const retyped = await broken()
+  await answer(fixing, retyped.typo)
+  check("the error typed back unchanged is wrong", await fixing.text(".milestone"), `✗ ${retyped.full}`)
+  check("and the mistake is named then too", (await fixing.text(".verb-note")) !== null, true)
+  stored = await fixing.stored()
+  check("graded as missed", stored.cards.find(c => c.slug === "error.strong-weak")?.missed, 1)
+
+  // A missing accent is still not the mistake being drilled.
+  await next(fixing)
+  const accented = await broken()
+  check("the next fix has an accent to leave off", /[áéíóú]/.test(accented.form), true)
+  await answer(fixing, accented.form.normalize("NFD").replace(/[́]/g, ""))
+  check("and a fix without it counts", await fixing.text(".verb-accent"), `right — ${accented.form}`)
+
+  // The missed kind comes round again, as a different sentence. Answered
+  // rightly until it does; its `seen` moving to 2 is what says it was asked.
+  const seenOf = async slug => (await fixing.stored()).cards.find(c => c.slug === slug)?.seen
+  let fixAgain = null
+  await next(fixing)
+  for (let i = 0; i < 12 && !fixAgain; i++) {
+    // The paraphrase follows in the curriculum, and the miss may be requeued
+    // behind one of its prompts. Passed, it moves on by itself.
+    if (!(await fixing.$(".verb-sentence"))) {
+      await fixing.tap(".grade")
+      await (await fixing.byText(".grade", "Got it")).click()
+      await wait(200)
+      continue
+    }
+    const b = await broken()
+    await answer(fixing, b.form)
+    if (await seenOf("error.strong-weak") === 2) fixAgain = b
+    else await next(fixing)
+  }
+  check("the missed kind comes round again", fixAgain !== null, true)
+  check("asking a different sentence", fixAgain && fixAgain.shown !== retyped.shown, true)
+  check("no page errors", fixing.errors, [])
+  await fixing.close()
 
   // --- the paraphrase, which nothing can check ---
   // The checked drills are put behind us so the session opens on the corpus;
   // every exercise type shares one queue, and the page tells them apart by
   // which `Answer` they carry rather than by which page they are on.
-  const done = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs(), ...porParaSlugs()]) })
+  const done = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs]) })
   await done.waitForSelector(".verb-prompt")
   await wait(400)
 

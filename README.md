@@ -635,8 +635,9 @@ to admit `verbs`, and stays bounded so one key still cannot become unlimited
 storage.
 
 An exercise is `{ slug, prompt, hint, answer }`, where `answer` is either
-`Checked { expected, frame }` — a typed answer, with the words shown either
-side of the box — or `SelfGraded { model, rubric }`. The frame belongs to the
+`Checked { expected, frame, note }` — a typed answer, with the words shown
+either side of the box and anything to say once it is compared — or
+`SelfGraded { model, rubric }`. The frame belongs to the
 typed answer rather than to the exercise, because only a typed answer has
 one. The page owns the session loop once; each drill type is a module
 producing exercises, which is what lets them be built separately rather than
@@ -745,6 +746,11 @@ It also lists the verb × tense items that are wholly regular, nearly all of
 them imperfects. Whether to stop scheduling those is #21. Printed, not acted
 on.
 
+`sync-verbs` writes the same list into the module as `deviations`, each cell
+with the form the regular pattern would have given. Error correction is built
+from it, and generating it with check-verbs's own `regular` is what stops the
+drill and the review disagreeing about what a regularised form is.
+
 ### The tense shift
 
 A sentence, a tense to move it to, and the verb typed in the box where it
@@ -807,6 +813,42 @@ since `ella [tiene] mucho trabajo` would ask for `ella tenemos`.
 asked into the person it is already in, so two sentences leave the persons
 they are in with one sentence each. `check-sentences` counts the person-shift
 items and lists any with only one sentence.
+
+### Error correction
+
+The bank again, with its verb broken on purpose (#26): `tení mucho trabajo` →
+*fix it · preterite* → `tuve`. Nothing is authored but the list of mistakes,
+which is the teaching. `Flashcards.Verbs.Correction` holds the four, each a
+thing learners do:
+
+| item | | |
+| --- | --- | --- |
+| `error.regularised` | `tení` for `tuve`, `teno` for `tengo` | the regular pattern on a verb with its own form — exactly check-verbs's "(not X)" |
+| `error.strong-weak` | `tuví` for `tuve`, `dijieron` for `dijeron` | the irregular preterite stem with the regular, stressed endings |
+| `error.strong-imperfect` | `tuvía` for `tenía` | the preterite's stem carried into an imperfect that is regular |
+| `error.boot` | `tienemos` for `tenemos` | a stem change carried into *nosotros* |
+
+**The item is the kind, not the verb.** What is being learned is to see a
+regularised irregular, and `tener` is the example — so four items with pools
+of 3 to 40 exercises, and `pick` moves to another sentence every time.
+
+**The tense is named.** Without it the fix is not determined: `tení` is a
+regularised `tuve` or a clipped `tenía`, and both mend the sentence. The
+mistake is named only after the answer, since naming it first gives the fix
+away — which is what `Checked`'s `note` is for.
+
+**Accents are not a kind, and grading is still `matches`.** Being failed for
+a missing accent on every question is what #16 decided against. The cost of
+forgiving is paid in generation instead: an error that differs from its fix
+only by an accent — `estas` for `estás` — would pass typed back unchanged, so
+it is refused. So is an error that is the verb's real form in another tense:
+`estamos en casa` is good Spanish, and mending it into the preterite is a tense
+shift. And `ser` and `ir` make none, since regularising a verb with no stem
+gives `o a la ciudad`, which nobody says.
+
+**Two real kinds are missing**, because no sentence has a verb that makes
+them: the orthographic (`llegé`, `buscé`) and the `-ir` preterite stem change
+(`dormió`). Both need sentences written for them first.
 
 ### The paraphrase
 
@@ -1046,6 +1088,7 @@ src/Flashcards/
   Pages/Study.purs                   the card, the loop, the wiring
   Pages/Verbs.purs                   the drills (#8); both exercises, one loop
   Verbs/Shift.purs                   the tense shift (#16), pure
+  Verbs/Correction.purs              error correction and its kinds (#26), pure
   Verbs/Paraphrase.purs              the paraphrase and its rubric (#10), pure
   Pages/Study/Model.purs             one State and one Message, for all of it
   Pages/Study/Pairing.purs           getting a key from one device to another
