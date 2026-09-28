@@ -122,11 +122,21 @@ An issue is where a decision gets argued and written down, so that the next
 person — or the next agent — starts from the conclusion rather than the
 question.
 
-**Whoever finds an issue wrong says so in a comment. Whoever reviews decides,
-and edits the body.** Not the finder, for two reasons. A correction can itself
-be wrong, and a comment is cheap to disagree with where an edit is work to
-undo. And `gh issue edit` replaces the whole body, so two people correcting
-one issue at once would clobber each other without either noticing.
+**A disagreement with an issue belongs in the pull request that acts on it**,
+where it can be read against the code it is about. One review surface, and the
+reasoning ends up in a commit message rather than a comment thread — which is
+where `git log` will have it later, and this log is read as a design history.
+
+The exception is a disagreement that changes *what gets built* rather than how:
+different data, a different item model, a different shape. Say those before
+building, in a comment, and wait. Authoring forty rows against the wrong rule
+and redoing them is the expensive failure.
+
+**Either way the finder does not edit the body. Whoever reviews decides, and
+edits it.** A correction can itself be wrong, and a comment or a pull request
+is cheap to disagree with where an edit is work to undo. And `gh issue edit`
+replaces the whole body, so two people correcting one issue at once would
+clobber each other without either noticing.
 
 The body does get edited in the end, though, and that part of the original
 rule stands: a correction left only in a comment below a wrong example is a
