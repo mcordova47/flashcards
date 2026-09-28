@@ -54,6 +54,7 @@ jobs:
       - run: npm run -s check-verbs
       - run: npm run -s check-paraphrase
       - run: npm run -s check-sentences
+      - run: npm run -s check-por-para
 
       - uses: actions/cache@v4
         with:

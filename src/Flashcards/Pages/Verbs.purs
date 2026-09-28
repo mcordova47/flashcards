@@ -10,9 +10,9 @@
 -- | key, the same codec, the same format version. The *pairing* key is shared,
 -- | so a device paired for the flashcards is already paired for this.
 -- |
--- | Three exercises so far: the tense shift (#16), the person shift (#25) and
--- | the paraphrase (#10). The page knows them only as the pools they yield:
--- | another exercise type adds pools, not a branch here.
+-- | Four exercises so far: the tense shift (#16), the person shift (#25),
+-- | por / para (#18) and the paraphrase (#10). The page knows them only as the
+-- | pools they yield: another exercise type adds pools, not a branch here.
 module Flashcards.Pages.Verbs
   ( module Model
   , init
@@ -34,6 +34,7 @@ import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Events as E
 import Elmish.HTML.Styled as H
 import Flashcards.Data.Paraphrase.Spanish (prompts)
+import Flashcards.Data.PorPara.Spanish (sentences) as PorPara
 import Flashcards.Data.Sentences.Spanish (sentences)
 import Flashcards.Data.Verbs.Spanish (table)
 import Flashcards.Exercise (Answer(..), Pool, Verdict(..), matches, pick)
@@ -45,6 +46,7 @@ import Flashcards.Pages.Verbs.Model (Message, Phase, State) as Model
 import Flashcards.Pages.Verbs.Progress as ProgressSheet
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.PersonShift as PersonShift
+import Flashcards.Verbs.PorPara (exercises) as PorPara
 import Flashcards.Payload as Payload
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
@@ -58,14 +60,15 @@ import Flashcards.Verbs.Shift as Shift
 -- | Every item there is, in the order new ones are introduced. Static, so
 -- | built once for the life of the page.
 -- |
--- | Three exercise types, one list. The page does not know which is which — it
--- | reads `Answer`, and the shifts and the paraphrase differ by which
--- | constructor they produce. The shifts come first because they are the
--- | easier question, and the order of this list is the curriculum.
+-- | Four exercise types, one list. The page does not know which is which — it
+-- | reads `Answer`, and the checked drills and the paraphrase differ by which
+-- | constructor they produce. The checked ones come first because they are
+-- | the easier question, and the order of this list is the curriculum.
 items :: Array Pool
 items = Exercise.pools $
   Shift.exercises table sentences
     <> PersonShift.exercises table sentences
+    <> PorPara.exercises PorPara.sentences
     <> Paraphrase.exercises prompts
 
 -- | Every item, named. Every exercise of a pool carries the same label, so the

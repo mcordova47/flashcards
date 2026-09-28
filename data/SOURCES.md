@@ -45,6 +45,16 @@ columns, so the model answer is a worked example, not the only right answer.
 by looking it up in `es-verbs.csv`, and refuses any word outside `es-1000.csv`
 that the row's `Notes` does not explain.
 
+## `es-por-para.csv` — por / para sentences
+
+Written by hand for #18. Each row is a Spanish sentence with `por` or `para`
+in brackets, the English that says which sense it is, and which of four
+contrasts it belongs to. Three sentences a side, six a contrast.
+
+`npm run check-por-para` refuses any word outside `es-1000.csv` that the row's
+`Notes` does not explain, and any contrast without at least two sentences on
+each side.
+
 ## `es-verb-coverage.csv` — a recommendation per cell
 
 **Derived, and an argument rather than a fact.** `npm run verb-coverage`

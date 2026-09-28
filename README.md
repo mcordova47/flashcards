@@ -28,7 +28,7 @@ npm start        # http://localhost:8000
 | `npm start` | Dev server, rebuilds on change |
 | `npm run build` | Compile and bundle into `public/` |
 | `npm test` | Unit specs — the pure core |
-| `npm run verify` | The paraphrase and sentence checks, then browser suites against a real Chrome |
+| `npm run verify` | The paraphrase, sentence and por / para checks, then browser suites against a real Chrome |
 | `npm run sync` | Regenerate every data module from its CSV — what CI checks is already done |
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
 | `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
@@ -39,6 +39,8 @@ npm start        # http://localhost:8000
 | `npm run sync-paraphrase` | Regenerate the paraphrase prompt module from `data/es-paraphrase.csv` |
 | `npm run check-paraphrase` | Prove every paraphrase model answer uses the form it claims, in deck vocabulary |
 | `npm run check-sentences` | Prove every shift sentence against the table, in deck vocabulary |
+| `npm run sync-por-para` | Regenerate the por / para sentence module from `data/es-por-para.csv` |
+| `npm run check-por-para` | Prove every por / para contrast asks both sides, in deck vocabulary |
 | `npm run rename` | Report words whose spelling changed, and pin the ones that should keep their history |
 | `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
 
@@ -102,8 +104,8 @@ Every push runs [`.github/workflows/check.yml`](.github/workflows/check.yml),
 in two jobs:
 
 - **data**, in seconds: regenerate every data module and fail if anything
-  changed, then `check-verbs`, `check-paraphrase`, `check-sentences` and
-  `npm test`.
+  changed, then `check-verbs`, `check-paraphrase`, `check-sentences`,
+  `check-por-para` and `npm test`.
 - **browser**, in about three minutes: build, then every browser suite against
   the Chrome the runner ships with.
 
@@ -863,6 +865,37 @@ One prompt is one item, rather than one item per confusion: prompts that
 spring the same trap are not equally hard, and sharing a box would let the
 easy one answer for the difficult one. `ParaphraseSpec` holds both decisions —
 that every prompt has its own item, and that no item collides with the shift.
+
+### por / para
+
+`data/es-por-para.csv` holds #18's sentences: `lo hice [por] ti`, the English
+that says which sense it is, and the contrast it belongs to. The page asks the
+English and shows the Spanish with a box where the preposition goes, so it is a
+`Checked` exercise on the same frame as the shifts. Not the other way round:
+the typed view heads the page with the prompt, and the Spanish would have the
+answer in it.
+
+**The English is the question, not a gloss.** `lo hice [ ] ti` takes either
+preposition. *Because of you* makes it `por` and *for your benefit* makes it
+`para`, and nothing in the Spanish says which. So `sync-por-para` refuses two
+rows with the same English, which would be one question and possibly one with
+two answers, and allows two with the same Spanish, which is a minimal pair.
+
+**The item is the contrast.** Four of them: cause vs purpose, duration vs
+deadline, through vs towards, exchange vs recipient. Each is
+`porpara.<contrast>`, with a pool of six sentences, three answered each way,
+and `Exercise.pick` turns it. Not one item per sentence, or the learner passes
+by remembering that *this* one takes `por`. And not one per side, because the
+mistake worth spacing is taking one side for the other. `check-por-para`
+refuses a contrast with fewer than two sentences on either side: a pool of only
+`por` can be passed by always typing `por`.
+
+The duration side leans on time of day (`por la noche`) and `por un momento`.
+*Por dos semanas* is often called an anglicism, and *para dos semanas* is also
+used for a planned stay, which makes a bare duration the one place where the
+answer would be genuinely in doubt.
+
+Answered by typing for now. A two-way choice wants two buttons, and that is #38.
 
 ## The study model
 
