@@ -38,6 +38,15 @@ const personSlugs = () => {
   return [...out]
 }
 
+// The por / para bank, by the English it asks, which is unique to a row even
+// where two rows share their Spanish.
+const porPara = rows("data/es-por-para.csv").map(([text, english, contrast]) => {
+  const [, before, answer, after] = text.match(/^(.*)\[(.*)\](.*)$/)
+  return { before, answer, after, english, contrast, slug: `porpara.${contrast}`, full: before + answer + after }
+})
+const porParaSlugs = () => [...new Set(porPara.map(r => r.slug))]
+const otherWord = w => w === "por" ? "para" : "por"
+
 const bank = rows("data/es-sentences.csv").map(([text, infinitive, tense, person, personShift]) => {
   const [, before, form, after] = text.match(/^(.*)\[(.*)\](.*)$/)
   return { plain: before + form + after, before, after, infinitive, tense, person, personShift: personShift === "yes" }
@@ -264,11 +273,56 @@ export default async ({ check, open, blobs }) => {
   check("no page errors", persons.errors, [])
   await persons.close()
 
+  // --- por / para: a preposition in the gap, the English saying which ---
+  // Everything else is put behind us, so the session is the four contrasts
+  // and nothing else, and a miss is requeued among them.
+  const pp = await open({ path: "/verbs", key: VERBS,
+    seed: behind([...shiftSlugs(), ...personSlugs(), ...corpus.map(c => `paraphrase.${c.id}`)]) })
+  await pp.waitForSelector(".verb-sentence")
+  await wait(400)
+  const ppAsked = async () => {
+    const english = await pp.text(".verb-sentence")
+    return porPara.find(r => r.english === english)
+  }
+
+  const ppFirst = await ppAsked()
+  check("asks the bank's first sentence, by its English", ppFirst, porPara[0])
+  check("naming the choice rather than a tense", await pp.text(".verb-target"), "→ por / para")
+  check("with the box where the preposition goes",
+    [await pp.text(".verb-before"), await pp.text(".verb-after")], [ppFirst.before, ppFirst.after])
+
+  await answer(pp, ppFirst.answer)
+  check("a right answer shows the Spanish filled in", await pp.text(".milestone"), `✓ ${ppFirst.full}`)
+  stored = await pp.stored()
+  check("keyed by the contrast, not the sentence",
+    stored.cards.filter(c => c.seen !== 3).map(c => [c.slug, c.missed]), [[ppFirst.slug, 0]])
+
+  await next(pp)
+  const ppMissed = await ppAsked()
+  check("the next item is the next contrast", ppMissed.slug !== ppFirst.slug, true)
+  await answer(pp, otherWord(ppMissed.answer))
+  check("the other preposition is wrong", await pp.text(".milestone"), `✗ ${ppMissed.full}`)
+  stored = await pp.stored()
+  check("and graded as missed", stored.cards.find(c => c.slug === ppMissed.slug)?.missed, 1)
+
+  let ppAgain = null
+  for (let i = 0; i < 6 && !ppAgain; i++) {
+    await next(pp)
+    const r = await ppAsked()
+    if (r.slug === ppMissed.slug) ppAgain = r
+    else await answer(pp, r.answer)
+  }
+  check("the missed contrast comes round again", ppAgain?.slug, ppMissed.slug)
+  check("asking the next sentence of its pool",
+    ppAgain?.english, porPara.filter(r => r.slug === ppMissed.slug)[1].english)
+  check("no page errors", pp.errors, [])
+  await pp.close()
+
   // --- the paraphrase, which nothing can check ---
-  // The shift items are put behind us so the session opens on the corpus;
+  // The checked drills are put behind us so the session opens on the corpus;
   // every exercise type shares one queue, and the page tells them apart by
   // which `Answer` they carry rather than by which page they are on.
-  const done = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs()]) })
+  const done = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs(), ...porParaSlugs()]) })
   await done.waitForSelector(".verb-prompt")
   await wait(400)
 
@@ -303,7 +357,7 @@ export default async ({ check, open, blobs }) => {
   const graded = stored.cards.find(c => c.slug === `paraphrase.${opener.id}`)
   check("graded under the frozen id", graded?.seen, 1)
   check("as got", graded?.missed, 0)
-  check("shares no item with either shift",
+  check("shares no item with any other drill",
     stored.cards.filter(c => !c.slug.startsWith("paraphrase.") && c.seen < 3).length, 0)
   check("and moves straight on, the reveal already read",
     await done.text(".verb-prompt"), corpus[1].prompt)
