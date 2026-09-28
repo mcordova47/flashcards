@@ -44,6 +44,7 @@ export const loadTable = () => {
   }
 
   const tenses = TENSES.map(t => t.name), persons = PERSONS.map(p => p.name)
+  const order = tenses.flatMap(t => persons.map(p => `${t}.${p}`))
   const verbs = []
   const byName = new Map()
 
@@ -73,16 +74,25 @@ export const loadTable = () => {
     const key = `${tense}.${person}`
     if (verb.cells.has(key)) {
       errors.push(`line ${line}: ${infinitive} ${tense} ${person} is already given as ${verb.cells.get(key)}`)
+      return
     }
-    const expected = tenses.flatMap(t => persons.map(p => `${t}.${p}`))[verb.cells.size]
-    if (expected && key !== expected && !verb.cells.has(key)) {
-      errors.push(`line ${line}: ${infinitive} ${tense} ${person} is out of order; expected ${expected.replace(".", " ")}`)
+    // Against the row before, not against a slot. A slot has to guess whether
+    // a bad row took one up - an inserted duplicate did not, a mistyped person
+    // did - and every guess turns one fault into a cascade of invented ones.
+    // With the duplicate and gap checks, rows that each come after the last
+    // are exactly table order. See #19.
+    const position = order.indexOf(key)
+    if (position >= 0) {
+      if (verb.last && position < verb.last.position) {
+        errors.push(`line ${line}: ${infinitive} ${tense} ${person} is out of order; it belongs before ${verb.last.key.replace(".", " ")} on line ${verb.last.line}`)
+      }
+      verb.last = { key, position, line }
     }
     verb.cells.set(key, form)
   })
 
   for (const verb of verbs) {
-    const missing = tenses.flatMap(t => persons.map(p => `${t}.${p}`)).filter(k => !verb.cells.has(k))
+    const missing = order.filter(k => !verb.cells.has(k))
     if (missing.length) {
       errors.push(`${verb.infinitive} has no ${missing.map(k => k.replace(".", " ")).join(", ")}`)
     }

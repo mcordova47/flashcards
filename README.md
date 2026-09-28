@@ -34,7 +34,7 @@ npm start        # http://localhost:8000
 | `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
 | `npm run sync-verbs` | Regenerate the conjugation module from `data/es-verbs.csv` |
 | `npm run sync-sentences` | Regenerate the shift sentence module from `data/es-sentences.csv` |
-| `npm run check-verbs` | Print every cell that deviates from the regular pattern — the review of the table |
+| `npm run check-verbs` | Print every paradigm that deviates from the regular pattern — the review of the table |
 | `npm run verb-coverage` | Recommend, for every cell, whether it is worth drilling — the input to #27 |
 | `npm run sync-paraphrase` | Regenerate the paraphrase prompt module from `data/es-paraphrase.csv` |
 | `npm run check-paraphrase` | Prove every paraphrase model answer uses the form it claims, in deck vocabulary |
@@ -706,10 +706,11 @@ prefers es-MX, and *usted* and *ustedes* ride on the third persons. 760 cells,
 generated into `Flashcards.Data.Verbs.Spanish` by `sync-verbs`.
 
 Nobody reads 760 cells, so `check-verbs` works out what the *regular* form
-would be for each and prints only the ones that differ. **That list is the
-review.** Every line in it should be an irregularity with a name — suppletion,
-a strong preterite, a stem change, a *yo* form the subjunctive inherits, or
-orthography: `llegué`, `sigo`, `leyó`, the diacritic on `dé`. A deviation that
+would be for each, and prints only the verb × tense paradigms where some cell
+differs. **That list is the review.** Every deviation in it should be an
+irregularity with a name — suppletion, a strong preterite, a stem change, a
+*yo* form the subjunctive inherits, or orthography: `llegué`, `sigo`, `leyó`,
+the diacritic on `dé`. A deviation that
 is not one of those is an error in the table, and a verb with no deviations at
 all is a verb that should not be in the table.
 
@@ -720,14 +721,20 @@ compared, or `ver`'s entirely regular preterite would be reported for writing
 exact: `Exercise.matches` forgives accents, which is right for a phone and
 wrong for a table whose whole job is to store them.
 
-**What it cannot see.** It prints only what *differs*, so a cell whose true
-form is irregular but which was written as the regular one is invisible — put
-`traducí` where `traduje` belongs and nothing is printed for that cell. A
-wholly regular verb is caught by name, and a wholly regular tense shows up in
-the regular-items list, but a single regularised cell inside an otherwise
-irregular tense shows up as nothing at all. That is what the hand-written
-assertions in `VerbsSpec` are for, and why adding a verb wants a second look
-at its paradigm rather than a clean run.
+A paradigm is printed whole, with its regular cells marked:
+
+```
+caer       preterite    1s ·caí·, 2s caíste (not caiste), 3s cayó (not caio), …
+```
+
+That is for the likeliest mistake in adding a verb: knowing it is irregular,
+getting most of it right, and writing the one you forgot as the regular form.
+Put `traducí` where `traduje` belongs and it appears as `·traducí·` among four
+deviations, to be looked at, rather than as a cell that is simply missing from
+the line. A wholly regular tense shows up in the regular-items list and a
+wholly regular verb by name. What none of this can say is that an irregular
+form is the *right* irregular form; that is what the hand-written assertions
+in `VerbsSpec` are for.
 
 It exits non-zero only for structural damage — a gap, a duplicate, a cell out
 of order — so it is a review to read rather than a gate to pass, and it is not
