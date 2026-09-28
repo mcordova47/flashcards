@@ -53,6 +53,17 @@ branch has merged:
 git worktree remove .claude/worktrees/<name>
 ```
 
+**Not `--force`.** Plain `remove` refuses a worktree with uncommitted changes
+in it, and on a shared machine that refusal is the whole of its value: what it
+is protecting may be someone else's afternoon. `--force` skips the check,
+which is the one thing you wanted. If it refuses, go and look at what is there
+before deciding — usually the answer is that you are removing the wrong
+worktree.
+
+Written down because it was nearly learned the hard way: five removed with
+`--force` in one go, one of them another agent's, and only afterwards did
+anyone check whether the branches had merged. They had.
+
 ## The stash you must not touch
 
 **The stash stack is shared across every worktree of a repository**, which the
