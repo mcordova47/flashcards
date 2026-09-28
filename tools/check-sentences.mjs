@@ -47,11 +47,11 @@ for (const s of sentences) {
   const expected = table.get(s.infinitive).get(`${s.tense.name}.${s.person.name}`)
   if (s.form !== expected) {
     wrong++
-    console.log(`x line ${s.line}: [${s.form}] is tagged ${s.infinitive} ${s.tense.name} ${s.person.name}, which the table has as ${expected}`)
+    console.error(`x line ${s.line}: [${s.form}] is tagged ${s.infinitive} ${s.tense.name} ${s.person.name}, which the table has as ${expected}`)
   }
   for (const word of unexplained(known, s.before + s.after, s.notes)) {
     wrong++
-    console.log(`x line ${s.line}: ${word} is not a deck word or a regular inflection of one; say why in Notes`)
+    console.error(`x line ${s.line}: ${word} is not a deck word or a regular inflection of one; say why in Notes`)
   }
 }
 
@@ -61,7 +61,7 @@ for (const s of sentences) {
   const other = frames.get(frame)
   if (other) {
     wrong++
-    console.log(`x line ${s.line}: [${s.form}] is line ${other.line}'s [${other.form}] with only the verb moved; a pool of the two asks one string`)
+    console.error(`x line ${s.line}: [${s.form}] is line ${other.line}'s [${other.form}] with only the verb moved; a pool of the two asks one string`)
   } else frames.set(frame, s)
 }
 
