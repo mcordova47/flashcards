@@ -59,6 +59,7 @@ exercise table sentence target
   | otherwise =
       formOf sentence.infinitive target sentence.person table <#> \expected ->
         { slug: Slug $ sentence.infinitive <> "." <> name target
+        , label: sentence.infinitive <> " · " <> name target
         , prompt: sentence.before <> sentence.form <> sentence.after
         , hint: name target
         , answer: Checked

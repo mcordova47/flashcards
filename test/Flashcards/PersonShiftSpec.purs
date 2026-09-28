@@ -30,6 +30,7 @@ spec = do
         Nothing -> fail "no exercise"
         Just e -> do
           e.slug `shouldEqual` Slug "person.tener.present.1p"
+          e.label `shouldEqual` "tener · present · nosotros"
           e.prompt `shouldEqual` "tengo mucho trabajo"
           e.hint `shouldEqual` "nosotros"
           frameOf e `shouldEqual` Just { before: "", after: " mucho trabajo" }

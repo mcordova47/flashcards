@@ -49,6 +49,9 @@ spec = do
     it "asks nothing before the reveal beyond the prompt" do
       (exercise doorOpen).hint `shouldEqual` ""
 
+    it "is named by what it asked, not by its id" do
+      (exercise doorOpen).label `shouldEqual` doorOpen.asked
+
   describe "the corpus" do
     let mine = exercises prompts
 
