@@ -419,6 +419,25 @@ export default async ({ check, open, blobs }) => {
   check("no page errors", fixing.errors, [])
   await fixing.close()
 
+  // --- what is next, when there is nothing now ---
+  // As the cards do. Everything at box 5 and far from due, so the session is
+  // empty on arrival and the page can only say when something comes back.
+  const far = Date.now() + 9 * 86400000
+  const settled = await open({ path: "/verbs", key: VERBS, seed: {
+    version: formatVersion(), language: "verbs", deck: "none",
+    cards: [...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs,
+            ...corpus.map(r => `paraphrase.${r.id}`)].map(slug =>
+      ({ slug, box: 5, seen: 8, missed: 0, lapses: 0, direction: "recognition", due: far })),
+  } })
+  await settled.waitForSelector(".done-title")
+  await wait(300)
+  check("with nothing to do, it says when there will be",
+    await settled.text(".done-stats"), "Nothing due for another 9 days.")
+  check("and does not promise a review as well",
+    await settled.$(".next-due"), null)
+  check("no page errors", settled.errors, [])
+  await settled.close()
+
   // --- the paraphrase, which nothing can check ---
   // The checked drills are put behind us so the session opens on the corpus;
   // every exercise type shares one queue, and the page tells them apart by

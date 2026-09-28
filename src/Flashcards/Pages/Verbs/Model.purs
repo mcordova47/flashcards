@@ -44,6 +44,12 @@ type State =
   -- | the cards do: the top bar is for the session, and anything that is not
   -- | part of it goes behind the dots.
   , panel :: Boolean
+  -- | When the page last knew the time: set as a session is built and again
+  -- | on every grade. The done screen needs one to say when the next item
+  -- | falls due, and the cards do the same with the moment their session
+  -- | ended. Left behind if the page is sat on for an hour, which is the same
+  -- | staleness the cards carry.
+  , at :: Maybe Instant
   -- | When the progress sheet was opened, if it is open. The moment is fixed
   -- | on opening, as on the cards, so *due tomorrow* does not move under you
   -- | while you read it.
