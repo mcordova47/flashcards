@@ -1,8 +1,26 @@
-# Refuses a broken push. Netlify still builds and deploys on its own; this
-# only says whether what it deployed should have been merged. See #23.
+# Refuses a broken merge. Netlify still builds and deploys on its own; this
+# says whether what it deployed should have gone in. See #23.
 name: check
 
-on: push
+# Both, and they answer different questions. `pull_request` tests the *merge
+# result*, which is the thing being asked about and which no branch contains -
+# two branches that each pass alone can break together, and the drift check is
+# exactly the kind that would only notice on the merge commit. `push` on main
+# keeps the safety net for anything that lands without a pull request.
+#
+# Branches are left to their pull request rather than run on every push, or
+# every run happens twice.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Several agents pushing at once means several runs that no longer matter.
+# Keep the newest per branch and stop the rest; main is exempt, since a
+# cancelled run there would leave a merged commit with no answer.
+concurrency:
+  group: check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   # Seconds, no browser. The drift check is the one thing nothing else covers:
