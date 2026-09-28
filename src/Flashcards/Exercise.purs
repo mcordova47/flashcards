@@ -38,7 +38,11 @@ type Rubric = Array String
 data Answer
   -- | Typed, compared, and the grade follows from the comparison. `frame` is
   -- | the words shown either side of the box, which only a typed answer has.
-  = Checked { expected :: String, frame :: Frame }
+  -- | `note` is said with the answer once it is compared, and is empty where
+  -- | the answer needs no explaining: a shift's is the tense it was asked
+  -- | for, which the prompt already said. An error correction's is which
+  -- | mistake it was, which saying beforehand would give away. See #26.
+  = Checked { expected :: String, frame :: Frame, note :: String }
   -- | Revealed, and the reader grades themselves against the reasons.
   | SelfGraded { model :: String, rubric :: Rubric }
 

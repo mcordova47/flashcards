@@ -53,6 +53,7 @@ exercise table sentence target
         , answer: Checked
             { expected
             , frame: { before: sentence.before, after: sentence.after }
+            , note: ""
             }
         }
 

@@ -106,6 +106,7 @@ exercise s =
   , answer: Checked
       { expected: word s.answer
       , frame: { before: s.before, after: s.after }
+      , note: ""
       }
   }
 
