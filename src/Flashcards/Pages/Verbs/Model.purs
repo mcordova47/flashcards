@@ -79,6 +79,8 @@ derive instance Eq Phase
 data Message
   = Loaded { progress :: Progress, syncKey :: Maybe String }
   | Started Instant
+  -- | A key, not yet read as anything. See `keyMessage`.
+  | Pressed String
   | Typed String
   -- | Check what was typed, or reveal what a self-graded answer was.
   | Answer

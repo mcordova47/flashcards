@@ -26,10 +26,9 @@ import Prelude
 import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.Either (Either(..))
-import Data.Maybe (Maybe(..), isJust)
+import Data.Maybe (Maybe(..), isJust, maybe)
 import Effect.Class (liftEffect)
 import Effect.Now as Now
-import Data.Foldable (for_)
 import Data.String as String
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Events as E
@@ -94,7 +93,7 @@ init = do
   -- would be typed and acted on at once. `Judge` is ignored unless something
   -- is revealed, which is what makes 1 and 2 safe to press mid-answer.
   forks \{ dispatch } ->
-    liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
+    liftEffect $ onKeyDown $ dispatch <<< Pressed
   fork do
     syncKey <- liftEffect $ Sync.adoptKey $ Page.pathFor Page.Verbs
     progress <- liftEffect $ Storage.load namespace fingerprint byRank
@@ -143,6 +142,11 @@ update state = case _ of
       , again = 0
       , loaded = true
       }
+
+  -- Through the update rather than straight to the message it maps to, so
+  -- that what a key means can depend on what is on screen.
+  Pressed key ->
+    maybe (pure state) (update state) (keyMessage key)
 
   Typed text ->
     pure state { typed = text }

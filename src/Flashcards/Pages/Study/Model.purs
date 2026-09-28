@@ -170,6 +170,8 @@ type Startup =
 
 data Message
   = Loaded Startup
+  -- | A key, not yet read as anything. See `keyMessage`.
+  | Pressed String
   | Flip
   | Answer Grade
   | Answered Grade Instant

@@ -72,7 +72,7 @@ init opening = do
       Route.replace =<< Route.current
       dispatch ShowPairing
   forks \{ dispatch } ->
-    liftEffect $ onKeyDown \key -> for_ (keyMessage key) dispatch
+    liftEffect $ onKeyDown $ dispatch <<< Pressed
   forks \{ dispatch } ->
     liftEffect $ Speech.onVoices $ dispatch <<< VoicesAvailable
   pure
@@ -143,6 +143,11 @@ update state = case _ of
       -- other way round with no explanation.
       noticing loaded $ "Fixed " <> show repaired.demoted <> " repeated "
         <> (if repaired.demoted == 1 then "prompt" else "prompts")
+
+  -- Through the update rather than straight to the message it maps to, so
+  -- that what a key means can depend on what is on screen.
+  Pressed key ->
+    maybe (pure state) (update state) (keyMessage key)
 
   VoicesAvailable voices ->
     pure $ settle state.savedAccent state.savedVoice voices state
