@@ -57,3 +57,10 @@ in `tools/verb-coverage.mjs` — four rules in the order they apply, and two
 numbers that are the arguable part: rank 500 as the line between a verb you
 meet and one you do not, and 10 of 20 deviations as the line above which a
 verb reads as irregular enough that its regular tenses get distrusted.
+
+`Recovers` is a **rival signal, reported beside the recommendation rather than
+folded into it**. It marks a cell of a stem-changing verb whose form uses the
+infinitive's stem — `volvemos` and `volvía` against `vuelvo` — so producing it
+means recovering the lemma first. The two disagree about fifteen verbs and
+thirty-six cells. Which is right is a question for `missed` once the drills
+have been used; both are on the record until then.

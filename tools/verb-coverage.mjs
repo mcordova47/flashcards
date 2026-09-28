@@ -27,6 +27,23 @@
 //      cells. Leave it out.
 //   5. Any of the above on a verb the deck does not teach, or teaches past
 //      rank 500, is real but rarely met. Later, not never.
+//
+// The `Recovers` column is a second, rival signal, reported beside the
+// recommendation rather than folded into it. Rule 3 says a regular cell is
+// hard because the verb reads as irregular and gets over-corrected. The rival
+// says it is hard for a different reason: you know a form, not a lemma.
+//
+// Eighteen of the thirty-eight change their stem in the present, which is the
+// form you meet most — `puedo`, `vuelvo`, `quiero`. To build anything on the
+// infinitive you first have to get back to it, and if you cannot you build on
+// the wrong stem: `encuentro` gives `encuentraba` rather than `encontraba`.
+// A cell marked `Recovers` is one of a stem-changing verb whose form uses the
+// infinitive's stem - the nosotros forms and most of the imperfect - so
+// producing it means recovering the lemma first.
+//
+// The two disagree about fifteen verbs. Which is right is a question for
+// `missed` once the drills have been used; until then both are on the record.
+// See #27.
 
 import fs from "fs"
 import { loadTable, ENDINGS, PERSONS, TENSES, regular } from "./verb-source.mjs"
@@ -64,11 +81,18 @@ const deviations = verb =>
   TENSES.flatMap(({ name: t }) => PERSONS.map(({ name: p }) =>
     verb.cells.get(`${t}.${p}`) !== regular(verb.infinitive, t, p))).filter(Boolean).length
 
+// The stem the infinitive offers, and whether the present keeps it. `oír`
+// keeps `o` and merely grows a `y`; `reír` does not keep `re`.
+const stemOf = infinitive => infinitive.slice(0, -2)
+const changesStem = verb =>
+  !verb.cells.get("present.3s").startsWith(stemOf(verb.infinitive))
+
 const rows = []
 for (const verb of verbs) {
   const r = rank.get(verb.infinitive) ?? null
   const common = r !== null && r <= COMMON
   const pervasive = deviations(verb) >= PERVASIVE
+  const shifts = changesStem(verb)
   for (const { name: tense } of TENSES) {
     const cells = PERSONS.map(({ name: person }) => {
       const form = verb.cells.get(`${tense}.${person}`)
@@ -85,16 +109,24 @@ for (const verb of verbs) {
         recommend = "later"
         why = `${why}; ${r === null ? "the deck does not teach this verb" : `rank ${r}, so rarely met`}`
       }
-      rows.push([verb.infinitive, r ?? "", tense, c.person, c.form, c.deviates ? "yes" : "", recommend, why])
+      // Needs the lemma back before it can be built. See the note above.
+      const recovers = shifts && c.form.startsWith(stemOf(verb.infinitive))
+      rows.push([verb.infinitive, r ?? "", tense, c.person, c.form,
+                 c.deviates ? "yes" : "", recovers ? "yes" : "", recommend, why])
     }
   }
 }
 
 const quote = v => /[",]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : String(v)
 fs.writeFileSync(OUT,
-  "Infinitive,Rank,Tense,Person,Form,Deviates,Recommend,Why\n"
+  "Infinitive,Rank,Tense,Person,Form,Deviates,Recovers,Recommend,Why\n"
   + rows.map(r => r.map(quote).join(",")).join("\n") + "\n")
 
-const tally = rows.reduce((a, r) => ({ ...a, [r[6]]: (a[r[6]] ?? 0) + 1 }), {})
+const tally = rows.reduce((a, r) => ({ ...a, [r[7]]: (a[r[7]] ?? 0) + 1 }), {})
 console.log(`wrote ${OUT} (${rows.length} cells)`)
 for (const k of ["drill", "later", "skip"]) console.log(`  ${String(tally[k] ?? 0).padStart(3)}  ${k}`)
+
+const recovers = rows.filter(r => r[6] === "yes")
+const disputed = recovers.filter(r => r[7] === "skip").length
+console.log(`\n${recovers.length} need the lemma recovered first, across ${new Set(recovers.map(r => r[0])).size} stem-changing verbs`)
+console.log(`  ${disputed} of them this recommendation leaves out — where the two signals disagree`)
