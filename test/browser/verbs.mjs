@@ -390,10 +390,12 @@ export default async ({ check, open, blobs }) => {
   ])
 
   // #29: the drills grow whenever a sentence is added, so a share of them
-  // would fall every time the app got better.
+  // would fall every time the app got better. A fraction reads as *200 of
+  // 1000*, numbers either side; a bare "of" would also match a paraphrase's
+  // prompt, which is rendered here as its label.
   const body = await sheet.text(".sheet-body")
   check("no fraction of a total anywhere on it",
-    [/\bof\b/.test(body), await sheet.$(".deck-progress"), await sheet.$(".bands")], [false, null, null])
+    [/\d+\s+of\s+\d+/.test(body), await sheet.$(".deck-progress"), await sheet.$(".bands")], [false, null, null])
 
   await sheet.tap(".sheet-close")
   check("and it closes", await sheet.$(".sheet"), null)
