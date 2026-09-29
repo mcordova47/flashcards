@@ -340,6 +340,20 @@ It is a **dumb blob store** and does not merge. The client does `GET` →
 specced, rather than being written a second time in JavaScript where the two
 would drift. Nothing on the server knows what a card is.
 
+A second function takes the notes written in the app (see [Notes](#notes)):
+
+```
+PUT  /api/notes/<key>             stores each note not already stored
+```
+
+It is write-only — there is no `GET`, and a device never reads its notes back
+— so it is delivery rather than sync, and needs no merge. Each note is a blob of
+its own in a separate `notes` store, at `<key>/<at>.json`: `at` is unique under
+one device's key, so the blob key is deterministic and a note sent twice is
+stored once. Append-only is unbounded unless something bounds it, so a key
+holds at most a hundred notes of up to 5 KB, about what one progress blob may.
+A batch that would go over is refused whole, and waits for a note to be read.
+
 ### Pairing
 
 The `•••` panel's **Sync another device** opens a sheet with a QR code and the
@@ -439,6 +453,10 @@ so it is not guessable, and the payload is a list of words someone has studied.
 But it is a publicly reachable endpoint that accepts writes, and that should be
 a choice rather than something you discover later.
 
+Notes are the other way round: anyone holding a key can add notes under it, up
+to the cap, and nobody can read them through the endpoint at all, including the
+device that wrote them.
+
 The step up is real accounts (Supabase, Cloudflare D1), which is a much larger
 commitment and buys little for a handful of family members.
 
@@ -454,11 +472,12 @@ with a **200**, so a routing mistake here does not 404 — it serves HTML to a
 JSON client. That has already produced one wrong conclusion in this project. The
 route is therefore declared twice, by the function's `config.path` and by an
 ordered redirect above the catch-all, and the handler reads the key off the end
-of the path so either resolution works.
+of the path so either resolution works. `/api/notes/` is declared the same
+two ways.
 
 Netlify's own routing is the one thing the test suite cannot check. On the first
 deploy, verify the **content type** of a 404 from `/api/progress/<32 chars>/es`,
-not its status.
+not its status — and of the 405 a `GET` to `/api/notes/<32 chars>` gets.
 
 ## What a card is, and renaming one
 
