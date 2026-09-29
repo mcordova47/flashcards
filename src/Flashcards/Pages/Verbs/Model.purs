@@ -12,6 +12,7 @@ import Prelude
 import Data.DateTime.Instant (Instant)
 import Data.Maybe (Maybe)
 import Flashcards.Exercise (Exercise, Verdict)
+import Flashcards.Notes.Sheet as Notes
 import Flashcards.Sync as Sync
 import Flashcards.Types.Card (Slug)
 import Flashcards.Types.Grade (Grade)
@@ -54,6 +55,8 @@ type State =
   , sent :: Maybe Progress
   , offline :: Boolean
   , loaded :: Boolean
+  -- | The note being written, if one is. See `Flashcards.Notes`.
+  , notes :: Notes.Sheet
   }
 
 -- | Where the current question has got to.
@@ -95,3 +98,5 @@ data Message
   | Sync
   | Synced Sync.Remote
   | Pushed Progress Boolean
+  | WriteNote
+  | Notes Notes.Message

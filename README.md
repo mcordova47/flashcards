@@ -219,6 +219,31 @@ only one whose meaning cannot be known.
 mastered 200 words." The app can be pleased without being the sort that tells
 you how well you are doing.
 
+## Notes
+
+`•••` → **Write a note**, on either page, opens a sheet for saying what you
+just noticed — a confusing hint, a wrong gloss — at the moment you notice it.
+Most of what has improved this app came from using it, and a thing noticed on
+a train is gone by the time there is a keyboard. See #49.
+
+What was on screen is recorded with it, so it need not be typed: the page, the
+item's slug, and what it asked — `/verbs · porpara.means · … · hablamos […]
+teléfono`. A typed answer is included only once it has been checked, since the
+sheet shows this line above the box and would otherwise give it away.
+
+Writing one leaves the question alone. Keys typed into a textarea never reach
+the page, and while the sheet is open no key means anything to it, so a space
+does not flip the card and a `z` does not undo the last answer. A sync landing
+meanwhile does not rebuild the session under it either.
+
+The notes are one list for the whole app, under `flashcards.notes.v1`, and stay
+on the device. **Copy all** puts them on the clipboard oldest first, each under
+its time and context, to paste wherever they are going. They are not synced:
+notes are append-only, so the merge would have to be a union, not
+`Progress.merge`, and that is its own piece of work. Nor are they filed as
+issues directly, which would need a token behind a pairing key — a door key,
+not a password.
+
 ## Progress
 
 `•••` → **See your progress** opens a sheet with three figures, a chart, and a
@@ -1084,6 +1109,8 @@ scanner.js                           the QR decoder, bundled on its own
 src/Flashcards/
   Exercise.purs                      what every verb drill has in common
   Keys.purs                          keys on the window, for both pages
+  Notes.purs                         a note, its saved format and its export
+  Notes/Sheet.purs                   the sheet a note is written in, both pages
   Page.purs                          which page a path names
   Pages/Study.purs                   the card, the loop, the wiring
   Pages/Verbs.purs                   the drills (#8); both exercises, one loop

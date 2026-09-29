@@ -11,11 +11,13 @@ module Flashcards.Pages.Study
 import Prelude
 
 import Data.Array as Array
+import Data.Bifunctor (lmap)
 import Data.DateTime.Instant (Instant)
 import Data.Either (Either(..))
 import Data.Foldable (for_, intercalate)
+import Data.String as String
 import Data.Int as Int
-import Data.Maybe (Maybe(..), fromMaybe, isJust, maybe)
+import Data.Maybe (Maybe(..), fromMaybe, isJust, isNothing, maybe)
 import Effect.Class (liftEffect)
 import Effect.Now as Now
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
@@ -28,6 +30,7 @@ import Flashcards.Language (Language)
 import Flashcards.Language as Language
 import Flashcards.Page as Page
 import Flashcards.Milestone as Milestone
+import Flashcards.Notes.Sheet as Notes
 import Flashcards.Pages.Study.Model (Message(..), Purpose(..), Screen(..), Session, State, Summary, noticing, untouched)
 import Flashcards.Pages.Study.Model (Message, State) as Model
 import Flashcards.Pages.Study.Pairing as Pairing
@@ -40,7 +43,7 @@ import Flashcards.Stats as Stats
 import Flashcards.Speech as Speech
 import Flashcards.Storage as Storage
 import Flashcards.Sync as Sync
-import Flashcards.Types.Card (Card, rankToInt)
+import Flashcards.Types.Card (Card, rankToInt, slugToString)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
@@ -100,6 +103,7 @@ init opening = do
     , sent: Nothing
     , syncedAt: Nothing
     , offline: false
+    , notes: Notes.closed
     }
 
 update :: State -> Message -> Transition Message State
@@ -145,9 +149,12 @@ update state = case _ of
         <> (if repaired.demoted == 1 then "prompt" else "prompts")
 
   -- Through the update rather than straight to the message it maps to, so
-  -- that what a key means can depend on what is on screen.
-  Pressed key ->
-    maybe (pure state) (update state) (keyMessage key)
+  -- that what a key means can depend on what is on screen. With a note being
+  -- written it means nothing here: Enter on the sheet's button would flip the
+  -- card behind it, and `z` would take back the last answer.
+  Pressed key
+    | isJust state.notes -> pure state
+    | otherwise -> maybe (pure state) (update state) (keyMessage key)
 
   VoicesAvailable voices ->
     pure $ settle state.savedAccent state.savedVoice voices state
@@ -401,7 +408,10 @@ update state = case _ of
               -- nobody is part-way through a card: a rebuild resets the flip,
               -- so landing one under a reader mid-tap would take the answer
               -- back off the screen.
-              when (merged /= state.progress && untouched state.screen) $
+              -- A note being written counts as a reader part-way through:
+              -- they are looking at the card, and it is what the note is
+              -- about.
+              when (merged /= state.progress && untouched state.screen && isNothing state.notes) $
                 fork $ liftEffect $ StartedAnother <$> Now.now
               pure state { progress = merged }
 
@@ -429,6 +439,12 @@ update state = case _ of
   UseLink -> Pairing.useLink state
   LinkPasted pasted -> Pairing.linkPasted pasted state
 
+  WriteNote ->
+    notes state { panel = Nothing } $ Notes.Open $ noteContext state
+
+  Notes message ->
+    notes state message
+
   ChooseAccent accent -> do
     let voice = Accent.autoVoice accent state.voices
     forkVoid $ liftEffect $ Storage.saveAccent state.language.code accent
@@ -445,6 +461,37 @@ update state = case _ of
       pure state
     _ ->
       pure state
+
+-- | Hands a message to the note sheet. Nothing comes back from it but itself,
+-- | which is why the card behind it is left exactly as it was.
+notes :: State -> Notes.Message -> Transition Message State
+notes state message =
+  lmap Notes (Notes.update state.notes message) <#> state { notes = _ }
+
+-- | What was on screen, for a note to carry so that it need not be typed.
+-- | The slug names the card; the prompt is what it asked, which way round.
+noteContext :: State -> String
+noteContext state = String.joinWith " · " $ [ Page.pathFor $ Page.Cards state.language ] <> case state.screen of
+  Studying session -> case currentCard state.index session of
+    Nothing -> []
+    Just card ->
+      [ slugToString card.slug
+      , (if asksEnglish state card then "production" else "recognition")
+          <> (if session.purpose == Drill then " drill" else "")
+      , "“" <> promptFor state card <> "”"
+      ]
+        <> (if session.flipped then [ "answer showing" ] else [])
+  _ ->
+    [ "between sessions" ]
+
+-- | Whether a card is asked from the English side. Unseen words start on
+-- | recognition.
+asksEnglish :: State -> Card -> Boolean
+asksEnglish state card =
+  (maybe Recognition _.direction $ Progress.lookup card.slug state.progress) == Production
+
+promptFor :: State -> Card -> String
+promptFor state card = if asksEnglish state card then card.english else card.word
 
 -- | Falls back to a bare language hint: even with no Spanish voice installed,
 -- | most engines still pronounce Spanish when told to.
@@ -503,6 +550,9 @@ view state dispatch =
       Nothing -> H.empty
       Just now -> ProgressSheet.view state.language now state.progress dispatch
   , if state.pairing then Pairing.view state dispatch else H.empty
+  , case state.notes of
+      Nothing -> H.empty
+      Just open -> Notes.view open (dispatch <<< Notes)
   , case state.notice of
       Nothing -> H.empty
       Just message -> H.div "notice" message
@@ -535,12 +585,10 @@ studyingView state session dispatch =
         H.empty
       Just card ->
         let
-          -- A card asks whichever way it has earned; unseen words start on
-          -- recognition.
-          producing =
-            (maybe Recognition _.direction $ Progress.lookup card.slug state.progress) == Production
+          -- A card asks whichever way it has earned.
+          producing = asksEnglish state card
 
-          prompt = if producing then card.english else card.word
+          prompt = promptFor state card
 
           -- Production cannot expect one answer: 61 English sides in the deck
           -- have more than one, so grade yourself against the whole set.

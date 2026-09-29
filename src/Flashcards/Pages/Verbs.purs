@@ -26,7 +26,8 @@ import Prelude
 import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.Either (Either(..))
-import Data.Maybe (Maybe(..), isJust, maybe)
+import Data.Bifunctor (lmap)
+import Data.Maybe (Maybe(..), isJust, isNothing, maybe)
 import Effect.Class (liftEffect)
 import Effect.Now as Now
 import Data.String as String
@@ -40,6 +41,7 @@ import Flashcards.Data.Verbs.Spanish (deviations, table)
 import Flashcards.Exercise (Answer(..), Pool, Verdict(..), matches, pick)
 import Flashcards.Exercise as Exercise
 import Flashcards.Keys (onKeyDown)
+import Flashcards.Notes.Sheet as Notes
 import Flashcards.Page as Page
 import Flashcards.Pages.Verbs.Model (Message(..), Phase(..), State, namespace)
 import Flashcards.Pages.Verbs.Model (Message, Phase, State) as Model
@@ -53,7 +55,7 @@ import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
 import Flashcards.Storage as Storage
 import Flashcards.Sync as Sync
-import Flashcards.Types.Card (Slug)
+import Flashcards.Types.Card (Slug, slugToString)
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Shift as Shift
@@ -112,6 +114,7 @@ init = do
     , sent: Nothing
     , offline: false
     , loaded: false
+    , notes: Notes.closed
     }
 
 -- | There is nothing for a fingerprint to certify here, and there never will
@@ -144,9 +147,12 @@ update state = case _ of
       }
 
   -- Through the update rather than straight to the message it maps to, so
-  -- that what a key means can depend on what is on screen.
-  Pressed key ->
-    maybe (pure state) (update state) (keyMessage key)
+  -- that what a key means can depend on what is on screen. With a note being
+  -- written it means nothing here: Enter on the sheet's button would answer
+  -- the question behind it.
+  Pressed key
+    | isJust state.notes -> pure state
+    | otherwise -> maybe (pure state) (update state) (keyMessage key)
 
   Typed text ->
     pure state { typed = text }
@@ -274,6 +280,43 @@ update state = case _ of
     if ok then pure state { sent = Just progress, offline = false }
     else pure state { offline = true }
 
+  WriteNote ->
+    notes state { panel = false } $ Notes.Open $ noteContext state
+
+  Notes message ->
+    notes state message
+
+-- | Hands a message to the note sheet. Nothing comes back from it but itself,
+-- | which is why the question behind it is left exactly as it was.
+notes :: State -> Notes.Message -> Transition Message State
+notes state message =
+  lmap Notes (Notes.update state.notes message) <#> state { notes = _ }
+
+-- | What was on screen, for a note to carry so that it need not be typed.
+-- |
+-- | The answer only once it has been checked, because the sheet shows this
+-- | above the box the note goes in, and before then it would give it away.
+-- | What was typed with it, since "it marked me wrong" is half a sentence
+-- | without it.
+noteContext :: State -> String
+noteContext state = String.joinWith " · " $ [ Page.pathFor Page.Verbs ] <> case state.shown of
+  Nothing ->
+    [ "between sessions" ]
+  Just exercise ->
+    [ slugToString exercise.slug, exercise.prompt ]
+      <> (if exercise.hint == "" then [] else [ "→ " <> exercise.hint ])
+      <> case exercise.answer, state.phase of
+        Checked { expected, frame }, Compared _ ->
+          [ frame.before <> "[" <> expected <> "]" <> frame.after
+          , "wrote “" <> String.trim state.typed <> "”"
+          ]
+        Checked { frame }, _ ->
+          [ frame.before <> "[…]" <> frame.after ]
+        SelfGraded _, Asked ->
+          []
+        SelfGraded _, _ ->
+          [ "revealed" ]
+
 -- | Fixes which exercise the first item in the queue asks, from the progress
 -- | as it stands before that item is graded.
 asking :: State -> State
@@ -295,8 +338,11 @@ keyMessage = case _ of
 advance :: State -> State
 advance state = asking state { typed = "", phase = Asked, queue = Array.drop 1 state.queue }
 
+-- | A note being written counts as touching it: the reader is looking at the
+-- | question, and a rebuild would swap it out from under the complaint.
 untouched :: State -> Boolean
-untouched state = state.got + state.again == 0 && state.typed == "" && state.phase == Asked
+untouched state =
+  state.got + state.again == 0 && state.typed == "" && state.phase == Asked && isNothing state.notes
 
 view :: State -> Dispatch Message -> ReactElement
 view state dispatch =
@@ -372,6 +418,9 @@ view state dispatch =
   , case state.statsAt of
       Nothing -> H.empty
       Just now -> ProgressSheet.view labelled now state.progress dispatch
+  , case state.notes of
+      Nothing -> H.empty
+      Just open -> Notes.view open (dispatch <<< Notes)
   ]
   where
     -- Both anchors: a page change is a page load here, so they need no router
@@ -384,6 +433,7 @@ view state dispatch =
         [ H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
         , H.a_ "panel-item" { href: "/" } "Flashcards"
         , H.a_ "panel-item" { href: "/?sync" } "Sync a device"
+        , H.button_ "panel-item" { onClick: dispatch <| WriteNote } "Write a note"
         , H.p "panel-note" syncNote
         ]
       ]

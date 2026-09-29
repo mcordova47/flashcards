@@ -1,6 +1,11 @@
 export const onKeyDown_ = handler => {
   window.addEventListener("keydown", e => {
     if (e.metaKey || e.ctrlKey || e.altKey) return
+    // A textarea is somewhere to write, so its keys are its own: a space is a
+    // space and Enter a new line, where the page would flip or answer or undo
+    // whatever is behind it. Before the space is stopped, which would
+    // otherwise make one impossible to type.
+    if (e.target instanceof HTMLTextAreaElement) return
     // Otherwise the flip key scrolls the page.
     if (e.key === " ") e.preventDefault()
     // A focused button treats Enter and Space as a click, so whichever button

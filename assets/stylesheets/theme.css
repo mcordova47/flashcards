@@ -794,6 +794,80 @@ body {
   color: var(--faint);
 }
 
+/* --- notes --- */
+
+/* Two panel items side by side, so a new one costs the panel no height. */
+.panel-pair {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.panel-pair .panel-item {
+  flex: 1;
+}
+
+.note-context {
+  margin: 0 0 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.note-draft {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--track);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.note-draft::placeholder {
+  color: var(--faint);
+}
+
+.note-save {
+  width: 100%;
+}
+
+.notes-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.note-copy {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.note-copied {
+  margin: 0 0 0.75rem;
+}
+
+.note {
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--track);
+}
+
+.note-meta {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  color: var(--faint);
+  overflow-wrap: anywhere;
+}
+
+.note-text {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 /* --- verb drills --- */
 
 .verb-sentence {

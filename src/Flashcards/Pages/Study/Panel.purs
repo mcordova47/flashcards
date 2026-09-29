@@ -4,7 +4,9 @@
 -- | It is a bottom sheet and every feature so far has wanted a row in it, so
 -- | it has grown past half the viewport. The next one that wants space should
 -- | reorganise this rather than make it taller — which is why `Sync now` is a
--- | link on the line it answers rather than a row of its own.
+-- | link on the line it answers rather than a row of its own, and why the
+-- | note shares a row with the drills: neither is about the deck in front of
+-- | you, and both take you somewhere else.
 module Flashcards.Pages.Study.Panel
   ( view
   )
@@ -39,7 +41,10 @@ view state dispatch =
     -- An anchor, not a message: a page change is a page load here, so this
     -- needs no router and puts no notion of "which page" into any state. It
     -- is also the only way to find the drills at all.
-    , H.a_ "panel-item" { href: Page.pathFor Page.Verbs } "Verb drills"
+    , H.div "panel-pair"
+      [ H.a_ "panel-item" { href: Page.pathFor Page.Verbs } "Verb drills"
+      , H.button_ "panel-item" { onClick: dispatch <| WriteNote } "Write a note"
+      ]
     , H.p "panel-note" $
         show (Progress.seenCount state.progress) <> " of "
           <> show (Array.length state.language.deck) <> " words seen"
