@@ -85,7 +85,15 @@ exercise p =
   -- The prompt, not the id: `door-open` is for the file, and the English is
   -- what the reader will recognise having been asked.
   , label: p.asked
-  , family: p.verb
+  -- Where the trap is the verb, the verb is the answer, and keying by it
+  -- would alternate ser and estar and give each one away by position. So
+  -- the pair, as por / para is one family whichever it takes: a ser prompt
+  -- then an estar one is the same choice made twice. Where the trap is the
+  -- tense, the verb is given away by nothing, and is what the last answer
+  -- would repeat.
+  , family: case p.trap of
+      OnVerb -> pair p.verb p.against
+      OnTense -> p.verb
   , prompt: p.asked
   -- Nothing to say before the reveal. The prompt is the whole question, and a
   -- hint here would name the trap, which is the answer.
@@ -98,6 +106,11 @@ exercise p =
 -- | with the others that spring the same trap.
 exercises :: Array Prompt -> Array Exercise
 exercises = map exercise
+
+-- | `estar / ser` whichever way round the prompt has them, as
+-- | `check-paraphrase` counts them.
+pair :: String -> String -> String
+pair a b = if a < b then a <> " / " <> b else b <> " / " <> a
 
 tense :: Tense -> String
 tense = case _ of

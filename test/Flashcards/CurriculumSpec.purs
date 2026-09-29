@@ -8,8 +8,8 @@ import Prelude
 import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.DateTime.Instant (Instant, instant)
-import Data.Foldable (foldl)
-import Data.Maybe (Maybe, fromJust)
+import Data.Foldable (foldl, maximum)
+import Data.Maybe (Maybe(..), fromJust, fromMaybe)
 import Data.String as String
 import Data.Time.Duration (Milliseconds(..))
 import Data.Tuple (Tuple(..))
@@ -39,6 +39,14 @@ together progress queue =
   Array.filter (\(Tuple a b) -> family progress a == family progress b) $
     Array.zip queue (Array.drop 1 queue)
 
+-- | How many alike pairs a session cannot avoid: with its largest family
+-- | `most` of `n`, every arrangement has at least `2 * most - n - 1`.
+unavoidable :: Progress -> Array Slug -> Int
+unavoidable progress queue = max 0 (2 * most - Array.length queue - 1)
+  where
+    families = map (family progress) queue
+    most = fromMaybe 0 $ maximum $ families <#> \f -> Array.length (Array.filter (_ == f) families)
+
 type Session = { progress :: Progress, queue :: Array Slug }
 
 -- | Every session a reader who gets everything right is given on one day,
@@ -67,18 +75,30 @@ sessions = describe "a verb drill session" do
     first = day 100.0 Progress.empty
     -- A week and a day later, everything is due at once: nothing but reviews.
     reviews = day 108.0 first.progress
-    clean = map (\s -> together s.progress s.queue)
+    -- Alike pairs found, beside the fewest there could be.
+    counted = map \s ->
+      Tuple (Array.length (together s.progress s.queue)) (unavoidable s.progress s.queue)
+    fewest = map \s -> let n = unavoidable s.progress s.queue in Tuple n n
+    -- Which families the pairs are of, session by session.
+    pairedIn = map \s -> Array.nub (together s.progress s.queue <#> \(Tuple a _) -> family s.progress a)
 
   it "is first met as the whole curriculum, a session at a time" do
     Array.length first.sessions `shouldEqual` 5
     Array.length (Array.concatMap _.queue first.sessions) `shouldEqual` Array.length items
 
-  it "never asks one verb twice in a row while it has anything else to ask" do
-    clean first.sessions `shouldEqual` map (const []) first.sessions
+  it "never asks two alike in a row more often than it must" do
+    counted first.sessions `shouldEqual` fewest first.sessions
 
   it "and nor does a session of reviews" do
     Array.length reviews.sessions `shouldEqual` 5
-    clean reviews.sessions `shouldEqual` map (const []) reviews.sessions
+    counted reviews.sessions `shouldEqual` fewest reviews.sessions
+
+  -- The paraphrase corpus opens on thirteen ser / estar prompts, one family,
+  -- and twelve of them land in one session of twenty. Nowhere else is any
+  -- family more than half a session.
+  it "puts two alike together only in the ser / estar block, which is most of its session" do
+    pairedIn first.sessions `shouldEqual` [ [], [], [], [ Just "estar / ser" ], [] ]
+    map (\s -> unavoidable s.progress s.queue) first.sessions `shouldEqual` [ 0, 0, 0, 3, 0 ]
 
 order :: Spec Unit
 order = describe "the order new items are met in" do
