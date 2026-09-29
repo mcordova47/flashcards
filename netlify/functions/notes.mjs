@@ -34,7 +34,10 @@ const KEY = /^[a-z0-9]{32}$/
 // are minted by the client, so someone set on free storage mints another. What
 // the cap stops is one key growing without end.
 export const MAX_NOTES = 100
-const MAX_NOTE_BYTES = 5_000
+// `Notes.maxBytes` on the client, which refuses to save a note over it. Were
+// the two to disagree, one note the client allowed would be refused in every
+// batch it was part of, and hold up every note after it.
+export const MAX_NOTE_BYTES = 5_000
 const MAX_BYTES = 500_000
 
 // Only the version `Flashcards.Notes` writes. A newer app will say so, and

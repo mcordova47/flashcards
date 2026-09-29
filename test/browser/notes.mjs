@@ -368,6 +368,48 @@ export default async ({ base, browser, check, open, noteBlobs }) => {
   check("no page errors", phone.errors, [])
   await phone.close()
 
+  // --- a note too long to send ---
+  // One the server refuses would be in every batch from then on, and hold up
+  // every note after it. Set rather than typed: five thousand keystrokes.
+  const long = await open()
+  await long.waitForSelector(".prompt")
+  const longKey = await keyOf(long)
+  const big = "ñ".repeat(2600)
+  await openSheet(long)
+  await long.$eval(".note-draft", (e, v) => { e.value = v }, big)
+  await long.tap(".note-save")
+  check("is refused, and says why",
+    await long.text(".note-too-long"), "That's too long to send in one note. Shorten it, or split it into two.")
+  check("is left in the box to cut down", await long.$eval(".note-draft", e => e.value), big)
+  check("and is not saved", await saved(long), null)
+  await long.$eval(".note-draft", e => { e.value = "" })
+  await long.type(".note-draft", "a short one after it")
+  await long.tap(".note-save")
+  await long.waitForNetworkIdle({ idleTime: 150 })
+  check("the next one is saved", (await saved(long)).notes.map(n => n.text), [ "a short one after it" ])
+  check("and the warning goes", await long.$(".note-too-long"), null)
+  check("and it is delivered", texts(longKey), [ "a short one after it" ])
+  await long.tap(".sheet-close")
+
+  // Saved before the sheet refused them, so already on a device.
+  await long.evaluate((k, v) => localStorage.setItem(k, v), NOTES, JSON.stringify({ version: 1, notes: [
+    { at: 1, context: "/", text: big },
+    { at: 2, context: "/", text: "written after the long one" },
+  ] }))
+  await long.evaluate(k => localStorage.removeItem(k), SENT)
+  await reload(long)
+  check("an old one too long to send does not hold up the ones after it",
+    texts(longKey), [ "a short one after it", "written after the long one" ])
+  check("which are counted, so it is not tried again", await sentOf(long), "2")
+  await openSheet(long)
+  // The list is read once the sheet is up, so it lands a beat after.
+  await long.waitForSelector(".note-text")
+  check("the sheet says which one was not sent",
+    await long.$$eval(".note-unsent", ns => ns.map(n => n.closest(".note").querySelector(".note-text").textContent.length)),
+    [ big.length ])
+  check("no page errors", long.errors, [])
+  await long.close()
+
   // A list this build cannot read is not one to send.
   const newerPage = await open()
   await newerPage.waitForSelector(".prompt")

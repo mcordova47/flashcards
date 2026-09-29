@@ -10,6 +10,7 @@ import Data.Argonaut.Parser (jsonParser)
 import Data.DateTime.Instant (Instant, instant)
 import Data.Either (Either(..), isLeft)
 import Data.Maybe (fromJust)
+import Data.Monoid (power)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Notes (Note)
 import Flashcards.Notes as Notes
@@ -88,3 +89,21 @@ spec = describe "notes" do
     -- request; sending none would strand them.
     it "is everything again, when the count is more than the list holds" do
       Notes.undelivered 3 [ first, second ] `shouldEqual` [ first, second ]
+
+  -- The server's limit is 5,000 bytes of `{"at":…,"context":…,"text":…}`,
+  -- whose empty frame with `at` 0 is 31 bytes.
+  describe "what the server will take" do
+    let sized text = { at: at 0.0, context: "", text }
+
+    it "takes a note of exactly the limit" do
+      Notes.fits (sized $ power "x" 4969) `shouldEqual` true
+
+    it "refuses one byte over" do
+      Notes.fits (sized $ power "x" 4970) `shouldEqual` false
+
+    it "counts an accented letter as two bytes, as the server does" do
+      Notes.fits (sized $ power "ñ" 2484) `shouldEqual` true
+      Notes.fits (sized $ power "ñ" 2485) `shouldEqual` false
+
+    it "counts a line break as the two characters it is escaped to" do
+      Notes.fits (sized $ power "\n" 2485) `shouldEqual` false

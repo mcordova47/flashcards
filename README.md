@@ -258,6 +258,13 @@ once, but not to the reader: a note read and deleted on the server would come
 straight back from every device that still had it. A count larger than the list
 is taken to belong to some other list, and everything is sent again.
 
+A note the server would refuse — over 5 KB once serialised, counted in bytes as
+the server counts, so `ñ` is two — is refused by the sheet instead, and left in
+the box to shorten. Otherwise it would be in every batch from then on and hold
+up every note after it. One saved before that check existed is skipped rather
+than sent; it stays on the device, marked in the sheet as not sent, and **Copy
+all** still has it.
+
 Nor are they filed as issues directly, which would need a token behind a
 pairing key — a door key, not a password.
 

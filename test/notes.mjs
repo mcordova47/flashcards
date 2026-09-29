@@ -96,6 +96,23 @@ try {
   await refused("a batch that is one good note and one bad", put(batch([ note(6), { at: 7 } ])), 400)
   check("and none of it stored anything", await keys(), before)
 
+  // --- the client and the server agree on what fits ---
+  // Were they to differ, a note the client saved would be refused in every
+  // batch it was in, and hold up every note after it.
+  const sized = text => ({ at: 0, context: "", text })
+  for (const [ label, text ] of [
+    [ "exactly the limit", "x".repeat(4969) ],
+    [ "a byte over", "x".repeat(4970) ],
+    [ "accented, just under", "ñ".repeat(2484) ],
+    [ "accented, just over", "ñ".repeat(2485) ],
+    [ "line breaks, just over", "\n".repeat(2485) ],
+  ]) {
+    const n = sized(text)
+    const taken = (await put(batch([ n ]), "e".repeat(32))).status === 200
+    await store.delete(`${"e".repeat(32)}/0.json`)
+    check(`the client's fits and the server agree: ${label}`, Notes.fits(n), taken)
+  }
+
   // --- the cap ---
   const stored = (await keys(`${KEY}/`)).length
   const room = MAX_NOTES - stored
