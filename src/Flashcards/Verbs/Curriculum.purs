@@ -5,6 +5,7 @@
 -- | from.
 module Flashcards.Verbs.Curriculum
   ( items
+  , byFrequency
   , labelled
   , session
   )
@@ -15,14 +16,17 @@ import Prelude
 import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.DateTime.Instant (Instant)
+import Data.Maybe (Maybe, fromMaybe)
+import Data.String as String
+import Flashcards.Data.Deck.Spanish (deck)
 import Flashcards.Data.Paraphrase.Spanish (prompts)
 import Flashcards.Data.PorPara.Spanish (sentences) as PorPara
 import Flashcards.Data.Sentences.Spanish (sentences)
 import Flashcards.Data.Verbs.Spanish (deviations, table)
-import Flashcards.Exercise (Pool, pick)
+import Flashcards.Exercise (Exercise, Pool, pick)
 import Flashcards.Exercise as Exercise
 import Flashcards.Scheduler as Scheduler
-import Flashcards.Types.Card (Slug)
+import Flashcards.Types.Card (Slug, rankToInt)
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Correction as Correction
@@ -39,14 +43,46 @@ import Flashcards.Verbs.Shift as Shift
 -- | constructor they produce. The checked ones come first because they are
 -- | the easier question, and among them the shifts and por / para come before
 -- | error correction: they name what to decide, where a correction asks you
--- | to see what is wrong. The order of this list is the curriculum.
+-- | to see what is wrong.
+-- |
+-- | Within the two shifts, the most common verb first, for the reason the
+-- | deck puts *que* before *concreto*: see `byFrequency`. The other three
+-- | keep their banks' order, and not because it was chosen: por / para has
+-- | no verb to rank, a correction's item is a kind of mistake rather than a
+-- | verb, and the paraphrase corpus runs in blocks by the trap it sets —
+-- | ser / estar, then tense, then saber / conocer — which ranking by verb
+-- | would scatter.
+-- | Whether those orders are right is still open.
+-- |
+-- | This is the order new items are met in, not the order they are asked:
+-- | `session` spreads each session so that no verb comes twice running.
 items :: Array Pool
 items = Exercise.pools $
-  Shift.exercises table sentences
-    <> PersonShift.exercises table sentences
+  byFrequency (Shift.exercises table sentences)
+    <> byFrequency (PersonShift.exercises table sentences)
     <> PorPara.exercises PorPara.sentences
     <> Correction.exercises table deviations sentences
     <> Paraphrase.exercises prompts
+
+-- | Exercises reordered by how common their verb is, in the Spanish deck's
+-- | ranking: `querer` is 2nd and `hacer` 43rd, so every `querer` item is met
+-- | before any of `hacer`'s. See #51.
+-- |
+-- | Stable, so a verb's items keep the order their bank gave them, and a
+-- | pool's exercises the order `pick` turns through. A verb the deck does not
+-- | have goes last. Frequency rather than difficulty because it is what the
+-- | deck already means by "first", and #24, which may yet rank the verbs some
+-- | other way, would replace this and nothing else.
+byFrequency :: Array Exercise -> Array Exercise
+byFrequency = Array.sortWith (fromMaybe top <<< rank <<< _.family)
+
+-- | Where the deck ranks a verb. The deck writes a verb used both ways with
+-- | its pronoun, `ir(se)`, and the table does not.
+rank :: String -> Maybe Int
+rank verb =
+  rankToInt <<< _.rank <$> Array.find (\card -> bare card.word == verb) deck
+  where
+    bare word = fromMaybe word $ String.stripSuffix (String.Pattern "(se)") word
 
 -- | Every item, named. Every exercise of a pool carries the same label, so the
 -- | first one's will do.

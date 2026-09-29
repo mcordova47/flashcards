@@ -6,18 +6,20 @@ module Test.Flashcards.CurriculumSpec
 import Prelude
 
 import Data.Array as Array
+import Data.Array.NonEmpty as NonEmpty
 import Data.DateTime.Instant (Instant, instant)
 import Data.Foldable (foldl)
 import Data.Maybe (Maybe, fromJust)
+import Data.String as String
 import Data.Time.Duration (Milliseconds(..))
 import Data.Tuple (Tuple(..))
-import Flashcards.Exercise (pick)
+import Flashcards.Exercise (Answer(..), Exercise, pick)
 import Flashcards.Scheduler as Scheduler
-import Flashcards.Types.Card (Slug)
+import Flashcards.Types.Card (Slug(..), slugToString)
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
-import Flashcards.Verbs.Curriculum (items, session)
+import Flashcards.Verbs.Curriculum (byFrequency, items, session)
 import Partial.Unsafe (unsafePartial)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
@@ -55,7 +57,12 @@ day d = go []
         p
 
 spec :: Spec Unit
-spec = describe "a verb drill session" do
+spec = do
+  sessions
+  order
+
+sessions :: Spec Unit
+sessions = describe "a verb drill session" do
   let
     first = day 100.0 Progress.empty
     -- A week and a day later, everything is due at once: nothing but reviews.
@@ -72,3 +79,29 @@ spec = describe "a verb drill session" do
   it "and nor does a session of reviews" do
     Array.length reviews.sessions `shouldEqual` 5
     clean reviews.sessions `shouldEqual` map (const []) reviews.sessions
+
+order :: Spec Unit
+order = describe "the order new items are met in" do
+  let
+    verbOf pool = (NonEmpty.head pool.exercises).family
+    -- The tense shifts come first, and the person shifts straight after.
+    shifts = Array.takeWhile (\p -> not (String.contains (String.Pattern "person.") (slugToString p.slug))) items
+    ask slug verb =
+      { slug: Slug slug, label: slug, family: verb, prompt: "", hint: ""
+      , answer: Checked { expected: "", frame: { before: "", after: "" }, note: "" }
+      } :: Exercise
+
+  it "starts on the most common verb the drills have" do
+    map _.slug (Array.take 2 items) `shouldEqual` [ Slug "querer.preterite", Slug "querer.imperfect" ]
+
+  it "meets the tense shifts a verb at a time, most common first" do
+    Array.nub (map verbOf shifts)
+      `shouldEqual` [ "querer", "poder", "tener", "ir", "decir", "estar", "hacer" ]
+
+  it "finds ir, which the deck writes ir(se)" do
+    map _.slug (byFrequency [ ask "hacer" "hacer", ask "ir" "ir" ])
+      `shouldEqual` [ Slug "ir", Slug "hacer" ]
+
+  it "puts a verb the deck does not have last, and keeps one verb's items as given" do
+    map _.slug (byFrequency [ ask "oler" "oler", ask "b" "tener", ask "a" "tener", ask "querer" "querer" ])
+      `shouldEqual` [ Slug "querer", Slug "b", Slug "a", Slug "oler" ]

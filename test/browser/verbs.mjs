@@ -56,6 +56,13 @@ const bank = rows("data/es-sentences.csv").map(([text, infinitive, tense, person
   return { plain: before + form + after, before, after, infinitive, tense, person, personShift: personShift === "yes" }
 })
 
+// Where the deck ranks a verb, which is the order a verb's shifts are first
+// met in (#51). The deck writes `ir(se)` where the table writes `ir`.
+const deckRank = new Map(rows("data/es-1000.csv").map(([rank, , word]) => [word.replace(/\(se\)$/, ""), Number(rank)]))
+const byFrequency = sentences =>
+  sentences.map((s, i) => [s, i]).sort(([a, i], [b, j]) =>
+    (deckRank.get(a.infinitive) ?? Infinity) - (deckRank.get(b.infinitive) ?? Infinity) || i - j).map(([s]) => s)
+
 // What the page is asking, and what the answer to it is. A pronoun is a
 // person shift and holds the tense; anything else is a tense, and holds the
 // person.
@@ -83,10 +90,11 @@ export default async ({ check, open, blobs }) => {
   await page.waitForSelector(".verb-sentence")
   await wait(400)
 
-  // --- the first item is the bank's first sentence, moved ---
+  // --- the first item is the most common verb's first sentence, moved ---
   const first = await asked(page)
-  check("asks the bank's first sentence", first.plain, bank[0].plain)
-  check("into a tense it is not in", first.target !== bank[0].tense, true)
+  const opens = byFrequency(bank)[0]
+  check("asks the most common verb's first sentence", first.plain, opens.plain)
+  check("into a tense it is not in", first.target !== opens.tense, true)
   check("with the box where the verb goes",
     [await page.text(".verb-before"), await page.text(".verb-after")], [first.before, first.after])
 
@@ -259,9 +267,9 @@ export default async ({ check, open, blobs }) => {
   await keys.close()
 
   // --- the person shift: the same sentences, the tense held still ---
-  // The tense shift is put behind us so the session opens on the first
-  // sentence marked for a person shift, moved into the first person it is
-  // not already in.
+  // The tense shift is put behind us so the session opens on the most
+  // common verb's first sentence marked for a person shift, moved into the
+  // first person it is not already in.
   const later = Date.now() + 30 * 86400000
   const behind = slugs => ({
     version: formatVersion(), language: "verbs", deck: "none",
@@ -272,7 +280,7 @@ export default async ({ check, open, blobs }) => {
   await persons.waitForSelector(".verb-sentence")
   await wait(400)
 
-  const opening = bank.find(s => s.personShift)
+  const opening = byFrequency(bank).find(s => s.personShift)
   const moved = await asked(persons)
   check("asks the first sentence marked for it", moved.plain, opening.plain)
   check("into a person it is not in, named by a pronoun",
