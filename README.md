@@ -376,8 +376,10 @@ PUT  /api/progress/<key>/<lang>   replaces it
 
 One key pairs a device; one blob per language hangs off it, because progress is
 per-language and each blob is then byte-identical to the backup file. The
-server does not know which languages exist — `<lang>` is capped at two letters
-only so that one key cannot become unlimited storage.
+server does not know which languages exist. `<lang>` must match
+`[a-z][a-z0-9-]{1,15}`, which keeps it a short, path-safe name, but does not
+limit how many a key can have — so what bounds storage is the size cap on each
+blob, not the pattern.
 
 It is a **dumb blob store** and does not merge. The client does `GET` →
 `Progress.merge` → `PUT`, so the merge rule stays in one place, pure and
@@ -722,8 +724,8 @@ conditional on anything.
 `flashcards.verbs.v1`, and a blob each on the server — but the key that
 identifies the device is not. A device paired for the flashcards is already
 paired for the drills. The endpoint's namespace pattern widened from `[a-z]{2}`
-to admit `verbs`, and stays bounded so one key still cannot become unlimited
-storage.
+to admit `verbs`. It bounds a name's length, not how many names a key can use,
+so it was never what limited a key's storage; the per-blob size cap is.
 
 An exercise is `{ slug, prompt, hint, answer }`, where `answer` is either
 `Checked { expected, frame, note }` — a typed answer, with the words shown
