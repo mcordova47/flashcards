@@ -111,12 +111,12 @@ spec = do
         Just e -> do
           e.slug `shouldEqual` Slug "error.regularised"
           e.label `shouldEqual` "an irregular made regular"
-          e.prompt `shouldEqual` "tení mucho trabajo"
+          e.prompt `shouldEqual` "yo tení mucho trabajo"
           e.hint `shouldEqual` "fix it · preterite"
           case e.answer of
             Checked c -> do
               c.expected `shouldEqual` "tuve"
-              c.frame `shouldEqual` { before: "", after: " mucho trabajo" }
+              c.frame `shouldEqual` { before: "yo ", after: " mucho trabajo" }
               c.note `shouldEqual` "an irregular verb, conjugated as though it were regular"
             SelfGraded _ -> fail "self-graded"
 
@@ -127,6 +127,26 @@ spec = do
     it "frames a verb in the middle" do
       (exercise table deviations dicen StrongWeak Preterite <#> _.prompt)
         `shouldEqual` Just "mi hermano dijió que no"
+
+    -- The ending is the broken thing, so it cannot be what says who.
+    -- `tengo` is not marked for a person shift, which is the point: whether
+    -- a subject is missing is read off the words, not that flag.
+    it "names the person of a sentence that has no subject" do
+      (exercise table deviations tengo Regularised Preterite <#> frameOf)
+        `shouldEqual` Just (Just { before: "yo ", after: " mucho trabajo" })
+
+    it "and of one that has only a negation before the verb" do
+      (exercise table deviations puedo Regularised Present <#> _.prompt)
+        `shouldEqual` Just "yo no podo dormir"
+
+    it "but gives one that has a subject no second" do
+      (exercise table deviations pueden Regularised Present <#> _.prompt)
+        `shouldEqual` Just "ellos no poden entrar"
+
+    -- The pronoun is outside the box, so typing it too is not the fix.
+    it "takes the verb alone" do
+      (exercise table deviations tengo Regularised Preterite <#> \e -> matches (expectedOf e) "yo tuve")
+        `shouldEqual` Just Wrong
 
   describe "the error-correction bank" do
     let yielded = exercises table deviations sentences
@@ -158,10 +178,12 @@ spec = do
         # map _.prompt
         # shouldEqual []
 
-    -- Subjectless sentences leave the person to the ending, so two cells
-    -- broken into the same string would make the fix a guess. The imperfect's
-    -- first and third persons share a form, and so share a fix, which is
-    -- fine.
+    -- Two cells broken into the same string would make the fix a guess if
+    -- the ending were all that said who. A subject says it now (#52), so
+    -- this is no longer what keeps the fix determined; kept because it
+    -- still holds, and a learner reading the ending should not be misled by
+    -- it either. The imperfect's first and third persons share a form, and
+    -- so share a fix, which is fine.
     it "never breaks two cells into one string with different fixes" do
       let
         verbs = Array.nub (map _.infinitive sentences)
@@ -178,6 +200,19 @@ spec = do
           Array.length (Array.nub (map _.fix (Array.filter (\b -> b.key == k) broken))) > 1
       ambiguous `shouldEqual` []
 
+    -- Before the verb, something that says who: the bank's own subject, or
+    -- the pronoun put in front. Never nothing, and never just a negation.
+    it "leaves no sentence without a subject" do
+      let
+        bare = do
+          s <- sentences
+          kind <- kinds
+          tense <- Shift.tenses
+          e <- Array.fromFoldable (exercise table deviations s kind tense)
+          f <- Array.fromFoldable (frameOf e)
+          if Array.elem (String.trim f.before) [ "", "no" ] then [ e.prompt ] else []
+      bare `shouldEqual` []
+
     it "shares no item with the shifts or the paraphrase" do
       let
         others = Set.fromFoldable $ map _.slug $
@@ -189,6 +224,8 @@ spec = do
   where
     tengo = sentence "" "tengo" " mucho trabajo" "tener" Sg1
     dicen = sentence "mi hermano " "dice" " que no" "decir" Sg3
+    puedo = sentence "no " "puedo" " dormir" "poder" Sg1
+    pueden = sentence "ellos no " "pueden" " entrar" "poder" Pl3
 
     fixOf verb tense person = Array.find (\c -> c.infinitive == verb && c.tense == tense && c.person == person) table <#> _.form
 
