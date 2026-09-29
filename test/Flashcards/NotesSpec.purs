@@ -73,3 +73,18 @@ spec = describe "notes" do
 
     it "is empty for no notes" do
       Notes.export [] `shouldEqual` ""
+
+  describe "what is left to deliver" do
+    it "is everything, when nothing has gone" do
+      Notes.undelivered 0 [ first, second ] `shouldEqual` [ first, second ]
+
+    it "is what came after the ones that went" do
+      Notes.undelivered 1 [ first, second ] `shouldEqual` [ second ]
+
+    it "is nothing, once they all have" do
+      Notes.undelivered 2 [ first, second ] `shouldEqual` []
+
+    -- Counted against some other list. Sending them all again costs a
+    -- request; sending none would strand them.
+    it "is everything again, when the count is more than the list holds" do
+      Notes.undelivered 3 [ first, second ] `shouldEqual` [ first, second ]

@@ -29,6 +29,7 @@ import Elmish (Dispatch, ReactElement, Transition, fork, forkMaybe, forks, (<|))
 import Elmish.HTML.Styled as H
 import Flashcards.Notes (Note)
 import Flashcards.Notes as Notes
+import Flashcards.Notes.Delivery as Delivery
 import Flashcards.Storage as Storage
 
 -- | `Nothing` is closed.
@@ -88,8 +89,12 @@ update sheet = case _ of
           at <- Now.now
           saved <- Storage.appendNote { at, context: open.context, text }
           -- Only once it is saved: a refused note stays in the box, so what
-          -- was typed is not lost along with the chance to save it.
-          when (isJust saved) clearDraft
+          -- was typed is not lost along with the chance to save it. And sent
+          -- from here, so one written online arrives without waiting for the
+          -- next sync.
+          when (isJust saved) do
+            clearDraft
+            Delivery.deliver
           pure $ Just $ Saved saved
       pure sheet
 
@@ -126,6 +131,11 @@ view open dispatch =
     , H.textarea_ "note-draft"
         { rows: 4, placeholder: "What did you notice?", autoFocus: true }
     , H.button_ "grade got-it note-save" { onClick: dispatch <| Save } "Save note"
+    -- Before anything is typed, like the warning below. A box that quietly
+    -- sends what is typed in it to someone else is a small breach of trust,
+    -- even when what is typed is "the hint is confusing".
+    , H.p "sheet-note note-where"
+        "Notes are kept on this device and sent to the person who looks after this app, for them to read."
     -- Said before anything is typed, as well as on a refused save: finding
     -- out only after writing the note would be the worse way round.
     , if open.unreadable then

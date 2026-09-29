@@ -51,6 +51,20 @@ export const pushRemote_ = (key, language, body, done) => {
     .catch(() => done(false))
 }
 
+// As `pushRemote_`, to the endpoint that takes notes. See netlify/functions/notes.mjs.
+export const pushNotes_ = (key, body, done) => {
+  fetch(`/api/notes/${key}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body,
+  })
+    .then(async response => {
+      await response.text()
+      done(response.ok)
+    })
+    .catch(() => done(false))
+}
+
 export const origin = () => (typeof window === "undefined" ? "" : window.location.origin)
 
 // Clipboard rather than `navigator.share`, even though a share sheet is the
