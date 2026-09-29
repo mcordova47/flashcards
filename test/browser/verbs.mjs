@@ -107,9 +107,17 @@ export default async ({ check, open, blobs }) => {
   check("with the flashcards untouched", await page.stored(storageKey), null)
 
   // --- accents are not the thing being drilled ---
+  // The session is spread so that one verb is never asked twice running
+  // (#51), so the first accented form is a question or two along. Answered
+  // rightly until it arrives.
   await next(page)
   let item = await asked(page)
-  check("the next item has an accent to leave off", /[áéíóú]/.test(item.form), true)
+  for (let i = 0; i < 5 && !/[áéíóú]/.test(item.form); i++) {
+    await answer(page, item.form)
+    await next(page)
+    item = await asked(page)
+  }
+  check("an item comes with an accent to leave off", /[áéíóú]/.test(item.form), true)
   await answer(page, item.form.normalize("NFD").replace(/[́]/g, ""))
   check("an unaccented answer counts", await page.text(".milestone"), `✓ ${item.full}`)
   check("and the accent is shown", await page.text(".verb-accent"), `right — ${item.form}`)
@@ -381,10 +389,20 @@ export default async ({ check, open, blobs }) => {
   check("keyed by the kind, not the verb",
     stored.cards.filter(c => c.slug.startsWith("error.")).map(c => [c.slug, c.missed]), [["error.regularised", 0]])
 
+  // The kinds all open on a `tener` sentence, so the session puts a
+  // paraphrase prompt between each (#51). Passed, it moves on by itself.
+  const passParaphrase = async () => {
+    if (await fixing.$(".verb-sentence")) return
+    await fixing.tap(".grade")
+    await (await fixing.byText(".grade", "Got it")).click()
+    await wait(200)
+  }
+
   // The one that forgiveness makes dangerous: typed back as shown, it must
   // be wrong. The generator refuses every error that differs from its fix
   // only by an accent, which is what makes this hold for every item.
   await next(fixing)
+  await passParaphrase()
   const retyped = await broken()
   await answer(fixing, retyped.typo)
   check("the error typed back unchanged is wrong", await fixing.text(".milestone"), `✗ ${retyped.full}`)
@@ -394,6 +412,7 @@ export default async ({ check, open, blobs }) => {
 
   // A missing accent is still not the mistake being drilled.
   await next(fixing)
+  await passParaphrase()
   const accented = await broken()
   check("the next fix has an accent to leave off", /[áéíóú]/.test(accented.form), true)
   await answer(fixing, accented.form.normalize("NFD").replace(/[́]/g, ""))
@@ -405,12 +424,9 @@ export default async ({ check, open, blobs }) => {
   let fixAgain = null
   await next(fixing)
   for (let i = 0; i < 12 && !fixAgain; i++) {
-    // The paraphrase follows in the curriculum, and the miss may be requeued
-    // behind one of its prompts. Passed, it moves on by itself.
+    // The miss may be requeued behind a paraphrase prompt.
     if (!(await fixing.$(".verb-sentence"))) {
-      await fixing.tap(".grade")
-      await (await fixing.byText(".grade", "Got it")).click()
-      await wait(200)
+      await passParaphrase()
       continue
     }
     const b = await broken()
@@ -483,14 +499,20 @@ export default async ({ check, open, blobs }) => {
   check("as got", graded?.missed, 0)
   check("shares no item with any other drill",
     stored.cards.filter(c => !c.slug.startsWith("paraphrase.") && c.seen < 3).length, 0)
+  // The corpus opens on two estar prompts and then two ser, and a session
+  // never asks one verb twice running (#51), so the second question is the
+  // third row. Checked, so that a reordered corpus fails here and not below.
+  check("the corpus opens as this assumes",
+    [corpus[0].verb === corpus[1].verb, corpus[1].verb !== corpus[2].verb], [true, true])
+  const asked2 = [corpus[0], corpus[2], corpus[1]]
   check("and moves straight on, the reveal already read",
-    await done.text(".verb-prompt"), corpus[1].prompt)
+    await done.text(".verb-prompt"), asked2[1].prompt)
 
   // Two taps in one tick, before the first grade can land. The typed side is
   // safe because `Answer` moves to `Compared` at once; this side has to wait
   // for the clock, so `Judging` is what stops the second.
   await done.tap(".grade")
-  const twice = corpus[1]
+  const twice = asked2[1]
   await done.evaluate(() => {
     const b = [...document.querySelectorAll(".grade")].find(e => e.textContent === "Got it")
     b.click(); b.click()
@@ -498,17 +520,17 @@ export default async ({ check, open, blobs }) => {
   await wait(250)
   stored = await done.stored()
   check("a double tap grades once, not twice",
-    stored.cards.filter(c => c.slug.startsWith("paraphrase.")).map(c => [c.slug, c.seen]),
-    [["paraphrase." + corpus[0].id, 1], ["paraphrase." + twice.id, 1]])
+    stored.cards.filter(c => c.slug.startsWith("paraphrase.")).map(c => [c.slug, c.seen]).sort(),
+    [["paraphrase." + corpus[0].id, 1], ["paraphrase." + twice.id, 1]].sort())
   check("and the next question is the next one",
-    await done.text(".verb-prompt"), corpus[2].prompt)
+    await done.text(".verb-prompt"), asked2[2].prompt)
 
   await done.tap(".grade")
   await (await done.byText(".grade", "Again")).click()
   await wait(200)
   stored = await done.stored()
   check("a self-graded miss is a miss",
-    stored.cards.find(c => c.slug === `paraphrase.${corpus[2].id}`)?.missed, 1)
+    stored.cards.find(c => c.slug === `paraphrase.${asked2[2].id}`)?.missed, 1)
   check("no page errors", done.errors, [])
   await done.close()
 
