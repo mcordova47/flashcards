@@ -13,8 +13,20 @@ description: Pick up a GitHub issue in this repository and take it to a pull req
 work is made here and is not repeated below.
 
 ```
-gh issue view <n>
+gh issue view <n> --comments
 ```
+
+**`--comments`, always.** Corrections live in comments here by design — the
+rule below is that you do not edit the issue body, so everything learned after
+an issue was written is underneath it. The body alone is the stale half, and
+`gh issue view <n>` does not show the rest.
+
+This is not hypothetical. #3's body describes building a card face that
+already ships and gating sentences on a vocabulary rule its own comment
+disproved by measurement. #62's body specifies a purge command that its
+comments amend precisely so it cannot delete the only copy of a note. Either
+one, read without its comments, produces confident work against a spec that
+was corrected weeks or hours earlier.
 
 **Then argue with it.** Issues here carry reasoning rather than requirements,
 and the reasoning has been wrong more than once — arithmetic that did not hold,
