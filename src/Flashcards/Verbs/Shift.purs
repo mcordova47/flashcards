@@ -60,6 +60,7 @@ exercise table sentence target
       formOf sentence.infinitive target sentence.person table <#> \expected ->
         { slug: Slug $ sentence.infinitive <> "." <> name target
         , label: sentence.infinitive <> " · " <> name target
+        , family: sentence.infinitive
         , prompt: sentence.before <> sentence.form <> sentence.after
         , hint: name target
         , answer: Checked

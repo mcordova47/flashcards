@@ -48,6 +48,7 @@ exercise table sentence target
       formOf sentence.infinitive sentence.tense target table <#> \expected ->
         { slug: Slug $ "person." <> sentence.infinitive <> "." <> Shift.name sentence.tense <> "." <> code target
         , label: sentence.infinitive <> " · " <> Shift.name sentence.tense <> " · " <> pronoun target
+        , family: sentence.infinitive
         , prompt: sentence.before <> sentence.form <> sentence.after
         , hint: pronoun target
         , answer: Checked

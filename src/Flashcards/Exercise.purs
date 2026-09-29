@@ -66,6 +66,13 @@ type Exercise =
   -- | by whichever module spelled the slug, which is the one that knows what
   -- | it means, and the same for every exercise of a pool.
   , label :: String
+  -- | What makes two exercises too alike to ask back to back: the verb, for
+  -- | every drill that has one, since `tener.imperfect` straight after
+  -- | `tener.preterite` is partly read off the answer just given. Por / para
+  -- | has no verb and is one family of its own. Per exercise rather than per
+  -- | pool, because an error correction's verb is whichever sentence `pick`
+  -- | lands on. See #51.
+  , family :: String
   , prompt :: String
   , hint :: String
   , answer :: Answer
