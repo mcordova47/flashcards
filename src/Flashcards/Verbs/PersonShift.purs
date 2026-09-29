@@ -24,7 +24,7 @@ import Flashcards.Exercise (Answer(..), Exercise)
 import Flashcards.Types.Card (Slug(..))
 import Flashcards.Verbs.Shift (Sentence)
 import Flashcards.Verbs.Shift as Shift
-import Flashcards.Verbs.Table (Cell, Person(..), formOf)
+import Flashcards.Verbs.Table (Cell, Person(..), formOf, pronoun)
 
 -- | Every person there is, in the table's order.
 persons :: Array Person
@@ -72,14 +72,3 @@ code = case _ of
   Sg3 -> "3s"
   Pl1 -> "1p"
   Pl3 -> "3p"
-
--- | The person as the prompt names it, `→ nosotros`. One pronoun for each,
--- | though `Sg3` and `Pl3` also carry *ella*, *usted* and the rest: the form
--- | is the same, and a list would be read as a choice to make.
-pronoun :: Person -> String
-pronoun = case _ of
-  Sg1 -> "yo"
-  Sg2 -> "tú"
-  Sg3 -> "él"
-  Pl1 -> "nosotros"
-  Pl3 -> "ellos"

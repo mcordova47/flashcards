@@ -355,10 +355,13 @@ export default async ({ check, open, blobs }) => {
   await fixing.waitForSelector(".verb-sentence")
   await wait(400)
 
+  // A subjectless sentence is shown with a pronoun in front, so the bank
+  // sentence is the one whose words either side match once it is taken off.
   const broken = async () => {
     const shown = await fixing.text(".verb-sentence")
     const before = await fixing.text(".verb-before") ?? "", after = await fixing.text(".verb-after") ?? ""
-    const s = bank.find(s => s.before === before && s.after === after)
+    const s = bank.find(s => s.after === after &&
+      (s.before === before || Object.entries(PRONOUNS).some(([p, code]) => code === s.person && `${p} ${s.before}` === before)))
     const tense = (await fixing.text(".verb-target")).replace(/^→ fix it · /, "")
     const form = table.get(`${s.infinitive}.${tense}.${s.person}`)
     return { shown, typo: shown.slice(before.length, shown.length - after.length), form, full: before + form + after }
@@ -367,7 +370,8 @@ export default async ({ check, open, blobs }) => {
   const opening1 = await broken()
   check("asks a sentence the bank does not have", bank.some(s => s.plain === opening1.shown), false)
   check("naming the tense, and that it wants fixing", await fixing.text(".verb-target"), "→ fix it · present")
-  check("broken as the first kind breaks it", opening1.shown, "teno mucho trabajo")
+  check("broken as the first kind breaks it", opening1.shown, "yo teno mucho trabajo")
+  check("with the person said, outside the box", await fixing.text(".verb-before"), "yo ")
   check("and saying nothing yet of what is wrong", await fixing.text(".verb-note"), null)
   await answer(fixing, opening1.form)
   check("a right fix shows the sentence mended", await fixing.text(".milestone"), `✓ ${opening1.full}`)
