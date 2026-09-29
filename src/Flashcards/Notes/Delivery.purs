@@ -34,7 +34,16 @@ deliver =
       -- Counted against a list that is no longer here. Forgotten, or it
       -- would stay above the list's length for ever, since it never lowers.
       when (sent > Array.length notes) Storage.forgetNotesSent
-      let fresh = Notes.undelivered sent notes
-      unless (Array.null fresh) $
-        Sync.pushNotes key (stringify $ Notes.toJson fresh) \ok ->
+      let
+        fresh = Notes.undelivered sent notes
+        -- One the server would refuse is left out rather than sent. The
+        -- sheet refuses to save such a note, but one saved before it did
+        -- would otherwise hold up every note after it for good. It is not
+        -- lost: it stays on the device, where the sheet says it was not sent
+        -- and Copy all still has it.
+        sendable = Array.filter Notes.fits fresh
+      if Array.null sendable then
+        unless (Array.null fresh) $ Storage.markNotesSent $ Array.length notes
+      else
+        Sync.pushNotes key (stringify $ Notes.toJson sendable) \ok ->
           when ok $ Storage.markNotesSent $ Array.length notes

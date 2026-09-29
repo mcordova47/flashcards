@@ -18,7 +18,9 @@ module Flashcards.Notes
   ( Note
   , currentVersion
   , export
+  , fits
   , fromJson
+  , maxBytes
   , stamp
   , toJson
   , undelivered
@@ -28,7 +30,7 @@ module Flashcards.Notes
 
 import Prelude
 
-import Data.Argonaut.Core (Json, jsonEmptyObject)
+import Data.Argonaut.Core (Json, jsonEmptyObject, stringify)
 import Data.Array as Array
 import Data.Argonaut.Decode (JsonDecodeError(..), decodeJson, (.:))
 import Data.Argonaut.Encode ((:=), (~>))
@@ -61,12 +63,33 @@ currentVersion = 1
 toJson :: Array Note -> Json
 toJson notes =
   "version" := currentVersion
-    ~> "notes" := (notes <#> \n ->
-         "at" := unwrap (unInstant n.at)
-           ~> "context" := n.context
-           ~> "text" := n.text
-           ~> jsonEmptyObject)
+    ~> "notes" := (one <$> notes)
     ~> jsonEmptyObject
+
+one :: Note -> Json
+one n =
+  "at" := unwrap (unInstant n.at)
+    ~> "context" := n.context
+    ~> "text" := n.text
+    ~> jsonEmptyObject
+
+-- | The most one note may take up once serialised, in UTF-8 bytes: the server
+-- | refuses anything larger (`MAX_NOTE_BYTES` in netlify/functions/notes.mjs),
+-- | and the two must agree.
+maxBytes :: Int
+maxBytes = 5_000
+
+-- | Whether the server will take it. Measured as the server measures, in
+-- | bytes of the same serialisation, so `ñ` counts twice and a line break,
+-- | escaped, counts twice too.
+-- |
+-- | Checked before a note is saved, because a note the server refuses would
+-- | refuse every batch it is in — and since what is sent is everything not yet
+-- | delivered, that is every batch from then on.
+fits :: Note -> Boolean
+fits n = byteLength (stringify $ one n) <= maxBytes
+
+foreign import byteLength :: String -> Int
 
 -- | Refuses a version it does not know rather than guessing at one: a newer
 -- | app wrote it, and reading it as this one would lose whatever it added.
