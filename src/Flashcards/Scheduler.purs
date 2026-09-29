@@ -153,8 +153,10 @@ buildSession items progress now size =
 -- | Otherwise the order is kept as nearly as it can be — at each step the
 -- | earliest item that differs from the one before and still leaves the rest
 -- | arrangeable — so the most overdue review and the most common new word
--- | still come first. Not a shuffle: the result is a function of the list,
--- | so a reload that rebuilds the session asks the same thing.
+-- | still come first. Precisely: of every arrangement with nothing alike
+-- | together, the one that is earliest read position by position. Not a
+-- | shuffle: the result is a function of the list, so a reload that rebuilds
+-- | the session asks the same thing.
 -- |
 -- | Where no arrangement avoids it, because one family is more than half of
 -- | what is left, that family goes first and everything else between its

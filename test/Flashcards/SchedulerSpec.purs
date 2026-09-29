@@ -295,8 +295,11 @@ spec = do
         `shouldEqual` [ "t1", "h1", "t2", "p1", "h2", "p2" ]
 
     -- Taking the earliest item that differs would give a, b, c and then two
-    -- c's with nothing to put between them.
-    it "looks ahead, starting with a family that is most of what is left" do
+    -- c's with nothing to put between them. Either guard prevents it — the
+    -- lookahead, or leading with the family there is most of — so this fails
+    -- only without both. What the lookahead alone is for is keeping the
+    -- order, which is the pairs case above.
+    it "never strands a family that is most of what is left" do
       spread [ "a1", "b1", "c1", "c2", "c3" ]
         `shouldEqual` [ "c1", "a1", "c2", "b1", "c3" ]
 
