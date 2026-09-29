@@ -6,8 +6,11 @@ export const onKeyDown_ = handler => {
     // whatever is behind it. Before the space is stopped, which would
     // otherwise make one impossible to type.
     if (e.target instanceof HTMLTextAreaElement) return
-    // Otherwise the flip key scrolls the page.
-    if (e.key === " ") e.preventDefault()
+    // Otherwise the flip key scrolls the page. Not from a text box, though,
+    // where stopping it means no space can be typed. The page still hears it,
+    // as it hears Enter from the drills' answer box, which relies on that - so
+    // a page with a text box on a sheet ignores keys while the sheet is open.
+    if (e.key === " " && !(e.target instanceof HTMLInputElement)) e.preventDefault()
     // A focused button treats Enter and Space as a click, so whichever button
     // was last tapped would fire again alongside whatever the page maps the
     // key to - answering a question nobody read. Both pages map both keys, so
