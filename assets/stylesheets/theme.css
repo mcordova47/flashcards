@@ -850,6 +850,12 @@ body {
   margin: 0 0 0.75rem;
 }
 
+/* The one thing on this sheet that is a problem, so it takes the accent. */
+.note-unreadable {
+  margin: 0 0 0.75rem;
+  color: var(--accent);
+}
+
 .note {
   padding: 0.75rem 0;
   border-top: 1px solid var(--track);

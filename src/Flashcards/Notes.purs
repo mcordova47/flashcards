@@ -42,7 +42,7 @@ import Data.Traversable (traverse)
 type Note =
   { at :: Instant
   -- | What was on screen when it was written, spelled by the page that knew:
-  -- | `verbs · porpara.means · …`. A string rather than a record, because
+  -- | `/verbs · porpara.means · …`. A string rather than a record, because
   -- | the only thing that ever reads it is a person.
   , context :: String
   , text :: String

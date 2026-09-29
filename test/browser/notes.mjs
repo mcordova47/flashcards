@@ -1,4 +1,4 @@
-import { slugAt, wait } from "./harness.mjs"
+import { deckFingerprint, formatVersion, slugAt, wait } from "./harness.mjs"
 
 export const name = "Notes written from inside the app"
 
@@ -15,6 +15,43 @@ const openSheet = async page => {
 const TYPED = "z the hint 1 is 2 confusing s\n\nsecond line"
 
 const saved = page => page.evaluate(k => JSON.parse(localStorage.getItem(k) ?? "null"), NOTES)
+
+// Holds the page's pull of remote progress until the test lets it go, and
+// answers it with whatever the test has queued. Sync runs on load, so this is
+// the only way to have one land while a sheet is open. No request is made
+// while it is held, so the page still reaches network idle.
+const holdSync = `
+  window.__held = []
+  const real = window.fetch
+  window.fetch = (url, opts) =>
+    String(url).includes("/api/") && !(opts && opts.method && opts.method !== "GET")
+      ? new Promise(r => window.__held.push(r))
+      : real(url, opts)
+  window.__release = body => {
+    window.__held.splice(0).forEach(r => r(new Response(body, { status: 200 })))
+  }
+`
+
+// What another device would hold: the one item, answered and a month out,
+// so a rebuild would move past it.
+const remote = (language, deck, slug) => JSON.stringify({
+  version: formatVersion(), deck, language,
+  cards: [ { slug, box: 3, seen: 5, missed: 0, lapses: 0, direction: "recognition",
+             due: Date.now() + 30 * 86400000 } ],
+})
+
+// The item a page is showing, read the way a note reads it. Opening and
+// closing the sheet leaves the session untouched again.
+const showing = async page => {
+  await page.click(".panel-toggle")
+  await wait(90)
+  for (const item of await page.$$(".panel-item")) {
+    if (await item.evaluate(e => e.textContent) === "Write a note") await item.click()
+  }
+  await page.waitForSelector(".note-context")
+  const slug = (await page.$eval(".note-context", e => e.textContent)).split(" · ")[1]
+  return slug
+}
 
 export default async ({ base, browser, check, open }) => {
   // --- from the cards, mid-question ---
@@ -183,4 +220,49 @@ export default async ({ base, browser, check, open }) => {
     await refused.text(".note-copied"), "Couldn't copy — select them below instead.")
   check("no page errors", refused.errors, [])
   await refused.close()
+
+  // --- a list this build cannot read is not saved over ---
+  // Notes live only on the device, so writing a fresh list over one a newer
+  // version wrote would lose it for good.
+  const newer = JSON.stringify({ version: 2, notes: [ { at: 0, context: "/verbs", text: "written by a newer app" } ] })
+  const stale = await open({ path: "/verbs" })
+  await stale.waitForSelector(".panel-toggle")
+  await stale.evaluate((k, v) => localStorage.setItem(k, v), NOTES, newer)
+  await openSheet(stale)
+  await stale.waitForSelector(".note-unreadable")
+  check("an unreadable list is said to be so before anything is typed", !!(await stale.$(".note-unreadable")), true)
+  await stale.type(".note-draft", "this one must not cost the others")
+  await stale.tap(".note-save")
+  check("saving writes nothing over it",
+    await stale.evaluate(k => localStorage.getItem(k), NOTES), newer)
+  check("and what was typed is still in the box",
+    await stale.$eval(".note-draft", e => e.value), "this one must not cost the others")
+  check("no page errors", stale.errors, [])
+  await stale.close()
+
+  // --- a sync landing while a note is written does not rebuild the session ---
+  // A control first on each page, so the test can see a rebuild at all.
+  const pages = [
+    { path: "/", language: "es", deck: deckFingerprint(), label: "the card" },
+    { path: "/verbs", language: "verbs", deck: "none", label: "the drill" },
+  ]
+  for (const { path, language, deck, label } of pages) {
+    for (const sheetOpen of [ false, true ]) {
+      const page = await open({ path, stub: holdSync })
+      await page.waitForSelector(".panel-toggle")
+      await page.waitForFunction(() => window.__held.length > 0)
+      const before = await showing(page)
+      if (!sheetOpen) { await page.click(".sheet-close"); await wait(90) }
+      await page.evaluate(body => window.__release(body), remote(language, deck, before))
+      await wait(400)
+      if (sheetOpen) { await page.click(".sheet-close"); await wait(90) }
+      const after = await showing(page)
+      check(sheetOpen
+        ? `with the sheet open, ${label} stays the one the note is about`
+        : `with nothing open, a sync moves ${label} on`,
+        sheetOpen ? after : after !== before, sheetOpen ? before : true)
+      check("no page errors", page.errors, [])
+      await page.close()
+    }
+  }
 }

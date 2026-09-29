@@ -5,7 +5,7 @@ module Flashcards.Storage
   ( accentKey
   , appendNote
   , languageKey
-  , loadNotes
+  , readNotes
   , notesKey
   , loadSyncedAt
   , saveSyncedAt
@@ -163,25 +163,34 @@ saveLanguage code = do
 notesKey :: String
 notesKey = "flashcards.notes.v1"
 
--- | Unreadable notes read as none, as progress does — but are left where they
--- | are until something is written over them, rather than cleared on sight.
-loadNotes :: Effect (Array Note)
-loadNotes = do
+-- | `Nothing` when there are notes stored and this build cannot read them —
+-- | which is not the same as there being none, and must not be treated as it.
+-- | Progress can afford to start over on unreadable data, because it also
+-- | lives on the server; notes live only here.
+readNotes :: Effect (Maybe (Array Note))
+readNotes = do
   storage <- localStorage =<< window
   Storage.getItem notesKey storage >>= case _ of
-    Nothing -> pure []
+    Nothing -> pure $ Just []
     Just raw -> case Notes.fromJson =<< lmap (const Notes.unreadable) (jsonParser raw) of
-      Right notes -> pure notes
+      Right notes -> pure $ Just notes
       Left err -> do
         Console.warn $ "saved notes could not be read: " <> printJsonDecodeError err
-        pure []
+        pure Nothing
 
 -- | Read, add and write in one go rather than writing back a list held in
 -- | state: the other page may be open in another tab, and a list read when
 -- | this sheet opened would quietly drop whatever that one wrote since.
-appendNote :: Note -> Effect (Array Note)
-appendNote n = do
-  notes <- flip Array.snoc n <$> loadNotes
-  storage <- localStorage =<< window
-  Storage.setItem notesKey (stringify $ Notes.toJson notes) storage
-  pure notes
+-- |
+-- | Refuses, and writes nothing, when what is stored cannot be read. The case
+-- | that bites is a tab left open across the deploy that moves notes to a new
+-- | version: written over by this code, every note the newer one kept would
+-- | be gone for good.
+appendNote :: Note -> Effect (Maybe (Array Note))
+appendNote n = readNotes >>= case _ of
+  Nothing -> pure Nothing
+  Just stored -> do
+    let notes = Array.snoc stored n
+    storage <- localStorage =<< window
+    Storage.setItem notesKey (stringify $ Notes.toJson notes) storage
+    pure $ Just notes
