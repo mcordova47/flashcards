@@ -26,9 +26,30 @@ instead, which disturbs nothing:
 git worktree add --detach .claude/worktrees/review-<n> $(git rev-parse origin/<their-branch>)
 ```
 
-**Then merge `origin/main` in and test that.** `main` is protected with
-`strict`, so the merge is what will land, and two branches that each pass
-alone can break together. Say so if the merge is not clean.
+## Let CI run the gate
+
+**Do not run `npm run verify` over someone else's branch.** CI already has:
+the `pull_request` trigger builds and tests the *merge result*, and `strict`
+means a branch cannot land while it is behind, so a green check is a green
+merge. Repeating it costs four minutes and tells you what `gh pr checks <n>`
+tells you in one second.
+
+```
+gh pr checks <n>
+```
+
+Two cases where that is not the whole answer, and neither is "run everything":
+
+- **The branch is behind `main`.** Then CI's run is against an older merge
+  base. Say so and let the update re-run it. Testing the merge yourself only
+  learns what CI will learn anyway.
+- **The pull request changes the workflow, or what the workflow runs.** Then
+  the green check was produced by the old one, and what it proves is a
+  question rather than an answer.
+
+The author runs the gate before proposing, per `CONTRIBUTING.md`, so that a
+red branch never reaches a reviewer. The reviewer does not run it again. That
+asymmetry is the point: you are here to check what CI cannot.
 
 ## The claims are the work
 
@@ -47,6 +68,12 @@ evidence; reading the implementation that produced the number is not.
 **Plant the failure.** Take the guard out and watch the test fail. Three tests
 in this repository have passed with the thing they tested removed, all three
 written in good faith. A test nobody has seen fail is a comment.
+
+**Run only what you planted against.** `npm test` is seconds. One browser
+suite is `node test/browser/run.mjs <name>` and about thirty. Ten suites is
+four minutes and answers a question nobody asked — you are not checking
+whether the branch is green, CI did that; you are checking whether one test
+can fail.
 
 ## Read the content
 
