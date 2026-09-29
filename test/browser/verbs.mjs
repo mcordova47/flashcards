@@ -225,6 +225,9 @@ export default async ({ check, open, blobs }) => {
   // setting `value`, which React would not hear and which would leave the
   // model holding whitespace the box no longer shows.
   await keys.type(".verb-answer", "  ")
+  // Which was vacuous for as long as the space was stopped before reaching
+  // the box: nothing was typed, and nothing is not an answer.
+  check("spaces can be typed into the box", await keys.$eval(".verb-answer", e => e.value), "  ")
   check("nor is whitespace", await keys.$eval(".grade", e => e.disabled), true)
   await keys.keyboard.press("Backspace")
   await keys.keyboard.press("Backspace")
