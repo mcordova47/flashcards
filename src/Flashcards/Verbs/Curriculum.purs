@@ -6,6 +6,7 @@
 module Flashcards.Verbs.Curriculum
   ( items
   , byFrequency
+  , family
   , labelled
   , session
   )
@@ -91,15 +92,17 @@ labelled = items <#> \pool -> { slug: pool.slug, label: (NonEmpty.head pool.exer
 
 -- | The next session: what the scheduler says is due and new, then spread so
 -- | that no two of one family are asked back to back. See #51.
--- |
--- | The family is the one of the exercise that will actually be asked, which
--- | for an error correction is whichever sentence `pick` lands on — and
--- | `pick` reads the same progress, so it is the one the page will show.
 session :: Progress -> Instant -> Array Slug
 session progress now =
-  Scheduler.spread family $
+  Scheduler.spread (family progress) $
     Scheduler.buildSession (map _.slug items) progress now Scheduler.sessionSize
-  where
-    family slug =
-      Array.find (\p -> p.slug == slug) items <#> \pool ->
-        (pick (Progress.lookup slug progress) pool).family
+
+-- | An item's family, as the exercise that will actually be asked has it.
+-- |
+-- | Not the pool's first: an error correction's pool spans verbs, and which
+-- | one is asked is whichever sentence `pick` lands on — and `pick` reads the
+-- | same progress the page does, so it is the one the page will show.
+family :: Progress -> Slug -> Maybe String
+family progress slug =
+  Array.find (\p -> p.slug == slug) items <#> \pool ->
+    (pick (Progress.lookup slug progress) pool).family

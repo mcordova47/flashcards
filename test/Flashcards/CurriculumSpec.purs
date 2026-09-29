@@ -13,25 +13,20 @@ import Data.Maybe (Maybe(..), fromJust, fromMaybe)
 import Data.String as String
 import Data.Time.Duration (Milliseconds(..))
 import Data.Tuple (Tuple(..))
-import Flashcards.Exercise (Answer(..), Exercise, pick)
+import Flashcards.Exercise (Answer(..), Exercise)
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Types.Card (Slug(..), slugToString)
+import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
-import Flashcards.Verbs.Curriculum (byFrequency, items, session)
+import Flashcards.Verbs.Curriculum (byFrequency, family, items, session)
 import Partial.Unsafe (unsafePartial)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
 
 at :: Number -> Instant
 at days = unsafePartial $ fromJust $ instant $ Milliseconds $ days * 86400000.0
-
--- | What the page will ask of the item, and so what its family is.
-family :: Progress -> Slug -> Maybe String
-family progress slug =
-  Array.find (\p -> p.slug == slug) items <#> \pool ->
-    (pick (Progress.lookup slug progress) pool).family
 
 -- | Every place in a session where one family is asked twice in a row.
 together :: Progress -> Array Slug -> Array (Tuple Slug Slug)
@@ -81,6 +76,18 @@ sessions = describe "a verb drill session" do
     fewest = map \s -> let n = unavoidable s.progress s.queue in Tuple n n
     -- Which families the pairs are of, session by session.
     pairedIn = map \s -> Array.nub (together s.progress s.queue <#> \(Tuple a _) -> family s.progress a)
+
+  -- The four kinds all open on a tener sentence, so a family read off the
+  -- pool's first exercise would call every error correction tener forever.
+  it "knows an error correction by the verb it will ask, which moves as it is seen" do
+    let
+      slug = Slug "error.regularised"
+      seen n = Progress.insert slug
+        { box: 1, due: at 0.0, seen: n, lapses: 0, missed: 0, direction: Recognition }
+        Progress.empty
+      verbs = Array.nub $ Array.range 0 9 <#> \n -> family (seen n) slug
+    family Progress.empty slug `shouldEqual` Just "tener"
+    (Array.length verbs > 1) `shouldEqual` true
 
   it "is first met as the whole curriculum, a session at a time" do
     Array.length first.sessions `shouldEqual` 5
