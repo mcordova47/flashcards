@@ -238,7 +238,10 @@ meanwhile does not rebuild the session under it either.
 
 The notes are one list for the whole app, under `flashcards.notes.v1`, and stay
 on the device. **Copy all** puts them on the clipboard oldest first, each under
-its time and context, to paste wherever they are going. They are not synced:
+its time and context, to paste wherever they are going. A stored list this
+build cannot read — one a newer version wrote, seen from a tab left open across
+the deploy — is never written over: the sheet says so and keeps the draft,
+since unlike progress there is no server copy to come back from. They are not synced:
 notes are append-only, so the merge would have to be a union, not
 `Progress.merge`, and that is its own piece of work. Nor are they filed as
 issues directly, which would need a token behind a pairing key — a door key,

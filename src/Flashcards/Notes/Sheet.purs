@@ -19,7 +19,7 @@ module Flashcards.Notes.Sheet
 import Prelude
 
 import Data.Array as Array
-import Data.Maybe (Maybe(..))
+import Data.Maybe (Maybe(..), isJust)
 import Data.String as String
 import Effect (Effect)
 import Effect.Class (liftEffect)
@@ -40,6 +40,9 @@ type Open =
   -- | meanwhile could otherwise change it.
   { context :: String
   , notes :: Array Note
+  -- | Whether the stored notes could not be read, in which case nothing may
+  -- | be saved over them. See `Storage.appendNote`.
+  , unreadable :: Boolean
   -- | What came of the last copy, until something else happens.
   , copied :: Maybe Boolean
   }
@@ -47,9 +50,11 @@ type Open =
 data Message
   -- | Carries what was on screen, as the page spells it.
   = Open String
-  | Loaded (Array Note)
+  -- | `Nothing` when what is stored cannot be read.
+  | Loaded (Maybe (Array Note))
   | Save
-  | Saved (Array Note)
+  -- | `Nothing` when it was refused, for the same reason.
+  | Saved (Maybe (Array Note))
   | CopyAll
   | Copied Boolean
   | Close
@@ -60,11 +65,14 @@ closed = Nothing
 update :: Sheet -> Message -> Transition Message Sheet
 update sheet = case _ of
   Open context -> do
-    fork $ liftEffect $ Loaded <$> Storage.loadNotes
-    pure $ Just { context, notes: [], copied: Nothing }
+    fork $ liftEffect $ Loaded <$> Storage.readNotes
+    pure $ Just { context, notes: [], unreadable: false, copied: Nothing }
 
-  Loaded notes ->
-    pure $ sheet <#> _ { notes = notes }
+  Loaded (Just notes) ->
+    pure $ sheet <#> _ { notes = notes, unreadable = false }
+
+  Loaded Nothing ->
+    pure $ sheet <#> _ { unreadable = true }
 
   -- A blank note is not a note. The button stays put rather than being
   -- disabled, because the field is not tracked and so nothing knows it is
@@ -78,13 +86,18 @@ update sheet = case _ of
         if text == "" then pure Nothing
         else do
           at <- Now.now
-          notes <- Storage.appendNote { at, context: open.context, text }
-          clearDraft
-          pure $ Just $ Saved notes
+          saved <- Storage.appendNote { at, context: open.context, text }
+          -- Only once it is saved: a refused note stays in the box, so what
+          -- was typed is not lost along with the chance to save it.
+          when (isJust saved) clearDraft
+          pure $ Just $ Saved saved
       pure sheet
 
-  Saved notes ->
-    pure $ sheet <#> _ { notes = notes, copied = Nothing }
+  Saved (Just notes) ->
+    pure $ sheet <#> _ { notes = notes, unreadable = false, copied = Nothing }
+
+  Saved Nothing ->
+    pure $ sheet <#> _ { unreadable = true }
 
   CopyAll -> case sheet of
     Just open | not (Array.null open.notes) -> do
@@ -113,6 +126,14 @@ view open dispatch =
     , H.textarea_ "note-draft"
         { rows: 4, placeholder: "What did you notice?", autoFocus: true }
     , H.button_ "grade got-it note-save" { onClick: dispatch <| Save } "Save note"
+    -- Said before anything is typed, as well as on a refused save: finding
+    -- out only after writing the note would be the worse way round.
+    , if open.unreadable then
+        H.p "sheet-note note-unreadable" $
+          "Your saved notes can't be read by this version of the app — most "
+            <> "likely a newer one wrote them — so it won't save over them. Reload "
+            <> "to update, and copy anything typed here first: reloading clears it."
+      else H.empty
     , if Array.null open.notes then H.empty
       else
         H.fragment
