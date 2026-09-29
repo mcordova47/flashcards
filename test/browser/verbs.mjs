@@ -363,13 +363,24 @@ export default async ({ check, open, blobs }) => {
   check("no page errors", pp.errors, [])
   await pp.close()
   // --- error correction: a sentence broken on purpose ---
-  // The shifts and por / para are put behind us, so the session opens on the
-  // first kind.
+  // The shifts and por / para are put behind us, so the session is the four
+  // kinds and the paraphrase. The kinds all open on a `tener` sentence, and
+  // thirteen of the sixteen paraphrase prompts are one family, ser / estar —
+  // more than half the session, so it leads and goes between everything
+  // else (#51). Passed, a prompt moves on by itself.
   // The sentence on screen is not in the bank - its verb is broken - so it
   // is found by the words either side of the box.
   const fixing = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs(), ...porParaSlugs()]) })
-  await fixing.waitForSelector(".verb-sentence")
+  await fixing.waitForSelector(".verb-sentence, .verb-prompt")
   await wait(400)
+
+  const passParaphrase = async () => {
+    if (await fixing.$(".verb-sentence")) return
+    await fixing.tap(".grade")
+    await (await fixing.byText(".grade", "Got it")).click()
+    await wait(200)
+  }
+  await passParaphrase()
 
   // A subjectless sentence is shown with a pronoun in front, so the bank
   // sentence is the one whose words either side match once it is taken off.
@@ -396,15 +407,6 @@ export default async ({ check, open, blobs }) => {
   stored = await fixing.stored()
   check("keyed by the kind, not the verb",
     stored.cards.filter(c => c.slug.startsWith("error.")).map(c => [c.slug, c.missed]), [["error.regularised", 0]])
-
-  // The kinds all open on a `tener` sentence, so the session puts a
-  // paraphrase prompt between each (#51). Passed, it moves on by itself.
-  const passParaphrase = async () => {
-    if (await fixing.$(".verb-sentence")) return
-    await fixing.tap(".grade")
-    await (await fixing.byText(".grade", "Got it")).click()
-    await wait(200)
-  }
 
   // The one that forgiveness makes dangerous: typed back as shown, it must
   // be wrong. The generator refuses every error that differs from its fix
@@ -507,12 +509,15 @@ export default async ({ check, open, blobs }) => {
   check("as got", graded?.missed, 0)
   check("shares no item with any other drill",
     stored.cards.filter(c => !c.slug.startsWith("paraphrase.") && c.seen < 3).length, 0)
-  // The corpus opens on two estar prompts and then two ser, and a session
-  // never asks one verb twice running (#51), so the second question is the
-  // third row. Checked, so that a reordered corpus fails here and not below.
+  // The corpus opens on a block of ser / estar prompts, which are one family
+  // whichever verb answers them, and a session keeps one family apart
+  // wherever it can (#51). So the second question is the first prompt that
+  // sets another trap, and the third is the corpus's second row. Checked, so
+  // that a reordered corpus fails here and not below.
+  const firstTense = corpus.findIndex(r => r.trap === "tense")
   check("the corpus opens as this assumes",
-    [corpus[0].verb === corpus[1].verb, corpus[1].verb !== corpus[2].verb], [true, true])
-  const asked2 = [corpus[0], corpus[2], corpus[1]]
+    [corpus[0].trap, corpus[1].trap, firstTense > 1 && firstTense < 20], ["verb", "verb", true])
+  const asked2 = [corpus[0], corpus[firstTense], corpus[1]]
   check("and moves straight on, the reveal already read",
     await done.text(".verb-prompt"), asked2[1].prompt)
 
