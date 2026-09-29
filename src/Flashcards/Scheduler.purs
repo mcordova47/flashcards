@@ -13,15 +13,19 @@ module Flashcards.Scheduler
   , requeue
   , requeueGap
   , sessionSize
+  , spread
   , struggling
   )
   where
 
 import Prelude
 
+import Control.Alt ((<|>))
+
 import Data.Array as Array
 import Data.DateTime.Instant (Instant, instant, unInstant)
-import Data.Maybe (Maybe(..), fromMaybe, isJust, isNothing)
+import Data.Foldable (maximum)
+import Data.Maybe (Maybe(..), fromMaybe, isJust, isNothing, maybe)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Types.Card (Slug)
@@ -139,6 +143,57 @@ buildSession items progress now size =
         # Array.sortWith _.due
 
     newCards = Array.filter (isNothing <<< _.state) annotated
+
+-- | The same items, reordered so that no two of one family sit side by side
+-- | wherever anything else could go between them.
+-- |
+-- | Blocked practice feels easier and is remembered worse: the second of two
+-- | alike questions is partly answered by the first. See #51.
+-- |
+-- | Otherwise the order is kept as nearly as it can be — at each step the
+-- | earliest item that differs from the one before and still leaves the rest
+-- | arrangeable — so the most overdue review and the most common new word
+-- | still come first. Not a shuffle: the result is a function of the list,
+-- | so a reload that rebuilds the session asks the same thing.
+-- |
+-- | Where no arrangement avoids it, because one family is more than half of
+-- | what is left, that family goes first and everything else between its
+-- | items, which leaves as few together as there can be.
+spread :: forall a k. Eq k => (a -> k) -> Array a -> Array a
+spread family = go [] Nothing
+  where
+    go placed last remaining =
+      case choose last remaining of
+        Nothing -> placed
+        Just i -> fromMaybe placed do
+          item <- Array.index remaining i
+          rest <- Array.deleteAt i remaining
+          pure $ go (Array.snoc placed item) (Just $ family item) rest
+
+    choose last remaining =
+      Array.findIndex identity (Array.mapWithIndex (arrangeable last remaining) remaining)
+        <|> Array.findIndex (\x -> differs last x && count remaining (family x) == most remaining) remaining
+        <|> Array.findIndex (differs last) remaining
+        <|> (if Array.null remaining then Nothing else Just 0)
+
+    differs last item = maybe true (_ /= family item) last
+
+    count items k = Array.length $ Array.filter (\x -> family x == k) items
+
+    most items = fromMaybe 0 $ maximum $ map (count items <<< family) items
+
+    -- Whether taking the item at `i` next leaves a remainder that can still
+    -- be laid out with no two alike together: no family more than half of
+    -- it, and the one just taken not so many that it must go first.
+    arrangeable last remaining i item =
+      differs last item && case Array.deleteAt i remaining of
+        Nothing -> false
+        Just rest ->
+          let
+            n = Array.length rest
+          in
+            count rest (family item) <= n / 2
+              && most rest <= (n + 1) / 2
 
 -- | `Again` drops a card to box 0, due now, so it comes round again before the
 -- | session ends. `GotIt` promotes it one box and pushes the next review out —

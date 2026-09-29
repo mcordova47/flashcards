@@ -9,6 +9,7 @@ import Data.Array as Array
 import Data.DateTime.Instant (Instant, instant, unInstant)
 import Data.Maybe (Maybe(..), fromJust)
 import Data.Newtype (unwrap)
+import Data.String as String
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Types.Card (Slug(..))
@@ -279,3 +280,34 @@ spec = do
     it "appends when the session is nearly over" do
       Scheduler.requeue (slugAt 99) 6 (slugAt <$> [ 1, 2, 3, 4, 5, 6, 7, 8 ])
         `shouldEqual` (slugAt <$> [ 1, 2, 3, 4, 5, 6, 7, 8, 99 ])
+
+  -- Families are the first letter, so `t1` and `t2` are two of one verb.
+  describe "spread" do
+    let
+      family = String.take 1
+      spread = Scheduler.spread family
+
+    it "leaves an order with nothing alike together as it was" do
+      spread [ "t1", "h1", "t2", "p1" ] `shouldEqual` [ "t1", "h1", "t2", "p1" ]
+
+    it "pulls apart the pairs a new session used to be made of" do
+      spread [ "t1", "t2", "h1", "h2", "p1", "p2" ]
+        `shouldEqual` [ "t1", "h1", "t2", "p1", "h2", "p2" ]
+
+    -- Taking the earliest item that differs would give a, b, c and then two
+    -- c's with nothing to put between them.
+    it "looks ahead, starting with a family that is most of what is left" do
+      spread [ "a1", "b1", "c1", "c2", "c3" ]
+        `shouldEqual` [ "c1", "a1", "c2", "b1", "c3" ]
+
+    it "puts alike ones together only once nothing else is left" do
+      spread [ "a1", "a2", "a3", "b1" ] `shouldEqual` [ "a1", "b1", "a2", "a3" ]
+
+    -- Starting with the lone b would leave four a's with nothing between
+    -- them; starting with an a leaves two.
+    it "and, when some must be, leads with the family there is most of" do
+      spread [ "b1", "a1", "a2", "a3", "a4" ] `shouldEqual` [ "a1", "b1", "a2", "a3", "a4" ]
+
+    it "loses nothing and adds nothing" do
+      let items = [ "t1", "t2", "t3", "h1", "h2", "p1", "q1", "q2" ]
+      Array.sort (spread items) `shouldEqual` Array.sort items
