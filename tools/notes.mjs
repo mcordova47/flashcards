@@ -21,7 +21,7 @@
 //
 // Nothing here deletes on read, and nothing deletes a note whose text does
 // not survive somewhere else. `--done` needs one of two proofs that it does:
-// an issue whose body or comments contain the text, checked with `gh` rather
+// an issue whose body or comments contain the note, checked with `gh` rather
 // than taken on trust, or a reason for dismissing it, which is appended with
 // the note to a local archive before anything is deleted. `--done` alone is
 // refused, as is a bulk purge, which is why there is none.
@@ -96,7 +96,13 @@ const everything = async () => {
 // fancier, since a false "not found" only costs a refusal.
 const flat = s => s.replace(/\s+/g, " ").trim()
 
-const inIssue = (n, text) => {
+// Looks for the whole entry, stamp and context included, not just the text.
+// The text alone is often a word or two — "typo", "confusing" — and would
+// match an issue about something else entirely, which is exactly the mistake
+// a triage pass makes. The stamp is to the minute, so the entry is this note.
+// It is also what the listing prints and the refusal below asks to be pasted,
+// so a note pasted either way passes.
+const inIssue = (n, note) => {
   let issue
   try {
     issue = JSON.parse(execFileSync("gh", [ "issue", "view", String(n), "--json", "body,comments" ], {
@@ -105,7 +111,7 @@ const inIssue = (n, text) => {
   } catch (e) {
     fail(`could not read issue #${n} with gh, so cannot confirm the note is in it:\n${e.stderr || e.message}`)
   }
-  const wanted = flat(text)
+  const wanted = flat(exported([ note ]))
   return [ issue.body ?? "", ...(issue.comments ?? []).map(c => c.body ?? "") ].some(b => flat(b).includes(wanted))
 }
 
@@ -149,8 +155,8 @@ const done = async key => {
   let where
   if (hasIssue) {
     if (!/^[1-9][0-9]*$/.test(flags.issue)) fail(`not an issue number: ${flags.issue}`)
-    if (!inIssue(flags.issue, note.text)) {
-      fail(`issue #${flags.issue} does not contain this note's text, so it is not deleted. Paste it in first:\n\n` +
+    if (!inIssue(flags.issue, note)) {
+      fail(`issue #${flags.issue} does not contain this note, so it is not deleted. Paste it in first:\n\n` +
         exported([ note ]))
     }
     where = `it is in #${flags.issue}`
