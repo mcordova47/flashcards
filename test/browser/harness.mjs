@@ -11,6 +11,7 @@ import path from "path"
 import puppeteer from "puppeteer-core"
 import { fileURLToPath } from "url"
 import { handle } from "../../netlify/functions/progress.mjs"
+import { handle as handleNotes } from "../../netlify/functions/notes.mjs"
 import { qrDataUrl } from "../../src/Flashcards/Sync.js"
 
 export const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
@@ -182,19 +183,34 @@ export const run = async (name, body, { headless = "new", slowMo } = {}) => {
     get: async key => blobs.get(key) ?? null,
     set: async (key, value) => { blobs.set(key, value) },
   }
+  // The notes store, which also lists, and writes only if new when asked to.
+  // Its real semantics are checked against Netlify's own local server in
+  // test/notes.mjs; this is what lets the suites see what a page sent.
+  const noteBlobs = new Map()
+  const notesStore = {
+    list: async ({ prefix = "" } = {}) => ({
+      blobs: [...noteBlobs.keys()].filter(k => k.startsWith(prefix)).map(key => ({ key, etag: "" })),
+      directories: [],
+    }),
+    set: async (key, value, { onlyIfNew } = {}) => {
+      if (onlyIfNew && noteBlobs.has(key)) return { modified: false }
+      noteBlobs.set(key, value)
+      return { modified: true }
+    },
+  }
 
   const server = http.createServer(async (req, res) => {
     if (req.url.startsWith("/api/")) {
       const chunks = []
       for await (const chunk of req) chunks.push(chunk)
       const body = Buffer.concat(chunks)
-      const reply = await handle(
-        new Request(`http://localhost${req.url}`, {
-          method: req.method,
-          body: body.length ? body : undefined,
-        }),
-        store,
-      )
+      const request = new Request(`http://localhost${req.url}`, {
+        method: req.method,
+        body: body.length ? body : undefined,
+      })
+      const reply = req.url.startsWith("/api/notes/")
+        ? await handleNotes(request, notesStore)
+        : await handle(request, store)
       res.writeHead(reply.status, Object.fromEntries(reply.headers))
       return res.end(Buffer.from(await reply.arrayBuffer()))
     }
@@ -270,7 +286,7 @@ export const run = async (name, body, { headless = "new", slowMo } = {}) => {
   console.log(`\n${name}`)
   let threw = false
   try {
-    await body({ base, browser, check, open, downloads, blobs })
+    await body({ base, browser, check, open, downloads, blobs, noteBlobs })
   } catch (e) {
     failed++
     threw = true

@@ -20,6 +20,12 @@
   to = "/.netlify/functions/progress/:splat"
   status = 200
 
+# The same again for the notes function, for the same reason.
+[[redirects]]
+  from = "/api/notes/*"
+  to = "/.netlify/functions/notes/:splat"
+  status = 200
+
 # Single-page app: everything resolves to the one entry point.
 [[redirects]]
   from = "/*"
