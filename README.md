@@ -236,16 +236,29 @@ the page, and while the sheet is open no key means anything to it, so a space
 does not flip the card and a `z` does not undo the last answer. A sync landing
 meanwhile does not rebuild the session under it either.
 
-The notes are one list for the whole app, under `flashcards.notes.v1`, and stay
-on the device. **Copy all** puts them on the clipboard oldest first, each under
-its time and context, to paste wherever they are going. A stored list this
-build cannot read — one a newer version wrote, seen from a tab left open across
-the deploy — is never written over: the sheet says so and keeps the draft,
-since unlike progress there is no server copy to come back from. They are not synced:
-notes are append-only, so the merge would have to be a union, not
-`Progress.merge`, and that is its own piece of work. Nor are they filed as
-issues directly, which would need a token behind a pairing key — a door key,
-not a password.
+The notes are one list for the whole app, under `flashcards.notes.v1`. **Copy
+all** puts them on the clipboard oldest first, each under its time and context,
+to paste wherever they are going. A stored list this build cannot read — one a
+newer version wrote, seen from a tab left open across the deploy — is never
+written over: the sheet says so and keeps the draft, since the device never gets
+its notes back from the server.
+
+Each is also **sent**, because a note on someone else's phone is not feedback
+(#62). It goes to `/api/notes` (see [Sync](#sync)) when it is saved, and if
+that does not get through, whenever the page next syncs. The sheet says so, in
+a line, before anything is typed. This is delivery and not sync: the device
+never reads its notes back, so there is no merge to write.
+
+The device remembers how many of its notes have gone, under
+`flashcards.notes.sent.v1`, and sends only the rest. A count, because the list
+is append-only and so the first `n` are exactly the ones sent. Resending
+everything each time would be harmless to the store, which keeps each note
+once, but not to the reader: a note read and deleted on the server would come
+straight back from every device that still had it. A count larger than the list
+is taken to belong to some other list, and everything is sent again.
+
+Nor are they filed as issues directly, which would need a token behind a
+pairing key — a door key, not a password.
 
 ## Progress
 

@@ -35,6 +35,7 @@ import Elmish.HTML.Events as E
 import Elmish.HTML.Styled as H
 import Flashcards.Exercise (Answer(..), Verdict(..), matches, pick)
 import Flashcards.Keys (onKeyDown)
+import Flashcards.Notes.Delivery as Delivery
 import Flashcards.Notes.Sheet as Notes
 import Flashcards.Page as Page
 import Flashcards.Pages.Verbs.Model (Message(..), Phase(..), State, namespace)
@@ -214,6 +215,8 @@ update state = case _ of
     Just key -> do
       forks \{ dispatch } ->
         liftEffect $ Sync.fetchRemote key namespace $ dispatch <<< Synced
+      -- Any note written offline goes with it. See `Notes.Delivery`.
+      forkVoid $ liftEffect Delivery.deliver
       pure state
 
   -- Deliberately simpler than the study page's exchange: no language can

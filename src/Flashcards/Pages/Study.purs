@@ -30,6 +30,7 @@ import Flashcards.Language (Language)
 import Flashcards.Language as Language
 import Flashcards.Page as Page
 import Flashcards.Milestone as Milestone
+import Flashcards.Notes.Delivery as Delivery
 import Flashcards.Notes.Sheet as Notes
 import Flashcards.Pages.Study.Model (Message(..), Purpose(..), Screen(..), Session, State, Summary, noticing, untouched)
 import Flashcards.Pages.Study.Model (Message, State) as Model
@@ -354,6 +355,8 @@ update state = case _ of
       forks \{ dispatch } ->
         liftEffect $ Sync.fetchRemote key state.language.code $
           dispatch <<< Synced state.language.code
+      -- Any note written offline goes with it. See `Notes.Delivery`.
+      forkVoid $ liftEffect Delivery.deliver
       pure state
 
   -- Answered for a language that has since been switched away from. The

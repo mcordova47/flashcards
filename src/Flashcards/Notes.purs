@@ -8,11 +8,12 @@
 -- | One list for the whole app rather than one per page: a note is about the
 -- | app, and it is read in one place. Each note says which page it came from.
 -- |
--- | Kept on the device and got out by copying, deliberately. Syncing needs a
--- | merge that `Progress.merge` is not — notes are append-only, so two devices
--- | that each wrote one offline must both keep theirs — and that is its own
--- | piece of work. Filing issues straight from here would put a token behind a
--- | pairing key, which is a door key and not a password.
+-- | Kept on the device, and delivered from it: each is sent once to a store
+-- | only the maintainer reads (`/api/notes`, #62), since a note on someone
+-- | else's phone is not feedback. Delivered rather than synced — the device
+-- | never reads them back, so there is nothing to merge. Filing issues straight
+-- | from here would put a token behind a pairing key, which is a door key and
+-- | not a password.
 module Flashcards.Notes
   ( Note
   , currentVersion
@@ -20,6 +21,7 @@ module Flashcards.Notes
   , fromJson
   , stamp
   , toJson
+  , undelivered
   , unreadable
   )
   where
@@ -27,6 +29,7 @@ module Flashcards.Notes
 import Prelude
 
 import Data.Argonaut.Core (Json, jsonEmptyObject)
+import Data.Array as Array
 import Data.Argonaut.Decode (JsonDecodeError(..), decodeJson, (.:))
 import Data.Argonaut.Encode ((:=), (~>))
 import Data.DateTime (date, hour, minute, time)
@@ -83,6 +86,22 @@ fromJson json = do
       context <- n .: "context"
       text <- n .: "text"
       pure { at, context, text }
+
+-- | The notes not yet delivered, given how many of them have been.
+-- |
+-- | A count rather than a flag on each note, because the list is append-only
+-- | — `Storage.appendNote` is the only thing that writes it — so the first `n`
+-- | are exactly the ones already sent. Remembering what went matters for more
+-- | than traffic: a note read and deleted on the server would otherwise come
+-- | back from every device that still had it.
+-- |
+-- | A count larger than the list means the list is not the one it counted,
+-- | and every note is sent again. The server stores each only once, so the
+-- | cost of being wrong that way is a request, not a duplicate.
+undelivered :: Int -> Array Note -> Array Note
+undelivered sent notes
+  | sent > Array.length notes = notes
+  | otherwise = Array.drop sent notes
 
 -- | Every note as one piece of text, oldest first, for pasting wherever it is
 -- | going next. Oldest first because that is the order things happened in and

@@ -7,6 +7,10 @@ module Flashcards.Storage
   , languageKey
   , readNotes
   , notesKey
+  , forgetNotesSent
+  , loadNotesSent
+  , markNotesSent
+  , notesSentKey
   , loadSyncedAt
   , saveSyncedAt
   , syncedAtKey
@@ -32,6 +36,7 @@ import Data.Argonaut.Decode.Error (printJsonDecodeError)
 import Data.Argonaut.Parser (jsonParser)
 import Data.DateTime.Instant (Instant, instant, unInstant)
 import Data.Either (Either(..))
+import Data.Int as Int
 import Data.Maybe (Maybe(..))
 import Data.Newtype (unwrap)
 import Data.Number as Number
@@ -194,3 +199,34 @@ appendNote n = readNotes >>= case _ of
     storage <- localStorage =<< window
     Storage.setItem notesKey (stringify $ Notes.toJson notes) storage
     pure $ Just notes
+
+-- | How many of this device's notes have reached the server. See
+-- | `Notes.undelivered`. Beside the notes rather than inside their blob, so
+-- | that the saved format — which a newer app may already have moved past —
+-- | is left exactly as it was.
+notesSentKey :: String
+notesSentKey = "flashcards.notes.sent.v1"
+
+-- | Zero when there is nothing readable stored, which sends everything: the
+-- | safe way to be wrong, since the server stores each note once.
+loadNotesSent :: Effect Int
+loadNotesSent = do
+  storage <- localStorage =<< window
+  raw <- Storage.getItem notesSentKey storage
+  pure case Int.fromString =<< raw of
+    Just n | n >= 0 -> n
+    _ -> 0
+
+-- | Never lowers it. Two tabs can each deliver and answer out of order, and
+-- | the one that knew fewer notes must not undo the one that knew more.
+markNotesSent :: Int -> Effect Unit
+markNotesSent n = do
+  sent <- loadNotesSent
+  when (n > sent) do
+    storage <- localStorage =<< window
+    Storage.setItem notesSentKey (show n) storage
+
+forgetNotesSent :: Effect Unit
+forgetNotesSent = do
+  storage <- localStorage =<< window
+  Storage.removeItem notesSentKey storage
