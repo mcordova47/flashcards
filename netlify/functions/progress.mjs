@@ -26,7 +26,11 @@ const KEY = /^[a-z0-9]{32}$/
 // way, with nothing here that has to agree with the client about shape.
 //
 // The server does not know what namespaces exist and should not. The pattern
-// is bounded only so that one key cannot be turned into unlimited storage.
+// bounds a name's shape and length, so that it cannot smuggle a path segment
+// in and the store key stays short. It does not bound how many namespaces a
+// key can have, so it is not what limits storage: MAX_BYTES limits each blob,
+// and nothing limits a key's total. Nor could a per-key limit do much, since
+// keys are minted by the client.
 const NAMESPACE = /^[a-z][a-z0-9-]{1,15}$/
 
 // A thousand cards is roughly 120 KB. This leaves room for a deck several
