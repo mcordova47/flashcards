@@ -29,6 +29,7 @@ import Flashcards.Accent as Accent
 import Flashcards.Deck as DeckIndex
 import Flashcards.Language (Language)
 import Flashcards.Milestone as Milestone
+import Flashcards.Notes.Sheet as Notes
 import Flashcards.Sync as Sync
 import Flashcards.Types.Card (Slug)
 import Flashcards.Types.Grade (Grade)
@@ -142,6 +143,8 @@ type State =
   -- | Where this app is served from, so the pairing link is absolute and can
   -- | be pasted anywhere rather than only followed from here.
   , origin :: String
+  -- | The note being written, if one is. See `Flashcards.Notes`.
+  , notes :: Notes.Sheet
   }
 
 -- | Everything that has to be asked of the outside world before the screen can
@@ -213,6 +216,8 @@ data Message
   | StartScan
   | Scanned Sync.Scan
   | StopScan
+  | WriteNote
+  | Notes Notes.Message
 
 -- | Whether a session can be rebuilt under the reader without costing them
 -- | anything: nothing answered into it, and no card turned over. A session

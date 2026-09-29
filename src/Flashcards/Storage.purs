@@ -3,7 +3,10 @@
 -- | streak beats a white screen.
 module Flashcards.Storage
   ( accentKey
+  , appendNote
   , languageKey
+  , loadNotes
+  , notesKey
   , loadSyncedAt
   , saveSyncedAt
   , syncedAtKey
@@ -23,6 +26,8 @@ module Flashcards.Storage
 import Prelude
 
 import Data.Argonaut.Core (stringify)
+import Data.Array as Array
+import Data.Bifunctor (lmap)
 import Data.Argonaut.Decode.Error (printJsonDecodeError)
 import Data.Argonaut.Parser (jsonParser)
 import Data.DateTime.Instant (Instant, instant, unInstant)
@@ -33,6 +38,8 @@ import Data.Number as Number
 import Data.Time.Duration (Milliseconds(..))
 import Effect (Effect)
 import Effect.Class.Console as Console
+import Flashcards.Notes (Note)
+import Flashcards.Notes as Notes
 import Flashcards.Payload as Payload
 import Flashcards.Types.Card (Rank, Slug)
 import Flashcards.Types.Progress (Progress)
@@ -149,3 +156,32 @@ saveLanguage :: String -> Effect Unit
 saveLanguage code = do
   storage <- localStorage =<< window
   Storage.setItem languageKey code storage
+
+-- | Every note written on this device, from either page. One key for the
+-- | whole app rather than one per page, since the list is read as one. See
+-- | `Flashcards.Notes`.
+notesKey :: String
+notesKey = "flashcards.notes.v1"
+
+-- | Unreadable notes read as none, as progress does — but are left where they
+-- | are until something is written over them, rather than cleared on sight.
+loadNotes :: Effect (Array Note)
+loadNotes = do
+  storage <- localStorage =<< window
+  Storage.getItem notesKey storage >>= case _ of
+    Nothing -> pure []
+    Just raw -> case Notes.fromJson =<< lmap (const Notes.unreadable) (jsonParser raw) of
+      Right notes -> pure notes
+      Left err -> do
+        Console.warn $ "saved notes could not be read: " <> printJsonDecodeError err
+        pure []
+
+-- | Read, add and write in one go rather than writing back a list held in
+-- | state: the other page may be open in another tab, and a list read when
+-- | this sheet opened would quietly drop whatever that one wrote since.
+appendNote :: Note -> Effect (Array Note)
+appendNote n = do
+  notes <- flip Array.snoc n <$> loadNotes
+  storage <- localStorage =<< window
+  Storage.setItem notesKey (stringify $ Notes.toJson notes) storage
+  pure notes

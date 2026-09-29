@@ -12,6 +12,7 @@ import Test.Flashcards.DeckSpec as DeckSpec
 import Test.Flashcards.PageSpec as PageSpec
 import Test.Flashcards.ExerciseSpec as ExerciseSpec
 import Test.Flashcards.MilestoneSpec as MilestoneSpec
+import Test.Flashcards.NotesSpec as NotesSpec
 import Test.Flashcards.PayloadSpec as PayloadSpec
 import Test.Flashcards.ProgressSpec as ProgressSpec
 import Test.Flashcards.ParaphraseSpec as ParaphraseSpec
@@ -38,6 +39,7 @@ main = runSpecAndExitProcess [ consoleReporter ] do
   MilestoneSpec.spec
   ExerciseSpec.spec
   VerbsSpec.spec
+  NotesSpec.spec
   ShiftSpec.spec
   ParaphraseSpec.spec
   PersonShiftSpec.spec
