@@ -21,6 +21,37 @@ contains, and `main` catches anything that gets in another way. Two branches
 that each pass alone can break together — the drift check especially, since a
 regenerated module is only stale relative to whatever else landed.
 
+Merges are **rebase only** — the pull request's commits are replayed onto main
+one at a time, and no merge commit is made. Squash is turned off on purpose. A
+pull request here often lands an enabling refactor and then the feature that
+needed it, and squashing the two welds a change that was provably behaviour
+preserving onto one that was not, which is the distinction the split existed
+to make.
+
+So freshen a branch by rebasing it, not by merging main into it:
+
+```
+git fetch origin && git rebase origin/main
+git push --force-with-lease
+```
+
+`git merge main` satisfies the up-to-date rule too, but the merge commit it
+makes says nothing and the rebase drops it on the way in regardless. Use
+`--force-with-lease` and not `--force`: it refuses when the remote moved under
+you, which is exactly the case worth catching. That is a different rule from
+the worktree one below — force-pushing your own pull request branch is
+routine, `git worktree remove --force` is not.
+
+Auto-merge is on, so a pull request can be queued to land the moment its
+checks come back green:
+
+```
+gh pr merge <n> --rebase --auto
+```
+
+The branch is deleted when it merges. The worktree is not, so remove that
+yourself.
+
 ## A worktree each
 
 ```
