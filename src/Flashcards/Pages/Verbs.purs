@@ -49,6 +49,7 @@ import Flashcards.Types.Card (Slug, slugToString)
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Curriculum (items, labelled)
+import Flashcards.Verbs.Curriculum as Curriculum
 
 -- | No deck, so nothing can be placed by rank — and nothing needs to be. This
 -- | namespace has no payloads older than v5, because it has no payloads older
@@ -110,7 +111,7 @@ update state = case _ of
   Started now ->
     pure $ asking state
       { at = Just now
-      , queue = Scheduler.buildSession (map _.slug items) state.progress now Scheduler.sessionSize
+      , queue = Curriculum.session state.progress now
       , got = 0
       , again = 0
       , loaded = true

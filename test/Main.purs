@@ -8,6 +8,7 @@ import Prelude
 import Effect (Effect)
 import Test.Flashcards.AccentSpec as AccentSpec
 import Test.Flashcards.CorrectionSpec as CorrectionSpec
+import Test.Flashcards.CurriculumSpec as CurriculumSpec
 import Test.Flashcards.DeckSpec as DeckSpec
 import Test.Flashcards.PageSpec as PageSpec
 import Test.Flashcards.ExerciseSpec as ExerciseSpec
@@ -45,3 +46,4 @@ main = runSpecAndExitProcess [ consoleReporter ] do
   PersonShiftSpec.spec
   PorParaSpec.spec
   CorrectionSpec.spec
+  CurriculumSpec.spec

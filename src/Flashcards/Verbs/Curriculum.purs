@@ -6,19 +6,25 @@
 module Flashcards.Verbs.Curriculum
   ( items
   , labelled
+  , session
   )
   where
 
 import Prelude
 
+import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
+import Data.DateTime.Instant (Instant)
 import Flashcards.Data.Paraphrase.Spanish (prompts)
 import Flashcards.Data.PorPara.Spanish (sentences) as PorPara
 import Flashcards.Data.Sentences.Spanish (sentences)
 import Flashcards.Data.Verbs.Spanish (deviations, table)
-import Flashcards.Exercise (Pool)
+import Flashcards.Exercise (Pool, pick)
 import Flashcards.Exercise as Exercise
+import Flashcards.Scheduler as Scheduler
 import Flashcards.Types.Card (Slug)
+import Flashcards.Types.Progress (Progress)
+import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Correction as Correction
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.PersonShift as PersonShift
@@ -46,3 +52,18 @@ items = Exercise.pools $
 -- | first one's will do.
 labelled :: Array { slug :: Slug, label :: String }
 labelled = items <#> \pool -> { slug: pool.slug, label: (NonEmpty.head pool.exercises).label }
+
+-- | The next session: what the scheduler says is due and new, then spread so
+-- | that no two of one family are asked back to back. See #51.
+-- |
+-- | The family is the one of the exercise that will actually be asked, which
+-- | for an error correction is whichever sentence `pick` lands on — and
+-- | `pick` reads the same progress, so it is the one the page will show.
+session :: Progress -> Instant -> Array Slug
+session progress now =
+  Scheduler.spread family $
+    Scheduler.buildSession (map _.slug items) progress now Scheduler.sessionSize
+  where
+    family slug =
+      Array.find (\p -> p.slug == slug) items <#> \pool ->
+        (pick (Progress.lookup slug progress) pool).family
