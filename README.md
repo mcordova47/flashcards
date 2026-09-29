@@ -43,6 +43,7 @@ npm start        # http://localhost:8000
 | `npm run check-por-para` | Prove every por / para contrast asks both sides and every sense only its own, in deck vocabulary |
 | `npm run rename` | Report words whose spelling changed, and pin the ones that should keep their history |
 | `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
+| `npm run notes` | Every note the app has sent, oldest first — see [Reading them](#reading-them) |
 
 ## Languages
 
@@ -259,6 +260,36 @@ is taken to belong to some other list, and everything is sent again.
 
 Nor are they filed as issues directly, which would need a token behind a
 pairing key — a door key, not a password.
+
+### Reading them
+
+```
+npm run notes                                    every note, oldest first
+npm run notes -- --since 2026-09-01              from that day on, in UTC
+npm run notes -- --json                          the same, with each note's key
+npm run notes -- --done <key> --issue <n>        delete one that #n now holds
+npm run notes -- --done <key> --dismiss "<why>"  archive it with the reason, then delete
+```
+
+A local script against the same store the function writes, which needs
+`NETLIFY_SITE_ID` and a personal access token in `NETLIFY_AUTH_TOKEN`; the top
+of `tools/notes.mjs` says where each is. For a spot check with no setup,
+**Data & Storage → Blobs** in the Netlify dashboard browses the `notes` store.
+
+The listing is exactly **Copy all**'s format, so a note reads the same whichever
+way it arrived and pastes into an issue the same way. It leaves out the keys:
+each begins with the device's pairing key, and this is the output meant for
+pasting somewhere public. `--json` has them, for anything that has to sort,
+filter or come back with a key to clear.
+
+Netlify Blobs has no expiry, so notes stay until cleared, and nothing clears
+one on reading it — a listing lost to a closed terminal would lose the notes
+with it. Nor can anything clear the only copy of one. `--done` needs either an
+issue whose body or comments hold the note's text, which it checks with `gh`,
+whitespace aside; or a reason to dismiss it, which is appended with the note to
+`~/.flashcards/notes-archive.jsonl` (or `$NOTES_ARCHIVE`) and read back before
+the note is deleted. `--done` alone is refused, and there is no bulk purge.
+Clearing a note also frees its place under the per-key cap.
 
 ## Progress
 

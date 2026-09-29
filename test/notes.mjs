@@ -5,14 +5,21 @@
 //   node test/notes.mjs
 //
 // No browser: what a page sends is the browser suite's business
-// (test/browser/notes.mjs). This is what the server does with it.
+// (test/browser/notes.mjs). This is what the server does with it, and what
+// `npm run notes` does with that, run as the real command against the same
+// local store with a stand-in `gh` on the PATH.
+//
+// Needs output/, from `npm test` or a build: the listing is checked against
+// the PureScript `Notes.export` it copies.
 
+import { spawn } from "child_process"
 import fs from "fs"
 import os from "os"
 import path from "path"
 import { getStore } from "@netlify/blobs"
 import { BlobsServer } from "@netlify/blobs/server"
 import { handle, MAX_NOTES } from "../netlify/functions/notes.mjs"
+import * as Notes from "../output/Flashcards.Notes/index.js"
 
 let failed = 0
 const stable = v => JSON.stringify(v)
@@ -109,6 +116,112 @@ try {
 
   const elsewhere = await put(batch([ note(2) ]), OTHER)
   check("the cap is per key", elsewhere.status, 200)
+
+  // --- npm run notes ---
+  console.log("\nnpm run notes")
+  await store.deleteAll()
+
+  // Two devices, interleaved in time, so oldest-first has to cross keys.
+  const PHONE = "c".repeat(32)
+  const LAPTOP = "d".repeat(32)
+  const sept = Date.parse("2026-09-01T00:00:00Z")
+  const a = { at: sept - 60_000, context: "/es · querer · recognition", text: "the hint is confusing" }
+  const b = { at: sept + 3_600_000, context: "/verbs · porpara.means", text: "two lines\nof it" }
+  const c = { at: sept + 7_200_000, context: "/verbs", text: "reads oddly when the sentence is long and wraps" }
+  await put(batch([ a, c ]), PHONE)
+  await put(batch([ b ]), LAPTOP)
+
+  const bin = fs.mkdtempSync(path.join(os.tmpdir(), "palabras-gh-"))
+  const issues = path.join(bin, "issues.json")
+  fs.writeFileSync(path.join(bin, "gh"),
+    `#!/usr/bin/env node
+const issues = JSON.parse(require("fs").readFileSync(${JSON.stringify(issues)}, "utf-8"))
+const found = issues[process.argv[4]]
+if (!found) { console.error("no such issue"); process.exit(1) }
+console.log(JSON.stringify(found))
+`, { mode: 0o755 })
+  fs.writeFileSync(issues, JSON.stringify({
+    5: { body: "Something else entirely.", comments: [ { body: "the hint is" } ] },
+    // Reflowed, as pasting into an issue does.
+    6: { body: "From a note:\n\nreads oddly when the\nsentence is  long and wraps", comments: [] },
+    7: { body: "", comments: [ { body: "Filed from a note: the hint is confusing." } ] },
+  }))
+  const archived = path.join(bin, "archive", "notes.jsonl")
+
+  const env = {
+    ...process.env,
+    PATH: `${bin}${path.delimiter}${process.env.PATH}`,
+    NETLIFY_SITE_ID: SITE,
+    NETLIFY_AUTH_TOKEN: TOKEN,
+    NETLIFY_BLOBS_EDGE_URL: edgeURL,
+    NOTES_ARCHIVE: archived,
+  }
+  // Not `spawnSync`: the blob server it talks to runs in this process, and
+  // would never answer.
+  const run = (argv, withEnv = env) => new Promise(resolve => {
+    const child = spawn(process.execPath, [ "tools/notes.mjs", ...argv ], { env: withEnv })
+    let out = "", err = ""
+    child.stdout.on("data", d => { out += d })
+    child.stderr.on("data", d => { err += d })
+    child.on("close", status => resolve({ status, out: out.replace(/\n$/, ""), err }))
+  })
+  const notes = (...argv) => run(argv)
+  const remaining = async () => (await keys()).length
+  // By what it says as well as how it exits, since a crash exits 1 too.
+  const refuses = (label, r, says) =>
+    check(label, { status: r.status, says: r.err.includes(says) }, { status: 1, says: true })
+
+  check("prints every note, oldest first, exactly as the app's Copy all does",
+    (await notes()).out, Notes["export"]([ a, b, c ]))
+  const everyNote = (await notes()).out
+  check("and leaves the pairing keys out of it", [ PHONE, LAPTOP ].some(k => everyNote.includes(k)), false)
+  check("--since is from the start of that day, in UTC", (await notes("--since", "2026-09-01")).out, Notes["export"]([ b, c ]))
+  refuses("--since refuses what is not a date", await notes("--since", "yesterday"), "not a date")
+
+  const listed = JSON.parse((await notes("--json")).out)
+  check("--json is the same notes in the same order, each with its key", listed, [
+    { key: `${PHONE}/${a.at}.json`, ...a },
+    { key: `${LAPTOP}/${b.at}.json`, ...b },
+    { key: `${PHONE}/${c.at}.json`, ...c },
+  ])
+  const [ ka, kb, kc ] = listed.map(n => n.key)
+
+  refuses("is not run without the site and a token",
+    await run([], { ...env, NETLIFY_AUTH_TOKEN: "" }), "needs NETLIFY_SITE_ID and NETLIFY_AUTH_TOKEN")
+  check("reading deleted nothing", await remaining(), 3)
+
+  // --- deleting, which never loses the only copy ---
+  refuses("--done alone is refused", await notes("--done", ka), "exactly one of")
+  refuses("as is --done with both proofs", await notes("--done", ka, "--issue", "7", "--dismiss", "x"), "exactly one of")
+  refuses("an issue without the text is refused", await notes("--done", ka, "--issue", "5"), "does not contain this note's text")
+  refuses("as is one gh cannot read", await notes("--done", ka, "--issue", "8"), "could not read issue #8")
+  refuses("an empty reason is refused", await notes("--done", ka, "--dismiss", "  "), "needs a reason")
+  refuses("as is a key that is not a note's", await notes("--done", "../x", "--issue", "7"), "not a note's key")
+  refuses("or one that is not there", await notes("--done", `${PHONE}/1.json`, "--dismiss", "x"), "no note at")
+  refuses("--issue alone does nothing", await notes("--issue", "7"), "go with --done")
+  check("and none of it deleted anything", await remaining(), 3)
+
+  const inComment = await notes("--done", ka, "--issue", "7")
+  check("once the issue holds the text, a comment will do", inComment.status, 0)
+  check("and it is gone", await store.get(ka), null)
+  check("reflowed across lines still counts", (await notes("--done", kc, "--issue", "6")).status, 0)
+  check("so both are gone", await keys(), [ kb ])
+
+  // A directory where the archive file should be: the append cannot land.
+  fs.mkdirSync(archived, { recursive: true })
+  refuses("a dismissal that cannot be archived is refused", await notes("--done", kb, "--dismiss", "not a bug"), "so it is not deleted")
+  check("and deletes nothing", await keys(), [ kb ])
+  fs.rmSync(archived, { recursive: true })
+
+  check("dismissing it with a reason", (await notes("--done", kb, "--dismiss", " the hint was right ")).status, 0)
+  const kept = fs.readFileSync(archived, "utf-8").trim().split("\n").map(l => JSON.parse(l))
+  check("archives the note, with the reason beside it",
+    kept.map(({ dismissed, ...rest }) => rest), [ { key: kb, ...b, why: "the hint was right" } ])
+  check("and when", Math.abs(Date.parse(kept[0].dismissed) - Date.now()) < 60_000, true)
+  check("before deleting it", await keys(), [])
+  const empty = await notes()
+  check("an empty store says so, off the listing", [ empty.out, empty.err.trim() ], [ "", "no notes" ])
+  fs.rmSync(bin, { recursive: true, force: true })
 } catch (e) {
   failed++
   console.log(`  ✗ threw: ${e.stack}`)
