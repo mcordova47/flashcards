@@ -105,6 +105,7 @@ init = do
     , queue: []
     , shown: Nothing
     , typed: ""
+    , at: Nothing
     , got: 0
     , again: 0
     , panel: false
@@ -140,7 +141,8 @@ update state = case _ of
 
   Started now ->
     pure $ asking state
-      { queue = Scheduler.buildSession (map _.slug items) state.progress now Scheduler.sessionSize
+      { at = Just now
+      , queue = Scheduler.buildSession (map _.slug items) state.progress now Scheduler.sessionSize
       , got = 0
       , again = 0
       , loaded = true
@@ -219,7 +221,8 @@ update state = case _ of
           Again -> Scheduler.requeue slug 0 state.queue
           GotIt -> state.queue
         graded = state
-          { progress = progress
+          { at = Just now
+          , progress = progress
           , queue = queue
           , got = state.got + (if grade == GotIt then 1 else 0)
           , again = state.again + (if grade == Again then 1 else 0)
@@ -366,8 +369,9 @@ view state dispatch =
         [ H.h1 "done-title" "Verbs"
         , H.p "done-stats" $
             if not state.loaded then ""
-            else if state.got + state.again == 0 then "Nothing left to drill."
+            else if state.got + state.again == 0 then caughtUp
             else tally
+        , nextLine
         ]
       Just exercise ->
         H.div "done-body" $ case exercise.answer of
@@ -447,6 +451,26 @@ view state dispatch =
       | otherwise = "Not backed up yet"
 
     total = state.got + state.again + Array.length state.queue
+
+    waitFor = do
+      now <- state.at
+      Stats.describeDuration <$> Stats.nextDueIn now (map _.slug items) state.progress
+
+    -- Arrived with nothing to do. Either something is coming, or the drills
+    -- have never been opened and there is nothing scheduled at all.
+    caughtUp = case waitFor of
+      Just wait -> "Nothing due for another " <> wait <> "."
+      Nothing -> "Nothing left to drill."
+
+    -- As on the cards, and for their reason: announcing the next one while a
+    -- dozen are still waiting would be a lie of omission. After a session that
+    -- emptied the queue, only when nothing else is due yet.
+    nextLine = case waitFor, state.at of
+      Just wait, Just now
+        | state.got + state.again > 0
+        , (Stats.overview now (map _.slug items) state.progress).dueNow == 0 ->
+            H.p "next-due" $ "Next review in " <> wait
+      _, _ -> H.empty
 
     tally =
       Stats.plural (state.got + state.again) "exercise" <> " · "

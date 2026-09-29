@@ -355,10 +355,13 @@ export default async ({ check, open, blobs }) => {
   await fixing.waitForSelector(".verb-sentence")
   await wait(400)
 
+  // A subjectless sentence is shown with a pronoun in front, so the bank
+  // sentence is the one whose words either side match once it is taken off.
   const broken = async () => {
     const shown = await fixing.text(".verb-sentence")
     const before = await fixing.text(".verb-before") ?? "", after = await fixing.text(".verb-after") ?? ""
-    const s = bank.find(s => s.before === before && s.after === after)
+    const s = bank.find(s => s.after === after &&
+      (s.before === before || Object.entries(PRONOUNS).some(([p, code]) => code === s.person && `${p} ${s.before}` === before)))
     const tense = (await fixing.text(".verb-target")).replace(/^→ fix it · /, "")
     const form = table.get(`${s.infinitive}.${tense}.${s.person}`)
     return { shown, typo: shown.slice(before.length, shown.length - after.length), form, full: before + form + after }
@@ -367,7 +370,8 @@ export default async ({ check, open, blobs }) => {
   const opening1 = await broken()
   check("asks a sentence the bank does not have", bank.some(s => s.plain === opening1.shown), false)
   check("naming the tense, and that it wants fixing", await fixing.text(".verb-target"), "→ fix it · present")
-  check("broken as the first kind breaks it", opening1.shown, "teno mucho trabajo")
+  check("broken as the first kind breaks it", opening1.shown, "yo teno mucho trabajo")
+  check("with the person said, outside the box", await fixing.text(".verb-before"), "yo ")
   check("and saying nothing yet of what is wrong", await fixing.text(".verb-note"), null)
   await answer(fixing, opening1.form)
   check("a right fix shows the sentence mended", await fixing.text(".milestone"), `✓ ${opening1.full}`)
@@ -418,6 +422,25 @@ export default async ({ check, open, blobs }) => {
   check("asking a different sentence", fixAgain && fixAgain.shown !== retyped.shown, true)
   check("no page errors", fixing.errors, [])
   await fixing.close()
+
+  // --- what is next, when there is nothing now ---
+  // As the cards do. Everything at box 5 and far from due, so the session is
+  // empty on arrival and the page can only say when something comes back.
+  const far = Date.now() + 9 * 86400000
+  const settled = await open({ path: "/verbs", key: VERBS, seed: {
+    version: formatVersion(), language: "verbs", deck: "none",
+    cards: [...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs,
+            ...corpus.map(r => `paraphrase.${r.id}`)].map(slug =>
+      ({ slug, box: 5, seen: 8, missed: 0, lapses: 0, direction: "recognition", due: far })),
+  } })
+  await settled.waitForSelector(".done-title")
+  await wait(300)
+  check("with nothing to do, it says when there will be",
+    await settled.text(".done-stats"), "Nothing due for another 9 days.")
+  check("and does not promise a review as well",
+    await settled.$(".next-due"), null)
+  check("no page errors", settled.errors, [])
+  await settled.close()
 
   // --- the paraphrase, which nothing can check ---
   // The checked drills are put behind us so the session opens on the corpus;

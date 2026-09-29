@@ -11,6 +11,13 @@
 -- | `tení mucho trabajo` is a regularised `tuve` or a clipped `tenía`, and
 -- | both mended sentences are good Spanish.
 -- |
+-- | And it names the person, by a subject put in front of a sentence that
+-- | has none. Most of the bank is subjectless, on purpose for the person
+-- | shift, and there the ending is all that carries the person; but the
+-- | ending is the broken thing, and a reader who knows it is wrong has no
+-- | reason to trust it. The subject goes in here rather than the bank, which
+-- | the person shift needs as it is. See #52.
+-- |
 -- | Pure, and given the table and its deviations rather than importing them,
 -- | so the spec can ask about a verb the table does not have.
 module Flashcards.Verbs.Correction
@@ -31,7 +38,7 @@ import Flashcards.Exercise (Answer(..), Exercise, Verdict(..), matches)
 import Flashcards.Types.Card (Slug(..))
 import Flashcards.Verbs.Shift (Sentence)
 import Flashcards.Verbs.Shift as Shift
-import Flashcards.Verbs.Table (Cell, Deviation, Person(..), Tense(..), formOf)
+import Flashcards.Verbs.Table (Cell, Deviation, Person(..), Tense(..), formOf, pronoun)
 
 -- | The mistakes, each one a thing learners do. Every error is made from a
 -- | cell `check-verbs` reports as deviating — the regularised irregular *is*
@@ -157,17 +164,34 @@ exercise :: Array Cell -> Array Deviation -> Sentence -> Kind -> Tense -> Maybe 
 exercise table deviations sentence kind tense = do
   wrong <- mistake table deviations kind sentence.infinitive tense sentence.person
   fix <- formOf sentence.infinitive tense sentence.person table
+  let before = subject sentence <> sentence.before
   pure
     { slug: Slug $ "error." <> code kind
     , label: label kind
-    , prompt: sentence.before <> wrong <> sentence.after
+    , prompt: before <> wrong <> sentence.after
     , hint: "fix it · " <> Shift.name tense
     , answer: Checked
         { expected: fix
-        , frame: { before: sentence.before, after: sentence.after }
+        , frame: { before, after: sentence.after }
         , note: note kind
         }
     }
+
+-- | `yo ` for `no [puedo] dormir`, and nothing for `mis padres [tienen] una
+-- | casa grande`, which says who already.
+-- |
+-- | Read off the words before the verb, since a sentence is subjectless
+-- | when nothing but a negation precedes it. Not `personShift`: `estoy muy
+-- | enfermo` has no subject, but is not marked for a shift, because the
+-- | adjective agrees.
+-- |
+-- | Always, where there is none, and not only where the error is ambiguous.
+-- | `yo tengo` is a little stiff, but a rule with a judgement in it is harder
+-- | to trust than one without.
+subject :: Sentence -> String
+subject sentence
+  | Array.elem (String.trim sentence.before) [ "", "no" ] = pronoun sentence.person <> " "
+  | otherwise = ""
 
 -- | Every exercise the bank yields, by kind, then tense, then the bank's
 -- | order. Tense before sentence so that `pick`, turning through a pool,

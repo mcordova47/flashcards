@@ -7,6 +7,7 @@ module Flashcards.Verbs.Table
   , Person(..)
   , Tense(..)
   , formOf
+  , pronoun
   )
   where
 
@@ -50,6 +51,19 @@ instance Show Person where
   show Sg3 = "Sg3"
   show Pl1 = "Pl1"
   show Pl3 = "Pl3"
+
+-- | The person as a prompt names it: the person shift's `→ nosotros`, and
+-- | the subject an error correction puts in front of a sentence that has
+-- | none. One pronoun for each, though `Sg3` and `Pl3` also carry *ella*,
+-- | *usted* and the rest: the form is the same, and a list would be read as
+-- | a choice to make.
+pronoun :: Person -> String
+pronoun = case _ of
+  Sg1 -> "yo"
+  Sg2 -> "tú"
+  Sg3 -> "él"
+  Pl1 -> "nosotros"
+  Pl3 -> "ellos"
 
 type Cell =
   { infinitive :: String
