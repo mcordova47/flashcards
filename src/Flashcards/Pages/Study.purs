@@ -149,11 +149,12 @@ update state = case _ of
         <> (if repaired.demoted == 1 then "prompt" else "prompts")
 
   -- Through the update rather than straight to the message it maps to, so
-  -- that what a key means can depend on what is on screen. With a note being
-  -- written it means nothing here: Enter on the sheet's button would flip the
-  -- card behind it, and `z` would take back the last answer.
+  -- that what a key means can depend on what is on screen. With anything over
+  -- the card it means nothing here: Enter on a sheet's button would flip the
+  -- card behind it, a `2` typed into the pairing link would grade it, and `z`
+  -- would take back the last answer from under the progress sheet.
   Pressed key
-    | isJust state.notes -> pure state
+    | covered state -> pure state
     | otherwise -> maybe (pure state) (update state) (keyMessage key)
 
   VoicesAvailable voices ->
@@ -710,6 +711,15 @@ completeView undoable language progress summary dispatch =
         H.empty
 
     cta = if caughtUp then "Check again" else "Study " <> show Scheduler.sessionSize <> " more"
+
+-- | Whether anything is over the card: the menu, or a sheet. Every one of them,
+-- | rather than whichever has something to type into, because a key acting on
+-- | a card you cannot see is wrong whether or not it was meant for a box, and
+-- | because listing sheets one at a time is how the pairing sheet was missed
+-- | when the note sheet was guarded.
+covered :: State -> Boolean
+covered state =
+  isJust state.panel || isJust state.statsAt || state.pairing || isJust state.notes
 
 keyMessage :: String -> Maybe Message
 keyMessage = case _ of
