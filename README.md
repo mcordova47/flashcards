@@ -285,8 +285,9 @@ filter or come back with a key to clear.
 Netlify Blobs has no expiry, so notes stay until cleared, and nothing clears
 one on reading it — a listing lost to a closed terminal would lose the notes
 with it. Nor can anything clear the only copy of one. `--done` needs either an
-issue whose body or comments hold the note's text, which it checks with `gh`,
-whitespace aside; or a reason to dismiss it, which is appended with the note to
+issue whose body or comments hold the whole note as the listing prints it —
+stamp and context too, since a note's text alone is often a word that any
+issue might use — which it checks with `gh`, whitespace aside; or a reason to dismiss it, which is appended with the note to
 `~/.flashcards/notes-archive.jsonl` (or `$NOTES_ARCHIVE`) and read back before
 the note is deleted. `--done` alone is refused, and there is no bulk purge.
 Clearing a note also frees its place under the per-key cap.

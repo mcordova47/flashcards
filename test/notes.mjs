@@ -141,10 +141,14 @@ if (!found) { console.error("no such issue"); process.exit(1) }
 console.log(JSON.stringify(found))
 `, { mode: 0o755 })
   fs.writeFileSync(issues, JSON.stringify({
-    5: { body: "Something else entirely.", comments: [ { body: "the hint is" } ] },
+    // The text and nothing else: not the note, since it could be any note.
+    5: { body: "Something else entirely.", comments: [ { body: a.text } ] },
     // Reflowed, as pasting into an issue does.
-    6: { body: "From a note:\n\nreads oddly when the\nsentence is  long and wraps", comments: [] },
-    7: { body: "", comments: [ { body: "Filed from a note: the hint is confusing." } ] },
+    6: { body: `From a note:\n\n${Notes["export"]([ c ]).replace(/ /g, (_, i) => i % 3 ? " " : "\n")}`, comments: [] },
+    7: { body: "", comments: [ { body: `Filed from a note:\n\n${Notes["export"]([ a ])}\n\nMore to follow.` } ] },
+    // What the review found: a one-word note, and an issue that merely
+    // uses the word.
+    9: { body: "The subjunctive table is confusing on narrow screens.", comments: [] },
   }))
   const archived = path.join(bin, "archive", "notes.jsonl")
 
@@ -193,11 +197,17 @@ console.log(JSON.stringify(found))
   // --- deleting, which never loses the only copy ---
   refuses("--done alone is refused", await notes("--done", ka), "exactly one of")
   refuses("as is --done with both proofs", await notes("--done", ka, "--issue", "7", "--dismiss", "x"), "exactly one of")
-  refuses("an issue without the text is refused", await notes("--done", ka, "--issue", "5"), "does not contain this note's text")
+  refuses("an issue with the text but not the note is refused", await notes("--done", ka, "--issue", "5"), "does not contain this note")
   refuses("as is one gh cannot read", await notes("--done", ka, "--issue", "8"), "could not read issue #8")
   refuses("an empty reason is refused", await notes("--done", ka, "--dismiss", "  "), "needs a reason")
   refuses("as is a key that is not a note's", await notes("--done", "../x", "--issue", "7"), "not a note's key")
   refuses("or one that is not there", await notes("--done", `${PHONE}/1.json`, "--dismiss", "x"), "no note at")
+  const word = { at: sept + 10_800_000, context: "/es", text: "confusing" }
+  await put(batch([ word ]), PHONE)
+  const kw = `${PHONE}/${word.at}.json`
+  refuses("a one-word note is not proved by an issue that uses the word", await notes("--done", kw, "--issue", "9"), "does not contain this note")
+  check("so it is still there", (await store.get(kw, { type: "json" }))?.text, "confusing")
+  await store.delete(kw)
   refuses("--issue alone does nothing", await notes("--issue", "7"), "go with --done")
   check("and none of it deleted anything", await remaining(), 3)
 
