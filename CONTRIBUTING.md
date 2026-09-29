@@ -158,7 +158,9 @@ like once the decision has been made.
 ## Review is a separate pass
 
 Work gets reviewed by someone who did not write it, and the review checks
-claims rather than reading them. `npm run worktree <their-branch>` gives you
-somewhere to run it that is not wherever you happened to be standing. Regenerate the thing that is supposed to be
+claims rather than reading them. Regenerate the thing that is supposed to be
 byte-identical. Plant the failure the new rule is supposed to catch. Run the
-one caller that the test suite does not cover.
+one caller that no test suite covers. And read the Spanish, which no tool can
+check and where most of the real findings have been.
+
+`/review <n>` is the procedure: where to stand, what to re-run, what to say.
