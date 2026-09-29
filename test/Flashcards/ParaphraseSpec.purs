@@ -52,6 +52,15 @@ spec = do
     it "is named by what it asked, not by its id" do
       (exercise doorOpen).label `shouldEqual` doorOpen.asked
 
+    -- Keyed by the answer, a session spreading ser prompts from estar ones
+    -- would alternate them, and the position would give the answer away.
+    it "is one family with the prompt that springs its trap the other way" do
+      (exercise doorOpen).family `shouldEqual` "estar / ser"
+      (exercise (doorOpen { verb = "ser", against = "estar" })).family `shouldEqual` "estar / ser"
+
+    it "but is its verb's family where the trap is the tense" do
+      (exercise knewAnswer).family `shouldEqual` "saber"
+
   describe "the corpus" do
     let mine = exercises prompts
 
