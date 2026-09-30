@@ -565,8 +565,16 @@ matches the word, which is what a respelling looks like.
 is a new card, and it starts fresh. Leave the slug alone and the new word
 inherits the old one's history instead: `concrete` to `concreto` and `concrete`
 to `armario` are the same edit to the word, and only the slug says which was
-meant. That is the safer way to get it wrong, because an inherited history
-corrects itself on the first miss and a lost one is gone. `sync-deck --fetch`
+meant.
+
+Getting that wrong costs more than it looks. The replaced word inherits the old
+card's box *and* its direction: if that card had graduated, the new word is
+asked in production — "say 'wardrobe' in Spanish" — never having been shown,
+and possibly not for sixty days, the interval at box 5. A miss resets its box
+but not its direction, which nothing ever sets back to recognition, so it
+never gets a recognition phase at all. Inheriting is still the better way to
+fail, because respelling is the common case and a lost history cannot be
+recovered, but it does not correct itself. `sync-deck --fetch`
 refuses a changed slug on a word still in the deck unless given `--drop-pins`,
 so a replacement made in one fetch, word and slug together, goes through, and
 a slug edited on its own has to be meant.
@@ -1185,7 +1193,7 @@ data/es-verbs.csv                    38 irregular verbs, 760 conjugated cells
 data/es-paraphrase.csv               41 prompts for #10, each with one trap
 data/es-sentences.csv                the tense-shift sentences, verb in brackets
 tools/sync-deck.mjs                  sheet -> CSV -> generated module
-tools/deck-source.mjs                the language table, shared by both
+tools/deck-source.mjs                the language table and CSV parsing, shared with the tests
 tools/sync-verbs.mjs                 conjugation CSV -> generated module
 tools/check-verbs.mjs                prints what deviates; the list IS the review
 tools/verb-source.mjs                what a row may be, and the regular forms
