@@ -40,7 +40,6 @@ for (const lang of chosen) {
     // every fetch rewrites every line, or reports one phantom difference at
     // the end of the file for ever.
     const normalised = body.replace(/\r\n/g, "\n").replace(/\n*$/, "\n")
-    fs.writeFileSync(lang.csv, normalised)
 
     // Say *what* differs, not just how much. The sheet overwrites the
     // snapshot wholesale, so a row that has been improved here and never
@@ -50,8 +49,8 @@ for (const lang of chosen) {
     const differing = now
       .map((line, i) => ({ line, before: was[i] }))
       .filter(row => row.line !== row.before && (row.line || row.before))
-    console.log(`  wrote ${lang.csv}`
-      + (differing.length ? ` - ${differing.length} row(s) differ from the local snapshot` : " - unchanged"))
+    console.log(`  fetched`
+      + (differing.length ? ` - ${differing.length} row(s) differ from ${lang.csv}` : ` - same as ${lang.csv}`))
     for (const { line, before } of differing.slice(0, 20)) {
       console.log(`    - ${before ?? "(absent)"}`)
       console.log(`    + ${line || "(absent)"}`)
@@ -74,9 +73,16 @@ for (const lang of chosen) {
                `    ${word}  was keyed ${JSON.stringify(slug)}, now ${JSON.stringify(has.get(word))}`).join("\n")
            + (lost.length > 20 ? `\n    ... and ${lost.length - 20} more` : "")
            + `\n  Put them back in the Slug column of the ${lang.tab} tab, or rerun with --drop-pins `
-           + `if it was deliberate - a card with a new slug starts its history over.`)
+           + `if you meant it - a card whose slug changes takes that slug's history instead of its own. `
+           + `Nothing was written.`)
       }
     }
+
+    // Only now. Written before the check, a refused fetch left the snapshot
+    // holding the very sheet it refused, and simply running it again passed,
+    // because there was no longer anything to compare against.
+    fs.writeFileSync(lang.csv, normalised)
+    console.log(`  wrote ${lang.csv}`)
 
     // What this fetch did to cards' identities, paired by slug - which is an
     // identity now, not a guess. This is the moment to say it: the person
