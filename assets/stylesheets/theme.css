@@ -850,10 +850,22 @@ body {
   margin: 0 0 0.75rem;
 }
 
-/* The one thing on this sheet that is a problem, so it takes the accent. */
-.note-unreadable {
+/* Under the button rather than a heading, so without `.sheet-note`'s pull
+   upwards, which would put it under the button's bottom edge. */
+.note-where {
+  margin: 0.75rem 0;
+}
+
+/* The things on this sheet that are a problem, so they take the accent. */
+.note-unreadable,
+.note-too-long {
   margin: 0 0 0.75rem;
   color: var(--accent);
+}
+
+/* Inside a listed note, below its text. */
+.note-unsent {
+  margin: 0.25rem 0 0;
 }
 
 .note {

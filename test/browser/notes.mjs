@@ -305,6 +305,11 @@ export default async ({ base, browser, check, open, noteBlobs }) => {
   check("the sheet says where a note goes before anything is typed",
     await phone.text(".note-where"),
     "Notes are kept on this device and sent to the person who looks after this app, for them to read.")
+  // `.sheet-note` pulls itself up under a heading, which under a button
+  // put the line beneath the button's bottom edge.
+  const [ button, line ] = await phone.$$eval([ ".note-save", ".note-where" ].join(","),
+    es => es.map(e => { const r = e.getBoundingClientRect(); return { top: r.top, bottom: r.bottom } }))
+  check("and clear of the button above it", line.top >= button.bottom, true)
   await phone.tap(".sheet-close")
 
   await write(phone, "sent as soon as it is saved")
