@@ -105,7 +105,7 @@ for (const lang of chosen) {
           + `\n    own word in its Slug cell in the ${lang.tab} tab and fetch again with --drop-pins.`)
       }
       if (fresh.length) {
-        console.log(`  ! ${fresh.length} card(s) start fresh, under a slug the snapshot did not have:\n`
+        console.log(`  ! ${fresh.length} card(s) under a slug the snapshot did not have - new, unless it is one the deck had before:\n`
           + list(fresh, c => `      #${c.rank}  ${c.slug}`))
       }
       if (gone.length) {

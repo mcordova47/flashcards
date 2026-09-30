@@ -562,9 +562,11 @@ alone. The card keeps its history.
 
 `sync-deck --fetch` says what each fetch did to cards' identities, pairing the
 snapshot before and after by slug: cards that changed word under the same slug
-(and so keep their history), cards under a slug not seen before (which start
-fresh), and slugs that left the deck (whose history went with them). That is
-the moment to check it, while you still know which edits were respellings.
+(and so keep their history), cards under a slug the snapshot did not have (new,
+unless the deck had that slug before — a re-added word or a reverted slug gets
+its history back), and slugs that left the deck (whose history went with
+them). That is the moment to check it, while you still know which edits were
+respellings.
 Respelling a word and "keeping its slug in step" shows up as one slug leaving
 and one arriving, which is the history lost; put the old slug back. Afterwards
 a slug that no longer matches its word is only counted, in one line, since
@@ -586,7 +588,9 @@ fail, because respelling is the common case and a lost history cannot be
 recovered, but it does not correct itself. `sync-deck --fetch`
 refuses a changed slug on a word still in the deck unless given `--drop-pins`,
 so a replacement made in one fetch, word and slug together, goes through, and
-a slug edited on its own has to be meant.
+a slug edited on its own has to be meant. `--drop-pins` lets through every slug
+change in that fetch, not just the one you meant, so make a deliberate slug
+edit its own fetch.
 
 ### Migrating from rank
 
