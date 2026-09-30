@@ -558,8 +558,17 @@ normalised: stripping accents would merge `este`/`éste` and eleven other
 Spanish pairs the deck keeps apart on purpose, plus `schön`/`schon` in German.
 
 **To respell a word**, edit its word cell in the sheet and leave its slug
-alone. The card keeps its history, and `sync-deck` warns that the slug no longer
-matches the word, which is what a respelling looks like.
+alone. The card keeps its history.
+
+`sync-deck --fetch` says what each fetch did to cards' identities, pairing the
+snapshot before and after by slug: cards that changed word under the same slug
+(and so keep their history), cards under a slug not seen before (which start
+fresh), and slugs that left the deck (whose history went with them). That is
+the moment to check it, while you still know which edits were respellings.
+Respelling a word and "keeping its slug in step" shows up as one slug leaving
+and one arriving, which is the history lost; put the old slug back. Afterwards
+a slug that no longer matches its word is only counted, in one line, since
+every respelling leaves one for good.
 
 **To replace a word with a different one**, edit its slug cell too. A new slug
 is a new card, and it starts fresh. Leave the slug alone and the new word
@@ -614,8 +623,9 @@ through.
 Three heuristics only warn, because all have legitimate exceptions: an all-caps
 gloss; a gloss containing its own Spanish answer — the latter makes a
 production card free, though a whole gloss equal to its Spanish is just a
-cognate and fine; and a slug that no longer matches its word, which is exactly
-what a respelling looks like and also exactly what a replaced word looks like.
+cognate and fine; and a count of cards whose slug no longer matches their word,
+which is exactly what a respelling looks like and also exactly what a replaced
+word looks like — the fetch that made each one listed it.
 
 ### Undo
 
