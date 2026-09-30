@@ -21,7 +21,6 @@
     "check-sentences": "node tools/check-sentences.mjs",
     "sync-por-para": "node tools/sync-por-para.mjs",
     "check-por-para": "node tools/check-por-para.mjs",
-    "rename": "node tools/rename.mjs",
     "preview": "node tools/preview-milestones.mjs",
     "notes": "node tools/notes.mjs"
   },

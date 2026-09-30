@@ -1,5 +1,5 @@
-// The deck sources, and the CSV handling shared by tools/sync-deck.mjs and
-// tools/rename.mjs.
+// The deck sources, and the CSV handling tools/sync-deck.mjs and the tests
+// share.
 
 export const SHEET = "1vz4CgmSxP7fFmoa-uzjXPmHckkjSfl2evmRyG5EsH5w"
 
@@ -51,28 +51,6 @@ export const parseCsv = text => {
   }
   if (field !== "" || row.length) { row.push(field); rows.push(row) }
   return rows
-}
-
-const quote = field => /["\n,]/.test(field) ? `"${field.replace(/"/g, '""')}"` : field
-
-// One row back to one line. Rows are rewritten a line at a time rather than
-// the file being round-tripped, so editing a slug touches one line in the diff
-// instead of reflowing a thousand.
-export const formatRow = fields => fields.map(quote).join(",")
-
-// A card's pinned slug, by rank, for every row that has one. Empty for a CSV
-// with no Slug column, which is every deck that has never had a rename.
-export const pinsIn = text => {
-  const [header, ...body] = parseCsv(text)
-  const at = (header ?? []).indexOf("Slug")
-  const pins = new Map()
-  if (at < 0) return pins
-  for (const cells of body) {
-    const rank = Number((cells[0] ?? "").trim())
-    const pin = (cells[at] ?? "").trim()
-    if (Number.isInteger(rank) && pin) pins.set(rank, pin)
-  }
-  return pins
 }
 
 // Each word's slug, for every row that has both. Keyed by word rather than
