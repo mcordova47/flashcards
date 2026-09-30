@@ -29,6 +29,7 @@ import Elmish (Dispatch, ReactElement, Transition, fork, forkMaybe, forks, (<|))
 import Elmish.HTML.Styled as H
 import Flashcards.Notes (Note)
 import Flashcards.Notes as Notes
+import Flashcards.Notes.Delivery as Delivery
 import Flashcards.Storage as Storage
 
 -- | `Nothing` is closed.
@@ -45,6 +46,8 @@ type Open =
   , unreadable :: Boolean
   -- | What came of the last copy, until something else happens.
   , copied :: Maybe Boolean
+  -- | Whether the last note tried was too long to send, and so not saved.
+  , tooLong :: Boolean
   }
 
 data Message
@@ -55,6 +58,8 @@ data Message
   | Save
   -- | `Nothing` when it was refused, for the same reason.
   | Saved (Maybe (Array Note))
+  -- | Refused before saving, as more than the server would take.
+  | TooLong
   | CopyAll
   | Copied Boolean
   | Close
@@ -66,7 +71,7 @@ update :: Sheet -> Message -> Transition Message Sheet
 update sheet = case _ of
   Open context -> do
     fork $ liftEffect $ Loaded <$> Storage.readNotes
-    pure $ Just { context, notes: [], unreadable: false, copied: Nothing }
+    pure $ Just { context, notes: [], unreadable: false, copied: Nothing, tooLong: false }
 
   Loaded (Just notes) ->
     pure $ sheet <#> _ { notes = notes, unreadable = false }
@@ -83,18 +88,30 @@ update sheet = case _ of
     Just open -> do
       forkMaybe $ liftEffect do
         text <- String.trim <$> draft
+        at <- Now.now
+        let n = { at, context: open.context, text }
         if text == "" then pure Nothing
+        -- Refused rather than saved: see `Notes.fits`. It stays in the box,
+        -- as any refused note does, so it can be cut down rather than typed
+        -- again.
+        else if not (Notes.fits n) then pure $ Just TooLong
         else do
-          at <- Now.now
-          saved <- Storage.appendNote { at, context: open.context, text }
+          saved <- Storage.appendNote n
           -- Only once it is saved: a refused note stays in the box, so what
-          -- was typed is not lost along with the chance to save it.
-          when (isJust saved) clearDraft
+          -- was typed is not lost along with the chance to save it. And sent
+          -- from here, so one written online arrives without waiting for the
+          -- next sync.
+          when (isJust saved) do
+            clearDraft
+            Delivery.deliver
           pure $ Just $ Saved saved
       pure sheet
 
   Saved (Just notes) ->
-    pure $ sheet <#> _ { notes = notes, unreadable = false, copied = Nothing }
+    pure $ sheet <#> _ { notes = notes, unreadable = false, copied = Nothing, tooLong = false }
+
+  TooLong ->
+    pure $ sheet <#> _ { tooLong = true }
 
   Saved Nothing ->
     pure $ sheet <#> _ { unreadable = true }
@@ -126,8 +143,17 @@ view open dispatch =
     , H.textarea_ "note-draft"
         { rows: 4, placeholder: "What did you notice?", autoFocus: true }
     , H.button_ "grade got-it note-save" { onClick: dispatch <| Save } "Save note"
+    -- Before anything is typed, like the warning below. A box that quietly
+    -- sends what is typed in it to someone else is a small breach of trust,
+    -- even when what is typed is "the hint is confusing".
+    , H.p "sheet-note note-where"
+        "Notes are kept on this device and sent to the person who looks after this app, for them to read."
     -- Said before anything is typed, as well as on a refused save: finding
     -- out only after writing the note would be the worse way round.
+    , if open.tooLong then
+        H.p "sheet-note note-too-long"
+          "That's too long to send in one note. Shorten it, or split it into two."
+      else H.empty
     , if open.unreadable then
         H.p "sheet-note note-unreadable" $
           "Your saved notes can't be read by this version of the app — most "
@@ -152,6 +178,11 @@ view open dispatch =
             H.div "note"
             [ H.p "note-meta" $ Notes.stamp n.at <> " · " <> n.context
             , H.p "note-text" n.text
+            -- Only a note saved before the sheet refused long ones. It is
+            -- never sent (`Notes.Delivery`), so this is the only place that
+            -- says so.
+            , if Notes.fits n then H.empty
+              else H.p "sheet-note note-unsent" "Too long to send — copy it instead."
             ]
         ]
     ]

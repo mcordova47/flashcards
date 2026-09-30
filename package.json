@@ -8,7 +8,7 @@
     "build": "spago build && node build.mjs",
     "start": "spago build && node dev.mjs",
     "test": "spago test",
-    "verify": "npm run -s check-paraphrase && npm run -s check-sentences && npm run -s check-por-para && npm run build && node test/browser/run.mjs",
+    "verify": "npm run -s check-paraphrase && npm run -s check-sentences && npm run -s check-por-para && npm run build && node test/notes.mjs && node test/browser/run.mjs",
     "sync": "npm run -s sync-deck && npm run -s sync-verbs && npm run -s sync-sentences && npm run -s sync-paraphrase && npm run -s sync-por-para",
     "sync-deck": "node tools/sync-deck.mjs",
     "sync-verbs": "node tools/sync-verbs.mjs",
@@ -22,7 +22,8 @@
     "sync-por-para": "node tools/sync-por-para.mjs",
     "check-por-para": "node tools/check-por-para.mjs",
     "rename": "node tools/rename.mjs",
-    "preview": "node tools/preview-milestones.mjs"
+    "preview": "node tools/preview-milestones.mjs",
+    "notes": "node tools/notes.mjs"
   },
   "license": "ISC",
   "devDependencies": {

@@ -64,6 +64,11 @@ jobs:
           key: spago-${{ hashFiles('spago.lock') }}
       - run: npm test
 
+      # The notes endpoint and `npm run notes`, against Netlify's own local
+      # blob server. After `npm test`, which builds the output/ it checks the
+      # listing against.
+      - run: node test/notes.mjs
+
   # About three minutes. ubuntu-latest ships Chrome at /usr/bin/google-chrome,
   # which the harness already looks for.
   browser:

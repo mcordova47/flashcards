@@ -23,6 +23,7 @@ module Flashcards.Sync
   , origin
   , pairingLink
   , pastedLink
+  , pushNotes
   , pushRemote
   , qrDataUrl
   , saveKey
@@ -177,6 +178,13 @@ pushRemote :: String -> String -> String -> (Boolean -> Effect Unit) -> Effect U
 pushRemote key language body handler =
   runEffectFn4 pushRemote_ key language body $ mkEffectFn1 handler
 
+-- | Hands notes to the server, already serialised. Reports only whether they
+-- | arrived: there is nothing to read back, since a device never sees its
+-- | notes again once sent.
+pushNotes :: String -> String -> (Boolean -> Effect Unit) -> Effect Unit
+pushNotes key body handler =
+  runEffectFn3 pushNotes_ key body $ mkEffectFn1 handler
+
 -- | Pure: the same link always gives the same code, so this can be called
 -- | straight from the view without a message round trip.
 foreign import qrDataUrl :: String -> String
@@ -250,3 +258,5 @@ type Fetched = { tag :: String, body :: String }
 foreign import fetchRemote_ :: EffectFn3 String String (EffectFn1 Fetched Unit) Unit
 
 foreign import pushRemote_ :: EffectFn4 String String String (EffectFn1 Boolean Unit) Unit
+
+foreign import pushNotes_ :: EffectFn3 String String (EffectFn1 Boolean Unit) Unit

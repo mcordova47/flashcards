@@ -43,6 +43,7 @@ npm start        # http://localhost:8000
 | `npm run check-por-para` | Prove every por / para contrast asks both sides and every sense only its own, in deck vocabulary |
 | `npm run rename` | Report words whose spelling changed, and pin the ones that should keep their history |
 | `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
+| `npm run notes` | Every note the app has sent, oldest first — see [Reading them](#reading-them) |
 
 ## Languages
 
@@ -236,16 +237,67 @@ the page, and while the sheet is open no key means anything to it, so a space
 does not flip the card and a `z` does not undo the last answer. A sync landing
 meanwhile does not rebuild the session under it either.
 
-The notes are one list for the whole app, under `flashcards.notes.v1`, and stay
-on the device. **Copy all** puts them on the clipboard oldest first, each under
-its time and context, to paste wherever they are going. A stored list this
-build cannot read — one a newer version wrote, seen from a tab left open across
-the deploy — is never written over: the sheet says so and keeps the draft,
-since unlike progress there is no server copy to come back from. They are not synced:
-notes are append-only, so the merge would have to be a union, not
-`Progress.merge`, and that is its own piece of work. Nor are they filed as
-issues directly, which would need a token behind a pairing key — a door key,
-not a password.
+The notes are one list for the whole app, under `flashcards.notes.v1`. **Copy
+all** puts them on the clipboard oldest first, each under its time and context,
+to paste wherever they are going. A stored list this build cannot read — one a
+newer version wrote, seen from a tab left open across the deploy — is never
+written over: the sheet says so and keeps the draft, since the device never gets
+its notes back from the server.
+
+Each is also **sent**, because a note on someone else's phone is not feedback
+(#62). It goes to `/api/notes` (see [Sync](#sync)) when it is saved, and if
+that does not get through, whenever the page next syncs. The sheet says so, in
+a line, before anything is typed. This is delivery and not sync: the device
+never reads its notes back, so there is no merge to write.
+
+The device remembers how many of its notes have gone, under
+`flashcards.notes.sent.v1`, and sends only the rest. A count, because the list
+is append-only and so the first `n` are exactly the ones sent. Resending
+everything each time would be harmless to the store, which keeps each note
+once, but not to the reader: a note read and deleted on the server would come
+straight back from every device that still had it. A count larger than the list
+is taken to belong to some other list, and everything is sent again.
+
+A note the server would refuse — over 5 KB once serialised, counted in bytes as
+the server counts, so `ñ` is two — is refused by the sheet instead, and left in
+the box to shorten. Otherwise it would be in every batch from then on and hold
+up every note after it. One saved before that check existed is skipped rather
+than sent; it stays on the device, marked in the sheet as not sent, and **Copy
+all** still has it.
+
+Nor are they filed as issues directly, which would need a token behind a
+pairing key — a door key, not a password.
+
+### Reading them
+
+```
+npm run notes                                    every note, oldest first
+npm run notes -- --since 2026-09-01              from that day on, in UTC
+npm run notes -- --json                          the same, with each note's key
+npm run notes -- --done <key> --issue <n>        delete one that #n now holds
+npm run notes -- --done <key> --dismiss "<why>"  archive it with the reason, then delete
+```
+
+A local script against the same store the function writes, which needs
+`NETLIFY_SITE_ID` and a personal access token in `NETLIFY_AUTH_TOKEN`; the top
+of `tools/notes.mjs` says where each is. For a spot check with no setup,
+**Data & Storage → Blobs** in the Netlify dashboard browses the `notes` store.
+
+The listing is exactly **Copy all**'s format, so a note reads the same whichever
+way it arrived and pastes into an issue the same way. It leaves out the keys:
+each begins with the device's pairing key, and this is the output meant for
+pasting somewhere public. `--json` has them, for anything that has to sort,
+filter or come back with a key to clear.
+
+Netlify Blobs has no expiry, so notes stay until cleared, and nothing clears
+one on reading it — a listing lost to a closed terminal would lose the notes
+with it. Nor can anything clear the only copy of one. `--done` needs either an
+issue whose body or comments hold the whole note as the listing prints it —
+stamp and context too, since a note's text alone is often a word that any
+issue might use — which it checks with `gh`, whitespace aside; or a reason to dismiss it, which is appended with the note to
+`~/.flashcards/notes-archive.jsonl` (or `$NOTES_ARCHIVE`) and read back before
+the note is deleted. `--done` alone is refused, and there is no bulk purge.
+Clearing a note also frees its place under the per-key cap.
 
 ## Progress
 
@@ -332,13 +384,29 @@ PUT  /api/progress/<key>/<lang>   replaces it
 
 One key pairs a device; one blob per language hangs off it, because progress is
 per-language and each blob is then byte-identical to the backup file. The
-server does not know which languages exist — `<lang>` is capped at two letters
-only so that one key cannot become unlimited storage.
+server does not know which languages exist. `<lang>` must match
+`[a-z][a-z0-9-]{1,15}`, which keeps it a short, path-safe name, but does not
+limit how many a key can have — so what bounds storage is the size cap on each
+blob, not the pattern.
 
 It is a **dumb blob store** and does not merge. The client does `GET` →
 `Progress.merge` → `PUT`, so the merge rule stays in one place, pure and
 specced, rather than being written a second time in JavaScript where the two
 would drift. Nothing on the server knows what a card is.
+
+A second function takes the notes written in the app (see [Notes](#notes)):
+
+```
+PUT  /api/notes/<key>             stores each note not already stored
+```
+
+It is write-only — there is no `GET`, and a device never reads its notes back
+— so it is delivery rather than sync, and needs no merge. Each note is a blob of
+its own in a separate `notes` store, at `<key>/<at>.json`: `at` is unique under
+one device's key, so the blob key is deterministic and a note sent twice is
+stored once. Append-only is unbounded unless something bounds it, so a key
+holds at most a hundred notes of up to 5 KB, about what one progress blob may.
+A batch that would go over is refused whole, and waits for a note to be read.
 
 ### Pairing
 
@@ -439,6 +507,10 @@ so it is not guessable, and the payload is a list of words someone has studied.
 But it is a publicly reachable endpoint that accepts writes, and that should be
 a choice rather than something you discover later.
 
+Notes are the other way round: anyone holding a key can add notes under it, up
+to the cap, and nobody can read them through the endpoint at all, including the
+device that wrote them.
+
 The step up is real accounts (Supabase, Cloudflare D1), which is a much larger
 commitment and buys little for a handful of family members.
 
@@ -454,11 +526,12 @@ with a **200**, so a routing mistake here does not 404 — it serves HTML to a
 JSON client. That has already produced one wrong conclusion in this project. The
 route is therefore declared twice, by the function's `config.path` and by an
 ordered redirect above the catch-all, and the handler reads the key off the end
-of the path so either resolution works.
+of the path so either resolution works. `/api/notes/` is declared the same
+two ways.
 
 Netlify's own routing is the one thing the test suite cannot check. On the first
 deploy, verify the **content type** of a 404 from `/api/progress/<32 chars>/es`,
-not its status.
+not its status — and of the 405 a `GET` to `/api/notes/<32 chars>` gets.
 
 ## What a card is, and renaming one
 
@@ -659,8 +732,8 @@ conditional on anything.
 `flashcards.verbs.v1`, and a blob each on the server — but the key that
 identifies the device is not. A device paired for the flashcards is already
 paired for the drills. The endpoint's namespace pattern widened from `[a-z]{2}`
-to admit `verbs`, and stays bounded so one key still cannot become unlimited
-storage.
+to admit `verbs`. It bounds a name's length, not how many names a key can use,
+so it was never what limited a key's storage; the per-blob size cap is.
 
 An exercise is `{ slug, prompt, hint, answer }`, where `answer` is either
 `Checked { expected, frame, note }` — a typed answer, with the words shown
