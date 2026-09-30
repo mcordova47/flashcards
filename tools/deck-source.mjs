@@ -1,6 +1,9 @@
 // The deck sources, and the CSV handling shared by tools/sync-deck.mjs and
 // tools/rename.mjs.
 
+import fs from "fs"
+import { execFileSync } from "child_process"
+
 export const SHEET = "1vz4CgmSxP7fFmoa-uzjXPmHckkjSfl2evmRyG5EsH5w"
 
 // One entry per language. `column` names the foreign side in the CSV, and
@@ -86,4 +89,28 @@ export const wordsIn = (text, column) => {
     if (Number.isInteger(rank)) words.set(rank, (cells[at] ?? "").trim())
   }
   return words
+}
+
+const committed = path => {
+  try {
+    return execFileSync("git", ["show", `HEAD:${path}`], { encoding: "utf-8" })
+  } catch {
+    return null // Not committed yet; there is nothing to have renamed away from.
+  }
+}
+
+// A rank whose foreign word differs from the committed snapshot, and whose old
+// spelling is nowhere in the new one. A word that merely moved rank is not a
+// rename — the slug travels with the card, which is the point of the rekey.
+export const changesIn = lang => {
+  const now = fs.readFileSync(lang.csv, "utf-8")
+  const then = committed(lang.csv)
+  if (then === null) return []
+  const was = wordsIn(then, lang.column)
+  const has = wordsIn(now, lang.column)
+  const present = new Set(has.values())
+  const pinned = pinsIn(now)
+  return [...has]
+    .filter(([rank, word]) => was.has(rank) && was.get(rank) !== word && !present.has(was.get(rank)))
+    .map(([rank, word]) => ({ rank, from: was.get(rank), to: word, pin: pinned.get(rank) ?? null }))
 }

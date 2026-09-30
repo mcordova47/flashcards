@@ -17,38 +17,13 @@
 // waits to be told.
 
 import fs from "fs"
-import { execFileSync } from "child_process"
-import { LANGUAGES, formatRow, languagesFor, parseCsv, pinsIn, wordsIn } from "./deck-source.mjs"
+import { LANGUAGES, changesIn, formatRow, languagesFor, parseCsv } from "./deck-source.mjs"
 
 const args = process.argv.slice(2)
 const fresh = args.includes("--new")
 const [only, rankArg] = args.filter(a => !a.startsWith("--"))
 
 const die = message => { console.error(`x ${message}`); process.exit(1) }
-
-const committed = path => {
-  try {
-    return execFileSync("git", ["show", `HEAD:${path}`], { encoding: "utf-8" })
-  } catch {
-    return null // Not committed yet; there is nothing to have renamed away from.
-  }
-}
-
-// A rank whose foreign word differs from the committed snapshot, and whose old
-// spelling is nowhere in the new one. A word that merely moved rank is not a
-// rename — the slug travels with the card, which is the point of the rekey.
-const changesIn = lang => {
-  const now = fs.readFileSync(lang.csv, "utf-8")
-  const then = committed(lang.csv)
-  if (then === null) return []
-  const was = wordsIn(then, lang.column)
-  const has = wordsIn(now, lang.column)
-  const present = new Set(has.values())
-  const pinned = pinsIn(now)
-  return [...has]
-    .filter(([rank, word]) => was.has(rank) && was.get(rank) !== word && !present.has(was.get(rank)))
-    .map(([rank, word]) => ({ rank, from: was.get(rank), to: word, pin: pinned.get(rank) ?? null }))
-}
 
 // Writes one field on one row, adding the Slug column if the CSV has none.
 // Line by line rather than a full round-trip, so the diff stays two lines.
