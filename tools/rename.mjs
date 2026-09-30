@@ -1,8 +1,20 @@
 // Keeps a card's history when its spelling changes.
 //
 //   node tools/rename.mjs              report every word that changed since HEAD
-//   node tools/rename.mjs es 472       #472 was renamed: pin its old spelling
-//   node tools/rename.mjs es 472 --new #472 is a different word: pin its new spelling, fresh start
+//   node tools/rename.mjs es 472            #472 was renamed: pin its old spelling
+//   node tools/rename.mjs es 472 --new      #472 is a different word: pin its new spelling, fresh start
+//   node tools/rename.mjs es éste           the card that was éste, however it is ranked now
+//   node tools/rename.mjs es éste este      ...and fail unless it now reads este
+//
+// A card can be named by rank or by its old spelling. Rank is shorter, and
+// needs no quoting for `die Türkei`, but it is a position rather than an
+// identity; the word says what happened, and asserting both ends fails if the
+// deck moved between the report and the command instead of pinning whatever
+// now sits there. No word in either deck is numeric, so the two cannot clash.
+//
+// Either way it only ever records a change the sheet already made. Spelling
+// flows one way, sheet to CSV to module; writing the new spelling from here
+// would make this a second source of it, and the next --fetch would undo it.
 //
 // Progress is keyed by a card's slug, and a slug is the foreign word's
 // spelling unless the CSV's Slug column pins something else. So correcting a
@@ -17,11 +29,11 @@
 // waits to be told.
 
 import fs from "fs"
-import { LANGUAGES, changesIn, formatRow, languagesFor, parseCsv } from "./deck-source.mjs"
+import { LANGUAGES, changesIn, formatRow, languagesFor, parseCsv, wordsIn } from "./deck-source.mjs"
 
 const args = process.argv.slice(2)
 const fresh = args.includes("--new")
-const [only, rankArg] = args.filter(a => !a.startsWith("--"))
+const [only, handle, asserted] = args.filter(a => !a.startsWith("--"))
 
 const die = message => { console.error(`x ${message}`); process.exit(1) }
 
@@ -65,6 +77,8 @@ if (!only) {
     console.log("\nFor each one, decide whether the history should follow:")
     console.log("  node tools/rename.mjs <lang> <rank>        a respelling - keep the history")
     console.log("  node tools/rename.mjs <lang> <rank> --new  a different word - start fresh")
+    console.log("A card can be named by its old spelling instead, and its new one asserted:")
+    console.log("  node tools/rename.mjs <lang> <old> [<new>] [--new]")
   }
   process.exit(0)
 }
@@ -72,10 +86,36 @@ if (!only) {
 const [lang] = languagesFor(only)
 if (!lang) die(`Unknown language "${only}". Known: ${LANGUAGES.map(l => l.code).join(", ")}`)
 
-const rank = Number(rankArg)
-if (!Number.isInteger(rank)) die(`Expected a rank, got ${JSON.stringify(rankArg ?? "")}`)
+if (!handle) die(`Expected a rank or a word after "${only}"`)
 
-const change = changesIn(lang).find(c => c.rank === rank)
+const changes = changesIn(lang)
+
+// A word is looked up as the old spelling first, since that is what names a
+// change. Failing that it may be a card nothing has happened to - which is
+// fine for clearing a stale pin with --new - or the *new* spelling of one that
+// has changed, which is a slip worth catching rather than guessing past.
+const byWord = word => {
+  const change = changes.find(c => c.from === word)
+  if (change) return change.rank
+  const [rank] = [...wordsIn(fs.readFileSync(lang.csv, "utf-8"), lang.column)].find(([, w]) => w === word) ?? []
+  if (rank === undefined) die(`no card in ${lang.csv} reads or read ${JSON.stringify(word)}. Run without arguments to see what changed.`)
+  const renamed = changes.find(c => c.rank === rank)
+  if (renamed) {
+    die(`${JSON.stringify(word)} is what #${rank} reads now. Name it by the spelling it had, `
+      + `${JSON.stringify(renamed.from)}, or by its rank.`)
+  }
+  return rank
+}
+
+const rank = /^\d+$/.test(handle) ? Number(handle) : byWord(handle)
+const change = changes.find(c => c.rank === rank)
+
+if (asserted !== undefined && change?.to !== asserted) {
+  die(change
+    ? `#${rank} ${change.from} now reads ${JSON.stringify(change.to)}, not ${JSON.stringify(asserted)}. `
+      + `The deck has moved since you looked - run without arguments to see what changed.`
+    : `#${rank} has not changed spelling since the last commit, so it cannot have become ${JSON.stringify(asserted)}.`)
+}
 
 if (fresh && change) {
   // Pinned to its own spelling, which keys it exactly as no pin would. The
