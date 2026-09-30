@@ -1,16 +1,17 @@
 // Keeps a card's history when its spelling changes.
 //
 //   node tools/rename.mjs              report every word that changed since HEAD
-//   node tools/rename.mjs es 472            #472 was renamed: pin its old spelling
-//   node tools/rename.mjs es 472 --new      #472 is a different word: pin its new spelling, fresh start
-//   node tools/rename.mjs es éste           the card that was éste, however it is ranked now
-//   node tools/rename.mjs es éste este      ...and fail unless it now reads este
+//   node tools/rename.mjs es libertad libertád   was libertad, now reads libertád: keep its history
+//   node tools/rename.mjs es libertad --new      a different word: pin its new spelling, fresh start
+//   node tools/rename.mjs es 472                 by rank, which checks nothing
 //
-// A card can be named by rank or by its old spelling. Rank is shorter, and
-// needs no quoting for `die Türkei`, but it is a position rather than an
-// identity; the word says what happened, and asserting both ends fails if the
-// deck moved between the report and the command instead of pinning whatever
-// now sits there. No word in either deck is numeric, so the two cannot clash.
+// A card can be named by rank or by its old spelling, and the new spelling
+// asserted after it. Only the assertion protects anything. Changes are found
+// by pairing old and new words at the same rank, so a row added or removed
+// above a respelling reports it against the neighbouring card - and a rank, or
+// an old spelling alone, pins whatever that pairing says. The new spelling,
+// typed from what was actually changed, fails instead. No word in either deck
+// is numeric, so a rank and a word cannot clash.
 //
 // Either way it only ever records a change the sheet already made. Spelling
 // flows one way, sheet to CSV to module; writing the new spelling from here
@@ -75,10 +76,12 @@ if (!only) {
     console.log("No word changed spelling since the last commit.")
   } else {
     console.log("\nFor each one, decide whether the history should follow:")
-    console.log("  node tools/rename.mjs <lang> <rank>        a respelling - keep the history")
-    console.log("  node tools/rename.mjs <lang> <rank> --new  a different word - start fresh")
-    console.log("A card can be named by its old spelling instead, and its new one asserted:")
-    console.log("  node tools/rename.mjs <lang> <old> [<new>] [--new]")
+    console.log("  node tools/rename.mjs <lang> <old> <new>   a respelling - keep the history")
+    console.log("  node tools/rename.mjs <lang> <old> --new   a different word - start fresh")
+    console.log("Type <new> from what you changed in the sheet, not from the list above. It pairs")
+    console.log("words by rank, so a row added or removed above a respelling puts it on the")
+    console.log("neighbouring card, and the assertion is what catches that. A rank works in")
+    console.log("place of <old>, but checks nothing.")
   }
   process.exit(0)
 }

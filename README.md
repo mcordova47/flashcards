@@ -560,16 +560,17 @@ eleven other Spanish pairs the deck keeps apart on purpose, plus
 **To rename a word**, edit the sheet, pull it, then:
 
 ```
-npm run rename                          # what changed since the last commit
-node tools/rename.mjs es 472            # a respelling: keep the history
-node tools/rename.mjs es 472 --new      # a different word: start fresh
-node tools/rename.mjs es éste este      # the same, naming it by word
+npm run rename                                  # what changed since the last commit
+node tools/rename.mjs es libertad libertád      # a respelling: keep the history
+node tools/rename.mjs es libertad --new         # a different word: start fresh
 ```
 
-A card can be named by its rank or by its old spelling, optionally followed by
-its new one. The word form fails if the deck moved between the report and the
-command, where a rank would pin whatever sits there now; the rank form spares
-quoting `"die Türkei"`. Neither writes a spelling — that only ever comes from
+Type the new spelling from what you changed in the sheet, not from the report.
+Changes are found by pairing old and new words at the same rank, so a row
+added or removed above a respelling reports it against the neighbouring card,
+and only an assertion that comes from outside that pairing catches it. A rank
+(`rename es 472`) or an old spelling on its own is accepted, but pins whatever
+the pairing says. Nothing here writes a spelling — that only ever comes from
 the sheet, or the next fetch would undo it.
 
 Which of the two a change is cannot be decided by machine — `concrete` to

@@ -80,14 +80,26 @@ for (const lang of chosen) {
   // is exactly how it goes wrong unnoticed. Either answer leaves a pin - the old
   // spelling to keep the history, the new one to start fresh - so a change
   // with none is one nobody has decided.
+  //
+  // The commands it suggests name the card by its old spelling and leave the
+  // new one for the person to type. Detection pairs words by rank, so a row
+  // added above a respelling pins the change on the neighbouring card, and a
+  // ready-made `rename <rank>` would then hand that card the other's history.
+  // An assertion typed from what was changed in the sheet is what refuses it;
+  // one filled in from this same detection would agree with it.
   const undecided = changesIn(lang).filter(c => c.pin === null)
   if (undecided.length) {
-    const rank = undecided.length === 1 ? undecided[0].rank : "<rank>"
+    // Single quotes, since an interactive shell expands `!` inside double
+    // ones, and `Auf Wiedersehen!` is a card.
+    const shell = s => /^[\p{L}\p{N}._-]+$/u.test(s) ? s : `'${s.replace(/'/g, `'\\''`)}'`
+    const old = undecided.length === 1 ? shell(undecided[0].from) : "<old spelling>"
     fail(`${undecided.length} word(s) changed spelling since the last commit:\n`
        + undecided.map(c => `    #${c.rank}  ${c.from} -> ${c.to}`).join("\n")
        + `\n  Progress is keyed by the old spelling, so this decides whether the card keeps its history:`
-       + `\n    node tools/rename.mjs ${lang.code} ${rank}        a respelling - keep it`
-       + `\n    node tools/rename.mjs ${lang.code} ${rank} --new  a different word - start fresh`)
+       + `\n    node tools/rename.mjs ${lang.code} ${old} <what it reads now>   a respelling - keep it`
+       + `\n    node tools/rename.mjs ${lang.code} ${old} --new                 a different word - start fresh`
+       + `\n  Type the new spelling from what you changed in the sheet, not from the list above: that`
+       + `\n  pairing is by rank, and a row added or removed above the card puts it on the wrong one.`)
   }
 
   const [header, ...body] = parseCsv(fs.readFileSync(lang.csv, "utf-8"))
