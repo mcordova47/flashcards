@@ -45,6 +45,11 @@ columns, so the model answer is a worked example, not the only right answer.
 by looking it up in `es-verbs.csv`, and refuses any word outside `es-1000.csv`
 that the row's `Notes` does not explain.
 
+The order of the rows matters too. A trap's answers may not be met four
+running alike or alternating, since the position would then give the answer
+away, and `npm test` checks that (#63). Moving a row is safe for progress,
+which is keyed by `Id`.
+
 ## `es-por-para.csv` — por / para sentences
 
 Written by hand for #18 and #43. Each row is a Spanish sentence with `por`
