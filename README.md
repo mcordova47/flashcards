@@ -190,7 +190,8 @@ out.
 **Where a machine cannot tell two intentions apart, it warns and the reader
 decides.** A slug that no longer matches its word is either a rename or a
 mistake and they are identical from here, so `sync-deck` warns rather than
-failing. `rename` reports what changed and waits to be told which it was. A
+failing. `rename` reports what changed and waits to be told which it was, and
+`sync-deck` will not go on until it has been. A
 fetch prints what it is about to overwrite and refuses to guess whether the
 sheet or the snapshot is right.
 
@@ -550,10 +551,11 @@ difference from `es-0472` is that the divergence is *visible* — `concrete`
 sitting beside `concreto` says exactly what happened, and `sync-deck` flags it.
 
 The slug is the word verbatim unless the CSV's `Slug` column pins something
-else, and that column is empty for all 2005 rows today. Fill it in only when a
-word is respelled and its history should follow. It is deliberately not
-normalised: stripping accents would merge `este`/`éste` and eleven other
-Spanish pairs the deck keeps apart on purpose, plus `schön`/`schon` in German.
+else, and that column is empty for all 2005 rows today. It gets a value only
+when a word's spelling changes, and `rename` below says which. It is
+deliberately not normalised: stripping accents would merge `este`/`éste` and
+eleven other Spanish pairs the deck keeps apart on purpose, plus
+`schön`/`schon` in German.
 
 **To rename a word**, edit the sheet, pull it, then:
 
@@ -565,9 +567,12 @@ node tools/rename.mjs es 472 --new  # a different word: start fresh
 
 Which of the two a change is cannot be decided by machine — `concrete` to
 `concreto` and `concrete` to `armario` are the same edit — so the script
-reports and waits to be told. Pinning writes the old spelling into the local
-CSV and prints the sheet cell to copy it into; `sync-deck --fetch` refuses to
-let the sheet quietly drop a pin the snapshot had.
+reports and waits to be told. Either answer writes a pin into the local CSV
+and prints the sheet cell to copy it into: the old spelling to keep the
+history, or the new one to start fresh. The second keys the card exactly as no
+pin would, but the filled cell is what records that somebody decided, and
+`sync-deck` refuses a changed spelling that has neither. `sync-deck --fetch`
+also refuses to let the sheet quietly drop a pin the snapshot had.
 
 ### Migrating from rank
 
@@ -596,7 +601,9 @@ also fails on spreadsheet damage: a cell reading `TRUE` or `FALSE` (Sheets
 decides the string "true" is a boolean, which is how `verdadero` was glossed
 for months) or a `#REF!`-style error value. With `--fetch` it additionally
 refuses to let the sheet drop a pinned slug the local snapshot had, because
-that loss is otherwise silent.
+that loss is otherwise silent. And it refuses a word whose spelling changed
+since the last commit with no pin either way, because regenerating then quietly
+starts that card over on every device — see "To rename a word" above.
 
 Three heuristics only warn, because all have legitimate exceptions: an all-caps
 gloss; a gloss containing its own Spanish answer — the latter makes a

@@ -9,7 +9,7 @@
 
 import fs from "fs"
 import crypto from "crypto"
-import { LANGUAGES, SHEET, languagesFor, parseCsv, pinsIn } from "./deck-source.mjs"
+import { LANGUAGES, SHEET, changesIn, languagesFor, parseCsv, pinsIn } from "./deck-source.mjs"
 
 const args = process.argv.slice(2)
 const fetching = args.includes("--fetch")
@@ -72,6 +72,22 @@ for (const lang of chosen) {
            + `to orphan that history deliberately.`)
       }
     }
+  }
+
+  // A respelled word gets a new slug unless the old one is pinned, which
+  // orphans the card's history on every device that has it. Whether it should
+  // follow is not a machine's call, but going ahead without anyone making it
+  // is exactly how it goes wrong unnoticed. Either answer leaves a pin - the old
+  // spelling to keep the history, the new one to start fresh - so a change
+  // with none is one nobody has decided.
+  const undecided = changesIn(lang).filter(c => c.pin === null)
+  if (undecided.length) {
+    const rank = undecided.length === 1 ? undecided[0].rank : "<rank>"
+    fail(`${undecided.length} word(s) changed spelling since the last commit:\n`
+       + undecided.map(c => `    #${c.rank}  ${c.from} -> ${c.to}`).join("\n")
+       + `\n  Progress is keyed by the old spelling, so this decides whether the card keeps its history:`
+       + `\n    node tools/rename.mjs ${lang.code} ${rank}        a respelling - keep it`
+       + `\n    node tools/rename.mjs ${lang.code} ${rank} --new  a different word - start fresh`)
   }
 
   const [header, ...body] = parseCsv(fs.readFileSync(lang.csv, "utf-8"))

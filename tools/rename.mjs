@@ -2,7 +2,7 @@
 //
 //   node tools/rename.mjs              report every word that changed since HEAD
 //   node tools/rename.mjs es 472       #472 was renamed: pin its old spelling
-//   node tools/rename.mjs es 472 --new #472 is a different word: no pin, fresh start
+//   node tools/rename.mjs es 472 --new #472 is a different word: pin its new spelling, fresh start
 //
 // Progress is keyed by a card's slug, and a slug is the foreign word's
 // spelling unless the CSV's Slug column pins something else. So correcting a
@@ -53,7 +53,9 @@ if (!only) {
     found += changes.length
     console.log(`\n[${lang.code}] ${changes.length} word(s) changed since the last commit`)
     for (const c of changes) {
-      const state = c.pin === c.from ? " (pinned)" : c.pin ? ` (pinned to ${JSON.stringify(c.pin)}!)` : ""
+      const state = c.pin === c.from ? " (pinned)"
+        : c.pin === c.to ? " (a new word)"
+        : c.pin ? ` (pinned to ${JSON.stringify(c.pin)}!)` : ""
       console.log(`  #${c.rank}  ${c.from} -> ${c.to}${state}`)
     }
   }
@@ -74,6 +76,19 @@ const rank = Number(rankArg)
 if (!Number.isInteger(rank)) die(`Expected a rank, got ${JSON.stringify(rankArg ?? "")}`)
 
 const change = changesIn(lang).find(c => c.rank === rank)
+
+if (fresh && change) {
+  // Pinned to its own spelling, which keys it exactly as no pin would. The
+  // filled cell is the point: it is what tells sync-deck this change was
+  // decided, where an empty one looks the same as a change nobody noticed.
+  const row = setPin(lang, rank, change.to)
+  console.log(`#${rank} ${change.from} -> ${change.to}`)
+  console.log(`  pinned to its new spelling in ${lang.csv}, so it starts fresh.`)
+  console.log(`\n  Put the same value in the sheet, or the next --fetch will drop it:`)
+  console.log(`    ${lang.tab} tab, row ${row}, Slug column: ${change.to}`)
+  console.log(`\n  Then: npm run sync-deck ${lang.code}`)
+  process.exit(0)
+}
 
 if (fresh) {
   // Clearing a pin is how a mistaken one is undone, so it is allowed even
