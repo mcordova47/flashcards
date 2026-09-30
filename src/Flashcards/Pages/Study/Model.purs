@@ -7,6 +7,7 @@
 -- | that has to be undone at every crossing.
 module Flashcards.Pages.Study.Model
   ( Message(..)
+  , Modal(..)
   , Purpose(..)
   , Screen(..)
   , Session
@@ -96,10 +97,10 @@ data Screen
 type State =
   { progress :: Progress
   , screen :: Screen
-  -- | `Just` the moment the panel was opened, which doubles as "is it open".
-  -- | Fixed at open, like the progress sheet, so "last synced 3 days ago" does
-  -- | not tick over while you are reading it.
-  , panel :: Maybe Instant
+  -- | Whatever is over the card, if anything. See `Modal`.
+  , modal :: Maybe Modal
+  -- | Not a `Modal`, though it is the other thing that appears over the
+  -- | screen: see there.
   , notice :: Maybe String
   , canSpeak :: Boolean
   -- | Every voice the device has, and the slice belonging to the language
@@ -116,13 +117,8 @@ type State =
   -- | finishes; after that it is always set, generated on first run.
   , syncKey :: Maybe String
   , index :: DeckIndex.Index
-  -- | `Just` the moment the screen was opened, which doubles as "is it open".
-  -- | The time is fixed at open so the due counts cannot shift underneath you.
-  , statsAt :: Maybe Instant
-  , pairing :: Boolean
   , canShare :: Boolean
   , canScan :: Boolean
-  , scanning :: Boolean
   -- | What the server is known to hold, and when it last took something.
   -- |
   -- | `sent` is the progress itself rather than a flag, so "is there anything
@@ -143,9 +139,37 @@ type State =
   -- | Where this app is served from, so the pairing link is absolute and can
   -- | be pasted anywhere rather than only followed from here.
   , origin :: String
-  -- | The note being written, if one is. See `Flashcards.Notes`.
-  , notes :: Notes.Sheet
   }
+
+-- | What is over the card. One field rather than one per overlay, because only
+-- | one is ever open: with a field each, every place that opened one had to
+-- | clear the others by hand, and every place that asked whether the card was
+-- | covered had to list them all — and listing them one at a time is how the
+-- | pairing sheet was missed when the note sheet was guarded (#60).
+-- |
+-- | The notice is left out on purpose, and would be wrong in here. It sits
+-- | over the screen but covers nothing: a toast that swallowed keys, or that
+-- | opening a sheet could replace, would take the card away from a reader for
+-- | three and a half seconds each time something was merely said. It can also
+-- | be raised while a sheet is open — the pairing sheet raises most of them —
+-- | which a modal, being one of these, could not be.
+-- |
+-- | Its own type rather than one shared with the drills, which spell the menu
+-- | differently and have no pairing. The pages share no state, and a shared
+-- | type would be one more thing to keep both of them agreeing with.
+data Modal
+  -- | The ••• menu, and the moment it was opened. Fixed at open, like the
+  -- | progress sheet, so "last synced 3 days ago" does not tick over while you
+  -- | are reading it.
+  = Panel Instant
+  -- | The progress sheet, and the moment it was opened. Fixed so the due
+  -- | counts cannot shift underneath you.
+  | Stats Instant
+  -- | The pairing sheet. Whether the camera is running belongs to it: closing
+  -- | the sheet always stopped the camera too, and nothing else reads it.
+  | Pairing { scanning :: Boolean }
+  -- | The note being written. See `Flashcards.Notes`.
+  | Note Notes.Open
 
 -- | Everything that has to be asked of the outside world before the screen can
 -- | exist: what was saved, what this device can do, and the time.

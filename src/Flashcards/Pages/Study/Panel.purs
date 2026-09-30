@@ -28,8 +28,9 @@ import Flashcards.Pages.Study.Model (Message(..), State)
 import Flashcards.Stats as Stats
 import Flashcards.Types.Progress as Progress
 
-view :: State -> Dispatch Message -> ReactElement
-view state dispatch =
+-- | Takes the moment it was opened, which the modal holds.
+view :: Instant -> State -> Dispatch Message -> ReactElement
+view opened state dispatch =
   H.fragment
   [ H.div_ "backdrop" { onClick: dispatch <| TogglePanel } H.empty
   , H.div "panel"
@@ -72,20 +73,20 @@ view state dispatch =
 
     syncNote
       | settled = "Everything is synced"
-      | otherwise = case state.offline, state.syncedAt, state.panel of
+      | otherwise = case state.offline, state.syncedAt of
           -- The only case worth a reason: a failed exchange is invisible on
           -- the card screen by design, so this is where it surfaces.
-          true, _, _ -> "Not synced — no connection" <> since
-          _, Nothing, _ -> "Not synced yet"
-          _, _, _ -> "Not synced" <> since
+          true, _ -> "Not synced — no connection" <> since
+          _, Nothing -> "Not synced yet"
+          _, _ -> "Not synced" <> since
 
     -- How stale the last successful exchange is, but only once that is worth
     -- remarking on. "Not synced · last synced under a minute ago" reads as a
     -- contradiction; a week is the thing you actually want to be told.
-    since = case state.syncedAt, state.panel of
-      Just at, Just now | elapsed at now >= Milliseconds 3600000.0 ->
-        " · last synced " <> Stats.describeDuration (elapsed at now) <> " ago"
-      _, _ -> ""
+    since = case state.syncedAt of
+      Just at | elapsed at opened >= Milliseconds 3600000.0 ->
+        " · last synced " <> Stats.describeDuration (elapsed at opened) <> " ago"
+      _ -> ""
 
     -- Only worth showing once there is more than one deck to switch between.
     languagePicker

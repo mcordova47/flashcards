@@ -28,27 +28,40 @@ import Data.Maybe (Maybe(..))
 import Effect.Class (liftEffect)
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Styled as H
-import Flashcards.Pages.Study.Model (Message(..), State, noticing)
+import Flashcards.Pages.Study.Model (Message(..), Modal(..), State, noticing)
 import Flashcards.Sync as Sync
 
 open :: State -> Transition Message State
 open state =
-  pure state { pairing = true, panel = Nothing }
+  pure state { modal = Just $ Pairing { scanning: false } }
 
 close :: State -> Transition Message State
 close state = do
   forkVoid $ liftEffect Sync.stopScan
-  pure state { pairing = false, scanning = false }
+  pure $ closed state
 
 startScan :: State -> Transition Message State
 startScan state = do
   forks \{ dispatch } -> liftEffect $ Sync.startScan $ dispatch <<< Scanned
-  pure state { scanning = true }
+  pure $ scanning true state
 
 stopScan :: State -> Transition Message State
 stopScan state = do
   forkVoid $ liftEffect Sync.stopScan
-  pure state { scanning = false }
+  pure $ scanning false state
+
+-- | Only if the sheet is still what is open. What arrives here can come back
+-- | from the camera or the clipboard after the reader has moved on, and must
+-- | neither reopen the sheet nor shut whatever replaced it.
+scanning :: Boolean -> State -> State
+scanning on state = case state.modal of
+  Just (Pairing _) -> state { modal = Just $ Pairing { scanning: on } }
+  _ -> state
+
+closed :: State -> State
+closed state = case state.modal of
+  Just (Pairing _) -> state { modal = Nothing }
+  _ -> state
 
 -- Reading a code is only a nicer way of arriving at a link, so it lands in
 -- the same place a pasted one does and gets the same forgiving parse.
@@ -56,13 +69,13 @@ scanned :: Sync.Scan -> State -> Transition Message State
 scanned result state = case result of
   Sync.Code text -> do
     fork $ pure $ LinkPasted text
-    pure state { scanning = false }
+    pure $ scanning false state
 
   Sync.Refused ->
-    noticing state { scanning = false } "Camera access was refused"
+    noticing (scanning false state) "Camera access was refused"
 
   Sync.Unusable ->
-    noticing state { scanning = false } "Couldn't start the camera"
+    noticing (scanning false state) "Couldn't start the camera"
 
 copyLink :: State -> Transition Message State
 copyLink state = case state.syncKey of
@@ -110,9 +123,8 @@ linkPasted pasted state = case Sync.keyFromLink pasted of
           Sync.clearPasted
         fork $ pure Sync
         noticing
-          state
+          (closed state)
             { syncKey = Just key
-            , pairing = false
             -- A different key is a different blob, so nothing is known about
             -- it until it answers.
             , sent = Nothing
@@ -126,8 +138,8 @@ linkPasted pasted state = case Sync.keyFromLink pasted of
 -- | way through the update loop, and a reader with nothing on screen has no
 -- | second move. With the link visible there is always one — select it, or
 -- | long-press it — and the button is a shortcut rather than the mechanism.
-view :: State -> Dispatch Message -> ReactElement
-view state dispatch =
+view :: { scanning :: Boolean } -> State -> Dispatch Message -> ReactElement
+view sheet state dispatch =
   H.div "sheet"
   [ H.div "sheet-head"
     [ H.h2 "sheet-title" "Sync another device"
@@ -157,7 +169,7 @@ view state dispatch =
           <> "that progress, since there are no accounts here. A door key, not "
           <> "a password."
     , H.h3 "sheet-heading" "From another device"
-    , if state.scanning then scanner else takeALink
+    , if sheet.scanning then scanner else takeALink
     ]
   ]
   where

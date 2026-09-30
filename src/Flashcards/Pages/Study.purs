@@ -32,8 +32,8 @@ import Flashcards.Page as Page
 import Flashcards.Milestone as Milestone
 import Flashcards.Notes.Delivery as Delivery
 import Flashcards.Notes.Sheet as Notes
-import Flashcards.Pages.Study.Model (Message(..), Purpose(..), Screen(..), Session, State, Summary, noticing, untouched)
-import Flashcards.Pages.Study.Model (Message, State) as Model
+import Flashcards.Pages.Study.Model (Message(..), Modal(..), Purpose(..), Screen(..), Session, State, Summary, noticing, untouched)
+import Flashcards.Pages.Study.Model (Message, Modal, State) as Model
 import Flashcards.Pages.Study.Pairing as Pairing
 import Flashcards.Pages.Study.Panel as Panel
 import Flashcards.Pages.Study.Progress as ProgressSheet
@@ -82,7 +82,7 @@ init opening = do
   pure
     { progress: Progress.empty
     , screen: Loading
-    , panel: Nothing
+    , modal: Nothing
     , notice: Nothing
     , canSpeak: false
     , allVoices: []
@@ -94,17 +94,13 @@ init opening = do
     , language: Language.default
     , syncKey: Nothing
     , index: DeckIndex.index Language.default.deck
-    , statsAt: Nothing
-    , pairing: false
     , canShare: false
     , canScan: false
-    , scanning: false
     , origin: ""
     , undo: Nothing
     , sent: Nothing
     , syncedAt: Nothing
     , offline: false
-    , notes: Notes.closed
     }
 
 update :: State -> Message -> Transition Message State
@@ -271,15 +267,15 @@ update state = case _ of
   StartedAnother now ->
     pure state { screen = startSession state.language.deck state.progress now, undo = Nothing }
 
-  TogglePanel -> case state.panel of
-    Just _ ->
-      pure state { panel = Nothing }
-    Nothing -> do
+  TogglePanel -> case state.modal of
+    Just (Panel _) ->
+      pure state { modal = Nothing }
+    _ -> do
       fork $ liftEffect $ OpenedPanel <$> Now.now
       pure state
 
   OpenedPanel now ->
-    pure state { panel = Just now }
+    pure state { modal = Just $ Panel now }
 
   DismissNotice ->
     pure state { notice = Nothing }
@@ -291,17 +287,15 @@ update state = case _ of
   -- Only reachable from the open progress sheet, which already fixed a
   -- moment when it opened — so the standing is taken from the same clock the
   -- figures on that sheet were read with.
-  DrillLeeches -> case state.statsAt of
-    Nothing ->
-      pure state
-    Just now ->
+  DrillLeeches -> case state.modal of
+    Just (Stats now) ->
       case Array.take Scheduler.sessionSize $ map _.slug $
              Stats.leeches Stats.leechThreshold state.language.deck state.progress of
         [] ->
           pure state
         queue ->
           pure state
-            { statsAt = Nothing
+            { modal = Nothing
             , screen =
                 Studying
                   { purpose: Drill
@@ -310,16 +304,18 @@ update state = case _ of
                   }
             , undo = Nothing
             }
+    _ ->
+      pure state
 
   ShowStats -> do
     fork $ liftEffect $ StatsAt <$> Now.now
     pure state
 
   StatsAt now ->
-    pure state { statsAt = Just now, panel = Nothing }
+    pure state { modal = Just $ Stats now }
 
   HideStats ->
-    pure state { statsAt = Nothing }
+    pure state { modal = Nothing }
 
   -- Reuses the startup path: everything that has to be reloaded for a new
   -- language is exactly what `Loaded` already reloads.
@@ -347,7 +343,7 @@ update state = case _ of
         now <- liftEffect Now.now
         pure $ Loaded
           { progress, now, canSpeak: state.canSpeak, savedAccent, savedVoice, language, index, syncKey, origin, syncedAt, canShare, canScan }
-      pure state { panel = Nothing, statsAt = Nothing }
+      pure state { modal = Nothing }
 
   Sync -> case state.syncKey of
     Nothing ->
@@ -415,7 +411,7 @@ update state = case _ of
               -- A note being written counts as a reader part-way through:
               -- they are looking at the card, and it is what the note is
               -- about.
-              when (merged /= state.progress && untouched state.screen && isNothing state.notes) $
+              when (merged /= state.progress && untouched state.screen && isNothing (writing state)) $
                 fork $ liftEffect $ StartedAnother <$> Now.now
               pure state { progress = merged }
 
@@ -444,7 +440,7 @@ update state = case _ of
   LinkPasted pasted -> Pairing.linkPasted pasted state
 
   WriteNote ->
-    notes state { panel = Nothing } $ Notes.Open $ noteContext state
+    notes state $ Notes.Open $ noteContext state
 
   Notes message ->
     notes state message
@@ -468,9 +464,21 @@ update state = case _ of
 
 -- | Hands a message to the note sheet. Nothing comes back from it but itself,
 -- | which is why the card behind it is left exactly as it was.
+-- |
+-- | A sheet that comes back closed closes the modal only if the modal was the
+-- | sheet: the sheet's own messages can land after it has gone — `Loaded` is
+-- | read from storage — and one landing then must not shut whatever has been
+-- | opened since.
 notes :: State -> Notes.Message -> Transition Message State
 notes state message =
-  lmap Notes (Notes.update state.notes message) <#> state { notes = _ }
+  lmap Notes (Notes.update (writing state) message) <#> \sheet ->
+    state { modal = maybe (if isJust (writing state) then Nothing else state.modal) (Just <<< Note) sheet }
+
+-- | The note sheet, if that is what is open.
+writing :: State -> Notes.Sheet
+writing state = case state.modal of
+  Just (Note open) -> Just open
+  _ -> Nothing
 
 -- | What was on screen, for a note to carry so that it need not be typed.
 -- | The slug names the card; the prompt is what it asked, which way round.
@@ -549,14 +557,14 @@ view state dispatch =
       Loading -> H.div "app" H.empty
       Studying session -> studyingView state session dispatch
       Complete summary -> completeView (isJust state.undo) state.language state.progress summary dispatch
-  , if isJust state.panel then Panel.view state dispatch else H.empty
-  , case state.statsAt of
+  -- No wildcard, so that another kind of modal fails to compile here rather
+  -- than opening onto nothing.
+  , case state.modal of
       Nothing -> H.empty
-      Just now -> ProgressSheet.view state.language now state.progress dispatch
-  , if state.pairing then Pairing.view state dispatch else H.empty
-  , case state.notes of
-      Nothing -> H.empty
-      Just open -> Notes.view open (dispatch <<< Notes)
+      Just (Panel opened) -> Panel.view opened state dispatch
+      Just (Stats now) -> ProgressSheet.view state.language now state.progress dispatch
+      Just (Pairing sheet) -> Pairing.view sheet state dispatch
+      Just (Note open) -> Notes.view open (dispatch <<< Notes)
   , case state.notice of
       Nothing -> H.empty
       Just message -> H.div "notice" message
@@ -717,12 +725,10 @@ completeView undoable language progress summary dispatch =
 
 -- | Whether anything is over the card: the menu, or a sheet. Every one of them,
 -- | rather than whichever has something to type into, because a key acting on
--- | a card you cannot see is wrong whether or not it was meant for a box, and
--- | because listing sheets one at a time is how the pairing sheet was missed
--- | when the note sheet was guarded.
+-- | a card you cannot see is wrong whether or not it was meant for a box. Not
+-- | the notice, which covers nothing; see `Modal`.
 covered :: State -> Boolean
-covered state =
-  isJust state.panel || isJust state.statsAt || state.pairing || isJust state.notes
+covered state = isJust state.modal
 
 keyMessage :: String -> Maybe Message
 keyMessage = case _ of
