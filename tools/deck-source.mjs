@@ -91,7 +91,7 @@ export const wordsIn = (text, column) => {
   return words
 }
 
-const committed = path => {
+export const committed = path => {
   try {
     return execFileSync("git", ["show", `HEAD:${path}`], { encoding: "utf-8" })
   } catch {

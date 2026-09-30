@@ -30,7 +30,7 @@
 // waits to be told.
 
 import fs from "fs"
-import { LANGUAGES, changesIn, formatRow, languagesFor, parseCsv, wordsIn } from "./deck-source.mjs"
+import { LANGUAGES, changesIn, committed, formatRow, languagesFor, parseCsv, wordsIn } from "./deck-source.mjs"
 
 const args = process.argv.slice(2)
 const fresh = args.includes("--new")
@@ -97,10 +97,12 @@ const changes = changesIn(lang)
 // change. Failing that it may be a card nothing has happened to - which is
 // fine for clearing a stale pin with --new - or the *new* spelling of one that
 // has changed, which is a slip worth catching rather than guessing past.
+const words = wordsIn(fs.readFileSync(lang.csv, "utf-8"), lang.column)
+
 const byWord = word => {
   const change = changes.find(c => c.from === word)
   if (change) return change.rank
-  const [rank] = [...wordsIn(fs.readFileSync(lang.csv, "utf-8"), lang.column)].find(([, w]) => w === word) ?? []
+  const [rank] = [...words].find(([, w]) => w === word) ?? []
   if (rank === undefined) die(`no card in ${lang.csv} reads or read ${JSON.stringify(word)}. Run without arguments to see what changed.`)
   const renamed = changes.find(c => c.rank === rank)
   if (renamed) {
@@ -114,10 +116,29 @@ const rank = /^\d+$/.test(handle) ? Number(handle) : byWord(handle)
 const change = changes.find(c => c.rank === rank)
 
 if (asserted !== undefined && change?.to !== asserted) {
-  die(change
-    ? `#${rank} ${change.from} now reads ${JSON.stringify(change.to)}, not ${JSON.stringify(asserted)}. `
-      + `The deck has moved since you looked - run without arguments to see what changed.`
-    : `#${rank} has not changed spelling since the last commit, so it cannot have become ${JSON.stringify(asserted)}.`)
+  if (!change) {
+    die(`#${rank} has not changed spelling since the last commit, so it cannot have become ${JSON.stringify(asserted)}.`)
+  }
+  // Changes are paired by rank, so a row added or removed above a respelling
+  // puts it on the neighbour, and the assertion is what disagrees. The card
+  // it meant is the one that reads the asserted spelling now and did not at
+  // the last commit - no card did, since otherwise the word merely moved.
+  // Rerunning would only reprint the same pairing, so say what to write
+  // instead: the old spelling on that card, and the neighbour pinned to its
+  // own spelling so the guard stops counting it as undecided.
+  const then = new Set(wordsIn(committed(lang.csv) ?? "", lang.column).values())
+  const [meant] = [...words].find(([, w]) => w === asserted && !then.has(w)) ?? []
+  if (meant === undefined) {
+    die(`#${rank} ${change.from} now reads ${JSON.stringify(change.to)}, not ${JSON.stringify(asserted)}, `
+      + `and no card has newly come to read ${JSON.stringify(asserted)} since the last commit. Check the spelling in the sheet.`)
+  }
+  die(`#${rank} ${change.from} now reads ${JSON.stringify(change.to)}, not ${JSON.stringify(asserted)}. `
+    + `Changes are paired by rank, so if a row was\n  added or removed above it, #${meant} now reads `
+    + `${JSON.stringify(asserted)}. To keep its history, put these in the Slug column,\n`
+    + `  in ${lang.csv} and in the ${lang.tab} tab:\n`
+    + `    #${meant}  row ${meant + 1}  ${change.from}\n`
+    + `    #${rank}  row ${rank + 1}  ${change.to}   (so this change counts as decided)\n`
+    + `  Then: npm run sync-deck ${lang.code}`)
 }
 
 if (fresh && change) {

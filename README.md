@@ -568,7 +568,9 @@ node tools/rename.mjs es libertad --new         # a different word: start fresh
 Type the new spelling from what you changed in the sheet, not from the report.
 Changes are found by pairing old and new words at the same rank, so a row
 added or removed above a respelling reports it against the neighbouring card,
-and only an assertion that comes from outside that pairing catches it. A rank
+and only an assertion that comes from outside that pairing catches it — it
+then names the card that newly reads that spelling and the two Slug cells that
+keep its history, since rerunning would only repeat the same pairing. A rank
 (`rename es 472`) or an old spelling on its own is accepted, but pins whatever
 the pairing says. Nothing here writes a spelling — that only ever comes from
 the sheet, or the next fetch would undo it.
