@@ -10,6 +10,7 @@ import os from "os"
 import path from "path"
 import puppeteer from "puppeteer-core"
 import { fileURLToPath } from "url"
+import { parseCsv } from "../../tools/deck-source.mjs"
 import { handle } from "../../netlify/functions/progress.mjs"
 import { handle as handleNotes } from "../../netlify/functions/notes.mjs"
 import { qrDataUrl } from "../../src/Flashcards/Sync.js"
@@ -66,20 +67,20 @@ let deckCache = null
 export const spanishDeck = () => deckCache ?? (deckCache = readSpanishDeck())
 
 const readSpanishDeck = () => {
-  const csv = fs.readFileSync(path.join(REPO, "data/es-1000.csv"), "utf-8")
-  const cell = c => c.replace(/^"|"$/g, "").replace(/""/g, '"').trim()
-  return csv.split("\n").slice(1).filter(l => l.trim()).map(line => {
-    const cells = line.match(/("([^"]|"")*"|[^,]*)/g).filter((_, i) => i % 2 === 0)
-    // The slug is the word verbatim; only a renamed card pins anything else,
-    // and none do today. See tools/sync-deck.mjs.
-    return { rank: Number(cells[0]), english: cell(cells[1]), word: cell(cells[2]) }
-  })
+  const [header, ...body] = parseCsv(fs.readFileSync(path.join(REPO, "data/es-1000.csv"), "utf-8"))
+  const slug = header.indexOf("Slug")
+  return body.filter(cells => cells.length > 1).map(cells => ({
+    rank: Number(cells[0]), english: cells[1].trim(), word: cells[2].trim(), slug: cells[slug].trim(),
+  }))
 }
 
 // The slug progress is keyed by, for the card standing at a given rank.
 // Fixtures still name cards by rank because that is how the deck reads, and
 // this is the one place that turns a position into an identity.
-export const slugAt = rank => spanishDeck().find(c => c.rank === rank).word
+export const slugAt = rank => spanishDeck().find(c => c.rank === rank).slug
+
+// The word shown for the card at a given rank.
+export const wordAt = rank => spanishDeck().find(c => c.rank === rank).word
 
 // The stored record for the card at a given rank.
 export const storedAt = (cards, rank) => cards.find(c => c.slug === slugAt(rank))
