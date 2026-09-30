@@ -41,7 +41,6 @@ npm start        # http://localhost:8000
 | `npm run check-sentences` | Prove every shift sentence against the table, in deck vocabulary |
 | `npm run sync-por-para` | Regenerate the por / para sentence module from `data/es-por-para.csv` |
 | `npm run check-por-para` | Prove every por / para contrast asks both sides and every sense only its own, in deck vocabulary |
-| `npm run rename` | Report words whose spelling changed, and pin the ones that should keep their history |
 | `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
 | `npm run notes` | Every note the app has sent, oldest first — see [Reading them](#reading-them) |
 
@@ -188,9 +187,9 @@ up to date while quietly not being, which is the one thing it exists to rule
 out.
 
 **Where a machine cannot tell two intentions apart, it warns and the reader
-decides.** A slug that no longer matches its word is either a rename or a
-mistake and they are identical from here, so `sync-deck` warns rather than
-failing. `rename` reports what changed and waits to be told which it was. A
+decides.** A slug that no longer matches its word is either a respelling or a
+replaced word and they are identical from here, so `sync-deck` warns rather
+than failing, and the slug is what the reader edits to say which. A
 fetch prints what it is about to overwrite and refuses to guess whether the
 sheet or the snapshot is right.
 
@@ -558,19 +557,19 @@ respelling. So adding a word means typing it twice. It is deliberately not
 normalised: stripping accents would merge `este`/`éste` and eleven other
 Spanish pairs the deck keeps apart on purpose, plus `schön`/`schon` in German.
 
-**To rename a word**, edit the sheet, pull it, then:
+**To respell a word**, edit its word cell in the sheet and leave its slug
+alone. The card keeps its history, and `sync-deck` warns that the slug no longer
+matches the word, which is what a respelling looks like.
 
-```
-npm run rename                    # what changed since the last commit
-node tools/rename.mjs es 472      # a respelling: keep the history
-node tools/rename.mjs es 472 --new  # a different word: start fresh
-```
-
-Which of the two a change is cannot be decided by machine — `concrete` to
-`concreto` and `concrete` to `armario` are the same edit — so the script
-reports and waits to be told. Pinning writes the old spelling into the local
-CSV and prints the sheet cell to copy it into; `sync-deck --fetch` refuses to
-let the sheet quietly drop a pin the snapshot had.
+**To replace a word with a different one**, edit its slug cell too. A new slug
+is a new card, and it starts fresh. Leave the slug alone and the new word
+inherits the old one's history instead: `concrete` to `concreto` and `concrete`
+to `armario` are the same edit to the word, and only the slug says which was
+meant. That is the safer way to get it wrong, because an inherited history
+corrects itself on the first miss and a lost one is gone. `sync-deck --fetch`
+refuses a changed slug on a word still in the deck unless given `--drop-pins`,
+so a replacement made in one fetch, word and slug together, goes through, and
+a slug edited on its own has to be meant.
 
 ### Migrating from rank
 
@@ -1186,7 +1185,6 @@ data/es-verbs.csv                    38 irregular verbs, 760 conjugated cells
 data/es-paraphrase.csv               41 prompts for #10, each with one trap
 data/es-sentences.csv                the tense-shift sentences, verb in brackets
 tools/sync-deck.mjs                  sheet -> CSV -> generated module
-tools/rename.mjs                     pins a slug when a word is respelled
 tools/deck-source.mjs                the language table, shared by both
 tools/sync-verbs.mjs                 conjugation CSV -> generated module
 tools/check-verbs.mjs                prints what deviates; the list IS the review
