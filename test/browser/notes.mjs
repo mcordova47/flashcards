@@ -1,4 +1,4 @@
-import { deckFingerprint, formatVersion, slugAt, wait } from "./harness.mjs"
+import { deckFingerprint, formatVersion, slugAt, wait, wordAt } from "./harness.mjs"
 
 export const name = "Notes written from inside the app"
 
@@ -66,7 +66,7 @@ export default async ({ base, browser, check, open, noteBlobs }) => {
   await openSheet(cards)
   check("the panel steps aside for the sheet", await cards.$(".panel"), null)
   check("the sheet says what was on screen before anything is typed",
-    await cards.text(".note-context"), `/es · ${slugAt(2)} · recognition · “${slugAt(2)}”`)
+    await cards.text(".note-context"), `/es · ${slugAt(2)} · recognition · “${wordAt(2)}”`)
   check("and the box is ready to type into",
     await cards.evaluate(() => document.activeElement?.className), "note-draft")
 
@@ -78,7 +78,7 @@ export default async ({ base, browser, check, open, noteBlobs }) => {
   const one = await saved(cards)
   check("the note is saved", one?.notes?.map(n => n.text), [ TYPED.trim() ])
   check("with what was on screen, untyped",
-    one.notes[0].context, `/es · ${slugAt(2)} · recognition · “${slugAt(2)}”`)
+    one.notes[0].context, `/es · ${slugAt(2)} · recognition · “${wordAt(2)}”`)
   check("and when", Math.abs(one.notes[0].at - Date.now()) < 60000, true)
   check("the box is emptied for the next one", await cards.$eval(".note-draft", e => e.value), "")
   check("and the note is listed", await cards.text(".note-text"), TYPED.trim())
@@ -102,7 +102,7 @@ export default async ({ base, browser, check, open, noteBlobs }) => {
   // A blank note is not a note.
   await openSheet(cards)
   check("the answer showing is recorded too",
-    await cards.text(".note-context"), `/es · ${slugAt(2)} · recognition · “${slugAt(2)}” · answer showing`)
+    await cards.text(".note-context"), `/es · ${slugAt(2)} · recognition · “${wordAt(2)}” · answer showing`)
   await cards.type(".note-draft", "   \n ")
   await cards.tap(".note-save")
   check("a blank one is not saved", (await saved(cards)).notes.length, 1)

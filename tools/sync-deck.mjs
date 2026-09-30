@@ -9,7 +9,7 @@
 
 import fs from "fs"
 import crypto from "crypto"
-import { LANGUAGES, SHEET, languagesFor, parseCsv, pinsIn } from "./deck-source.mjs"
+import { LANGUAGES, SHEET, languagesFor, parseCsv, slugsByWord } from "./deck-source.mjs"
 
 const args = process.argv.slice(2)
 const fetching = args.includes("--fetch")
@@ -58,18 +58,22 @@ for (const lang of chosen) {
     }
     if (differing.length > 20) console.log(`    ... and ${differing.length - 20} more`)
 
-    // A pinned slug is the only thing tying a renamed card to its history, and
-    // the sheet overwrites the snapshot wholesale. Losing one is silent - the
-    // slug simply goes back to matching the word, so nothing downstream can
-    // tell - which makes this the one place it can be caught.
+    // A slug is the only thing tying a card to its history, and the sheet
+    // overwrites the snapshot wholesale, so a cell edited by mistake or a
+    // column pasted one row out would silently rekey cards. Matched by word,
+    // not rank: a row added or removed shifts every rank below it without
+    // changing any card, and a deleted or respelled word has no slug here to
+    // keep. What is left is a word still in the deck whose slug changed.
     if (!droppingPins) {
-      const had = pinsIn(previous), has = pinsIn(normalised)
-      const lost = [...had].filter(([rank, pin]) => has.get(rank) !== pin)
+      const had = slugsByWord(previous, lang.column), has = slugsByWord(normalised, lang.column)
+      const lost = [...had].filter(([word, slug]) => slug && has.has(word) && has.get(word) !== slug)
       if (lost.length) {
-        fail(`the fetch dropped ${lost.length} pinned slug(s) that ${lang.csv} had:\n`
-           + lost.map(([rank, pin]) => `    #${rank} was keyed ${JSON.stringify(pin)}`).join("\n")
-           + `\n  Add them to the Slug column of the ${lang.tab} tab, or rerun with --drop-pins `
-           + `to orphan that history deliberately.`)
+        fail(`the fetch changed the slug of ${lost.length} word(s) still in the deck:\n`
+           + lost.slice(0, 20).map(([word, slug]) =>
+               `    ${word}  was keyed ${JSON.stringify(slug)}, now ${JSON.stringify(has.get(word))}`).join("\n")
+           + (lost.length > 20 ? `\n    ... and ${lost.length - 20} more` : "")
+           + `\n  Put them back in the Slug column of the ${lang.tab} tab, or rerun with --drop-pins `
+           + `if it was deliberate - a card with a new slug starts its history over.`)
       }
     }
   }
@@ -82,16 +86,19 @@ for (const lang of chosen) {
 
   // Optional, and found by name: the decks do not agree on column count.
   const exampleAt = header.indexOf("Example")
-  // Also optional, and usually empty. A slug is only written down when a word
-  // is renamed and its history should follow; otherwise the word is the slug.
+  // Required, on every row. The slug is what progress is keyed by, and it is
+  // written down rather than derived from the word so that correcting a
+  // spelling cannot quietly change which card it is. An empty one is refused
+  // rather than filled in from the word, which is the silent case over again.
   const slugAt = header.indexOf("Slug")
+  if (slugAt < 0) fail(`there is no Slug column. Every card needs one: it is what its history is keyed by.`)
 
   const cards = body.map((cells, i) => {
     const rank = Number((cells[0] ?? "").trim())
     const english = (cells[1] ?? "").trim()
     const foreign = (cells[2] ?? "").trim()
     const example = exampleAt < 0 ? "" : (cells[exampleAt] ?? "").trim()
-    const pinned = slugAt < 0 ? "" : (cells[slugAt] ?? "").trim()
+    const slug = (cells[slugAt] ?? "").trim()
     if (!Number.isInteger(rank)) fail(`row ${i + 2} has a non-integer Order: ${cells[0]}`)
     if (!english) fail(`row ${i + 2} has an empty English side`)
     if (!foreign) fail(`row ${i + 2} has an empty ${lang.column} side`)
@@ -99,12 +106,21 @@ for (const lang of chosen) {
     // schön/schon; lowercasing would merge German Sie and sie in a deck that
     // carried both. The word is already required unique, so it needs nothing
     // doing to it.
-    return { rank, english, foreign, example, slug: pinned || foreign }
+    return { rank, english, foreign, example, slug }
   })
 
   cards.forEach((c, i) => {
     if (c.rank !== i + 1) fail(`Order is not contiguous: expected ${i + 1}, got ${c.rank}`)
   })
+
+  const unslugged = cards.filter(c => !c.slug)
+  if (unslugged.length) {
+    fail(`${unslugged.length} card(s) have no slug:\n`
+       + unslugged.slice(0, 20).map(c => `    #${c.rank}  ${c.foreign}`).join("\n")
+       + (unslugged.length > 20 ? `\n    ... and ${unslugged.length - 20} more` : "")
+       + `\n  Fill each Slug cell in the ${lang.tab} tab with the word itself. A slug is never `
+       + `filled in for you, because that is how a respelling used to lose a card's history.`)
+  }
 
   // Spreadsheet coercions. Sheets decides the string "true" is a boolean and
   // exports it as TRUE; `verdadero` was glossed that way from the very first
@@ -152,12 +168,14 @@ for (const lang of chosen) {
   }
 
   // A slug outliving its spelling is exactly what the Slug column is for, so
-  // this is not an error - but it is also what an accidentally reused slug
-  // looks like, and those are indistinguishable to a machine.
+  // this is not an error - but it is also what a word replaced by a different
+  // one looks like, and those are indistinguishable to a machine. The replaced
+  // card inherits the old one's history, which corrects itself on the first
+  // miss; changing its slug is how to start it fresh instead.
   for (const c of cards) {
     if (c.slug !== c.foreign) {
-      warnings.push(`#${c.rank} is keyed ${JSON.stringify(c.slug)} but reads `
-                  + `${JSON.stringify(c.foreign)} - intended after a rename, wrong if the word was replaced`)
+      warnings.push(`#${c.rank} is keyed ${JSON.stringify(c.slug)} but reads ${JSON.stringify(c.foreign)} - `
+                  + `right after a respelling; if it is a different word, change its slug to start it fresh`)
     }
   }
 

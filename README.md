@@ -549,9 +549,12 @@ keep the slug while replacing the word and history lands on the wrong card. The
 difference from `es-0472` is that the divergence is *visible* — `concrete`
 sitting beside `concreto` says exactly what happened, and `sync-deck` flags it.
 
-The slug is the word verbatim unless the CSV's `Slug` column pins something
-else, and that column is empty for all 2005 rows today. Fill it in only when a
-word is respelled and its history should follow. It is deliberately not
+Every row carries its slug in the CSV's `Slug` column. When the column was
+filled in, every slug was the word itself, all 2005 of them. It is written down
+rather than derived so that respelling a word changes the word and nothing
+else, and `sync-deck` refuses a row with none rather than filling it in from
+the word — the fallback that used to orphan a card's history on every
+respelling. So adding a word means typing it twice. It is deliberately not
 normalised: stripping accents would merge `este`/`éste` and eleven other
 Spanish pairs the deck keeps apart on purpose, plus `schön`/`schon` in German.
 
@@ -594,15 +597,18 @@ Contiguous ranks, non-empty sides, a unique Spanish side (which ES→EN
 prompting depends on) and a unique slug (which saved history depends on). It
 also fails on spreadsheet damage: a cell reading `TRUE` or `FALSE` (Sheets
 decides the string "true" is a boolean, which is how `verdadero` was glossed
-for months) or a `#REF!`-style error value. With `--fetch` it additionally
-refuses to let the sheet drop a pinned slug the local snapshot had, because
-that loss is otherwise silent.
+for months) or a `#REF!`-style error value. It refuses a card with no slug.
+With `--fetch` it also refuses a fetch that changes the slug of a word still in
+the deck — a cell edited by mistake, or the column lost or pasted a row out —
+because that rekeys cards silently. It matches by word rather than rank, so
+adding or removing a row is fine; `--drop-pins` lets a deliberate change
+through.
 
 Three heuristics only warn, because all have legitimate exceptions: an all-caps
 gloss; a gloss containing its own Spanish answer — the latter makes a
 production card free, though a whole gloss equal to its Spanish is just a
 cognate and fine; and a slug that no longer matches its word, which is exactly
-what a rename looks like and also exactly what a mistake looks like.
+what a respelling looks like and also exactly what a replaced word looks like.
 
 ### Undo
 
