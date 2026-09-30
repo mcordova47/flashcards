@@ -38,8 +38,8 @@ import Flashcards.Keys (onKeyDown)
 import Flashcards.Notes.Delivery as Delivery
 import Flashcards.Notes.Sheet as Notes
 import Flashcards.Page as Page
-import Flashcards.Pages.Verbs.Model (Message(..), Phase(..), State, namespace)
-import Flashcards.Pages.Verbs.Model (Message, Phase, State) as Model
+import Flashcards.Pages.Verbs.Model (Message(..), Modal(..), Phase(..), State, namespace)
+import Flashcards.Pages.Verbs.Model (Message, Modal, Phase, State) as Model
 import Flashcards.Pages.Verbs.Progress as ProgressSheet
 import Flashcards.Payload as Payload
 import Flashcards.Scheduler as Scheduler
@@ -78,14 +78,12 @@ init = do
     , at: Nothing
     , got: 0
     , again: 0
-    , panel: false
-    , statsAt: Nothing
+    , modal: Nothing
     , phase: Asked
     , syncKey: Nothing
     , sent: Nothing
     , offline: false
     , loaded: false
-    , notes: Notes.closed
     }
 
 -- | There is nothing for a fingerprint to certify here, and there never will
@@ -155,18 +153,21 @@ update state = case _ of
     _, _ ->
       pure state
 
-  TogglePanel ->
-    pure state { panel = not state.panel }
+  TogglePanel -> case state.modal of
+    Just Panel ->
+      pure state { modal = Nothing }
+    _ ->
+      pure state { modal = Just Panel }
 
   ShowStats -> do
     fork $ liftEffect $ StatsAt <$> Now.now
     pure state
 
   StatsAt now ->
-    pure state { statsAt = Just now, panel = false }
+    pure state { modal = Just $ Stats now }
 
   HideStats ->
-    pure state { statsAt = Nothing }
+    pure state { modal = Nothing }
 
   Judge grade -> case state.phase of
     Revealed -> do
@@ -256,16 +257,28 @@ update state = case _ of
     else pure state { offline = true }
 
   WriteNote ->
-    notes state { panel = false } $ Notes.Open $ noteContext state
+    notes state $ Notes.Open $ noteContext state
 
   Notes message ->
     notes state message
 
 -- | Hands a message to the note sheet. Nothing comes back from it but itself,
 -- | which is why the question behind it is left exactly as it was.
+-- |
+-- | A sheet that comes back closed closes the modal only if the modal was the
+-- | sheet: the sheet's own messages can land after it has gone — `Loaded` is
+-- | read from storage — and one landing then must not shut whatever has been
+-- | opened since.
 notes :: State -> Notes.Message -> Transition Message State
 notes state message =
-  lmap Notes (Notes.update state.notes message) <#> state { notes = _ }
+  lmap Notes (Notes.update (writing state) message) <#> \sheet ->
+    state { modal = maybe (if isJust (writing state) then Nothing else state.modal) (Just <<< Note) sheet }
+
+-- | The note sheet, if that is what is open.
+writing :: State -> Notes.Sheet
+writing state = case state.modal of
+  Just (Note open) -> Just open
+  _ -> Nothing
 
 -- | What was on screen, for a note to carry so that it need not be typed.
 -- |
@@ -305,7 +318,7 @@ asking state = state { shown = exercise }
 -- | Whether anything is over the question. See the study page, which has the
 -- | same rule and more to cover.
 covered :: State -> Boolean
-covered state = state.panel || isJust state.statsAt || isJust state.notes
+covered state = isJust state.modal
 
 keyMessage :: String -> Maybe Message
 keyMessage = case _ of
@@ -322,7 +335,7 @@ advance state = asking state { typed = "", phase = Asked, queue = Array.drop 1 s
 -- | question, and a rebuild would swap it out from under the complaint.
 untouched :: State -> Boolean
 untouched state =
-  state.got + state.again == 0 && state.typed == "" && state.phase == Asked && isNothing state.notes
+  state.got + state.again == 0 && state.typed == "" && state.phase == Asked && isNothing (writing state)
 
 view :: State -> Dispatch Message -> ReactElement
 view state dispatch =
@@ -395,13 +408,13 @@ view state dispatch =
                   ]
             ]
   , H.div "controls" controls
-  , if state.panel then panel else H.empty
-  , case state.statsAt of
+  -- No wildcard, so that another kind of modal fails to compile here rather
+  -- than opening onto nothing.
+  , case state.modal of
       Nothing -> H.empty
-      Just now -> ProgressSheet.view labelled now state.progress dispatch
-  , case state.notes of
-      Nothing -> H.empty
-      Just open -> Notes.view open (dispatch <<< Notes)
+      Just Panel -> panel
+      Just (Stats now) -> ProgressSheet.view labelled now state.progress dispatch
+      Just (Note open) -> Notes.view open (dispatch <<< Notes)
   ]
   where
     -- Both anchors: a page change is a page load here, so they need no router
