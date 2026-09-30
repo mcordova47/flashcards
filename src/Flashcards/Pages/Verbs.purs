@@ -119,11 +119,11 @@ update state = case _ of
       }
 
   -- Through the update rather than straight to the message it maps to, so
-  -- that what a key means can depend on what is on screen. With a note being
-  -- written it means nothing here: Enter on the sheet's button would answer
-  -- the question behind it.
+  -- that what a key means can depend on what is on screen. With anything over
+  -- the question it means nothing here: Enter on a sheet's button would answer
+  -- it from behind the sheet.
   Pressed key
-    | isJust state.notes -> pure state
+    | covered state -> pure state
     | otherwise -> maybe (pure state) (update state) (keyMessage key)
 
   Typed text ->
@@ -301,6 +301,11 @@ asking state = state { shown = exercise }
       slug <- Array.head state.queue
       pool <- Array.find (\p -> p.slug == slug) items
       pure $ pick (Progress.lookup slug state.progress) pool
+
+-- | Whether anything is over the question. See the study page, which has the
+-- | same rule and more to cover.
+covered :: State -> Boolean
+covered state = state.panel || isJust state.statsAt || isJust state.notes
 
 keyMessage :: String -> Maybe Message
 keyMessage = case _ of
