@@ -170,8 +170,9 @@ for (const lang of chosen) {
   // A slug outliving its spelling is exactly what the Slug column is for, so
   // this is not an error - but it is also what a word replaced by a different
   // one looks like, and those are indistinguishable to a machine. The replaced
-  // card inherits the old one's history, which corrects itself on the first
-  // miss; changing its slug is how to start it fresh instead.
+  // card inherits the old one's box and direction - asked in production,
+  // unseen, if the old card had graduated, and a miss resets the box but never
+  // the direction - so changing its slug is how to start it fresh instead.
   for (const c of cards) {
     if (c.slug !== c.foreign) {
       warnings.push(`#${c.rank} is keyed ${JSON.stringify(c.slug)} but reads ${JSON.stringify(c.foreign)} - `
