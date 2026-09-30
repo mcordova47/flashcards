@@ -186,6 +186,27 @@ trap for whoever reads the example next. Several issues here carry a "settled
 after review" section recording what changed and why, which is what it looks
 like once the decision has been made.
 
+### Whether the queue is actually moving
+
+```
+npm run issues
+```
+
+The backlog day by day, the lead time over everything that closed, and the open
+issues the flow has not reached.
+
+**The open count is not the health signal.** Reviewing well produces issues, so
+a fortnight of good reviews adds more than it closes and reads worse than a
+fortnight in which nobody looked at anything. The direction and the lead time
+are the numbers that mean something; the level on its own is not.
+
+The section worth acting on is the last one. An issue that has been open longer
+than 90% of closed issues ever took is one the normal flow is not going to
+reach, measured against this repository's own pace rather than a fixed number
+of days — so it keeps meaning the same thing when the pace changes. It is not a
+verdict. #7 scores high and is correctly parked; the number says only that it
+will not happen by itself, and closing it is sometimes the right answer.
+
 ## Review is a separate pass
 
 Work gets reviewed by someone who did not write it, and the review checks
