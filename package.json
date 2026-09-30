@@ -22,7 +22,8 @@
     "sync-por-para": "node tools/sync-por-para.mjs",
     "check-por-para": "node tools/check-por-para.mjs",
     "preview": "node tools/preview-milestones.mjs",
-    "notes": "node tools/notes.mjs"
+    "notes": "node tools/notes.mjs",
+    "issues": "node tools/issues.mjs"
   },
   "license": "ISC",
   "devDependencies": {
