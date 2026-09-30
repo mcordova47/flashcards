@@ -87,15 +87,15 @@ prompts =
     , verb: "ir", tense: Preterite, person: Sg1
     , trap: OnTense, against: "imperfect"
     }
-  , { id: "had-dog", asked: "How would you tell me you had a dog as a kid?"
-    , model: "De niño, tenía un perro."
-    , verb: "tener", tense: Imperfect, person: Sg1
-    , trap: OnTense, against: "preterite"
-    }
   , { id: "sister-had-son", asked: "How would you tell me your sister had a son yesterday?"
     , model: "Ayer mi hermana tuvo un hijo."
     , verb: "tener", tense: Preterite, person: Sg3
     , trap: OnTense, against: "imperfect"
+    }
+  , { id: "had-dog", asked: "How would you tell me you had a dog as a kid?"
+    , model: "De niño, tenía un perro."
+    , verb: "tener", tense: Imperfect, person: Sg1
+    , trap: OnTense, against: "preterite"
     }
   , { id: "played-street", asked: "How would you tell me you played in the street every day as a kid?"
     , model: "De niño, jugaba en la calle todos los días."
@@ -107,15 +107,15 @@ prompts =
     , verb: "jugar", tense: Preterite, person: Sg1
     , trap: OnTense, against: "imperfect"
     }
-  , { id: "reading-when-called", asked: "How would you tell me you were reading when I called?"
-    , model: "Leía cuando me llamaste."
-    , verb: "leer", tense: Imperfect, person: Sg1
-    , trap: OnTense, against: "preterite"
-    }
   , { id: "read-whole-book", asked: "How would you tell me you read the whole book last night?"
     , model: "Anoche leí todo el libro."
     , verb: "leer", tense: Preterite, person: Sg1
     , trap: OnTense, against: "imperfect"
+    }
+  , { id: "reading-when-called", asked: "How would you tell me you were reading when I called?"
+    , model: "Leía cuando me llamaste."
+    , verb: "leer", tense: Imperfect, person: Sg1
+    , trap: OnTense, against: "preterite"
     }
   , { id: "slept-badly", asked: "How would you tell me you slept badly last night?"
     , model: "Anoche dormí mal."
@@ -192,11 +192,6 @@ prompts =
     , verb: "saber", tense: Present, person: Sg1
     , trap: OnVerb, against: "conocer"
     }
-  , { id: "know-sister", asked: "How would you ask me if I know your sister?"
-    , model: "¿Conoces a mi hermana?"
-    , verb: "conocer", tense: Present, person: Sg2
-    , trap: OnVerb, against: "saber"
-    }
   , { id: "know-where-hotel", asked: "How might you ask me if I know where the hotel is?"
     , model: "¿Sabes dónde está el hotel?"
     , verb: "saber", tense: Present, person: Sg2
@@ -206,6 +201,11 @@ prompts =
     , model: "Nadie sabe su nombre."
     , verb: "saber", tense: Present, person: Sg3
     , trap: OnVerb, against: "conocer"
+    }
+  , { id: "know-sister", asked: "How would you ask me if I know your sister?"
+    , model: "¿Conoces a mi hermana?"
+    , verb: "conocer", tense: Present, person: Sg2
+    , trap: OnVerb, against: "saber"
     }
   , { id: "parents-know-family", asked: "How would you tell me my parents know your family?"
     , model: "Tus padres conocen a mi familia."

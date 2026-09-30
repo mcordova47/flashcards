@@ -13,6 +13,7 @@ import Data.Maybe (Maybe(..), fromJust, fromMaybe)
 import Data.String as String
 import Data.Time.Duration (Milliseconds(..))
 import Data.Tuple (Tuple(..))
+import Flashcards.Data.Paraphrase.Spanish (prompts)
 import Flashcards.Exercise (Answer(..), Exercise)
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Types.Card (Slug(..), slugToString)
@@ -21,6 +22,7 @@ import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Curriculum (byFrequency, family, items, session)
+import Flashcards.Verbs.Paraphrase (Trap(..))
 import Partial.Unsafe (unsafePartial)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
@@ -41,6 +43,44 @@ unavoidable progress queue = max 0 (2 * most - Array.length queue - 1)
   where
     families = map (family progress) queue
     most = fromMaybe 0 $ maximum $ families <#> \f -> Array.length (Array.filter (_ == f) families)
+
+-- | Each paraphrase confusion, with its prompts' answers in the order `queue`
+-- | asks them, where four running are alike or alternate: `conocer / saber:
+-- | conocer saber conocer saber ...`. The trap is the answer — the verb for a
+-- | verb trap, the tense for a tense trap — so a short pattern in it lets the
+-- | position answer the prompt. See #63.
+-- |
+-- | Four, not three: with only two answers, refusing both three alike and three
+-- | alternating leaves pairs as the one order allowed, and then everything
+-- | after the second answer is known.
+-- |
+-- | A confusion whose prompts all have one answer is skipped, since no order
+-- | can hide that: present / subjunctive has no prompt answered in the
+-- | present. That is a gap in the corpus, not in its order: #77.
+patterned :: Array Slug -> Array String
+patterned queue = Array.mapMaybe run confusions
+  where
+    met = queue # Array.mapMaybe \slug ->
+      Array.find (\p -> Slug ("paraphrase." <> p.id) == slug) prompts <#> \p ->
+        case p.trap of
+          OnVerb -> { confusion: pair p.verb p.against, answer: p.verb }
+          OnTense -> { confusion: pair (tense p.tense) p.against, answer: tense p.tense }
+
+    tense = String.toLower <<< show
+    pair a b = String.joinWith " / " (Array.sort [ a, b ])
+    confusions = Array.nub (map _.confusion met)
+
+    run c =
+      let
+        answers = map _.answer $ Array.filter (\m -> m.confusion == c) met
+        fours = Array.range 0 (Array.length answers - 4) <#> \i -> Array.slice i (i + 4) answers
+        shaped = case _ of
+          [ a, b, a', b' ] -> a == a' && b == b'
+          _ -> false
+      in
+        if Array.length (Array.nub answers) > 1 && Array.any shaped fours
+          then Just (c <> ": " <> String.joinWith " " answers)
+          else Nothing
 
 type Session = { progress :: Progress, queue :: Array Slug }
 
@@ -106,6 +146,12 @@ sessions = describe "a verb drill session" do
   it "puts two alike together only in the ser / estar block, which is most of its session" do
     pairedIn first.sessions `shouldEqual` [ [], [], [], [ Just "estar / ser" ], [] ]
     map (\s -> unavoidable s.progress s.queue) first.sessions `shouldEqual` [ 0, 0, 0, 3, 0 ]
+
+  -- Met in their order, not the file's: a verb trap's family is its pair,
+  -- so the spread keeps those as written, but a tense trap's is its verb,
+  -- and the spread moves those between sessions and around each other.
+  it "meets no paraphrase trap's answers in a run of four, alike or alternating" do
+    patterned (Array.concatMap _.queue first.sessions) `shouldEqual` []
 
 order :: Spec Unit
 order = describe "the order new items are met in" do

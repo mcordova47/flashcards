@@ -14,12 +14,12 @@ food-good,"How might you say the food is really good today?","Hoy la comida est�
 city-far,"How would you tell me the city is far from here?","La ciudad está lejos de aquí.",estar,present,3s,verb,ser,
 went-store-weekly,"How would you tell me you went to the store every week?","Iba a la tienda cada semana.",ir,imperfect,1s,tense,preterite,
 went-mexico,"How might you tell me you went to Mexico last year?","El año pasado fui a México.",ir,preterite,1s,tense,imperfect,"México is a proper noun, not vocabulary; fui is also ser's preterite, which the context settles"
-had-dog,"How would you tell me you had a dog as a kid?","De niño, tenía un perro.",tener,imperfect,1s,tense,preterite,
 sister-had-son,"How would you tell me your sister had a son yesterday?","Ayer mi hermana tuvo un hijo.",tener,preterite,3s,tense,imperfect,
+had-dog,"How would you tell me you had a dog as a kid?","De niño, tenía un perro.",tener,imperfect,1s,tense,preterite,
 played-street,"How would you tell me you played in the street every day as a kid?","De niño, jugaba en la calle todos los días.",jugar,imperfect,1s,tense,preterite,
 played-two-hours,"How might you tell me you played for two hours yesterday?","Ayer jugué dos horas.",jugar,preterite,1s,tense,imperfect,
-reading-when-called,"How would you tell me you were reading when I called?","Leía cuando me llamaste.",leer,imperfect,1s,tense,preterite,"llamaste is a second, preterite decision the rubric does not mention; kept because the two side by side are the clearest contrast in the set"
 read-whole-book,"How would you tell me you read the whole book last night?","Anoche leí todo el libro.",leer,preterite,1s,tense,imperfect,
+reading-when-called,"How would you tell me you were reading when I called?","Leía cuando me llamaste.",leer,imperfect,1s,tense,preterite,"llamaste is a second, preterite decision the rubric does not mention; kept because the two side by side are the clearest contrast in the set"
 slept-badly,"How would you tell me you slept badly last night?","Anoche dormí mal.",dormir,preterite,1s,tense,imperfect,
 found-out-truth,"How would you tell me you found out the truth yesterday?","Ayer supe la verdad.",saber,preterite,1s,tense,imperfect,"The preterite of saber means found out, which is the lesson; saber, not conocer, because a truth is a fact, so the verb is not a second decision"
 already-knew-answer,"How might you tell me you already knew the answer?","Ya sabía la respuesta.",saber,imperfect,1s,tense,preterite,"saber, not conocer, because an answer is a fact, so the verb is not a second decision"
@@ -35,8 +35,8 @@ want-him-set,"How would you tell me you want him to set the table?","Quiero que 
 do-when-time,"How would you tell me you'll do it when you have time?","Lo hago cuando tenga tiempo.",tener,subjunctive,1s,tense,present,
 know-this-city,"How might you tell me you know this city?","Conozco esta ciudad.",conocer,present,1s,verb,saber,
 know-drive,"How would you tell me you know how to drive?","Sé conducir.",saber,present,1s,verb,conocer,
-know-sister,"How would you ask me if I know your sister?","¿Conoces a mi hermana?",conocer,present,2s,verb,saber,
 know-where-hotel,"How might you ask me if I know where the hotel is?","¿Sabes dónde está el hotel?",saber,present,2s,verb,conocer,
 nobody-knows-name,"How would you tell me nobody knows his name?","Nadie sabe su nombre.",saber,present,3s,verb,conocer,
+know-sister,"How would you ask me if I know your sister?","¿Conoces a mi hermana?",conocer,present,2s,verb,saber,
 parents-know-family,"How would you tell me my parents know your family?","Tus padres conocen a mi familia.",conocer,present,3p,verb,saber,
 we-know-late,"How would you tell me we know it's late?","Sabemos que es tarde.",saber,present,1p,verb,conocer,
