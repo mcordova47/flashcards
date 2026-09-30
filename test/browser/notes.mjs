@@ -221,6 +221,36 @@ export default async ({ base, browser, check, open, noteBlobs }) => {
   check("no page errors", refused.errors, [])
   await refused.close()
 
+  // --- a copy that answers after the sheet has gone ---
+  // The sheet and the menu are one field on both pages, and the sheet hands a
+  // late message back as a closed sheet. Taken at its word, that would close
+  // the menu opened since. The clipboard is held until the menu is up, which
+  // is the one late message a reader can cause.
+  const heldClipboard = `
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: {
+      writeText: () => new Promise(r => { window.__resolve = r }),
+    }})
+  `
+  for (const path of [ "/", "/verbs" ]) {
+    const late = await open({ path, stub: heldClipboard })
+    await late.waitForSelector(".panel-toggle")
+    await late.evaluate((k, v) => localStorage.setItem(k, v), NOTES,
+      JSON.stringify({ version: 1, notes: [ { at: 0, context: path, text: "kept" } ] }))
+    await openSheet(late)
+    await late.waitForSelector(".note-copy")
+    await late.tap(".note-copy")
+    check(`${path}: the copy is held`, await late.evaluate(() => typeof window.__resolve), "function")
+    await late.tap(".sheet-close")
+    await late.tap(".panel-toggle")
+    check(`${path}: the menu is open before it answers`, !!(await late.$(".panel")), true)
+    await late.evaluate(() => window.__resolve())
+    await wait(90)
+    check(`${path}: a late answer from the clipboard leaves the menu open`, !!(await late.$(".panel")), true)
+    check(`${path}: and does not bring the sheet back`, await late.$(".notes-sheet"), null)
+    check(`${path}: no page errors`, late.errors, [])
+    await late.close()
+  }
+
   // --- a list this build cannot read is not saved over ---
   // Notes live only on the device, so writing a fresh list over one a newer
   // version wrote would lose it for good.
