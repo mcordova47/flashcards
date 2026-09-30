@@ -1,6 +1,7 @@
 -- | What the verb drills are, as distinct from what they do.
 module Flashcards.Pages.Verbs.Model
   ( Message(..)
+  , Modal(..)
   , Phase(..)
   , State
   , namespace
@@ -41,29 +42,41 @@ type State =
   , typed :: String
   -- | How far the current question has got.
   , phase :: Phase
-  -- | Whether the ••• menu is open. The drills have one for the same reason
-  -- | the cards do: the top bar is for the session, and anything that is not
-  -- | part of it goes behind the dots.
-  , panel :: Boolean
+  -- | Whatever is over the question, if anything. See `Modal`.
+  , modal :: Maybe Modal
   -- | When the page last knew the time: set as a session is built and again
   -- | on every grade. The done screen needs one to say when the next item
   -- | falls due, and the cards do the same with the moment their session
   -- | ended. Left behind if the page is sat on for an hour, which is the same
   -- | staleness the cards carry.
   , at :: Maybe Instant
-  -- | When the progress sheet was opened, if it is open. The moment is fixed
-  -- | on opening, as on the cards, so *due tomorrow* does not move under you
-  -- | while you read it.
-  , statsAt :: Maybe Instant
   , syncKey :: Maybe String
   -- | What the server is known to hold. See the study page, where the same
   -- | comparison decides whether the panel may claim to be up to date.
   , sent :: Maybe Progress
   , offline :: Boolean
   , loaded :: Boolean
-  -- | The note being written, if one is. See `Flashcards.Notes`.
-  , notes :: Notes.Sheet
   }
+
+-- | What is over the question. One field rather than one per overlay, because
+-- | only one is ever open: with a field each, every place that opened one had
+-- | to clear the others by hand, and every place that asked whether the page
+-- | was covered had to list them all — which is how #60 happened.
+-- |
+-- | Its own type rather than the study page's, which has more in it and
+-- | spells the menu differently. The two pages share no state, and a shared
+-- | type would be one more thing to keep both of them agreeing with.
+data Modal
+  -- | The ••• menu. The drills have one for the same reason the cards do: the
+  -- | top bar is for the session, and anything that is not part of it goes
+  -- | behind the dots.
+  = Panel
+  -- | The progress sheet, and when it was opened. The moment is fixed on
+  -- | opening, as on the cards, so *due tomorrow* does not move under you
+  -- | while you read it.
+  | Stats Instant
+  -- | The note being written. See `Flashcards.Notes`.
+  | Note Notes.Open
 
 -- | Where the current question has got to.
 -- |
