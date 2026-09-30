@@ -9,7 +9,7 @@
 
 import fs from "fs"
 import crypto from "crypto"
-import { LANGUAGES, SHEET, languagesFor, parseCsv, slugsByWord } from "./deck-source.mjs"
+import { LANGUAGES, SHEET, cardsIn, languagesFor, parseCsv } from "./deck-source.mjs"
 
 const args = process.argv.slice(2)
 const fetching = args.includes("--fetch")
@@ -64,8 +64,9 @@ for (const lang of chosen) {
     // not rank: a row added or removed shifts every rank below it without
     // changing any card, and a deleted or respelled word has no slug here to
     // keep. What is left is a word still in the deck whose slug changed.
+    const before = cardsIn(previous, lang.column), after = cardsIn(normalised, lang.column)
     if (!droppingPins) {
-      const had = slugsByWord(previous, lang.column), has = slugsByWord(normalised, lang.column)
+      const had = new Map(before.map(c => [c.word, c.slug])), has = new Map(after.map(c => [c.word, c.slug]))
       const lost = [...had].filter(([word, slug]) => slug && has.has(word) && has.get(word) !== slug)
       if (lost.length) {
         fail(`the fetch changed the slug of ${lost.length} word(s) still in the deck:\n`
@@ -74,6 +75,38 @@ for (const lang of chosen) {
            + (lost.length > 20 ? `\n    ... and ${lost.length - 20} more` : "")
            + `\n  Put them back in the Slug column of the ${lang.tab} tab, or rerun with --drop-pins `
            + `if it was deliberate - a card with a new slug starts its history over.`)
+      }
+    }
+
+    // What this fetch did to cards' identities, paired by slug - which is an
+    // identity now, not a guess. This is the moment to say it: the person
+    // made the edit and still knows whether it was a respelling or a
+    // replacement, and only they can tell those apart. After this it is one
+    // line among every earlier respelling (see the tree-wide count below).
+    const wasBySlug = new Map(before.filter(c => c.slug).map(c => [c.slug, c]))
+    const isBySlug = new Set(after.map(c => c.slug))
+    if (wasBySlug.size) {
+      const list = (items, line) => items.slice(0, 20).map(line).join("\n")
+        + (items.length > 20 ? `\n      ... and ${items.length - 20} more` : "")
+      const reworded = after.filter(c => wasBySlug.has(c.slug) && wasBySlug.get(c.slug).word !== c.word)
+      const fresh = after.filter(c => c.slug && !wasBySlug.has(c.slug))
+      const gone = [...wasBySlug.values()].filter(c => !isBySlug.has(c.slug))
+      if (reworded.length) {
+        console.log(`  ! ${reworded.length} card(s) changed word and keep their history, box and direction:\n`
+          + list(reworded, c => `      #${c.rank}  ${wasBySlug.get(c.slug).word} -> ${c.word}`)
+          + `\n    Right for a respelling. If one is a different word, it will be asked as the old card was -`
+          + `\n    in production, never shown, if that card had graduated. To start it fresh instead, put its`
+          + `\n    own word in its Slug cell in the ${lang.tab} tab and fetch again with --drop-pins.`)
+      }
+      if (fresh.length) {
+        console.log(`  ! ${fresh.length} card(s) start fresh, under a slug the snapshot did not have:\n`
+          + list(fresh, c => `      #${c.rank}  ${c.slug}`))
+      }
+      if (gone.length) {
+        console.log(`  ! ${gone.length} slug(s) left the deck, and their history with them:\n`
+          + list(gone, c => `      ${c.slug}  (was #${c.rank}, ${c.word})`)
+          + `\n    Right for a deleted word. If one was respelled instead, put the old slug back in its`
+          + `\n    Slug cell in the ${lang.tab} tab and fetch again with --drop-pins to keep its history.`)
       }
     }
   }
@@ -173,11 +206,13 @@ for (const lang of chosen) {
   // card inherits the old one's box and direction - asked in production,
   // unseen, if the old card had graduated, and a miss resets the box but never
   // the direction - so changing its slug is how to start it fresh instead.
-  for (const c of cards) {
-    if (c.slug !== c.foreign) {
-      warnings.push(`#${c.rank} is keyed ${JSON.stringify(c.slug)} but reads ${JSON.stringify(c.foreign)} - `
-                  + `right after a respelling; if it is a different word, change its slug to start it fresh`)
-    }
+  // The fetch that makes one says so, card by card, while the person still
+  // knows which it was. Here it is only counted: every respelling leaves one
+  // for good, and a list that grows forever is a list nobody reads.
+  const rekeyed = cards.filter(c => c.slug !== c.foreign).length
+  if (rekeyed) {
+    warnings.push(`${rekeyed} card(s) are keyed by an earlier spelling of their word - `
+                + `expected after a respelling; the fetch that made each one listed it`)
   }
 
   const byEnglish = new Map()

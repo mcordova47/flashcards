@@ -53,19 +53,19 @@ export const parseCsv = text => {
   return rows
 }
 
-// Each word's slug, for every row that has both. Keyed by word rather than
-// rank, because rank is a position: a row added or removed above a card moves
-// it without changing what it is.
-export const slugsByWord = (text, column) => {
+// Every row with a word, as { rank, word, slug }. The slug is "" where the
+// cell is empty or the CSV has no Slug column.
+export const cardsIn = (text, column) => {
   const [header, ...body] = parseCsv(text)
   const wordAt = (header ?? []).indexOf(column), slugAt = (header ?? []).indexOf("Slug")
-  const slugs = new Map()
-  if (wordAt < 0) return slugs
-  for (const cells of body) {
-    const word = (cells[wordAt] ?? "").trim()
-    if (word) slugs.set(word, slugAt < 0 ? "" : (cells[slugAt] ?? "").trim())
-  }
-  return slugs
+  if (wordAt < 0) return []
+  return body
+    .map(cells => ({
+      rank: Number((cells[0] ?? "").trim()),
+      word: (cells[wordAt] ?? "").trim(),
+      slug: slugAt < 0 ? "" : (cells[slugAt] ?? "").trim(),
+    }))
+    .filter(c => c.word)
 }
 
 // The foreign side of every row, by rank.
