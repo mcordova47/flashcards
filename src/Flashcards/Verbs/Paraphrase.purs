@@ -104,6 +104,14 @@ exercise p =
 -- | Every exercise the corpus yields, in its order — one prompt, one item, so
 -- | each is scheduled on how hard it turns out to be rather than sharing a box
 -- | with the others that spring the same trap.
+-- |
+-- | The cost is that the thing being spaced is the sentence, and a sentence
+-- | can be memorised where a decision cannot: a verb and tense with one
+-- | prompt is that prompt. The answer, for now, is several prompts to every
+-- | verb and tense rather than keying by `verb.tense` as the shift does, so
+-- | that remembering them all is close to learning the choice. Whether to make
+-- | the pair the item after all is for after living with the stocked corpus.
+-- | See #84.
 exercises :: Array Prompt -> Array Exercise
 exercises = map exercise
 
