@@ -272,7 +272,7 @@ pairing key — a door key, not a password.
 ```
 npm run notes                                    every note, oldest first
 npm run notes -- --since 2026-09-01              from that day on, in UTC
-npm run notes -- --json                          the same, with each note's key
+npm run --silent notes -- --json                 the same, with each note's key
 npm run notes -- --done <key> --issue <n>        delete one that #n now holds
 npm run notes -- --done <key> --dismiss "<why>"  archive it with the reason, then delete
 ```
@@ -286,7 +286,8 @@ The listing is exactly **Copy all**'s format, so a note reads the same whichever
 way it arrived and pastes into an issue the same way. It leaves out the keys:
 each begins with the device's pairing key, and this is the output meant for
 pasting somewhere public. `--json` has them, for anything that has to sort,
-filter or come back with a key to clear.
+filter or come back with a key to clear — under `npm run --silent`, since npm
+otherwise prints its own banner to stdout ahead of the JSON.
 
 Netlify Blobs has no expiry, so notes stay until cleared, and nothing clears
 one on reading it — a listing lost to a closed terminal would lose the notes

@@ -2,9 +2,12 @@
 //
 //   npm run notes                                  every note, oldest first
 //   npm run notes -- --since 2026-09-01            from that day on (UTC)
-//   npm run notes -- --json                        the same, with each note's key
+//   npm run --silent notes -- --json               the same, with each note's key
 //   npm run notes -- --done <key> --issue <n>      delete one that issue #n now holds
 //   npm run notes -- --done <key> --dismiss "<why>"  archive it with the reason, then delete
+//
+// `--silent` on the JSON because npm prints its own banner to stdout, and
+// without it a parser meets a blank line and `> flashcards@1.0.0 notes` first.
 //
 // Against the same Netlify Blobs store the function writes, from here rather
 // than from inside Netlify, which needs the site and a personal access token:
