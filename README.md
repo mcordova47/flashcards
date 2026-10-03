@@ -389,6 +389,12 @@ server does not know which languages exist. `<lang>` must match
 limit how many a key can have — so what bounds storage is the size cap on each
 blob, not the pattern.
 
+**[SYNC.md](SYNC.md) draws this**: the exchange as a flowchart, and the timing
+cases as sequence diagrams — a response outliving a language switch, the three
+guards on a session rebuild, undo against a push, two devices writing at once,
+and how notes differ from all of it. The prose below says what sync is; that
+says what it does, which is the half that reads badly as paragraphs.
+
 It is a **dumb blob store** and does not merge. The client does `GET` →
 `Progress.merge` → `PUT`, so the merge rule stays in one place, pure and
 specced, rather than being written a second time in JavaScript where the two
