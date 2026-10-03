@@ -273,8 +273,8 @@ pairing key — a door key, not a password.
 npm run notes                                    every note, oldest first
 npm run notes -- --since 2026-09-01              from that day on, in UTC
 npm run --silent notes -- --json                 the same, with each note's key
-npm run notes -- --done <key> --issue <n>        delete one that #n now holds
-npm run notes -- --done <key> --dismiss "<why>"  archive it with the reason, then delete
+npm run notes -- --filed <key> --issue <n>       delete one that #n now holds
+npm run notes -- --filed <key> --dismiss "<why>" archive it with the reason, then delete
 ```
 
 A local script against the same store the function writes, which needs
@@ -291,12 +291,12 @@ otherwise prints its own banner to stdout ahead of the JSON.
 
 Netlify Blobs has no expiry, so notes stay until cleared, and nothing clears
 one on reading it — a listing lost to a closed terminal would lose the notes
-with it. Nor can anything clear the only copy of one. `--done` needs either an
+with it. Nor can anything clear the only copy of one. `--filed` needs either an
 issue whose body or comments hold the whole note as the listing prints it —
 stamp and context too, since a note's text alone is often a word that any
 issue might use — which it checks with `gh`, whitespace aside; or a reason to dismiss it, which is appended with the note to
 `~/.flashcards/notes-archive.jsonl` (or `$NOTES_ARCHIVE`) and read back before
-the note is deleted. `--done` alone is refused, and there is no bulk purge.
+the note is deleted. `--filed` alone is refused, and there is no bulk purge.
 Clearing a note also frees its place under the per-key cap.
 
 ## Progress

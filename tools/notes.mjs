@@ -3,8 +3,8 @@
 //   npm run notes                                  every note, oldest first
 //   npm run notes -- --since 2026-09-01            from that day on (UTC)
 //   npm run --silent notes -- --json               the same, with each note's key
-//   npm run notes -- --done <key> --issue <n>      delete one that issue #n now holds
-//   npm run notes -- --done <key> --dismiss "<why>"  archive it with the reason, then delete
+//   npm run notes -- --filed <key> --issue <n>     delete one that issue #n now holds
+//   npm run notes -- --filed <key> --dismiss "<why>" archive it with the reason, then delete
 //
 // `--silent` on the JSON because npm prints its own banner to stdout, and
 // without it a parser meets a blank line and `> flashcards@1.0.0 notes` first.
@@ -23,10 +23,10 @@
 // public. `--json` has the keys.
 //
 // Nothing here deletes on read, and nothing deletes a note whose text does
-// not survive somewhere else. `--done` needs one of two proofs that it does:
+// not survive somewhere else. `--filed` needs one of two proofs that it does:
 // an issue whose body or comments contain the note, checked with `gh` rather
 // than taken on trust, or a reason for dismissing it, which is appended with
-// the note to a local archive before anything is deleted. `--done` alone is
+// the note to a local archive before anything is deleted. `--filed` alone is
 // refused, as is a bulk purge, which is why there is none.
 //
 // NETLIFY_BLOBS_EDGE_URL points it at a local blob server instead, which is
@@ -40,8 +40,8 @@ import { getStore } from "@netlify/blobs"
 
 const USAGE = `usage:
   npm run notes [-- --since <yyyy-mm-dd>] [--json]
-  npm run notes -- --done <key> --issue <n>
-  npm run notes -- --done <key> --dismiss "<why>"`
+  npm run notes -- --filed <key> --issue <n>
+  npm run notes -- --filed <key> --dismiss "<why>"`
 
 const fail = message => {
   console.error(message)
@@ -55,7 +55,7 @@ const flags = {}
 for (let i = 0; i < args.length; i++) {
   const flag = args[i]
   if (flag === "--json") { flags.json = true; continue }
-  if ([ "--since", "--done", "--issue", "--dismiss" ].includes(flag)) {
+  if ([ "--since", "--filed", "--issue", "--dismiss" ].includes(flag)) {
     if (i + 1 >= args.length) fail(`${flag} needs a value\n\n${USAGE}`)
     flags[flag.slice(2)] = args[++i]
     continue
@@ -83,7 +83,7 @@ const everything = async () => {
   for await (const page of store.list({ paginate: true })) {
     for (const { key } of page.blobs) {
       const n = await store.get(key, { type: "json" })
-      // Gone between the list and the read, most likely to a `--done`
+      // Gone between the list and the read, most likely to a `--filed`
       // running elsewhere.
       if (n !== null) notes.push({ key, at: n.at, context: n.context, text: n.text })
     }
@@ -140,13 +140,13 @@ const archive = (n, why) => {
   return file
 }
 
-const done = async key => {
+const filed = async key => {
   if (!/^[a-z0-9]{32}\/\d+\.json$/.test(key)) fail(`not a note's key: ${key}\n(keys are in \`npm run notes -- --json\`)`)
-  if (flags.since || flags.json) fail(`--done takes only --issue or --dismiss\n\n${USAGE}`)
+  if (flags.since || flags.json) fail(`--filed takes only --issue or --dismiss\n\n${USAGE}`)
   const hasIssue = flags.issue !== undefined
   const hasWhy = flags.dismiss !== undefined
   if (hasIssue === hasWhy) {
-    fail("--done needs exactly one of --issue <n>, once the note's text is in that issue,\n" +
+    fail("--filed needs exactly one of --issue <n>, once the note's text is in that issue,\n" +
       "or --dismiss \"<why>\", which archives it with the reason first.\n" +
       "Nothing deletes the only copy of a note.")
   }
@@ -187,6 +187,6 @@ const list = async () => {
   else console.error("no notes")
 }
 
-if (flags.done !== undefined) await done(flags.done)
-else if (flags.issue !== undefined || flags.dismiss !== undefined) fail(`--issue and --dismiss go with --done\n\n${USAGE}`)
+if (flags.filed !== undefined) await filed(flags.filed)
+else if (flags.issue !== undefined || flags.dismiss !== undefined) fail(`--issue and --dismiss go with --filed\n\n${USAGE}`)
 else await list()
