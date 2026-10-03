@@ -332,8 +332,8 @@ prompts =
     , verb: "venir", tense: Subjunctive, person: Pl3
     , trap: OnTense, against: "present"
     }
-  , { id: "possible-come-tomorrow", asked: "How might you tell me it's possible you'll come tomorrow?"
-    , model: "Es posible que venga mañana."
+  , { id: "possible-come-tomorrow", asked: "How might you tell me it's possible you'll come here tomorrow?"
+    , model: "Es posible que venga aquí mañana."
     , verb: "venir", tense: Subjunctive, person: Sg1
     , trap: OnTense, against: "present"
     }

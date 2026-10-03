@@ -63,7 +63,7 @@ dont-think-true,"How might you tell me you don't think it's true?","No creo que 
 want-him-set,"How would you tell me you want him to set the table?","Quiero que ponga la mesa.",poner,subjunctive,3s,tense,present,
 do-when-time,"How would you tell me you'll do it when you have time?","Lo hago cuando tenga tiempo.",tener,subjunctive,1s,tense,present,
 eat-when-parents-come,"How would you tell me we'll eat when your parents come?","Comemos cuando vengan mis padres.",venir,subjunctive,3p,tense,present,
-possible-come-tomorrow,"How might you tell me it's possible you'll come tomorrow?","Es posible que venga mañana.",venir,subjunctive,1s,tense,present,
+possible-come-tomorrow,"How might you tell me it's possible you'll come here tomorrow?","Es posible que venga aquí mañana.",venir,subjunctive,1s,tense,present,"venir, not ir, because here is where the speaker is: coming to where the listener is would be vaya, so the verb is not a second decision"
 looking-someone-help,"How might you tell me you're looking for someone who can help you?","Busco a alguien que me pueda ayudar.",poder,subjunctive,3s,tense,present,"Subjunctive because the someone is not yet found: busco a alguien que me puede ayudar means a particular person who can"
 better-say-nothing,"How might you tell me it's better that we don't say anything?","Es mejor que no digamos nada.",decir,subjunctive,1p,tense,present,
 leave-before-others-arrive,"How would you tell me we'll leave before the others arrive?","Salimos antes de que lleguen los otros.",llegar,subjunctive,3p,tense,present,"antes de que always takes the subjunctive, whatever the time"
