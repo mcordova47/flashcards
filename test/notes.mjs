@@ -212,35 +212,35 @@ console.log(JSON.stringify(found))
   check("reading deleted nothing", await remaining(), 3)
 
   // --- deleting, which never loses the only copy ---
-  refuses("--done alone is refused", await notes("--done", ka), "exactly one of")
-  refuses("as is --done with both proofs", await notes("--done", ka, "--issue", "7", "--dismiss", "x"), "exactly one of")
-  refuses("an issue with the text but not the note is refused", await notes("--done", ka, "--issue", "5"), "does not contain this note")
-  refuses("as is one gh cannot read", await notes("--done", ka, "--issue", "8"), "could not read issue #8")
-  refuses("an empty reason is refused", await notes("--done", ka, "--dismiss", "  "), "needs a reason")
-  refuses("as is a key that is not a note's", await notes("--done", "../x", "--issue", "7"), "not a note's key")
-  refuses("or one that is not there", await notes("--done", `${PHONE}/1.json`, "--dismiss", "x"), "no note at")
+  refuses("--filed alone is refused", await notes("--filed", ka), "exactly one of")
+  refuses("as is --filed with both proofs", await notes("--filed", ka, "--issue", "7", "--dismiss", "x"), "exactly one of")
+  refuses("an issue with the text but not the note is refused", await notes("--filed", ka, "--issue", "5"), "does not contain this note")
+  refuses("as is one gh cannot read", await notes("--filed", ka, "--issue", "8"), "could not read issue #8")
+  refuses("an empty reason is refused", await notes("--filed", ka, "--dismiss", "  "), "needs a reason")
+  refuses("as is a key that is not a note's", await notes("--filed", "../x", "--issue", "7"), "not a note's key")
+  refuses("or one that is not there", await notes("--filed", `${PHONE}/1.json`, "--dismiss", "x"), "no note at")
   const word = { at: sept + 10_800_000, context: "/es", text: "confusing" }
   await put(batch([ word ]), PHONE)
   const kw = `${PHONE}/${word.at}.json`
-  refuses("a one-word note is not proved by an issue that uses the word", await notes("--done", kw, "--issue", "9"), "does not contain this note")
+  refuses("a one-word note is not proved by an issue that uses the word", await notes("--filed", kw, "--issue", "9"), "does not contain this note")
   check("so it is still there", (await store.get(kw, { type: "json" }))?.text, "confusing")
   await store.delete(kw)
-  refuses("--issue alone does nothing", await notes("--issue", "7"), "go with --done")
+  refuses("--issue alone does nothing", await notes("--issue", "7"), "go with --filed")
   check("and none of it deleted anything", await remaining(), 3)
 
-  const inComment = await notes("--done", ka, "--issue", "7")
+  const inComment = await notes("--filed", ka, "--issue", "7")
   check("once the issue holds the text, a comment will do", inComment.status, 0)
   check("and it is gone", await store.get(ka), null)
-  check("reflowed across lines still counts", (await notes("--done", kc, "--issue", "6")).status, 0)
+  check("reflowed across lines still counts", (await notes("--filed", kc, "--issue", "6")).status, 0)
   check("so both are gone", await keys(), [ kb ])
 
   // A directory where the archive file should be: the append cannot land.
   fs.mkdirSync(archived, { recursive: true })
-  refuses("a dismissal that cannot be archived is refused", await notes("--done", kb, "--dismiss", "not a bug"), "so it is not deleted")
+  refuses("a dismissal that cannot be archived is refused", await notes("--filed", kb, "--dismiss", "not a bug"), "so it is not deleted")
   check("and deletes nothing", await keys(), [ kb ])
   fs.rmSync(archived, { recursive: true })
 
-  check("dismissing it with a reason", (await notes("--done", kb, "--dismiss", " the hint was right ")).status, 0)
+  check("dismissing it with a reason", (await notes("--filed", kb, "--dismiss", " the hint was right ")).status, 0)
   const kept = fs.readFileSync(archived, "utf-8").trim().split("\n").map(l => JSON.parse(l))
   check("archives the note, with the reason beside it",
     kept.map(({ dismissed, ...rest }) => rest), [ { key: kb, ...b, why: "the hint was right" } ])
