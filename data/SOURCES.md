@@ -65,8 +65,11 @@ of the other.
 ## `es-verb-coverage.csv` — a recommendation per cell
 
 **Derived, and an argument rather than a fact.** `npm run verb-coverage`
-regenerates it from `es-verbs.csv` and `es-1000.csv`; nothing reads it at
-runtime and nothing breaks if it is stale.
+regenerates it from `es-verbs.csv` and `es-1000.csv`, and `npm run sync`
+does both that and `sync-coverage`, which generates its `Recommend` column
+into `Flashcards.Data.Coverage.Spanish` for the app to read (#96). So CI
+refuses it stale, like any other generated file. `Why` and the other columns
+stay here: they are for a person arguing with the verdict, not for the app.
 
 It exists for #27, which asks which of the table's 760 cells are worth
 drilling. Each row says *drill*, *later* or *skip*, and why. The reasoning is

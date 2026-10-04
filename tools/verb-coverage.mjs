@@ -4,8 +4,9 @@
 //   node tools/verb-coverage.mjs
 //
 // Derived, and an argument rather than a fact - it is the input to #27, which
-// asks which of the 760 cells earn a place. Regenerate it after changing the
-// table or the deck; nothing depends on it at runtime.
+// asks which of the 760 cells earn a place. `npm run sync` regenerates it,
+// and then tools/sync-coverage.mjs generates the verdicts into a module the
+// app can read (#96), so CI's drift check covers both.
 //
 // The reasoning, in the order it is applied:
 //
