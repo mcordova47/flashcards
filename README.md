@@ -36,6 +36,7 @@ npm start        # http://localhost:8000
 | `npm run sync-sentences` | Regenerate the shift sentence module from `data/es-sentences.csv` |
 | `npm run check-verbs` | Print every paradigm that deviates from the regular pattern — the review of the table |
 | `npm run verb-coverage` | Recommend, for every cell, whether it is worth drilling — the input to #27 |
+| `npm run sync-coverage` | Regenerate the coverage module from `data/es-verb-coverage.csv` — the verdicts, not the reasons |
 | `npm run sync-paraphrase` | Regenerate the paraphrase prompt module from `data/es-paraphrase.csv` |
 | `npm run check-paraphrase` | Prove every paraphrase model answer uses the form it claims, in deck vocabulary |
 | `npm run check-sentences` | Prove every shift sentence against the table, in deck vocabulary |
@@ -115,6 +116,11 @@ generated modules and people read the CSVs, so a commit that edits
 with a diff that looks right. Every generator is deterministic, so
 regenerating from a current CSV changes nothing, and any change at all means
 one of them is stale. The fix is `npm run sync` and commit what it writes.
+
+One chain has two links. `es-verb-coverage.csv` is generated from the table
+and the deck, and the coverage module from it, so `sync` runs `verb-coverage`
+before `sync-coverage`. Checking only the second would prove the module
+matches a CSV that could itself be behind.
 
 `check-verbs` gates only on structure — a gap, a duplicate, an unknown tense.
 The deviations it prints are the review of the table, not a failure.
