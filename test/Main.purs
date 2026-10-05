@@ -12,6 +12,7 @@ import Test.Flashcards.CurriculumSpec as CurriculumSpec
 import Test.Flashcards.DeckSpec as DeckSpec
 import Test.Flashcards.PageSpec as PageSpec
 import Test.Flashcards.ExerciseSpec as ExerciseSpec
+import Test.Flashcards.GridSpec as GridSpec
 import Test.Flashcards.MilestoneSpec as MilestoneSpec
 import Test.Flashcards.NotesSpec as NotesSpec
 import Test.Flashcards.PayloadSpec as PayloadSpec
@@ -47,3 +48,4 @@ main = runSpecAndExitProcess [ consoleReporter ] do
   PorParaSpec.spec
   CorrectionSpec.spec
   CurriculumSpec.spec
+  GridSpec.spec

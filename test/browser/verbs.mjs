@@ -613,6 +613,71 @@ export default async ({ check, open, blobs }) => {
   check("no fraction of a total anywhere on it",
     [/\d+\s+of\s+\d+/.test(body), await sheet.$(".deck-progress"), await sheet.$(".bands")], [false, null, null])
 
+  // --- the grid (#32) ---
+  // Every square's state worked out again here, from the CSVs and the seed
+  // rather than from the app: which items the two shifts yield onto a
+  // square, how far the seed has them, and what the coverage says of the
+  // squares nothing asks. Error correction moves no square, and reaches
+  // none the shifts do not, so it is not here.
+  const coverage = rows("data/es-verb-coverage.csv")
+  const verbs = [...new Set(coverage.map(r => r[0]))]
+  const TENSES = ["present", "preterite", "imperfect", "subjunctive"]
+  const seeded = new Map(worked.cards.map(c => [c.slug, c]))
+  const onSquare = (inf, tense) => [...shiftSlugs(), ...personSlugs()].filter(slug =>
+    slug === `${inf}.${tense}` || slug.startsWith(`person.${inf}.${tense}.`))
+  const expectedState = (inf, tense) => {
+    const items = onSquare(inf, tense)
+    if (items.length === 0) {
+      const verdicts = coverage.filter(r => r[0] === inf && r[2] === tense).map(r => r[7])
+      return verdicts.every(v => v === "skip") ? "left out on purpose" : "nothing asks this yet"
+    }
+    const boxes = items.map(slug => seeded.get(slug)?.box)
+    if (boxes.every(b => b >= 5)) return "known"
+    if (boxes.some(b => b !== undefined)) return "learning"
+    return "not started"
+  }
+  const squares = await sheet.$$eval(".grid-square", es => es.map(e => e.title))
+  check("a square for every verb and tense", squares.length, verbs.length * TENSES.length)
+  check("verbs in the deck's order, not the table's",
+    await sheet.$$eval(".grid-verb", es => es.map(e => e.textContent)),
+    [...verbs].sort((a, b) => (deckRank.get(a) ?? Infinity) - (deckRank.get(b) ?? Infinity)))
+  const expected = verbs.flatMap(inf => TENSES.map(t => `${inf} · ${t} — ${expectedState(inf, t)}`)).sort()
+  check("every square in the state the data and the seed give it", [...squares].sort(), expected)
+  const tally = state => expected.filter(e => e.endsWith(state)).length
+  check("and all five states are on it", ["known", "learning", "not started", "nothing asks this yet", "left out on purpose"]
+    .map(s => tally(s) > 0), [true, true, true, true, true])
+  check("with a legend naming them, and counting none",
+    await sheet.$$eval(".grid-legend .legend-item", es => es.map(e => e.textContent)),
+    ["known", "learning", "not started", "nothing asks this yet", "left out on purpose"])
+
+  // A reference, not only a score: a square opens onto its forms.
+  const squareFor = (inf, tense) => `.grid-square[title^="${inf} · ${tense} —"]`
+  await sheet.tap(squareFor("tener", "preterite"))
+  await wait(100)
+  check("a tapped square shows its forms",
+    await sheet.$$eval(".grid-form", es => es.map(e => e.textContent)),
+    Object.entries(PRONOUNS).map(([pronoun, code]) => `${pronoun} ${table.get(`tener.preterite.${code}`)}`))
+  check("under its own row", await sheet.text(".grid-detail-head"), "tener · preterite")
+  await sheet.tap(squareFor("ser", "subjunctive"))
+  await wait(100)
+  check("tapping another moves it there", await sheet.$$eval(".grid-detail", es => es.length), 1)
+  await sheet.tap(squareFor("ser", "subjunctive"))
+  await wait(100)
+  check("and tapping it again closes it", await sheet.$(".grid-detail"), null)
+
+  // A left-out square opens too, and says why rather than leaving it blank.
+  const leftOut = expected.find(e => e.endsWith("left out on purpose")).split(" — ")[0].split(" · ")
+  await sheet.tap(squareFor(...leftOut))
+  await wait(100)
+  check("a left-out square says why", await sheet.text(".grid-detail-state"),
+    "Left out on purpose: the regular endings give every form.")
+
+  const overflow = await sheet.evaluate(() => {
+    const grid = document.querySelector(".grid")
+    return [document.documentElement.scrollWidth > window.innerWidth, grid.scrollWidth > grid.clientWidth]
+  })
+  check("fits a phone without scrolling sideways", overflow, [false, false])
+
   await sheet.tap(".sheet-close")
   check("and it closes", await sheet.$(".sheet"), null)
   check("no page errors", sheet.errors, [])

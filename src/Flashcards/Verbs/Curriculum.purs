@@ -7,6 +7,7 @@ module Flashcards.Verbs.Curriculum
   ( items
   , byFrequency
   , family
+  , grid
   , labelled
   , session
   )
@@ -19,6 +20,7 @@ import Data.Array.NonEmpty as NonEmpty
 import Data.DateTime.Instant (Instant)
 import Data.Maybe (Maybe, fromMaybe)
 import Data.String as String
+import Flashcards.Data.Coverage.Spanish (coverage)
 import Flashcards.Data.Deck.Spanish (deck)
 import Flashcards.Data.Paraphrase.Spanish (prompts)
 import Flashcards.Data.PorPara.Spanish (sentences) as PorPara
@@ -31,6 +33,8 @@ import Flashcards.Types.Card (Slug, rankToInt)
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Correction as Correction
+import Flashcards.Verbs.Grid (VerbRow)
+import Flashcards.Verbs.Grid as Grid
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.PersonShift as PersonShift
 import Flashcards.Verbs.PorPara (exercises) as PorPara
@@ -96,6 +100,12 @@ session :: Progress -> Instant -> Array Slug
 session progress now =
   Scheduler.spread (family progress) $
     Scheduler.buildSession (map _.slug items) progress now Scheduler.sessionSize
+
+-- | The conjugation grid for this progress: every verb of the table, the most
+-- | common first, for the reason the shifts are met that way. See
+-- | `Grid.grid`.
+grid :: Progress -> Array VerbRow
+grid = Grid.grid rank table coverage items
 
 -- | An item's family, as the exercise that will actually be asked has it.
 -- |
