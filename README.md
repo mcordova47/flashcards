@@ -909,7 +909,7 @@ A square is in one of five states, and only the first three are about you:
 | **left out on purpose** | the coverage says skip for every person |
 
 Shaded *mastered or not*, the grid would read as almost entirely failure,
-because the sentence bank reaches 7 verbs of 38. The last two states are what
+because the sentence bank reaches 11 verbs of 38. The last two states are what
 keep it a map of what to author next rather than a list of what you have not
 done: a dashed outline is a gap someone could fill, a hatch is one left on
 purpose. The legend counts nothing, because five counts adding up to the
@@ -940,9 +940,18 @@ same sentence at another time.
 **The bank decides which items exist.** Each sentence yields its verb in the
 tenses it is not already in, so an item exists only if some sentence reaches
 it, and it needs two for a later sighting to ask a different one. The bank's
-sentences are over seven verbs and all written in the present, so they give
-fourteen items — each verb's preterite and imperfect — with at least two
+sentences are over eleven verbs and all written in the present, so they give
+twenty-two items — each verb's preterite and imperfect — with at least two
 sentences each. A verb's present would need sentences written in a past tense.
+
+**A verb wants five sentences, one in each person.** A shift keeps its
+sentence's person, so a person no sentence is in has its preterite and
+imperfect unreached; and three marked for the person shift, in three persons,
+give every present a pool of two. The first seven verbs have 28 between them,
+unevenly, and leave eight persons' preterite and imperfect unreached (`ir`
+misses two); `ver`, `venir`, `ser` and `saber` (#100) have one in each. No
+shift reaches the subjunctive, so fifteen of a verb's twenty cells is the most
+a sentence can open.
 
 `check-sentences` confirms every bracketed word is what the table has for its
 tag, and holds the rest of each sentence to the deck's vocabulary by the same
