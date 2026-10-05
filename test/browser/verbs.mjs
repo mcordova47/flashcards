@@ -237,6 +237,10 @@ export default async ({ check, open, blobs }) => {
   // next Enter lands.
   check("the answer box has focus to begin with",
     await keys.evaluate(() => document.activeElement?.className.includes("verb-answer")), true)
+  // Nothing here can type on an iPhone, so what is checked is that the box
+  // asks: `spellCheck` alone leaves Safari free to rewrite a right answer.
+  check("and asks iOS not to autocorrect what is typed into it",
+    await keys.$eval(".verb-answer", e => e.getAttribute("autocorrect")), "off")
 
   // Tapping a button leaves it focused, and a focused button takes Enter as a
   // click. Without that being stopped this grades the next question unseen.
