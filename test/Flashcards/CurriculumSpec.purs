@@ -9,11 +9,12 @@ import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.DateTime.Instant (Instant, instant)
 import Data.Foldable (foldl, maximum)
-import Data.Maybe (Maybe(..), fromJust, fromMaybe)
+import Data.Maybe (Maybe(..), fromJust, fromMaybe, isJust)
 import Data.String as String
 import Data.Time.Duration (Milliseconds(..))
 import Data.Tuple (Tuple(..))
 import Flashcards.Data.Paraphrase.Spanish (prompts)
+import Flashcards.Data.Verbs.Spanish (table)
 import Flashcards.Exercise (Answer(..), Exercise)
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Types.Card (Slug(..), slugToString)
@@ -23,6 +24,7 @@ import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Curriculum (byFrequency, family, items, session)
 import Flashcards.Verbs.Paraphrase (Trap(..))
+import Flashcards.Verbs.Table (formOf)
 import Partial.Unsafe (unsafePartial)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
@@ -103,6 +105,7 @@ spec :: Spec Unit
 spec = do
   sessions
   order
+  cells
 
 sessions :: Spec Unit
 sessions = describe "a verb drill session" do
@@ -162,7 +165,7 @@ order = describe "the order new items are met in" do
     -- The tense shifts come first, and the person shifts straight after.
     shifts = Array.takeWhile (\p -> not (String.contains (String.Pattern "person.") (slugToString p.slug))) items
     ask slug verb =
-      { slug: Slug slug, label: slug, family: verb, prompt: "", hint: ""
+      { slug: Slug slug, label: slug, family: verb, cell: Nothing, prompt: "", hint: ""
       , answer: Checked { expected: "", frame: { before: "", after: "" }, note: "" }
       } :: Exercise
 
@@ -180,3 +183,30 @@ order = describe "the order new items are met in" do
   it "puts a verb the deck does not have last, and keeps one verb's items as given" do
     map _.slug (byFrequency [ ask "oler" "oler", ask "b" "tener", ask "a" "tener", ask "querer" "querer" ])
       `shouldEqual` [ Slug "querer", Slug "b", Slug "a", Slug "oler" ]
+
+cells :: Spec Unit
+cells = describe "the cell an exercise says it drills" do
+  let
+    exercises = Array.concatMap (NonEmpty.toArray <<< _.exercises) items
+    expected e = case e.answer of
+      Checked c -> Just c.expected
+      SelfGraded _ -> Nothing
+
+  -- Which is what makes it safe for the grid to read: a cell named wrongly
+  -- would shade a square nothing asks, and nothing else would notice.
+  it "is the one whose form the answer is" do
+    let
+      named = Array.mapMaybe (\e -> e.cell <#> \c -> { e, c }) exercises
+      wrong = Array.filter (\{ e, c } -> formOf c.infinitive c.tense c.person table /= expected e) named
+    map (_.prompt <<< _.e) wrong `shouldEqual` []
+    -- Not vacuous: the shifts and the corrections are most of the drills.
+    (Array.length named > 0) `shouldEqual` true
+
+  it "is named by every shift and correction, and by no paraphrase or por / para" do
+    let
+      named prefix = Array.nub $ map (isJust <<< _.cell) $
+        Array.filter (\e -> String.take (String.length prefix) (slugToString e.slug) == prefix) exercises
+    named "paraphrase." `shouldEqual` [ false ]
+    named "porpara." `shouldEqual` [ false ]
+    named "error." `shouldEqual` [ true ]
+    named "person." `shouldEqual` [ true ]

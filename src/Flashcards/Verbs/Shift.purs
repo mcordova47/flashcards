@@ -61,6 +61,7 @@ exercise table sentence target
         { slug: Slug $ sentence.infinitive <> "." <> name target
         , label: sentence.infinitive <> " · " <> name target
         , family: sentence.infinitive
+        , cell: Just { infinitive: sentence.infinitive, tense: target, person: sentence.person }
         , prompt: sentence.before <> sentence.form <> sentence.after
         , hint: name target
         , answer: Checked

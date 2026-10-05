@@ -19,6 +19,7 @@ module Flashcards.Verbs.Paraphrase
 
 import Prelude
 
+import Data.Maybe (Maybe(..))
 import Flashcards.Exercise (Answer(..), Exercise, Rubric)
 import Flashcards.Types.Card (Slug(..))
 import Flashcards.Verbs.Table (Person(..), Tense(..))
@@ -94,6 +95,10 @@ exercise p =
   , family: case p.trap of
       OnVerb -> pair p.verb p.against
       OnTense -> p.verb
+  -- It has a verb, tense and person, and the model answer conjugates them,
+  -- but what is graded is whether you chose them, not how you spelled the
+  -- result. See `Exercise`.
+  , cell: Nothing
   , prompt: p.asked
   -- Nothing to say before the reveal. The prompt is the whole question, and a
   -- hint here would name the trap, which is the answer.

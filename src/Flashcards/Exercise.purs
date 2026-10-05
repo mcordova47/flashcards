@@ -8,6 +8,7 @@
 -- | `Answer` they produce, not by which app they live in. See #8.
 module Flashcards.Exercise
   ( Answer(..)
+  , Drilled
   , Exercise
   , Frame
   , Pool
@@ -29,6 +30,7 @@ import Data.String as String
 import Data.String.CodePoints as CodePoints
 import Flashcards.Types.Card (Slug)
 import Flashcards.Types.Progress (CardProgress)
+import Flashcards.Verbs.Table (Person, Tense)
 
 -- | Why the answer is what it is, for the drills where many answers are right
 -- | and only a few properties are required. Saying "ser, not estar" teaches
@@ -73,10 +75,25 @@ type Exercise =
   -- | pool, because an error correction's verb is whichever sentence `pick`
   -- | lands on. See #51.
   , family :: String
+  -- | The cell of the table this exercise has you produce, where producing
+  -- | it is what is being tested: the shifts and error correction, whose
+  -- | answer is a form. Not the paraphrase, whose answer happens to contain
+  -- | one but which tests the choice of verb and tense — it keeps its own
+  -- | boxes for that reason, see `Paraphrase.exercise` — and not por / para,
+  -- | which has no verb.
+  -- |
+  -- | Per exercise, like `family`, because an error correction's pool spans
+  -- | cells. Here so that the grid of #32 can read which squares the drills
+  -- | reach as a fact rather than by parsing slugs, which are identities and
+  -- | promise nothing about their spelling.
+  , cell :: Maybe Drilled
   , prompt :: String
   , hint :: String
   , answer :: Answer
   }
+
+-- | A cell of the table without its form: which one, not what it says.
+type Drilled = { infinitive :: String, tense :: Tense, person :: Person }
 
 -- | Every way there is of asking one item.
 -- |

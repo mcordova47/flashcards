@@ -54,7 +54,7 @@ spec = do
   describe "an item with more than one way to ask it" do
     let
       ask slug prompt =
-        { slug: Slug slug, label: slug, family: "", prompt, hint: ""
+        { slug: Slug slug, label: slug, family: "", cell: Nothing, prompt, hint: ""
         , answer: Checked { expected: "", frame: { before: "", after: "" }, note: "" }
         } :: Exercise
       bank =
