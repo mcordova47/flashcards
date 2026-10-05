@@ -3,6 +3,7 @@ module Flashcards.Pages.Verbs.Model
   ( Message(..)
   , Modal(..)
   , Phase(..)
+  , Square
   , State
   , namespace
   )
@@ -18,6 +19,7 @@ import Flashcards.Sync as Sync
 import Flashcards.Types.Card (Slug)
 import Flashcards.Types.Grade (Grade)
 import Flashcards.Types.Progress (Progress)
+import Flashcards.Verbs.Table (Tense)
 
 -- | Its own namespace, so its progress is its own blob on the server and its
 -- | own key in storage — `flashcards.verbs.v1` beside `flashcards.es.v1`, via
@@ -71,12 +73,17 @@ data Modal
   -- | top bar is for the session, and anything that is not part of it goes
   -- | behind the dots.
   = Panel
-  -- | The progress sheet, and when it was opened. The moment is fixed on
-  -- | opening, as on the cards, so *due tomorrow* does not move under you
-  -- | while you read it.
-  | Stats Instant
+  -- | The progress sheet, when it was opened, and which square of its grid
+  -- | is open, if any. The moment is fixed on opening, as on the cards, so
+  -- | *due tomorrow* does not move under you while you read it. The square
+  -- | lives here rather than beside it because it means nothing once the
+  -- | sheet has closed, and reopening should not find it still open.
+  | Stats { at :: Instant, open :: Maybe Square }
   -- | The note being written. See `Flashcards.Notes`.
   | Note Notes.Open
+
+-- | A square of the progress sheet's grid: a verb and a tense.
+type Square = { infinitive :: String, tense :: Tense }
 
 -- | Where the current question has got to.
 -- |
@@ -112,6 +119,8 @@ data Message
   | ShowStats
   | StatsAt Instant
   | HideStats
+  -- | Open a square of the grid, or close it if it is the one open.
+  | OpenSquare Square
   | Graded Grade Instant
   | Next
   | Sync

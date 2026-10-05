@@ -892,6 +892,38 @@ with the form the regular pattern would have given. Error correction is built
 from it, and generating it with check-verbs's own `regular` is what stops the
 drill and the review disagreeing about what a regularised form is.
 
+### The grid
+
+The drills' progress sheet ends on the table: 38 verbs by four tenses, the
+most common verb first. Tap a square and its five forms open under its row,
+so it is a reference as well as a score.
+
+A square is in one of five states, and only the first three are about you:
+
+| | |
+| --- | --- |
+| **known** | every item on it mastered |
+| **learning** | something on it answered |
+| **not started** | a drill asks it; nothing on it answered yet |
+| **nothing asks this yet** | worth drilling, and no drill reaches it |
+| **left out on purpose** | the coverage says skip for every person |
+
+Shaded *mastered or not*, the grid would read as almost entirely failure,
+because the sentence bank reaches 7 verbs of 38. The last two states are what
+keep it a map of what to author next rather than a list of what you have not
+done: a dashed outline is a gap someone could fill, a hatch is one left on
+purpose. The legend counts nothing, because five counts adding up to the
+table are a percentage by another name.
+
+The states come from `Flashcards.Verbs.Grid`. Which items are on a square is
+read from each exercise's `cell`, never from its slug: a pool is on a square
+when every exercise in it names that square. So the tense shift and the
+person shift count, and error correction does not — its item is a kind of
+mistake across verbs, and its progress says nothing about any one square. The
+paraphrase names no cell, since what it grades is the choice of verb and
+tense, not the spelling. Squares nothing asks get their state from the
+coverage module, with `later` counted as worth drilling.
+
 ### The tense shift
 
 A sentence, a tense to move it to, and the verb typed in the box where it

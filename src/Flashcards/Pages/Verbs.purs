@@ -164,7 +164,13 @@ update state = case _ of
     pure state
 
   StatsAt now ->
-    pure state { modal = Just $ Stats now }
+    pure state { modal = Just $ Stats { at: now, open: Nothing } }
+
+  OpenSquare square -> case state.modal of
+    Just (Stats sheet) ->
+      pure state { modal = Just $ Stats sheet { open = if sheet.open == Just square then Nothing else Just square } }
+    _ ->
+      pure state
 
   HideStats ->
     pure state { modal = Nothing }
@@ -413,7 +419,7 @@ view state dispatch =
   , case state.modal of
       Nothing -> H.empty
       Just Panel -> panel
-      Just (Stats now) -> ProgressSheet.view labelled now state.progress dispatch
+      Just (Stats sheet) -> ProgressSheet.view labelled sheet (Curriculum.grid state.progress) state.progress dispatch
       Just (Note open) -> Notes.view open (dispatch <<< Notes)
   ]
   where
