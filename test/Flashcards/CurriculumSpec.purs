@@ -133,24 +133,24 @@ sessions = describe "a verb drill session" do
     (Array.length verbs > 1) `shouldEqual` true
 
   it "is first met as the whole curriculum, a session at a time" do
-    Array.length first.sessions `shouldEqual` 8
+    Array.length first.sessions `shouldEqual` 9
     Array.length (Array.concatMap _.queue first.sessions) `shouldEqual` Array.length items
 
   it "never asks two alike in a row more often than it must" do
     counted first.sessions `shouldEqual` fewest first.sessions
 
   it "and nor does a session of reviews" do
-    Array.length reviews.sessions `shouldEqual` 8
+    Array.length reviews.sessions `shouldEqual` 9
     counted reviews.sessions `shouldEqual` fewest reviews.sessions
 
   -- The paraphrase corpus opens on thirteen ser / estar prompts, one family,
-  -- and twelve of them land in one session of twenty. It closes on seven
-  -- saber / conocer prompts, and 142 items leave a last session of two,
-  -- which are the last two of those: one family, so one pair no spread can
-  -- undo. Nowhere else is any family more than half a session.
-  it "puts two alike together only in the ser / estar block and the tail of two" do
-    pairedIn first.sessions `shouldEqual` [ [], [], [], [ Just "estar / ser" ], [], [], [], [ Just "conocer / saber" ] ]
-    map (\s -> unavoidable s.progress s.queue) first.sessions `shouldEqual` [ 0, 0, 0, 3, 0, 0, 0, 1 ]
+  -- and all thirteen land in one session of twenty. It closes on seven
+  -- saber / conocer prompts, and 170 items leave a last session of ten,
+  -- seven of them those: one family over most of a session, so three pairs
+  -- no spread can undo. Nowhere else is any family more than half a session.
+  it "puts two alike together only in the ser / estar block and the saber / conocer tail" do
+    pairedIn first.sessions `shouldEqual` [ [], [], [], [], [ Just "estar / ser" ], [], [], [], [ Just "conocer / saber" ] ]
+    map (\s -> unavoidable s.progress s.queue) first.sessions `shouldEqual` [ 0, 0, 0, 0, 5, 0, 0, 0, 3 ]
 
   -- Met in their order, not the file's: a verb trap's family is its pair,
   -- so the spread keeps those as written, but a tense trap's is its verb,
@@ -174,7 +174,7 @@ order = describe "the order new items are met in" do
 
   it "meets the tense shifts a verb at a time, most common first" do
     Array.nub (map verbOf shifts)
-      `shouldEqual` [ "querer", "poder", "tener", "ir", "decir", "estar", "hacer" ]
+      `shouldEqual` [ "querer", "poder", "tener", "ver", "ir", "decir", "venir", "ser", "estar", "saber", "hacer" ]
 
   it "finds ir, which the deck writes ir(se)" do
     map _.slug (byFrequency [ ask "hacer" "hacer", ask "ir" "ir" ])
