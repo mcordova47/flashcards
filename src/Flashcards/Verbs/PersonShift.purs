@@ -49,6 +49,7 @@ exercise table sentence target
         { slug: Slug $ "person." <> sentence.infinitive <> "." <> Shift.name sentence.tense <> "." <> code target
         , label: sentence.infinitive <> " · " <> Shift.name sentence.tense <> " · " <> pronoun target
         , family: sentence.infinitive
+        , cell: Just { infinitive: sentence.infinitive, tense: sentence.tense, person: target }
         , prompt: sentence.before <> sentence.form <> sentence.after
         , hint: pronoun target
         , answer: Checked

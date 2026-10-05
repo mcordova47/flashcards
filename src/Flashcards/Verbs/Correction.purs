@@ -171,6 +171,7 @@ exercise table deviations sentence kind tense = do
     -- The verb, not the kind: the kind is what is being learned, but the
     -- verb is what the last answer would give away.
     , family: sentence.infinitive
+    , cell: Just { infinitive: sentence.infinitive, tense, person: sentence.person }
     , prompt: before <> wrong <> sentence.after
     , hint: "fix it · " <> Shift.name tense
     , answer: Checked

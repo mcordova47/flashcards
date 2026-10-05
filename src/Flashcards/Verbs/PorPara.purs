@@ -135,6 +135,7 @@ exercise s =
   -- One decision, whichever sense asks it: two in a row is the same choice
   -- made twice.
   , family: "por / para"
+  , cell: Nothing
   , prompt: s.english
   , hint: "por / para"
   , answer: Checked
