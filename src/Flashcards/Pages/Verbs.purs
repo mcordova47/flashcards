@@ -386,6 +386,10 @@ view state dispatch =
               , H.input_ ("verb-answer" <> mark)
                   { key: show (state.got + state.again)
                   , placeholder: "…", spellCheck: false, autoCapitalize: "none"
+                  -- Not covered by `spellCheck`: Safari's autocorrect is its
+                  -- own attribute, and left on it turns a right `tuve` into
+                  -- a wrong `tube` before the drill ever sees it.
+                  , autoCorrect: "off"
                   , autoFocus: true
                   , value: state.typed
                   , onChange: dispatch <| Typed <<< E.inputText
