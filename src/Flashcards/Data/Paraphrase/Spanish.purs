@@ -202,15 +202,15 @@ prompts =
     , verb: "tener", tense: Imperfect, person: Sg2
     , trap: OnTense, against: "preterite"
     }
-  , { id: "kids-played-all-afternoon", asked: "How might you tell me the children played all afternoon yesterday?"
-    , model: "Ayer los niños jugaron toda la tarde."
-    , verb: "jugar", tense: Preterite, person: Pl3
-    , trap: OnTense, against: "imperfect"
-    }
   , { id: "what-played-kid", asked: "How might you ask me what I played as a kid?"
     , model: "¿A qué jugabas de niño?"
     , verb: "jugar", tense: Imperfect, person: Sg2
     , trap: OnTense, against: "preterite"
+    }
+  , { id: "kids-played-all-afternoon", asked: "How might you tell me the children played all afternoon yesterday?"
+    , model: "Ayer los niños jugaron toda la tarde."
+    , verb: "jugar", tense: Preterite, person: Pl3
+    , trap: OnTense, against: "imperfect"
     }
   , { id: "brother-played-well", asked: "How would you tell me your brother played very well last night?"
     , model: "Anoche mi hermano jugó muy bien."
