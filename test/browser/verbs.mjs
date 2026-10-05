@@ -241,6 +241,10 @@ export default async ({ check, open, blobs }) => {
   // asks: `spellCheck` alone leaves Safari free to rewrite a right answer.
   check("and asks iOS not to autocorrect what is typed into it",
     await keys.$eval(".verb-answer", e => e.getAttribute("autocorrect")), "off")
+  // Read back as the property and not only the attribute: that is the
+  // browser having understood it, which is what the keyboard asks.
+  check("and tells the keyboard that Enter checks it",
+    await keys.$eval(".verb-answer", e => [e.getAttribute("enterkeyhint"), e.enterKeyHint]), ["go", "go"])
 
   // Tapping a button leaves it focused, and a focused button takes Enter as a
   // click. Without that being stopped this grades the next question unseen.

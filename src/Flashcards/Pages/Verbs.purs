@@ -32,6 +32,8 @@ import Effect.Now as Now
 import Data.String as String
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Events as E
+import Elmish.HTML.Generated (Props_input)
+import Elmish.HTML.Internal as I
 import Elmish.HTML.Styled as H
 import Flashcards.Exercise (Answer(..), Verdict(..), matches, pick)
 import Flashcards.Keys (onKeyDown)
@@ -343,6 +345,13 @@ untouched :: State -> Boolean
 untouched state =
   state.got + state.again == 0 && state.typed == "" && state.phase == Asked && isNothing (writing state)
 
+-- | `H.input_` with one prop elmish-html does not have, built the way the
+-- | library builds `H.input_` itself, so every other prop is still checked
+-- | against its row. Spelt in camelCase, which React 17 knows and writes out
+-- | as `enterkeyhint`; the lowercase spelling draws its unknown-prop warning.
+answerBox :: I.StyledTagNoContent_ (enterKeyHint :: String | Props_input)
+answerBox = I.styledTagNoContent_ "input"
+
 view :: State -> Dispatch Message -> ReactElement
 view state dispatch =
   H.div "app"
@@ -383,13 +392,18 @@ view state dispatch =
               -- each one gets a fresh box and `autoFocus` fires again. Keeping
               -- focus here is also what stops a tapped button holding it and
               -- taking the next Enter for itself.
-              , H.input_ ("verb-answer" <> mark)
+              , answerBox ("verb-answer" <> mark)
                   { key: show (state.got + state.again)
                   , placeholder: "…", spellCheck: false, autoCapitalize: "none"
                   -- Not covered by `spellCheck`: Safari's autocorrect is its
                   -- own attribute, and left on it turns a right `tuve` into
                   -- a wrong `tube` before the drill ever sees it.
                   , autoCorrect: "off"
+                  -- Enter checks the answer, so the key says so rather than
+                  -- `return`. `go` and not `done`, which promises the
+                  -- keyboard closing: the box keeps focus, and the next
+                  -- Enter moves on.
+                  , enterKeyHint: "go"
                   , autoFocus: true
                   , value: state.typed
                   , onChange: dispatch <| Typed <<< E.inputText
