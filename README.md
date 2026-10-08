@@ -940,9 +940,9 @@ same sentence at another time.
 **The bank decides which items exist.** Each sentence yields its verb in the
 tenses it is not already in, so an item exists only if some sentence reaches
 it, and it needs two for a later sighting to ask a different one. The bank's
-sentences are over fifteen verbs and all written in the present, so they give
-thirty items — each verb's preterite and imperfect — with at least two
-sentences each. A verb's present would need sentences written in a past tense.
+sentences are over nineteen verbs, so they give forty-two items, each with at
+least two sentences: every verb's preterite and imperfect, and the present of
+the four verbs (#41) with sentences written in the imperfect too.
 
 **A verb wants five sentences, one in each person.** A shift keeps its
 sentence's person, so a person no sentence is in has its preterite and
@@ -952,6 +952,18 @@ unevenly, and leave eight persons' preterite and imperfect unreached (`ir`
 misses two); `ver`, `venir`, `ser` and `saber` (#100), and `poner`, `caer`,
 `oír` and `traer` (#104), have one in each. No shift reaches the subjunctive,
 so fifteen of a verb's twenty cells is the most a sentence can open.
+
+**Except where *nosotros* does not change.** `empezar`, `jugar`, `dormir` and
+`sentir` (#41) have the same *nosotros* in the present and the preterite, so a
+present `[dormimos] poco` would ask for its preterite and take the prompt back
+unchanged. Their *nosotros* is written in the imperfect, which asks both and
+shows neither; that leaves the present with one sentence, so each has a second
+in the imperfect, and six in all. Neither of those is marked for the person
+shift, which would open imperfect items with a pool of one. The imperfect
+*nosotros* is the cell that costs: no sentence reaches it. `oír` (#104) took
+the other side of the trade, a present `[oímos]` kept because it is the true
+answer, rather than a present item with a pool of one; #108 is the check that
+would decide between them.
 
 `check-sentences` confirms every bracketed word is what the table has for its
 tag, and holds the rest of each sentence to the deck's vocabulary by the same
@@ -1015,7 +1027,7 @@ thing learners do:
 
 **The item is the kind, not the verb.** What is being learned is to see a
 regularised irregular, and `tener` is the example — so four items with pools
-of 3 to 40 exercises, and `pick` moves to another sentence every time.
+of 9 to 107 exercises, and `pick` moves to another sentence every time.
 
 **The tense is named.** Without it the fix is not determined: `tení` is a
 regularised `tuve` or a clipped `tenía`, and both mend the sentence. The
@@ -1031,9 +1043,11 @@ it is refused. So is an error that is the verb's real form in another tense:
 shift. And `ser` and `ir` make none, since regularising a verb with no stem
 gives `o a la ciudad`, which nobody says.
 
-**Two real kinds are missing**, because no sentence has a verb that makes
-them: the orthographic (`llegé`, `buscé`) and the `-ir` preterite stem change
-(`dormió`). Both need sentences written for them first.
+**Two more come in through the first.** The orthographic (`empezé`, `jugé`)
+and the `-ir` preterite stem change (`dormió`, `sentió`) are each exactly the
+regular form, so `error.regularised` makes them from the sentences #41 added:
+`empezar` and `jugar` in the first person, where the respelling lives, and
+`dormir` and `sentir` in the third, where the stem closes.
 
 ### The paraphrase
 
