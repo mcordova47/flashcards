@@ -144,14 +144,14 @@ sessions = describe "a verb drill session" do
     counted reviews.sessions `shouldEqual` fewest reviews.sessions
 
   -- The paraphrase corpus opens on thirteen ser / estar prompts, one family,
-  -- and closes on seven saber / conocer prompts. At 230 items all thirteen
-  -- land in one session of twenty, five pairs no spread can undo, and the
-  -- last session is ten, seven of them saber / conocer: three pairs. Nowhere
-  -- else is any family more than half a session. That is the count landing
-  -- badly, as 198 landed well; the next change to the bank moves it again.
+  -- and closes on seven saber / conocer prompts. At 232 items eleven of the
+  -- thirteen land in one session of twenty, one pair no spread can undo, and
+  -- the last session is twelve, seven of them saber / conocer: one pair.
+  -- Nowhere else is any family more than half a session. Where the count
+  -- lands moves with every change to the bank.
   it "puts two alike together only in the ser / estar block and the saber / conocer tail" do
     pairedIn first.sessions `shouldEqual` [ [], [], [], [], [], [], [], [ Just "estar / ser" ], [], [], [], [ Just "conocer / saber" ] ]
-    map (\s -> unavoidable s.progress s.queue) first.sessions `shouldEqual` [ 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 3 ]
+    map (\s -> unavoidable s.progress s.queue) first.sessions `shouldEqual` [ 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 ]
 
   -- Met in their order, not the file's: a verb trap's family is its pair,
   -- so the spread keeps those as written, but a tense trap's is its verb,

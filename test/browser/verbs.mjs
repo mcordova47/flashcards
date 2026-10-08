@@ -47,9 +47,10 @@ const porPara = rows("data/es-por-para.csv").map(([text, english, item]) => {
 const porParaSlugs = () => [...new Set(porPara.map(r => r.slug))]
 const otherWord = w => w === "por" ? "para" : "por"
 
-// Error correction's items are its kinds, so there are four and they are
+// Error correction's items are its kinds, so there are six and they are
 // named rather than derived.
-const errorSlugs = ["regularised", "strong-weak", "strong-imperfect", "boot"].map(k => `error.${k}`)
+const errorSlugs = ["regularised", "strong-weak", "strong-imperfect", "boot", "orthographic", "stem-ir"]
+  .map(k => `error.${k}`)
 
 const bank = rows("data/es-sentences.csv").map(([text, infinitive, tense, person, personShift]) => {
   const [, before, form, after] = text.match(/^(.*)\[(.*)\](.*)$/)
@@ -374,8 +375,8 @@ export default async ({ check, open, blobs }) => {
   check("no page errors", pp.errors, [])
   await pp.close()
   // --- error correction: a sentence broken on purpose ---
-  // The shifts and por / para are put behind us, so the session is the four
-  // kinds and the paraphrase. The kinds all open on a `tener` sentence, and
+  // The shifts and por / para are put behind us, so the session is the six
+  // kinds and the paraphrase. The first four open on a `tener` sentence, and
   // thirteen of the sixteen paraphrase prompts are one family, ser / estar —
   // more than half the session, so it leads and goes between everything
   // else (#51). Passed, a prompt moves on by itself.
