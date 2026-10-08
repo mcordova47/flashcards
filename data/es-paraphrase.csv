@@ -33,8 +33,8 @@ met-brother-party,"How would you tell me you met my brother at a party?","Conoc�
 went-sea-summer,"How would you tell me you and your sister always went to the sea in the summer?","Mi hermana y yo siempre íbamos al mar en verano.",ir,imperfect,1p,tense,preterite,
 grandparents-came,"How would you tell me your grandparents always came on Sundays?","Mis abuelos siempre venían los domingos.",venir,imperfect,3p,tense,preterite,domingo is outside the deck; the habitual day is what makes it imperfect
 where-went-last-night,"How would you ask me where I went last night?","¿Adónde fuiste anoche?",ir,preterite,2s,tense,imperfect,"fuiste is also ser's preterite, which adónde settles"
-friends-went-sea,"How might you tell me your friends went to the sea yesterday?","Ayer mis amigos fueron al mar.",ir,preterite,3p,tense,imperfect,"fueron is also ser's preterite, which the context settles"
 car-problem-morning,"How would you tell me you had a problem with the car this morning?","Esta mañana tuve un problema con el coche.",tener,preterite,1s,tense,imperfect,
+friends-went-sea,"How might you tell me your friends went to the sea yesterday?","Ayer mis amigos fueron al mar.",ir,preterite,3p,tense,imperfect,"fueron is also ser's preterite, which the context settles"
 grandfather-always-dog,"How would you tell me your grandfather always had a dog in the house?","Mi abuelo siempre tenía un perro en la casa.",tener,imperfect,3s,tense,preterite,
 many-friends-school,"How might you ask me if I had many friends at school?","¿Tenías muchos amigos en la escuela?",tener,imperfect,2s,tense,preterite,
 what-played-kid,"How might you ask me what I played as a kid?","¿A qué jugabas de niño?",jugar,imperfect,2s,tense,preterite,"De niña if asking a girl; the gender is not the decision"

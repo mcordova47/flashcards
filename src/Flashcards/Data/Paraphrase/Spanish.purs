@@ -182,14 +182,14 @@ prompts =
     , verb: "ir", tense: Preterite, person: Sg2
     , trap: OnTense, against: "imperfect"
     }
-  , { id: "friends-went-sea", asked: "How might you tell me your friends went to the sea yesterday?"
-    , model: "Ayer mis amigos fueron al mar."
-    , verb: "ir", tense: Preterite, person: Pl3
-    , trap: OnTense, against: "imperfect"
-    }
   , { id: "car-problem-morning", asked: "How would you tell me you had a problem with the car this morning?"
     , model: "Esta mañana tuve un problema con el coche."
     , verb: "tener", tense: Preterite, person: Sg1
+    , trap: OnTense, against: "imperfect"
+    }
+  , { id: "friends-went-sea", asked: "How might you tell me your friends went to the sea yesterday?"
+    , model: "Ayer mis amigos fueron al mar."
+    , verb: "ir", tense: Preterite, person: Pl3
     , trap: OnTense, against: "imperfect"
     }
   , { id: "grandfather-always-dog", asked: "How would you tell me your grandfather always had a dog in the house?"
