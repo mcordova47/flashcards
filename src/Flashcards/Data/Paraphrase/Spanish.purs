@@ -167,14 +167,14 @@ prompts =
     , verb: "conocer", tense: Preterite, person: Sg1
     , trap: OnTense, against: "imperfect"
     }
-  , { id: "grandparents-came", asked: "How would you tell me your grandparents always came on Sundays?"
-    , model: "Mis abuelos siempre venían los domingos."
-    , verb: "venir", tense: Imperfect, person: Pl3
-    , trap: OnTense, against: "preterite"
-    }
   , { id: "went-sea-summer", asked: "How would you tell me you and your sister always went to the sea in the summer?"
     , model: "Mi hermana y yo siempre íbamos al mar en verano."
     , verb: "ir", tense: Imperfect, person: Pl1
+    , trap: OnTense, against: "preterite"
+    }
+  , { id: "grandparents-came", asked: "How would you tell me your grandparents always came on Sundays?"
+    , model: "Mis abuelos siempre venían los domingos."
+    , verb: "venir", tense: Imperfect, person: Pl3
     , trap: OnTense, against: "preterite"
     }
   , { id: "where-went-last-night", asked: "How would you ask me where I went last night?"
