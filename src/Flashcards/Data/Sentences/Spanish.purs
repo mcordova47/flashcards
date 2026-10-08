@@ -56,7 +56,7 @@ sentences =
   , { before: "", form: "somos", after: " parte del problema", infinitive: "ser", tense: Present, person: Pl1, personShift: true }
   , { before: "las preguntas ", form: "son", after: " muy difíciles", infinitive: "ser", tense: Present, person: Pl3, personShift: false }
   , { before: "no ", form: "sé", after: " nada", infinitive: "saber", tense: Present, person: Sg1, personShift: true }
-  , { before: "", form: "sabes", after: " la verdad", infinitive: "saber", tense: Present, person: Sg2, personShift: true }
+  , { before: "no ", form: "sabes", after: " la verdad", infinitive: "saber", tense: Present, person: Sg2, personShift: true }
   , { before: "mi hermana ", form: "sabe", after: " la respuesta", infinitive: "saber", tense: Present, person: Sg3, personShift: false }
   , { before: "no ", form: "sabemos", after: " su nombre", infinitive: "saber", tense: Present, person: Pl1, personShift: true }
   , { before: "mis padres ", form: "saben", after: " la noticia", infinitive: "saber", tense: Present, person: Pl3, personShift: false }
