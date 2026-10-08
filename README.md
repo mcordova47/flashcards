@@ -966,9 +966,12 @@ for either would leave it unable to tell a phone typo from a mood error.
 Nothing in the bank does that today; the list is there so the bank does not
 grow into it.
 
-It fails two sentences of one verb around the same words — `[hacemos] la
-comida` and `[hacen] la comida`. That is one string in two rows, and a pool of
-them asks the same question twice.
+It fails two sentences around the same words — `[hacemos] la comida` and
+`[hacen] la comida`. That is one string in two rows, and a pool of them asks
+the same question twice. Of any two verbs, not only one: error correction's
+pools are kinds of mistake, so they mix verbs (#103). For the same reason it
+fails two that correction's added subject makes alike, `yo [vengo] aquí` and
+`[estoy] aquí`.
 
 `sync-sentences` refuses the structural faults — no brackets, capitals or
 punctuation, a tense a shift cannot reach, or a verb the table spells

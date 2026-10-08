@@ -20,10 +20,17 @@
 // a sentence cannot be asked into the person it is already in, so with two
 // the persons they are in each have a pool of one. See #25.
 //
-// And it refuses two sentences of one verb around the same words, `[hacemos]
-// la comida` and `[hacen] la comida`. They are two rows and one string: the
-// pool is there so an item cannot be passed by remembering one, and asking
-// both is asking the same thing twice.
+// And it refuses two sentences around the same words, `[hacemos] la comida`
+// and `[hacen] la comida`. They are two rows and one string: the pool is there
+// so an item cannot be passed by remembering one, and asking both is asking
+// the same thing twice. Of any two verbs, not only of one: the shifts never
+// mix verbs in a pool, but error correction does, since its items are kinds
+// of mistake. See #103.
+//
+// And for the same reason it refuses two that error correction would make
+// one, which is a different string: correction puts a subject in front of a
+// sentence that has none, so `[vengo] aquí` reads `yo [] aquí`, and so does
+// `yo [estoy] aquí`.
 //
 // And every question whose answer, with its accents taken off, is another
 // cell of the same verb and person: `llegué` and `llegue`, `busqué` and
@@ -55,14 +62,25 @@ for (const s of sentences) {
   }
 }
 
-const frames = new Map()
+// Mirrors Flashcards.Verbs.Correction.subject, and Table.pronoun under it.
+const PRONOUNS = { "1s": "yo", "2s": "tú", "3s": "él", "1p": "nosotros", "3p": "ellos" }
+const subject = s => ["", "no"].includes(s.before.trim()) ? `${PRONOUNS[s.person.name]} ` : ""
+
+const frames = new Map(), corrected = new Map()
 for (const s of sentences) {
-  const frame = `${s.infinitive} ${s.before}[]${s.after}`
+  const frame = `${s.before}[]${s.after}`
   const other = frames.get(frame)
+  const correction = `${subject(s)}${frame}`
+  const alike = corrected.get(correction)
   if (other) {
     wrong++
     console.error(`x line ${s.line}: [${s.form}] is line ${other.line}'s [${other.form}] with only the verb moved; a pool of the two asks one string`)
-  } else frames.set(frame, s)
+  } else if (alike) {
+    wrong++
+    console.error(`x line ${s.line}: [${s.form}] and line ${alike.line}'s [${alike.form}] are both ${correction} once error correction gives them a subject`)
+  }
+  frames.set(frame, frames.get(frame) ?? s)
+  corrected.set(correction, alike ?? s)
 }
 
 const count = (pools, slug) => pools.set(slug, (pools.get(slug) ?? 0) + 1)
