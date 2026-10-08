@@ -34,6 +34,8 @@ import Prelude
 import Data.Array as Array
 import Data.Maybe (Maybe(..))
 import Data.String as String
+import Data.String.CodeUnits (toCharArray)
+import Data.Tuple (Tuple(..))
 import Flashcards.Exercise (Answer(..), Exercise, Verdict(..), matches)
 import Flashcards.Types.Card (Slug(..))
 import Flashcards.Verbs.Shift (Sentence)
@@ -51,9 +53,6 @@ import Flashcards.Verbs.Table (Cell, Deviation, Person(..), Tense(..), formOf, p
 -- |   accent could not be the thing to fix: `tenia` would be accepted as the
 -- |   fix for `tenia`. Grading strictly here instead would fail a missing
 -- |   accent on every kind, which is what #16 decided against.
--- | - **Orthographic** (`llegé`, `buscé`) and the **-ir preterite stem
--- |   change** (`dormió`). Real, and in the table, but no sentence in the
--- |   bank has a verb that makes them.
 data Kind
   -- | `teno` for `tengo`, `tení` for `tuve`: the regular pattern applied to
   -- | a verb that has its own form. The commonest of all, and the one a
@@ -73,6 +72,18 @@ data Kind
   -- | which keeps the infinitive's stem. The change is learned from the
   -- | forms heard most, and those are exactly the ones that have it.
   | Boot
+  -- | `empezé` for `empecé`, `jugé` for `jugué`: the first-person preterite
+  -- | of a `-car`, `-gar` or `-zar` verb, with the consonant left as the
+  -- | infinitive spells it. It is the regular form, but calling it that
+  -- | would teach the wrong thing: the verb is regular, and what is missing
+  -- | is the spelling that keeps its sound before an `e`. See #41.
+  | Orthographic
+  -- | `dormió` for `durmió`, `sentieron` for `sintieron`: the third persons
+  -- | of an `-ir` stem-changer's preterite, with the stem left as it is in
+  -- | the infinitive. Also the regular form, and also worth its own rule,
+  -- | which is not the present's: there the stem opens, `duerme`, and here
+  -- | it closes. See #41.
+  | StemIr
 
 derive instance Eq Kind
 
@@ -81,10 +92,12 @@ instance Show Kind where
   show StrongImperfect = "StrongImperfect"
   show StrongWeak = "StrongWeak"
   show Boot = "Boot"
+  show Orthographic = "Orthographic"
+  show StemIr = "StemIr"
 
 -- | In the order they are introduced: the commonest first.
 kinds :: Array Kind
-kinds = [ Regularised, StrongWeak, StrongImperfect, Boot ]
+kinds = [ Regularised, StrongWeak, StrongImperfect, Boot, Orthographic, StemIr ]
 
 -- | The wrong form a kind makes of one cell, if it makes one.
 -- |
@@ -106,10 +119,14 @@ mistake table deviations kind infinitive tense person
   | Array.elem infinitive suppletive = Nothing
   | not (Array.elem tense Shift.tenses) = Nothing
   | otherwise = do
-      _ <- formOf infinitive tense person table
+      fix <- formOf infinitive tense person table
       wrong <- case kind of
         Regularised ->
-          _.regular <$> deviation tense person
+          regularised fix Regularised
+        Orthographic ->
+          regularised fix Orthographic
+        StemIr ->
+          regularised fix StemIr
         StrongImperfect | tense == Imperfect ->
           strongStem <#> (_ <> imperfect person)
         StrongWeak | tense == Preterite ->
@@ -123,6 +140,22 @@ mistake table deviations kind infinitive tense person
     real = Array.filter (\c -> c.infinitive == infinitive && Array.elem c.tense Shift.tenses) table
 
     deviation t p = Array.find (\d -> d.infinitive == infinitive && d.tense == t && d.person == p) deviations
+
+    -- The cell's regular form, if this is the kind it belongs to. Every
+    -- regular form is one of three, so no error is filed under two items.
+    regularised fix k = do
+      d <- deviation tense person
+      if regularKind d.regular fix == k then Just d.regular else Nothing
+
+    regularKind regular fix
+      | tense == Preterite && respell regular == Just fix = Orthographic
+      | tense == Preterite && regularFirst && closes regular fix = StemIr
+      | otherwise = Regularised
+
+    -- A first person the review calls regular, as `dormí` is. A strong
+    -- preterite closes vowels too, `pudiste` and `vinieron` and `di`, but
+    -- they come from its stem, and its first person is irregular with them.
+    regularFirst = deviation Preterite Sg1 == Nothing
 
     cell t p = do
       _ <- deviation t p
@@ -210,6 +243,26 @@ exercises table deviations sentences = do
 suppletive :: Array String
 suppletive = [ "ser", "ir" ]
 
+-- | `empecé` from `empezé`: before a front vowel, `c` is written `qu`, `g` is
+-- | written `gu` and `z` is written `c`, so that each keeps the sound it has
+-- | in the infinitive. Only the first-person preterite's `-é` puts one there
+-- | in the tenses a sentence can be in.
+respell :: String -> Maybe String
+respell regular = Array.findMap swap [ Tuple "cé" "qué", Tuple "gé" "gué", Tuple "zé" "cé" ]
+  where
+    swap (Tuple from to) = String.stripSuffix (String.Pattern from) regular <#> (_ <> to)
+
+-- | `dormió` and `durmió`: the same but for one vowel, closed, `e` to `i` or
+-- | `o` to `u`. Read off the two forms rather than the infinitive, since
+-- | `seguir`'s last vowel is the `u` that is only there for the `g`.
+closes :: String -> String -> Boolean
+closes regular fix =
+  Array.length a == Array.length b && Array.elem differ [ [ Tuple 'e' 'i' ], [ Tuple 'o' 'u' ] ]
+  where
+    a = toCharArray regular
+    b = toCharArray fix
+    differ = Array.filter (\(Tuple x y) -> x /= y) (Array.zip a b)
+
 -- | Unstressed where a strong preterite's are, stressed where the regular
 -- | ones are: the difference is the mistake.
 weak :: Person -> String
@@ -236,6 +289,8 @@ code = case _ of
   StrongImperfect -> "strong-imperfect"
   StrongWeak -> "strong-weak"
   Boot -> "boot"
+  Orthographic -> "orthographic"
+  StemIr -> "stem-ir"
 
 -- | As the progress sheet lists what keeps slipping.
 label :: Kind -> String
@@ -244,6 +299,8 @@ label = case _ of
   StrongImperfect -> "a preterite stem in the imperfect"
   StrongWeak -> "a preterite stem with regular endings"
   Boot -> "a stem change in nosotros"
+  Orthographic -> "a spelling left unchanged before -é"
+  StemIr -> "an -ir preterite stem left open"
 
 -- | Said once the answer is in, and not before: naming the mistake would
 -- | give the fix away.
@@ -253,3 +310,5 @@ note = case _ of
   StrongImperfect -> "the irregular stem belongs to the preterite; the imperfect is regular"
   StrongWeak -> "an irregular preterite stem takes -e and -o, and -eron after j"
   Boot -> "nosotros keeps the infinitive's stem"
+  Orthographic -> "before -é, c is written qu, g is written gu and z is written c, to keep the sound"
+  StemIr -> "an -ir verb that changes its stem closes it in the preterite's third persons: e to i, o to u"

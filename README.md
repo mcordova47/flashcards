@@ -1015,7 +1015,7 @@ items and lists any with only one sentence.
 
 The bank again, with its verb broken on purpose (#26): `tení mucho trabajo` →
 *fix it · preterite* → `tuve`. Nothing is authored but the list of mistakes,
-which is the teaching. `Flashcards.Verbs.Correction` holds the four, each a
+which is the teaching. `Flashcards.Verbs.Correction` holds the six, each a
 thing learners do:
 
 | item | | |
@@ -1024,10 +1024,12 @@ thing learners do:
 | `error.strong-weak` | `tuví` for `tuve`, `dijieron` for `dijeron` | the irregular preterite stem with the regular, stressed endings |
 | `error.strong-imperfect` | `tuvía` for `tenía` | the preterite's stem carried into an imperfect that is regular |
 | `error.boot` | `tienemos` for `tenemos` | a stem change carried into *nosotros* |
+| `error.orthographic` | `empezé` for `empecé`, `jugé` for `jugué` | a `-car`, `-gar` or `-zar` first-person preterite without the respelling that keeps its sound |
+| `error.stem-ir` | `dormió` for `durmió`, `sentieron` for `sintieron` | an `-ir` stem-changer's third-person preterite with the stem left open |
 
 **The item is the kind, not the verb.** What is being learned is to see a
-regularised irregular, and `tener` is the example — so four items with pools
-of 9 to 107 exercises, and `pick` moves to another sentence every time.
+regularised irregular, and `tener` is the example — so six items with pools
+of 4 to 97 exercises, and `pick` moves to another sentence every time.
 
 **The tense is named.** Without it the fix is not determined: `tení` is a
 regularised `tuve` or a clipped `tenía`, and both mend the sentence. The
@@ -1043,11 +1045,19 @@ it is refused. So is an error that is the verb's real form in another tense:
 shift. And `ser` and `ir` make none, since regularising a verb with no stem
 gives `o a la ciudad`, which nobody says.
 
-**Two more come in through the first.** The orthographic (`empezé`, `jugé`)
-and the `-ir` preterite stem change (`dormió`, `sentió`) are each exactly the
-regular form, so `error.regularised` makes them from the sentences #41 added:
-`empezar` and `jugar` in the first person, where the respelling lives, and
-`dormir` and `sentir` in the third, where the stem closes.
+**The last two are the first, split by their rule** (#41). `empezé` and
+`dormió` are each exactly the regular form, so `error.regularised` would make
+them, under a note — *conjugated as though it were regular* — that says less
+than the rule, and of `empezar` says the wrong thing: it is regular, and what
+is missing is a spelling. So a regular form is one of three kinds, read off
+the form and the fix: the fix respelled from the regular `-cé`, `-gé` or `-zé`
+is orthographic; the fix one vowel closed, `e` to `i` or `o` to `u`, in a
+preterite whose first person is regular, is the `-ir` stem; anything else is
+regularised. The first-person condition is what keeps out the strong
+preterites, which close vowels of their own: `pudiste`, `vinieron`, `di`.
+The bank has them from `empezar` and `jugar` in the first person, where the
+respelling is, and `dormir` and `sentir` in the third, where the stem
+closes.
 
 ### The paraphrase
 

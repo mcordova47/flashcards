@@ -7,7 +7,7 @@ import Prelude
 
 import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
-import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Maybe (Maybe(..), fromMaybe, isJust)
 import Data.Set as Set
 import Data.String as String
 import Data.Tuple (Tuple(..))
@@ -38,10 +38,57 @@ spec = do
       wrong Regularised "saber" Present Sg1 `shouldEqual` Just "sabo"
       wrong Regularised "poner" Preterite Sg2 `shouldEqual` Just "poniste"
 
-    -- #26 listed this as a stem change that did not happen, and it is: it
-    -- is also exactly the regular form, so it is this kind.
-    it "which covers a stem change that did not happen" do
-      wrong Regularised "dormir" Preterite Sg3 `shouldEqual` Just "dormió"
+    -- Exactly the regular form too, but the verb is regular in sound, and
+    -- the rule is a spelling one. See #41.
+    it "leaves a consonant unrespelt before -é" do
+      wrong Orthographic "empezar" Preterite Sg1 `shouldEqual` Just "empezé"
+      wrong Orthographic "llegar" Preterite Sg1 `shouldEqual` Just "llegé"
+      wrong Orthographic "buscar" Preterite Sg1 `shouldEqual` Just "buscé"
+      wrong Orthographic "jugar" Preterite Sg1 `shouldEqual` Just "jugé"
+      wrong Regularised "empezar" Preterite Sg1 `shouldEqual` Nothing
+
+    it "only where the respelling is" do
+      wrong Orthographic "empezar" Preterite Sg2 `shouldEqual` Nothing
+      wrong Orthographic "jugar" Present Sg1 `shouldEqual` Nothing
+      wrong Regularised "jugar" Present Sg2 `shouldEqual` Just "jugas"
+
+    -- #26 listed this as a stem change that did not happen, and it is the
+    -- regular form; but its rule is its own. See #41.
+    it "leaves an -ir preterite's stem open" do
+      wrong StemIr "dormir" Preterite Sg3 `shouldEqual` Just "dormió"
+      wrong StemIr "dormir" Preterite Pl3 `shouldEqual` Just "dormieron"
+      wrong StemIr "sentir" Preterite Sg3 `shouldEqual` Just "sentió"
+      wrong StemIr "pedir" Preterite Pl3 `shouldEqual` Just "pedieron"
+      wrong StemIr "seguir" Preterite Sg3 `shouldEqual` Just "seguió"
+      wrong Regularised "dormir" Preterite Sg3 `shouldEqual` Nothing
+
+    -- `pedo` closes its stem too, but in the present, where the rule is the
+    -- boot's; and `oyó`'s `y` is a spelling, not a stem.
+    it "only in the preterite, and only of a vowel" do
+      wrong StemIr "pedir" Present Sg1 `shouldEqual` Nothing
+      wrong Regularised "pedir" Present Sg1 `shouldEqual` Just "pedo"
+      wrong StemIr "dormir" Preterite Sg1 `shouldEqual` Nothing
+      wrong StemIr "oír" Preterite Sg3 `shouldEqual` Nothing
+      wrong StemIr "construir" Preterite Sg3 `shouldEqual` Nothing
+      wrong StemIr "decir" Preterite Sg3 `shouldEqual` Nothing
+
+    -- A vowel closed, one each, but by the strong stem, not by the rule.
+    it "nor of a strong preterite, which closes vowels of its own" do
+      wrong StemIr "poder" Preterite Sg2 `shouldEqual` Nothing
+      wrong StemIr "venir" Preterite Pl3 `shouldEqual` Nothing
+      wrong StemIr "dar" Preterite Sg1 `shouldEqual` Nothing
+      wrong Regularised "venir" Preterite Pl3 `shouldEqual` Just "venieron"
+
+    -- The three are one regular form split three ways, so a cell that is
+    -- one is never another, and no error is asked under two items.
+    it "files every regular form under one kind" do
+      let
+        regulars = [ Regularised, Orthographic, StemIr ]
+        twice = do
+          d <- deviations
+          let made = Array.filter (\k -> isJust (wrong k d.infinitive d.tense d.person)) regulars
+          if Array.length made > 1 then [ d.infinitive <> " " <> show d.tense <> " " <> show d.person ] else []
+      twice `shouldEqual` []
 
     it "puts a preterite stem in the imperfect" do
       wrong StrongImperfect "tener" Imperfect Sg1 `shouldEqual` Just "tuvía"
@@ -105,6 +152,24 @@ spec = do
       mistake table without StrongImperfect "tener" Imperfect Sg1 `shouldEqual` Nothing
 
   describe "an error-correction exercise" do
+    it "names a respelling" do
+      case exercise table deviations empiezo Orthographic Preterite of
+        Nothing -> fail "no exercise"
+        Just e -> do
+          e.slug `shouldEqual` Slug "error.orthographic"
+          e.prompt `shouldEqual` "yo empezé a trabajar"
+          expectedOf e `shouldEqual` "empecé"
+          noteOf e `shouldEqual` "before -é, c is written qu, g is written gu and z is written c, to keep the sound"
+
+    it "and an -ir stem closed" do
+      case exercise table deviations duerme StemIr Preterite of
+        Nothing -> fail "no exercise"
+        Just e -> do
+          e.slug `shouldEqual` Slug "error.stem-ir"
+          e.prompt `shouldEqual` "el niño dormió en su cama"
+          expectedOf e `shouldEqual` "durmió"
+          noteOf e `shouldEqual` "an -ir verb that changes its stem closes it in the preterite's third persons: e to i, o to u"
+
     it "asks the sentence broken, and takes the verb mended" do
       case exercise table deviations tengo Regularised Preterite of
         Nothing -> fail "no exercise"
@@ -226,6 +291,8 @@ spec = do
     dicen = sentence "mi hermano " "dice" " que no" "decir" Sg3
     puedo = sentence "no " "puedo" " dormir" "poder" Sg1
     pueden = sentence "ellos no " "pueden" " entrar" "poder" Pl3
+    empiezo = sentence "" "empiezo" " a trabajar" "empezar" Sg1
+    duerme = sentence "el niño " "duerme" " en su cama" "dormir" Sg3
 
     fixOf verb tense person = Array.find (\c -> c.infinitive == verb && c.tense == tense && c.person == person) table <#> _.form
 
@@ -234,10 +301,17 @@ spec = do
       StrongImperfect -> "strong-imperfect"
       StrongWeak -> "strong-weak"
       Boot -> "boot"
+      Orthographic -> "orthographic"
+      StemIr -> "stem-ir"
 
 expectedOf :: forall r. { answer :: Answer | r } -> String
 expectedOf e = case e.answer of
   Checked c -> c.expected
+  SelfGraded _ -> ""
+
+noteOf :: forall r. { answer :: Answer | r } -> String
+noteOf e = case e.answer of
+  Checked c -> c.note
   SelfGraded _ -> ""
 
 frameOf :: forall r. { answer :: Answer | r } -> Maybe { before :: String, after :: String }
