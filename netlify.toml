@@ -33,7 +33,7 @@
   status = 200
 
 # The bundle is content-hashed by nothing, so keep it revalidating; the deck
-# changes only when the sheet does.
+# changes only when a CSV does, and that is a deploy.
 [[headers]]
   for = "/index.js"
   [headers.values]

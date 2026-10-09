@@ -2,14 +2,14 @@
 
 ## `es-1000.csv` — Spanish
 
-A [Google Sheet][sheet] maintained by hand, originally seeded from a
-1000-most-common-words list and since corrected extensively — see the closed
-deck-cleanup issues for what changed and why.
+Edited by hand in this file, originally seeded from a 1000-most-common-words
+list and since corrected extensively — see the closed deck-cleanup issues for
+what changed and why. It began in a Google Sheet, which stopped being the source
+in #131 and is no longer shared.
 
 ## `de-1000.csv` — German
 
-Sourced from [onewholearns.com/vocabulary/top-1000][owl] and added to the same
-sheet.
+Sourced from [onewholearns.com/vocabulary/top-1000][owl] and imported the same way.
 
 Not a frequency list: it is a **course vocabulary list**, A1 then A2, across 19
 units, alphabetical within each unit. So a card's rank is its position in that
@@ -30,7 +30,6 @@ The source also carries part of speech, CEFR level, unit, and an example
 sentence for every word. Those columns are kept in the CSV although the deck
 generator ignores them; the examples are the obvious raw material for #3.
 
-[sheet]: https://docs.google.com/spreadsheets/d/1vz4CgmSxP7fFmoa-uzjXPmHckkjSfl2evmRyG5EsH5w/edit
 [owl]: https://onewholearns.com/vocabulary/top-1000
 
 ## `es-paraphrase.csv` — Spanish paraphrase prompts
