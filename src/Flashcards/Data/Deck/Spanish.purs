@@ -61,7 +61,7 @@ deck =
   , { rank: Rank 40, slug: Slug "tiempo", english: "time (duration)", word: "tiempo", example: "" }
   , { rank: Rank 41, slug: Slug "saber", english: "to know", word: "saber", example: "" }
   , { rank: Rank 42, slug: Slug "conocer", english: "to know (be familiar with)", word: "conocer", example: "" }
-  , { rank: Rank 43, slug: Slug "hacer", english: "to do", word: "hacer", example: "" }
+  , { rank: Rank 43, slug: Slug "hacer", english: "to do (to make)", word: "hacer", example: "" }
   , { rank: Rank 44, slug: Slug "practicar", english: "to practice", word: "practicar", example: "" }
   , { rank: Rank 45, slug: Slug "llegar", english: "to arrive", word: "llegar", example: "" }
   , { rank: Rank 46, slug: Slug "también", english: "too, also", word: "también", example: "" }
@@ -197,7 +197,7 @@ deck =
   , { rank: Rank 176, slug: Slug "dinero", english: "money", word: "dinero", example: "" }
   , { rank: Rank 177, slug: Slug "casi", english: "almost", word: "casi", example: "" }
   , { rank: Rank 178, slug: Slug "punto", english: "point", word: "punto", example: "" }
-  , { rank: Rank 179, slug: Slug "hecho", english: "done", word: "hecho", example: "" }
+  , { rank: Rank 179, slug: Slug "hecho", english: "done (made)", word: "hecho", example: "" }
   , { rank: Rank 180, slug: Slug "durante", english: "during", word: "durante", example: "" }
   , { rank: Rank 181, slug: Slug "cualquier", english: "any (whichever)", word: "cualquier", example: "" }
   , { rank: Rank 182, slug: Slug "mano", english: "hand", word: "mano", example: "" }
@@ -219,7 +219,7 @@ deck =
   , { rank: Rank 198, slug: Slug "problema", english: "problem", word: "problema", example: "" }
   , { rank: Rank 199, slug: Slug "acuerdo", english: "agreement", word: "acuerdo", example: "" }
   , { rank: Rank 200, slug: Slug "cuenta", english: "account", word: "cuenta", example: "" }
-  , { rank: Rank 201, slug: Slug "medio", english: "medium", word: "medio", example: "" }
+  , { rank: Rank 201, slug: Slug "medio", english: "half (middle)", word: "medio", example: "" }
   , { rank: Rank 202, slug: Slug "contra", english: "against", word: "contra", example: "" }
   , { rank: Rank 203, slug: Slug "fuera", english: "out", word: "fuera", example: "" }
   , { rank: Rank 204, slug: Slug "buscar", english: "to search", word: "buscar", example: "" }
@@ -483,7 +483,7 @@ deck =
   , { rank: Rank 462, slug: Slug "derecho", english: "right", word: "derecho", example: "" }
   , { rank: Rank 463, slug: Slug "primer", english: "first (before a noun)", word: "primer", example: "" }
   , { rank: Rank 464, slug: Slug "importancia", english: "importance", word: "importancia", example: "" }
-  , { rank: Rank 465, slug: Slug "genial", english: "brilliant", word: "genial", example: "" }
+  , { rank: Rank 465, slug: Slug "genial", english: "great", word: "genial", example: "" }
   , { rank: Rank 466, slug: Slug "sistema", english: "system", word: "sistema", example: "" }
   , { rank: Rank 467, slug: Slug "justo", english: "just", word: "justo", example: "" }
   , { rank: Rank 468, slug: Slug "viaje", english: "trip", word: "viaje", example: "" }
@@ -525,7 +525,7 @@ deck =
   , { rank: Rank 504, slug: Slug "coche", english: "car", word: "coche", example: "" }
   , { rank: Rank 505, slug: Slug "obtener", english: "to obtain", word: "obtener", example: "" }
   , { rank: Rank 506, slug: Slug "programa", english: "program", word: "programa", example: "" }
-  , { rank: Rank 507, slug: Slug "lejos", english: "away", word: "lejos", example: "" }
+  , { rank: Rank 507, slug: Slug "lejos", english: "far", word: "lejos", example: "" }
   , { rank: Rank 508, slug: Slug "siete", english: "seven", word: "siete", example: "" }
   , { rank: Rank 509, slug: Slug "enorme", english: "huge", word: "enorme", example: "" }
   , { rank: Rank 510, slug: Slug "respuesta", english: "response", word: "respuesta", example: "" }
@@ -612,7 +612,7 @@ deck =
   , { rank: Rank 591, slug: Slug "grave", english: "severe", word: "grave", example: "" }
   , { rank: Rank 592, slug: Slug "decisión", english: "decision", word: "decisión", example: "" }
   , { rank: Rank 593, slug: Slug "música", english: "music", word: "música", example: "" }
-  , { rank: Rank 594, slug: Slug "extraño", english: "strange", word: "extraño", example: "" }
+  , { rank: Rank 594, slug: Slug "extraño", english: "weird (foreign)", word: "extraño", example: "" }
   , { rank: Rank 595, slug: Slug "crecer", english: "to grow", word: "crecer", example: "" }
   , { rank: Rank 596, slug: Slug "surgir", english: "to emerge", word: "surgir", example: "" }
   , { rank: Rank 597, slug: Slug "película", english: "movie", word: "película", example: "" }
@@ -762,12 +762,12 @@ deck =
   , { rank: Rank 741, slug: Slug "probablemente", english: "probably", word: "probablemente", example: "" }
   , { rank: Rank 742, slug: Slug "constituir", english: "to constitute", word: "constituir", example: "" }
   , { rank: Rank 743, slug: Slug "ayer", english: "yesterday", word: "ayer", example: "" }
-  , { rank: Rank 744, slug: Slug "dispuesto", english: "ready", word: "dispuesto", example: "" }
+  , { rank: Rank 744, slug: Slug "dispuesto", english: "willing (available)", word: "dispuesto", example: "" }
   , { rank: Rank 745, slug: Slug "cubrir", english: "to cover", word: "cubrir", example: "" }
   , { rank: Rank 746, slug: Slug "funcionar", english: "to function", word: "funcionar", example: "" }
   , { rank: Rank 747, slug: Slug "compañero", english: "partner", word: "compañero", example: "" }
   , { rank: Rank 748, slug: Slug "bonito", english: "nice", word: "bonito", example: "" }
-  , { rank: Rank 749, slug: Slug "salida", english: "output", word: "salida", example: "" }
+  , { rank: Rank 749, slug: Slug "salida", english: "exit", word: "salida", example: "" }
   , { rank: Rank 750, slug: Slug "caber", english: "to fit", word: "caber", example: "" }
   , { rank: Rank 751, slug: Slug "conciencia", english: "awareness", word: "conciencia", example: "" }
   , { rank: Rank 752, slug: Slug "atender", english: "to meet", word: "atender", example: "" }
@@ -851,7 +851,7 @@ deck =
   , { rank: Rank 830, slug: Slug "exponer", english: "to exhibit", word: "exponer", example: "" }
   , { rank: Rank 831, slug: Slug "control", english: "control", word: "control", example: "" }
   , { rank: Rank 832, slug: Slug "civil", english: "civil", word: "civil", example: "" }
-  , { rank: Rank 833, slug: Slug "raro", english: "rare", word: "raro", example: "" }
+  , { rank: Rank 833, slug: Slug "raro", english: "weird (rare)", word: "raro", example: "" }
   , { rank: Rank 834, slug: Slug "ciencia", english: "science", word: "ciencia", example: "" }
   , { rank: Rank 835, slug: Slug "tamaño", english: "size", word: "tamaño", example: "" }
   , { rank: Rank 836, slug: Slug "cuadro", english: "chart, painting", word: "cuadro", example: "" }
@@ -908,7 +908,7 @@ deck =
   , { rank: Rank 887, slug: Slug "organizar", english: "to organize", word: "organizar", example: "" }
   , { rank: Rank 888, slug: Slug "elección", english: "choice", word: "elección", example: "" }
   , { rank: Rank 889, slug: Slug "visita", english: "visit", word: "visita", example: "" }
-  , { rank: Rank 890, slug: Slug "divertido", english: "funny", word: "divertido", example: "" }
+  , { rank: Rank 890, slug: Slug "divertido", english: "fun", word: "divertido", example: "" }
   , { rank: Rank 891, slug: Slug "contener", english: "to contain", word: "contener", example: "" }
   , { rank: Rank 892, slug: Slug "apoyo", english: "support", word: "apoyo", example: "" }
   , { rank: Rank 893, slug: Slug "árbol", english: "tree", word: "árbol", example: "" }

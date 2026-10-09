@@ -41,7 +41,7 @@ Order,English,Español,Slug
 40,time (duration),tiempo,tiempo
 41,to know,saber,saber
 42,to know (be familiar with),conocer,conocer
-43,to do,hacer,hacer
+43,to do (to make),hacer,hacer
 44,to practice,practicar,practicar
 45,to arrive,llegar,llegar
 46,"too, also",también,también
@@ -177,7 +177,7 @@ Order,English,Español,Slug
 176,money,dinero,dinero
 177,almost,casi,casi
 178,point,punto,punto
-179,done,hecho,hecho
+179,done (made),hecho,hecho
 180,during,durante,durante
 181,any (whichever),cualquier,cualquier
 182,hand,mano,mano
@@ -199,7 +199,7 @@ Order,English,Español,Slug
 198,problem,problema,problema
 199,agreement,acuerdo,acuerdo
 200,account,cuenta,cuenta
-201,medium,medio,medio
+201,half (middle),medio,medio
 202,against,contra,contra
 203,out,fuera,fuera
 204,to search,buscar,buscar
@@ -463,7 +463,7 @@ Order,English,Español,Slug
 462,right,derecho,derecho
 463,first (before a noun),primer,primer
 464,importance,importancia,importancia
-465,brilliant,genial,genial
+465,great,genial,genial
 466,system,sistema,sistema
 467,just,justo,justo
 468,trip,viaje,viaje
@@ -505,7 +505,7 @@ Order,English,Español,Slug
 504,car,coche,coche
 505,to obtain,obtener,obtener
 506,program,programa,programa
-507,away,lejos,lejos
+507,far,lejos,lejos
 508,seven,siete,siete
 509,huge,enorme,enorme
 510,response,respuesta,respuesta
@@ -592,7 +592,7 @@ Order,English,Español,Slug
 591,severe,grave,grave
 592,decision,decisión,decisión
 593,music,música,música
-594,strange,extraño,extraño
+594,weird (foreign),extraño,extraño
 595,to grow,crecer,crecer
 596,to emerge,surgir,surgir
 597,movie,película,película
@@ -742,12 +742,12 @@ Order,English,Español,Slug
 741,probably,probablemente,probablemente
 742,to constitute,constituir,constituir
 743,yesterday,ayer,ayer
-744,ready,dispuesto,dispuesto
+744,willing (available),dispuesto,dispuesto
 745,to cover,cubrir,cubrir
 746,to function,funcionar,funcionar
 747,partner,compañero,compañero
 748,nice,bonito,bonito
-749,output,salida,salida
+749,exit,salida,salida
 750,to fit,caber,caber
 751,awareness,conciencia,conciencia
 752,to meet,atender,atender
@@ -831,7 +831,7 @@ Order,English,Español,Slug
 830,to exhibit,exponer,exponer
 831,control,control,control
 832,civil,civil,civil
-833,rare,raro,raro
+833,weird (rare),raro,raro
 834,science,ciencia,ciencia
 835,size,tamaño,tamaño
 836,"chart, painting",cuadro,cuadro
@@ -888,7 +888,7 @@ Order,English,Español,Slug
 887,to organize,organizar,organizar
 888,choice,elección,elección
 889,visit,visita,visita
-890,funny,divertido,divertido
+890,fun,divertido,divertido
 891,to contain,contener,contener
 892,support,apoyo,apoyo
 893,tree,árbol,árbol
