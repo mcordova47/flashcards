@@ -6,6 +6,7 @@ module Flashcards.Pages.Verbs.Model
   , Square
   , State
   , namespace
+  , typing
   )
   where
 
@@ -59,6 +60,16 @@ type State =
   , offline :: Boolean
   , loaded :: Boolean
   }
+
+-- | What the box says, once it is allowed to say anything. Only while the
+-- | question is `Asked`: after the check the echo reads this field, so a
+-- | change here would have the page contradict a verdict it has already given.
+-- | `readOnly` keeps the DOM from sending one; this is what makes the echo true
+-- | whatever the DOM does, and it is a function so that it can be tested.
+typing :: String -> State -> State
+typing text state = case state.phase of
+  Asked -> state { typed = text }
+  _ -> state
 
 -- | What is over the question. One field rather than one per overlay, because
 -- | only one is ever open: with a field each, every place that opened one had

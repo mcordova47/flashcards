@@ -267,6 +267,23 @@ export default async ({ check, open, blobs }) => {
   await keys.tap(".grade")
   check("tapping Check and then Next leaves the box focused",
     await keys.evaluate(() => document.activeElement?.className.includes("verb-answer")), true)
+  // The box is read-only once the answer is showing, and the echo is what was
+  // checked: typing into a focused box afterwards must change neither.
+  await keys.type(".verb-answer", "nada")
+  await keys.tap(".grade")
+  const echo = () => keys.text(".verb-attempt")
+  const readOnly = () => keys.$eval(".verb-answer", e => e.readOnly)
+  check("the box is read-only once checked", await readOnly(), true)
+  check("and still holds focus, which is what guards the next Enter",
+    await keys.evaluate(() => document.activeElement?.className.includes("verb-answer")), true)
+  const echoed = await echo()
+  await keys.keyboard.type("XYZ")
+  check("typing after the check does not change the box",
+    await keys.$eval(".verb-answer", e => e.value), "nada")
+  check("nor the echo", await echo(), echoed)
+  await keys.tap(".grade")
+  check("and the next question's box is editable again", await readOnly(), false)
+  check("and focused", await keys.evaluate(() => document.activeElement?.className.includes("verb-answer")), true)
   // The top bar is for the session; everything else is behind the dots, as
   // on the cards. Both are anchors: a page change is a page load here.
   check("nothing but pips and the dots in the top bar",

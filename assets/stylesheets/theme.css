@@ -1117,6 +1117,13 @@ body {
   color: var(--wrong);
 }
 
+/* Once checked it takes no more typing, and says so: no caret to suggest it
+   does, and the pointer is not the I-beam of a box that wants text. */
+.verb-answer[readonly] {
+  caret-color: transparent;
+  cursor: default;
+}
+
 /* A wrong answer is the one worth reading, so it is not set quieter than a
    right one. Same size as the flourish, different colour. */
 .milestone.verb-wrong {

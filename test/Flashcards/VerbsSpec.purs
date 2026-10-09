@@ -6,7 +6,11 @@ module Test.Flashcards.VerbsSpec
 import Prelude
 
 import Data.Array as Array
+import Data.Foldable (for_)
 import Data.Maybe (Maybe(..))
+import Flashcards.Exercise (Verdict(..))
+import Flashcards.Pages.Verbs.Model (Phase(..), typing)
+import Flashcards.Types.Progress as Progress
 import Flashcards.Data.Verbs.Spanish (table)
 import Flashcards.Verbs.Table (Person(..), Tense(..), formOf)
 import Test.Spec (Spec, describe, it)
@@ -39,3 +43,23 @@ spec = do
     it "has all twenty cells for every verb" do
       let verbs = Array.nub (map _.infinitive table)
       Array.length table `shouldEqual` (Array.length verbs * 20)
+
+  -- After the check the echo reads `typed`, so it must not move.
+  describe "typing into the answer box" do
+    let
+      base =
+        { progress: Progress.empty, queue: [], shown: Nothing, typed: "nada"
+        , got: 0, again: 0, phase: Asked, modal: Nothing, at: Nothing
+        , syncKey: Nothing, sent: Nothing, offline: false, loaded: true
+        }
+
+    it "is taken while the question is asked" do
+      (typing "nadaX" base).typed `shouldEqual` "nadaX"
+
+    it "is ignored once the answer has been compared" do
+      for_ [ Exact, Wrong ] \verdict ->
+        (typing "nadaXYZ" base { phase = Compared verdict }).typed `shouldEqual` "nada"
+
+    it "is ignored once an answer is revealed or being graded" do
+      for_ [ Revealed, Judging ] \phase ->
+        (typing "nadaXYZ" base { phase = phase }).typed `shouldEqual` "nada"
