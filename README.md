@@ -1255,17 +1255,22 @@ you grade yourself against the set.
 
 Most of those groups have been given distinct English sides — `to be (what it
 is)` and `to be (how or where it is)` — so each card is separately answerable
-and graduates on its own. Fourteen remain, deliberately: they are true synonyms,
+and graduates on its own. Some remain, deliberately: they are true synonyms,
 where a parenthetical would be circular (`to start (empezar)` teaches nothing)
 and producing the commonest is the right answer.
 
 Only the **most frequent** member of such a group graduates. In production the
-gloss is the entire prompt, so the six cards behind `that` would be the same
-unanswerable question six times over, and producing *que* would credit all of
-them. The other 70 cards stay in recognition and climb the full ladder to box 5
+gloss is the entire prompt, so the three cards behind `to start` would be the
+same unanswerable question three times over, and producing *empezar* would credit
+all of them. The rest stay in recognition and climb the full ladder to box 5
 instead — which is why a recognition card at the top box counts as mastered:
 that is as far as it can go. Giving those groups distinct English sides would
 let them graduate again with no code change; see #4.
+
+How many groups there are, and how many cards they leave in recognition, moves
+whenever a gloss is edited, so it is not written here: `npm run sync-deck` prints
+the number of English sides that map to more than one Spanish word, and
+`npm run collisions` lists the near misses.
 
 Progress saved before that rule existed can hold cards that graduated when they
 should not have, and so can a backup from an older device. Both are repaired on
