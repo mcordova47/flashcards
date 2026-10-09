@@ -388,12 +388,15 @@ view state dispatch =
             -- falls: first, last or in the middle.
             , H.div "verb-frame"
               [ H.span "verb-before" frame.before
-              -- Keyed by the tally, which moves on every graded question, so
-              -- each one gets a fresh box and `autoFocus` fires again. Keeping
-              -- focus here is also what stops a tapped button holding it and
-              -- taking the next Enter for itself.
+              -- Keyed by the tally, which moves when a question is graded, and
+              -- by whether it has been checked, which moves again at Next.
+              -- Each of those gets a fresh box and `autoFocus` fires again.
+              -- The tally alone remounted after Check and not after Next, so a
+              -- tapped Next held focus, was disabled by the empty box it
+              -- brought, and dropped it to the body. Keeping focus here is
+              -- also what stops a tapped button taking the next Enter.
               , answerBox ("verb-answer" <> mark)
-                  { key: show (state.got + state.again)
+                  { key: show (state.got + state.again) <> checkedKey
                   , placeholder: "…", spellCheck: false, autoCapitalize: "none"
                   -- Not covered by `spellCheck`: Safari's autocorrect is its
                   -- own attribute, and left on it turns a right `tuve` into
@@ -466,6 +469,10 @@ view state dispatch =
 
     total = state.got + state.again + Array.length state.queue
 
+    checkedKey = case state.phase of
+      Compared _ -> "-checked"
+      _ -> ""
+
     waitFor = do
       now <- state.at
       Stats.describeDuration <$> Stats.nextDueIn now (map _.slug items) state.progress
@@ -493,10 +500,10 @@ view state dispatch =
 
     controls = case state.phase of
       Compared _ ->
-        [ H.button_ "grade got-it" { onClick: dispatch <| Next } "Next" ]
+        [ H.button_ "grade got-it" { onClick: dispatch <| Next, key: "next" } "Next" ]
       -- Nothing checked this, so nothing can say how it went but the reader.
       Asked ->
-        [ H.button_ "grade got-it" { onClick: dispatch <| Answer, disabled: not answerable } ask ]
+        [ H.button_ "grade got-it" { onClick: dispatch <| Answer, disabled: not answerable, key: "ask" } ask ]
       -- `Revealed` and `Judging` look the same on purpose: the buttons stay
       -- put across the frame between the tap and the grade landing, and
       -- `Judge` ignores the second tap rather than the view hiding it.
