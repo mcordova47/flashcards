@@ -14,6 +14,8 @@ on:
   push:
     branches: [main]
   pull_request:
+    # `labeled` so that adding `slug-change` re-runs the check it excuses.
+    types: [opened, synchronize, reopened, labeled, unlabeled]
 
 # Several agents pushing at once means several runs that no longer matter.
 # Keep the newest per branch and stop the rest; main is exempt, since a
@@ -48,6 +50,18 @@ jobs:
             echo "::error::A generated module is out of date with its CSV. Run \`npm run sync\` and commit the result."
             exit 1
           fi
+
+      # A slug is what a card's history is keyed by, so one that changes on a
+      # word still in the deck is refused. Against the pull request's base,
+      # never HEAD, which already has the change. A deliberate one carries the
+      # `slug-change` label; pushes to main are not compared with themselves.
+      - name: No slug changed on a word still in the deck
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+          node tools/check-slugs.mjs --base "origin/${{ github.base_ref }}" $FLAGS
+        env:
+          FLAGS: ${{ contains(github.event.pull_request.labels.*.name, 'slug-change') && '--drop-pins' || '' }}
 
       # Structural only: deviations from the regular pattern are its output,
       # not a failure, and it exits zero for them.
