@@ -98,7 +98,75 @@ less than one who hears which of their judgements was better than the issue's.
 **Own what is yours.** Where the issue was wrong, say the issue was wrong, and
 edit it — the reviewer edits, per `CONTRIBUTING.md`, and the author does not.
 
-**A comment on a line blocks the merge.** `required_conversation_resolution`
-is on, so "non-blocking nit" is not something you can actually offer. Either
-it is worth stopping for and goes in a thread, or it is not and goes in the
-summary.
+## What to do with what you found
+
+Every finding ends in exactly one of three places, and **you decide which**.
+There is no "not blocking" section and no "follow-up". The first leaves the
+maintainer guessing which things matter. The second is a promise nobody holds:
+nothing happens after a pull request merges unless a person coordinates it,
+and the maintainer's attention is the scarce thing here, not CI minutes. Decide
+whatever can be decided.
+
+**Fix it in this pull request.** When the finding is about what this change does
+or claims, and the right fix is clear. Push it as its own commit with the reason
+in the message, and let CI run again. Another round costs minutes; a fix put
+off costs a person.
+
+**File a new issue.** When it is real but is not this change's to fix: it was
+already true before the change, it is a different deliverable, or it needs a
+decision or data nobody here has. File it yourself, with the reasoning
+(`CONTRIBUTING.md`, *Issues carry the reasoning*), and link it from the review.
+An issue is something `/issue` can pick up. A sentence in a comment is not.
+
+**Ignore it.** When it is wrong, already decided, or not worth the change. Say
+so in a line, with the reason, so nobody raises it again. *I checked this and
+it is fine* is this disposition and is worth saying.
+
+### Which one
+
+A finding about what the change touches or claims, with a clear fix, is a fix
+here. A finding about something it did not touch is an issue, and so is
+anything that would be a different deliverable: a fix to code the pull request
+never changed does not go in as a commit, because one commit is one deliverable.
+
+**Ask the maintainer only when the answer depends on something you cannot see.**
+That is a change to what gets built, which is the line `/issue` already draws
+between *the same thing either way* and *something materially different*, or a
+matter of taste with no right answer. Put those first, under **Needs you**.
+A review whose **Needs you** is empty is the goal.
+
+### Pushing a fix
+
+Stand in the branch's worktree, as above. `git fetch`, make the commit, and
+`git push`: **never `--force`**. From a detached worktree that is
+`git push origin HEAD:<their-branch>`. If the author has moved the push is
+refused, and the remedy is to rebase onto them and push again. Re-run only what
+you changed, as above, then `gh pr checks <n>` until green. Do not run the gate
+yourself; CI will. If CI fails on a commit of yours, that failure is yours to
+fix and not a finding to hand back.
+
+### Resolve what you open
+
+`required_conversation_resolution` is on, so a thread left open is the
+maintainer clicking *resolve*. A thread you opened is yours to resolve once its
+disposition has been carried out: the fix pushed, the issue filed and linked, or
+the reason given. A finding you fix needs no thread at all.
+
+```
+gh api graphql -f query='{ repository(owner: "mcordova47", name: "flashcards") { pullRequest(number: <n>) { reviewThreads(first: 50) { nodes { id isResolved comments(first: 1) { nodes { body } } } } } } }'
+gh api graphql -f query='mutation { resolveReviewThread(input: { threadId: "<id>" }) { thread { isResolved } } }'
+```
+
+### How to end
+
+With a short table, and then one of two lines.
+
+| finding | disposition | where |
+| --- | --- | --- |
+| the gate ignores a blank row | fixed | `a1b2c3d` |
+| the same fault in an untouched module | issue | #140 |
+| a `TODO` the author left | ignored | already tracked in #98 |
+
+**Ready to merge:** every finding has a disposition and it has been carried out,
+checks are green, your threads are resolved, and nothing needs the maintainer.
+Or **Needs you:** and the list.
