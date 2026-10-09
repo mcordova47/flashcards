@@ -44,6 +44,7 @@ npm start        # http://localhost:8000
 | `npm run check-por-para` | Prove every por / para contrast asks both sides and every sense only its own, in deck vocabulary |
 | `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
 | `npm run notes` | Every note the app has sent, oldest first — see [Reading them](#reading-them) |
+| `npm run collisions` | Glosses that share a content word without being the same string, for a person to rule on — a report, not a gate |
 | `npm run reach` | Which cells of the conjugation table the drills can ask |
 
 ## Languages
@@ -644,6 +645,31 @@ production card free, though a whole gloss equal to its Spanish is just a
 cognate and fine; and a count of cards whose slug no longer matches their word,
 which is exactly what a respelling looks like and also exactly what a replaced
 word looks like — the fetch that made each one listed it.
+
+### Glosses that look wrong and are not
+
+Eleven Spanish cards are glossed in the shape `is X to (to Y)`:
+
+```
+gustar    is pleasing to (to like)        faltar     is missing to (to lack)
+parecer   is seeming to (to seem)         costar     is costly to (to cost)
+quedar    is remaining to (to be left)    doler      is painful to (to hurt)
+interesar is interesting to (to interest) preocupar  is worrying to (to worry)
+importar  is important to (to matter)     bastar     is sufficient to (to be enough)
+                                          encantar   is delightful to (to love)
+```
+
+This is deliberate. These verbs take the inverted construction — `me gusta` is
+*it is pleasing to me* — and the gloss teaches that shape rather than the
+English idiom. The parenthetical is the English verb the construction
+translates to; it is not the sense of the word in isolation, which is why
+`quedar` says *(to be left)* and not *(to stay)*: *to stay* is `quedarse`, a
+different card.
+
+Do not "fix" one into plain English. A new verb of this kind takes the same
+shape, and the parenthetical must be an English rendering of **that verb**, not
+of a different one (`acordar(se)` once carried *(remember)*, which is
+`acordarse`, and was the fault).
 
 ### Undo
 
