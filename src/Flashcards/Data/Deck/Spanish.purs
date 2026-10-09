@@ -13,7 +13,7 @@ import Flashcards.Types.Card (Card, Rank(..), Slug(..))
 -- | is no longer what protects it - it certifies that a rank still names the
 -- | word it named, which is all that placing a pre-v5 payload needs.
 fingerprint :: String
-fingerprint = "654958a3f958"
+fingerprint = "f321a7d5a5b9"
 
 -- | The index into this deck is meaningful: it is the order cards are
 -- | introduced in.
@@ -661,7 +661,7 @@ deck =
   , { rank: Rank 640, slug: Slug "simplemente", english: "simply", word: "simplemente", example: "" }
   , { rank: Rank 641, slug: Slug "imposible", english: "impossible", word: "imposible", example: "" }
   , { rank: Rank 642, slug: Slug "gusto", english: "taste", word: "gusto", example: "" }
-  , { rank: Rank 643, slug: Slug "acordar(se)", english: "to agree", word: "acordar(se)", example: "" }
+  , { rank: Rank 643, slug: Slug "acordar(se)", english: "to agree", word: "acordar", example: "" }
   , { rank: Rank 644, slug: Slug "sitio", english: "site", word: "sitio", example: "" }
   , { rank: Rank 645, slug: Slug "lengua", english: "language, tongue", word: "lengua", example: "" }
   , { rank: Rank 646, slug: Slug "cortar", english: "to cut", word: "cortar", example: "" }
