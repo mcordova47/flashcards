@@ -218,7 +218,9 @@ check and where most of the real findings have been.
 `/review <n>` is the procedure: where to stand, what to re-run, what to say.
 
 **A review ends with every finding decided.** Each one is fixed in the pull
-request, filed as an issue, or ignored with a reason. None is deferred to a
-follow-up, because a follow-up is only done if someone remembers to ask for it,
-and the maintainer's attention is the scarce thing here, not CI minutes. The
-reviewer decides what can be decided and asks only about what cannot.
+request by its author, filed as an issue by the reviewer, or ignored with a
+reason. None is deferred to a follow-up, because a follow-up is only done if
+someone remembers to ask for it, and the maintainer's attention is the scarce
+thing here, not CI minutes. The reviewer decides what can be decided, asks only
+about what cannot, tells the maintainer which issues it filed, and queues
+auto-merge when there is nothing left for anyone to do.
