@@ -44,6 +44,7 @@ npm start        # http://localhost:8000
 | `npm run check-por-para` | Prove every por / para contrast asks both sides and every sense only its own, in deck vocabulary |
 | `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
 | `npm run notes` | Every note the app has sent, oldest first — see [Reading them](#reading-them) |
+| `npm run reach` | Which cells of the conjugation table the drills can ask |
 
 ## Languages
 
