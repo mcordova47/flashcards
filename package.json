@@ -25,7 +25,8 @@
     "check-por-para": "node tools/check-por-para.mjs",
     "preview": "node tools/preview-milestones.mjs",
     "notes": "node tools/notes.mjs",
-    "issues": "node tools/issues.mjs"
+    "issues": "node tools/issues.mjs",
+    "collisions": "node tools/near-collisions.mjs"
   },
   "license": "ISC",
   "devDependencies": {
