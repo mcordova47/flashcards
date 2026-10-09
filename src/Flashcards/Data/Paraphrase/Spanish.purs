@@ -212,14 +212,14 @@ prompts =
     , verb: "jugar", tense: Preterite, person: Pl3
     , trap: OnTense, against: "imperfect"
     }
-  , { id: "brother-played-well", asked: "How would you tell me your brother played very well last night?"
-    , model: "Anoche mi hermano jugó muy bien."
-    , verb: "jugar", tense: Preterite, person: Sg3
-    , trap: OnTense, against: "imperfect"
-    }
   , { id: "father-read-paper", asked: "How might you tell me your father read the newspaper this morning?"
     , model: "Esta mañana mi padre leyó el periódico."
     , verb: "leer", tense: Preterite, person: Sg3
+    , trap: OnTense, against: "imperfect"
+    }
+  , { id: "brother-played-well", asked: "How would you tell me your brother played very well last night?"
+    , model: "Anoche mi hermano jugó muy bien."
+    , verb: "jugar", tense: Preterite, person: Sg3
     , trap: OnTense, against: "imperfect"
     }
   , { id: "grandparents-read-paper", asked: "How might you tell me your grandparents read the newspaper every morning?"
