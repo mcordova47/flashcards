@@ -82,8 +82,9 @@ spec = do
         index = Deck.index Spanish.deck
         barred = Array.filter (\c -> not $ Deck.isCanonical c index) Spanish.deck
       -- Fifteen since `aun` was corrected from "even, yet, still" to "even",
-      -- which made it the synonym of `incluso` it always was.
-      Array.length barred `shouldEqual` 15
+      -- which made it the synonym of `incluso` it always was. Sixteen since
+      -- `acordar(se)` lost "(remember)" and became the synonym of `convenir`.
+      Array.length barred `shouldEqual` 16
 
   describe "repairing cards that reached production before the rule" do
     let

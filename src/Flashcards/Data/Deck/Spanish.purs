@@ -146,7 +146,7 @@ deck =
   , { rank: Rank 125, slug: Slug "tan", english: "such, as, so", word: "tan", example: "" }
   , { rank: Rank 126, slug: Slug "quién", english: "who", word: "quién", example: "" }
   , { rank: Rank 127, slug: Slug "parte", english: "part", word: "parte", example: "" }
-  , { rank: Rank 128, slug: Slug "quedar", english: "is remaining to (to stay)", word: "quedar", example: "" }
+  , { rank: Rank 128, slug: Slug "quedar", english: "is remaining to (to be left)", word: "quedar", example: "" }
   , { rank: Rank 129, slug: Slug "por favor", english: "please", word: "por favor", example: "" }
   , { rank: Rank 130, slug: Slug "dónde", english: "where? (asking)", word: "dónde", example: "" }
   , { rank: Rank 131, slug: Slug "nunca", english: "never", word: "nunca", example: "" }
@@ -661,7 +661,7 @@ deck =
   , { rank: Rank 640, slug: Slug "simplemente", english: "simply", word: "simplemente", example: "" }
   , { rank: Rank 641, slug: Slug "imposible", english: "impossible", word: "imposible", example: "" }
   , { rank: Rank 642, slug: Slug "gusto", english: "taste", word: "gusto", example: "" }
-  , { rank: Rank 643, slug: Slug "acordar(se)", english: "to agree (remember)", word: "acordar(se)", example: "" }
+  , { rank: Rank 643, slug: Slug "acordar(se)", english: "to agree", word: "acordar(se)", example: "" }
   , { rank: Rank 644, slug: Slug "sitio", english: "site", word: "sitio", example: "" }
   , { rank: Rank 645, slug: Slug "lengua", english: "language, tongue", word: "lengua", example: "" }
   , { rank: Rank 646, slug: Slug "cortar", english: "to cut", word: "cortar", example: "" }
