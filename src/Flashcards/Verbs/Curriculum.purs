@@ -5,6 +5,8 @@
 -- | from.
 module Flashcards.Verbs.Curriculum
   ( items
+  , produced
+  , corrected
   , byFrequency
   , family
   , grid
@@ -63,11 +65,23 @@ import Flashcards.Verbs.Shift as Shift
 -- | `session` spreads each session so that no verb comes twice running.
 items :: Array Pool
 items = Exercise.pools $
+  produced
+    <> PorPara.exercises PorPara.sentences
+    <> corrected
+    <> Paraphrase.exercises prompts
+
+-- | The exercises that have you produce a form: the two shifts, in the order
+-- | they are met. Apart from `corrected` so that `Reach` can ask which cells
+-- | the drills reach with and without error correction, which sets `cell` but
+-- | asks you to fix a wrong form and not to produce one. See #114.
+produced :: Array Exercise
+produced =
   byFrequency (Shift.exercises table sentences)
     <> byFrequency (PersonShift.exercises table sentences)
-    <> PorPara.exercises PorPara.sentences
-    <> Correction.exercises table deviations sentences
-    <> Paraphrase.exercises prompts
+
+-- | The error corrections, named for the same reason as `produced`.
+corrected :: Array Exercise
+corrected = Correction.exercises table deviations sentences
 
 -- | Exercises reordered by how common their verb is, in the Spanish deck's
 -- | ranking: `querer` is 2nd and `hacer` 43rd, so every `querer` item is met
