@@ -909,7 +909,7 @@ A square is in one of five states, and only the first three are about you:
 | **left out on purpose** | the coverage says skip for every person |
 
 Shaded *mastered or not*, the grid would read as almost entirely failure,
-because the sentence bank reaches 26 verbs of 38. The last two states are what
+because the sentence bank reaches 29 verbs of 38. The last two states are what
 keep it a map of what to author next rather than a list of what you have not
 done: a dashed outline is a gap someone could fill, a hatch is one left on
 purpose. The legend counts nothing, because five counts adding up to the
@@ -940,9 +940,9 @@ same sentence at another time.
 **The bank decides which items exist.** Each sentence yields its verb in the
 tenses it is not already in, so an item exists only if some sentence reaches
 it, and it needs two for a later sighting to ask a different one. The bank's
-sentences are over twenty-six verbs, so they give fifty-eight items, each with at
+sentences are over twenty-nine verbs, so they give sixty-seven items, each with at
 least two sentences: every verb's preterite and imperfect, and the present of
-the six verbs (#41, #104) with sentences written in the imperfect too.
+the nine verbs (#41, #104) with sentences written in the imperfect too.
 
 **A verb wants five sentences, one in each person.** A shift keeps its
 sentence's person, so a person no sentence is in has its preterite and
@@ -950,11 +950,11 @@ imperfect unreached; and three marked for the person shift, in three persons,
 give every present a pool of two. The first seven verbs have 28 between them,
 unevenly, and leave eight persons' preterite and imperfect unreached (`ir`
 misses two); `ver`, `venir`, `ser` and `saber` (#100), and `poner`, `caer`,
-`oír` and `traer`, and `valer` and `leer` (#104), have one in each. No shift reaches the subjunctive,
+`oír` and `traer`, and `valer` and `leer`, and `pedir`, `seguir` and `morir` (#104), have one in each. No shift reaches the subjunctive,
 so fifteen of a verb's twenty cells is the most a sentence can open.
 
-**Except where *nosotros* does not change.** `empezar`, `jugar`, `dormir` and
-`sentir` (#41) have the same *nosotros* in the present and the preterite, so a
+**Except where *nosotros* does not change.** `empezar`, `jugar`, `dormir`, `sentir`,
+`pedir`, `seguir` and `morir` (#41, #104) have the same *nosotros* in the present and the preterite, so a
 present `[dormimos] poco` would ask for its preterite and take the prompt back
 unchanged. Their *nosotros* is written in the imperfect, which asks both and
 shows neither; that leaves the present with one sentence, so each has a second
