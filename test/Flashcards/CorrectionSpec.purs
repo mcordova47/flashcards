@@ -159,7 +159,7 @@ spec = do
           e.slug `shouldEqual` Slug "error.orthographic"
           e.prompt `shouldEqual` "yo empezé a trabajar"
           expectedOf e `shouldEqual` "empecé"
-          noteOf e `shouldEqual` "before -é, c is written qu, g is written gu and z is written c, to keep the sound"
+          noteOf e `shouldEqual` "before -é, z is written c, to keep the sound"
 
     it "and an -ir stem closed" do
       case exercise table deviations duerme StemIr Preterite of
@@ -168,7 +168,32 @@ spec = do
           e.slug `shouldEqual` Slug "error.stem-ir"
           e.prompt `shouldEqual` "el niño dormió en su cama"
           expectedOf e `shouldEqual` "durmió"
-          noteOf e `shouldEqual` "an -ir verb that changes its stem closes it in the preterite's third persons: e to i, o to u"
+          noteOf e `shouldEqual` "an -ir verb that changes its stem closes it in the preterite's third persons: o to u"
+
+    -- The note is of the cell and not the kind (#120). `hizo` once showed
+    -- "and -eron after j", which has nothing to do with it.
+    describe "the note says only what is true of the cell" do
+      let noteFor s kind tense = exercise table deviations s kind tense <#> noteOf
+
+      it "leaves j out of a strong preterite that has none" do
+        noteFor hace StrongWeak Preterite
+          `shouldEqual` Just "an irregular preterite stem takes -e and -o, which are not stressed"
+        noteFor tengo StrongWeak Preterite
+          `shouldEqual` Just "an irregular preterite stem takes -e and -o, which are not stressed"
+
+      it "names j for the stem that has one" do
+        noteFor dicen3 StrongWeak Preterite
+          `shouldEqual` Just "a preterite stem ending in j takes -eron, not -ieron"
+
+      it "says the one respelling a verb needs" do
+        noteFor llego Orthographic Preterite
+          `shouldEqual` Just "before -é, g is written gu, to keep the sound"
+        noteFor busco Orthographic Preterite
+          `shouldEqual` Just "before -é, c is written qu, to keep the sound"
+
+      it "says the one vowel an -ir stem closes" do
+        noteFor pide StemIr Preterite
+          `shouldEqual` Just "an -ir verb that changes its stem closes it in the preterite's third persons: e to i"
 
     it "asks the sentence broken, and takes the verb mended" do
       case exercise table deviations tengo Regularised Preterite of
@@ -293,6 +318,11 @@ spec = do
     pueden = sentence "ellos no " "pueden" " entrar" "poder" Pl3
     empiezo = sentence "" "empiezo" " a trabajar" "empezar" Sg1
     duerme = sentence "el niño " "duerme" " en su cama" "dormir" Sg3
+    hace = sentence "ella " "hace" " la cena" "hacer" Sg3
+    dicen3 = sentence "ellos " "dicen" " la verdad" "decir" Pl3
+    llego = sentence "" "llego" " tarde" "llegar" Sg1
+    busco = sentence "" "busco" " las llaves" "buscar" Sg1
+    pide = sentence "ella " "pide" " la cuenta" "pedir" Sg3
 
     fixOf verb tense person = Array.find (\c -> c.infinitive == verb && c.tense == tense && c.person == person) table <#> _.form
 
