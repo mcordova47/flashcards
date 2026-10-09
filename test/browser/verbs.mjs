@@ -260,6 +260,13 @@ export default async ({ check, open, blobs }) => {
     after.slug !== before.slug, true)
   check("landing one question on, not two",
     (await keys.stored()).cards.filter(c => c.seen > 0).length, 2)
+  // Tapped through, which is how a phone is used with the keyboard down:
+  // Enter keeps focus in the box on its own, so it proves nothing here.
+  await keys.type(".verb-answer", "nada")
+  await keys.tap(".grade")
+  await keys.tap(".grade")
+  check("tapping Check and then Next leaves the box focused",
+    await keys.evaluate(() => document.activeElement?.className.includes("verb-answer")), true)
   // The top bar is for the session; everything else is behind the dots, as
   // on the cards. Both are anchors: a page change is a page load here.
   check("nothing but pips and the dots in the top bar",
