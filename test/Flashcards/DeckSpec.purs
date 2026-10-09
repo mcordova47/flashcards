@@ -86,12 +86,12 @@ spec = do
       -- `acordar(se)` lost "(remember)" and became the synonym of `convenir`.
       Array.length barred `shouldEqual` 16
 
-    it "asking acordar(se) for to agree, and convenir only in recognition" do
+    it "asking acordar for to agree, and convenir only in recognition" do
       let
         index = Deck.index Spanish.deck
         canonical w = map (\c -> Deck.isCanonical c index)
           (Array.find (\c -> c.word == w) Spanish.deck)
-      canonical "acordar(se)" `shouldEqual` Just true
+      canonical "acordar" `shouldEqual` Just true
       canonical "convenir" `shouldEqual` Just false
 
   describe "repairing cards that reached production before the rule" do
