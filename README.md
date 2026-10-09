@@ -667,9 +667,12 @@ translates to; it is not the sense of the word in isolation, which is why
 different card.
 
 Do not "fix" one into plain English. A new verb of this kind takes the same
-shape, and the parenthetical must be an English rendering of **that verb**, not
-of a different one (`acordar(se)` once carried *(remember)*, which is
-`acordarse`, and was the fault).
+shape, and its parenthetical is the English for **that verb**.
+
+This is the convention of this family only. The `(se)` cards follow another —
+`ir(se)` *to go (go away/leave)*, `llamar(se)` *to call (be called/name)*,
+`levantar(se)` *to lift (to get up)* — where the parenthetical is deliberately
+the reflexive sense.
 
 ### Undo
 
