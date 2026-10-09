@@ -31,7 +31,6 @@ npm start        # http://localhost:8000
 | `npm run verify` | The paraphrase, sentence and por / para checks, then browser suites against a real Chrome |
 | `npm run sync` | Regenerate every data module from its CSV — what CI checks is already done |
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
-| `npm run sync-deck -- --fetch` | Pull the Google Sheet first, then regenerate |
 | `npm run sync-verbs` | Regenerate the conjugation module from `data/es-verbs.csv` |
 | `npm run sync-sentences` | Regenerate the shift sentence module from `data/es-sentences.csv` |
 | `npm run check-verbs` | Print every paradigm that deviates from the regular pattern — the review of the table |
@@ -145,9 +144,9 @@ deploy; it says whether a push should have been made.
 
 Three decisions carry the whole design.
 
-**The deck is generated at build time.** The [Google Sheet][sheet] is the authoring
-tool; the app never talks to it at runtime. `tools/sync-deck.mjs` pulls the CSV,
-validates it, and writes `src/Flashcards/Data/Deck/Spanish.purs` — 1000
+**The deck is generated at build time.** The CSVs in `data/` are the source and
+are edited directly; the app never reads them at runtime. `tools/sync-deck.mjs`
+validates a CSV and writes `src/Flashcards/Data/Deck/Spanish.purs` — 1000
 typechecked record literals with no runtime decode and no failure path. The deck
 stays diffable in git.
 
@@ -198,8 +197,8 @@ out.
 decides.** A slug that no longer matches its word is either a respelling or a
 replaced word and they are identical from here, so `sync-deck` warns rather
 than failing, and the slug is what the reader edits to say which. A
-fetch prints what it is about to overwrite and refuses to guess whether the
-sheet or the snapshot is right.
+changed slug is refused unless the pull request says it was meant, rather than
+guessed at.
 
 **Machine-check correctness before; judge register in use.** There is one
 reader and he wrote the content, so a review that means reading the answers
@@ -572,20 +571,12 @@ respelling. So adding a word means typing it twice. It is deliberately not
 normalised: stripping accents would merge `este`/`éste` and eleven other
 Spanish pairs the deck keeps apart on purpose, plus `schön`/`schon` in German.
 
-**To respell a word**, edit its word cell in the sheet and leave its slug
+**To respell a word**, edit its word cell in the CSV and leave its slug
 alone. The card keeps its history.
 
-`sync-deck --fetch` says what each fetch did to cards' identities, pairing the
-snapshot before and after by slug: cards that changed word under the same slug
-(and so keep their history), cards under a slug the snapshot did not have (new,
-unless the deck had that slug before — a re-added word or a reverted slug gets
-its history back), and slugs that left the deck (whose history went with
-them). That is the moment to check it, while you still know which edits were
-respellings.
-Respelling a word and "keeping its slug in step" shows up as one slug leaving
-and one arriving, which is the history lost; put the old slug back. Afterwards
-a slug that no longer matches its word is only counted, in one line, since
-every respelling leaves one for good.
+The diff shows it: the word changes and the slug on the same row does not.
+Afterwards a slug that no longer matches its word is only counted, in one line,
+since every respelling leaves one for good.
 
 **To replace a word with a different one**, edit its slug cell too. A new slug
 is a new card, and it starts fresh. Leave the slug alone and the new word
@@ -600,12 +591,12 @@ and possibly not for sixty days, the interval at box 5. A miss resets its box
 but not its direction, which nothing ever sets back to recognition, so it
 never gets a recognition phase at all. Inheriting is still the better way to
 fail, because respelling is the common case and a lost history cannot be
-recovered, but it does not correct itself. `sync-deck --fetch`
-refuses a changed slug on a word still in the deck unless given `--drop-pins`,
-so a replacement made in one fetch, word and slug together, goes through, and
-a slug edited on its own has to be meant. `--drop-pins` lets through every slug
-change in that fetch, not just the one you meant, so make a deliberate slug
-edit its own fetch.
+recovered, but it does not correct itself. `npm run check-slugs` refuses a
+changed slug on a word still in the deck, so a replacement made in one change,
+word and slug together, goes through, and a slug edited on its own has to be
+meant: label the pull request `slug-change`, or pass `--drop-pins` locally.
+That lets through every slug change in it, not just the one you meant, so make
+a deliberate slug edit its own pull request.
 
 ### Migrating from rank
 
@@ -630,21 +621,23 @@ deploy invalidates it and nothing else does.
 
 Contiguous ranks, non-empty sides, a unique Spanish side (which ES→EN
 prompting depends on) and a unique slug (which saved history depends on). It
-also fails on spreadsheet damage: a cell reading `TRUE` or `FALSE` (Sheets
-decides the string "true" is a boolean, which is how `verdadero` was glossed
-for months) or a `#REF!`-style error value. It refuses a card with no slug.
-With `--fetch` it also refuses a fetch that changes the slug of a word still in
-the deck — a cell edited by mistake, or the column lost or pasted a row out —
-because that rekeys cards silently. It matches by word rather than rank, so
-adding or removing a row is fine; `--drop-pins` lets a deliberate change
-through.
+also fails on spreadsheet damage, which a CSV opened and saved in any
+spreadsheet app can pick up: a cell reading `TRUE` or `FALSE` (Sheets decides
+the string "true" is a boolean, which is how `verdadero` was glossed for
+months) or a `#REF!`-style error value. It refuses a card with no slug.
+
+`check-slugs` is separate, because it needs a second copy to compare with: it
+refuses a CSV that changes the slug of a word still in the deck, against
+`origin/main` (or the pull request's base in CI) and never against `HEAD`,
+which has the change once it is committed. It matches by word rather than
+rank, so adding or removing a row is fine.
 
 Three heuristics only warn, because all have legitimate exceptions: an all-caps
 gloss; a gloss containing its own Spanish answer — the latter makes a
 production card free, though a whole gloss equal to its Spanish is just a
 cognate and fine; and a count of cards whose slug no longer matches their word,
 which is exactly what a respelling looks like and also exactly what a replaced
-word looks like — the fetch that made each one listed it.
+word looks like.
 
 ### Glosses that look wrong and are not
 
@@ -1318,11 +1311,12 @@ a backup file.
 ## Layout
 
 ```
-data/es-1000.csv                     committed snapshot of the sheet
+data/es-1000.csv                     the Spanish deck, as edited
 data/es-verbs.csv                    38 irregular verbs, 760 conjugated cells
 data/es-paraphrase.csv               41 prompts for #10, each with one trap
 data/es-sentences.csv                the tense-shift sentences, verb in brackets
-tools/sync-deck.mjs                  sheet -> CSV -> generated module
+tools/sync-deck.mjs                  CSV -> generated module
+tools/check-slugs.mjs                a changed slug, against main
 tools/deck-source.mjs                the language table and CSV parsing, shared with the tests
 tools/sync-verbs.mjs                 conjugation CSV -> generated module
 tools/check-verbs.mjs                prints what deviates; the list IS the review
@@ -1384,4 +1378,3 @@ indefinitely.
 React is pinned to 17 because Elmish 0.13 mounts through `ReactDOM.render`,
 which React 19 removed.
 
-[sheet]: https://docs.google.com/spreadsheets/d/1vz4CgmSxP7fFmoa-uzjXPmHckkjSfl2evmRyG5EsH5w/edit

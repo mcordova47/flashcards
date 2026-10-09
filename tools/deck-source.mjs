@@ -1,17 +1,11 @@
-// The deck sources, and the CSV handling tools/sync-deck.mjs and the tests
-// share.
+// The deck sources, and the CSV handling tools/sync-deck.mjs and
+// tools/check-slugs.mjs share.
 
-export const SHEET = "1vz4CgmSxP7fFmoa-uzjXPmHckkjSfl2evmRyG5EsH5w"
-
-// One entry per language. `column` names the foreign side in the CSV, and
-// `gid` identifies the tab — a tab *name* cannot be used, because the export
-// endpoint silently falls back to the first sheet for a name it does not know.
+// One entry per language. `column` names the foreign side in the CSV.
 export const LANGUAGES = [
   {
     code: "es",
     name: "Spanish",
-    gid: "886210546",
-    tab: "es-1000",
     column: "Español",
     csv: "data/es-1000.csv",
     module: "Spanish",
@@ -20,8 +14,6 @@ export const LANGUAGES = [
   {
     code: "de",
     name: "German",
-    gid: "1432606036",
-    tab: "de-1000",
     column: "Deutsch",
     csv: "data/de-1000.csv",
     module: "German",
