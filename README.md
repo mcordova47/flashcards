@@ -947,9 +947,9 @@ the nine verbs (#41, #104) with sentences written in the imperfect too.
 **A verb wants five sentences, one in each person.** A shift keeps its
 sentence's person, so a person no sentence is in has its preterite and
 imperfect unreached; and three marked for the person shift, in three persons,
-give every present a pool of two. The first seven verbs have 28 between them,
-unevenly, and leave eight persons' preterite and imperfect unreached (`ir`
-misses two); `ver`, `venir`, `ser` and `saber` (#100), and `poner`, `caer`,
+give every present a pool of two. The first seven verbs were written unevenly and
+left eight persons' preterite and imperfect unreached (`ir` missed two); a
+sentence in each of those persons (#104) closed the gap. `ver`, `venir`, `ser` and `saber` (#100), and `poner`, `caer`,
 `oír` and `traer`, and `valer` and `leer`, and `pedir`, `seguir` and `morir` (#104), have one in each. No shift reaches the subjunctive,
 so fifteen of a verb's twenty cells is the most a sentence can open.
 
