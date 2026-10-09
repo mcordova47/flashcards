@@ -40,7 +40,7 @@ import Flashcards.Keys (onKeyDown)
 import Flashcards.Notes.Delivery as Delivery
 import Flashcards.Notes.Sheet as Notes
 import Flashcards.Page as Page
-import Flashcards.Pages.Verbs.Model (Message(..), Modal(..), Phase(..), State, namespace)
+import Flashcards.Pages.Verbs.Model (Message(..), Modal(..), Phase(..), State, namespace, typing)
 import Flashcards.Pages.Verbs.Model (Message, Modal, Phase, State) as Model
 import Flashcards.Pages.Verbs.Progress as ProgressSheet
 import Flashcards.Payload as Payload
@@ -127,7 +127,7 @@ update state = case _ of
     | otherwise -> maybe (pure state) (update state) (keyMessage key)
 
   Typed text ->
-    pure state { typed = text }
+    pure $ typing text state
 
   -- Both kinds of answer arrive here, and part company over whether anything
   -- can decide them. A typed one is compared and graded on the spot; a
@@ -408,6 +408,11 @@ view state dispatch =
                   -- Enter moves on.
                   , enterKeyHint: "go"
                   , autoFocus: true
+                  -- Not `disabled`, which cannot hold focus, and the box
+                  -- holding focus is what stops a tapped button taking the
+                  -- next Enter. Read-only keeps focus, still hears `keydown`
+                  -- and types nothing.
+                  , readOnly: state.phase /= Asked
                   , value: state.typed
                   , onChange: dispatch <| Typed <<< E.inputText
                   }
