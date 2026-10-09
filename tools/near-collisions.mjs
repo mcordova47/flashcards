@@ -18,13 +18,15 @@ import fs from "fs"
 import { languagesFor, parseCsv } from "./deck-source.mjs"
 
 const STOP = new Set(["to", "the", "a", "an", "of", "is", "be", "in", "on", "for", "at", "with", "by", "and", "or"])
-// Crude: enough to join agree/agrees/agreed, not a stemmer.
-const stem = w => w.replace(/(ing|ed|es|s)$/, "")
+// Crude: enough to join agree/agrees/agreed/agreeing, not a stemmer. The final
+// `e` goes last so that agree and agrees meet on the same stem.
+const stem = w => w.replace(/(ing|ed|es|s)$/, "").replace(/e$/, "")
 const words = gloss =>
   gloss.replace(/\([^)]*\)/g, " ").toLowerCase().split(/[^a-z']+/)
     .filter(w => w && !STOP.has(w)).map(stem)
 
 const lang = languagesFor(process.argv[2] ?? "es")[0]
+if (!lang) { console.error(`Unknown language "${process.argv[2]}". Known: es, de`); process.exit(1) }
 const [header, ...rows] = parseCsv(fs.readFileSync(lang.csv, "utf-8"))
 const at = n => header.indexOf(n)
 const cards = rows.filter(r => r[at("English")] && r[at(lang.column)]).map(r => ({
