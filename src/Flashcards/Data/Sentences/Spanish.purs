@@ -136,7 +136,7 @@ sentences =
   , { before: "este libro ", form: "vale", after: " mucho dinero", infinitive: "valer", tense: Present, person: Sg3, personShift: false }
   , { before: "", form: "valemos", after: " más juntos", infinitive: "valer", tense: Present, person: Pl1, personShift: true }
   , { before: "las casas ", form: "valen", after: " mucho", infinitive: "valer", tense: Present, person: Pl3, personShift: false }
-  , { before: "", form: "leo", after: " un libro cada día", infinitive: "leer", tense: Present, person: Sg1, personShift: true }
+  , { before: "", form: "leo", after: " un libro en casa", infinitive: "leer", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "lees", after: " mucho en casa", infinitive: "leer", tense: Present, person: Sg2, personShift: true }
   , { before: "mi madre ", form: "lee", after: " el periódico", infinitive: "leer", tense: Present, person: Sg3, personShift: false }
   , { before: "", form: "leemos", after: " en nuestra casa", infinitive: "leer", tense: Present, person: Pl1, personShift: true }
