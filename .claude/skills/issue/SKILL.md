@@ -87,7 +87,27 @@ Open a pull request. In the description:
 
 - what changed, file by file
 - anything in the issue you disagreed with, and what you did instead
-- anything left undone, and why
+- anything you did not do. Each item is **done, filed, or dropped**: *filed* means
+  you opened the issue yourself and put its number here, *dropped* means a
+  reason. A bare "left undone" is a loose end nobody will pick up, because
+  nothing happens after a merge unless someone coordinates it
 - **for each claim, how you checked it**
 
+Tell the maintainer afterwards which issues you filed, with numbers and titles.
+
 Then say so, and stop. Someone who did not write it reviews it.
+
+## When a review is left for you
+
+You are told a review is waiting. Read it (`gh pr view <n> --comments`, and the
+review itself).
+
+- **Carry out its fix items, all of them and only them.** Do not widen the change.
+  Its issue items and ignore items need nothing from you.
+- **Say how you checked each fix**, in a comment on the pull request.
+- **If you think an item is wrong, say so there and stop.** Do not skip it
+  silently. That makes it a question for the maintainer.
+- Push, and wait for `gh pr checks <n>` to go green.
+- Then do what the verdict says. **Fix, then merge:** queue
+  `gh pr merge <n> --rebase --auto`. **Fix, then re-review:** say the fixes are
+  done and stop. If you opened or were handed a thread, resolve it once fixed.

@@ -224,3 +224,8 @@ someone remembers to ask for it, and the maintainer's attention is the scarce
 thing here, not CI minutes. The reviewer decides what can be decided, asks only
 about what cannot, tells the maintainer which issues it filed, and queues
 auto-merge when there is nothing left for anyone to do.
+
+**The same goes for the author.** "Left undone" in a pull request is not a place
+to leave things. Each item is done, filed as an issue by the author with its
+number in the description, or dropped with a reason, and the author tells the
+maintainer which issues it filed.
