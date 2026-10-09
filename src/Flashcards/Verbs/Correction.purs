@@ -210,7 +210,7 @@ exercise table deviations sentence kind tense = do
     , answer: Checked
         { expected: fix
         , frame: { before, after: sentence.after }
-        , note: note kind
+        , note: note kind fix wrong
         }
     }
 
@@ -304,11 +304,41 @@ label = case _ of
 
 -- | Said once the answer is in, and not before: naming the mistake would
 -- | give the fix away.
-note :: Kind -> String
-note = case _ of
+-- |
+-- | Of the cell, not only the kind. A kind covers cells its whole rule does
+-- | not touch — `decir` and `traer` are the only j-stems the bank
+-- | has, and `hizo` shown "after j" asks the reader what a `j` has to do
+-- | with it, which is how #120 came in. So each clause is chosen from the
+-- | fix and the mistake, which is all a cell is here, and says only what is
+-- | true of the one on screen. See #120.
+-- |
+-- | Where the cell does not pick a clause the note is the kind's rule whole,
+-- | which is what every cell of `Regularised`, `StrongImperfect` and `Boot`
+-- | is: those rules have no clauses to leave out.
+note :: Kind -> String -> String -> String
+note kind fix wrong = case kind of
   Regularised -> "an irregular verb, conjugated as though it were regular"
   StrongImperfect -> "the irregular stem belongs to the preterite; the imperfect is regular"
-  StrongWeak -> "an irregular preterite stem takes -e and -o, and -eron after j"
+  -- The only strong cell whose mistake is not a stressed ending is `-eron`;
+  -- `-iste`, `-imos` and `-ieron` are the same either way, and make none.
+  StrongWeak
+    | endsWith "jeron" fix -> "a preterite stem ending in j takes -eron, not -ieron"
+    | otherwise -> "an irregular preterite stem takes -e and -o, which are not stressed"
   Boot -> "nosotros keeps the infinitive's stem"
-  Orthographic -> "before -é, c is written qu, g is written gu and z is written c, to keep the sound"
-  StemIr -> "an -ir verb that changes its stem closes it in the preterite's third persons: e to i, o to u"
+  Orthographic
+    | endsWith "qué" fix -> "before -é, c is written qu, to keep the sound"
+    | endsWith "gué" fix -> "before -é, g is written gu, to keep the sound"
+    | endsWith "cé" fix -> "before -é, z is written c, to keep the sound"
+    | otherwise -> "before -é, c is written qu, g is written gu and z is written c, to keep the sound"
+  StemIr -> case closing of
+    Just v -> "an -ir verb that changes its stem closes it in the preterite's third persons: " <> v
+    Nothing -> "an -ir verb that changes its stem closes it in the preterite's third persons: e to i, o to u"
+  where
+    endsWith suffix s = String.stripSuffix (String.Pattern suffix) s /= Nothing
+
+    -- `o to u` for `dormió`/`durmió`: the one vowel the two differ by.
+    closing =
+      case Array.filter (\(Tuple x y) -> x /= y) (Array.zip (toCharArray wrong) (toCharArray fix)) of
+        [ Tuple 'e' 'i' ] -> Just "e to i"
+        [ Tuple 'o' 'u' ] -> Just "o to u"
+        _ -> Nothing
