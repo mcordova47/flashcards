@@ -247,6 +247,13 @@ export default async ({ check, open, blobs }) => {
   check("and tells the keyboard that Enter checks it",
     await keys.$eval(".verb-answer", e => [e.getAttribute("enterkeyhint"), e.enterKeyHint]), ["go", "go"])
 
+  // Autocorrect is a separate attribute and was done first. This one is
+  // autofill: without it the phone offers stored contacts and addresses for a
+  // box that wants a verb. Read as the property too, since that is the browser
+  // having understood it.
+  check("and asks the browser not to autofill it",
+    await keys.$eval(".verb-answer", e => [e.getAttribute("autocomplete"), e.autocomplete]), ["off", "off"])
+
   // Tapping a button leaves it focused, and a focused button takes Enter as a
   // click. Without that being stopped this grades the next question unseen.
   const before = await asked(keys)

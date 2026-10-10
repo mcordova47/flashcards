@@ -28,6 +28,7 @@ import Data.Maybe (Maybe(..))
 import Effect.Class (liftEffect)
 import Elmish (Dispatch, ReactElement, Transition, fork, forkVoid, forks, (<|))
 import Elmish.HTML.Styled as H
+import Flashcards.Html (textBox)
 import Flashcards.Pages.Study.Model (Message(..), Modal(..), State, noticing)
 import Flashcards.Sync as Sync
 
@@ -199,10 +200,13 @@ view sheet state dispatch =
         [ H.p "sheet-note" $
             if state.canScan then "Or paste its link." else "Paste its link here."
         -- Uncontrolled, and read on submit. See `Flashcards.Sync.pastedLink`.
-        , H.input_ "pair-paste"
+        , textBox "pair-paste"
             { placeholder: "https://…/?pair=…"
             , spellCheck: false
             , autoCapitalize: "none"
+            -- A link is neither a contact nor an address, so nothing is stored for it
+            -- and a suggestion would only be in the way.
+            , autoComplete: "off"
             }
         , H.button_ "grade pair-use" { onClick: dispatch <| UseLink } "Use this link"
         ]

@@ -37,6 +37,7 @@ import Elmish.HTML.Generated (Props_input)
 import Elmish.HTML.Internal as I
 import Elmish.HTML.Styled as H
 import Flashcards.Exercise (Answer(..), Verdict(..), matches, pick)
+import Flashcards.Html (WithAutofill)
 import Flashcards.Keys (onKeyDown)
 import Flashcards.Notes.Delivery as Delivery
 import Flashcards.Notes.Sheet as Notes
@@ -379,11 +380,12 @@ untouched :: State -> Boolean
 untouched state =
   state.got + state.again == 0 && state.typed == "" && state.phase == Asked && isNothing (writing state)
 
--- | `H.input_` with one prop elmish-html does not have, built the way the
+-- | `H.input_` with one prop elmish-html does not have, and one it types wrongly
+-- | (`autoComplete`, see `Flashcards.Html`), built the way the
 -- | library builds `H.input_` itself, so every other prop is still checked
 -- | against its row. Spelt in camelCase, which React 17 knows and writes out
 -- | as `enterkeyhint`; the lowercase spelling draws its unknown-prop warning.
-answerBox :: I.StyledTagNoContent_ (enterKeyHint :: String | Props_input)
+answerBox :: I.StyledTagNoContent_ (WithAutofill (enterKeyHint :: String | Props_input))
 answerBox = I.styledTagNoContent_ "input"
 
 view :: State -> Dispatch Message -> ReactElement
@@ -436,6 +438,11 @@ view state dispatch =
                   -- own attribute, and left on it turns a right `tuve` into
                   -- a wrong `tube` before the drill ever sees it.
                   , autoCorrect: "off"
+                  -- Autocorrect is not autofill, and `off` on the one does not touch the
+                  -- other. This stops the browser offering stored contacts, addresses or
+                  -- earlier entries for a box that is none of them. It cannot stop a
+                  -- password manager, which is its own matter.
+                  , autoComplete: "off"
                   -- Enter checks the answer, so the key says so rather than
                   -- `return`. `go` and not `done`, which promises the
                   -- keyboard closing: the box keeps focus, and the next

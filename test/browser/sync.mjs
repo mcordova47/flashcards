@@ -403,6 +403,9 @@ export default async ({ check, open, base, blobs }) => {
   await wait(300)
   const its = await installed.$eval(".pair-link", e => e.value)
 
+  check("the paste field asks the browser not to autofill it",
+    await installed.$eval(".pair-paste", e => [e.getAttribute("autocomplete"), e.autocomplete]), ["off", "off"])
+
   await installed.type(".pair-paste", "not a link")
   ;(await installed.byText(".grade", "Use this link")).click()
   await wait(200)
