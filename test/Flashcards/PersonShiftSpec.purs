@@ -103,11 +103,13 @@ expected :: Exercise -> Maybe String
 expected e = case e.answer of
   Checked c -> Just c.expected
   SelfGraded _ -> Nothing
+  Choice _ -> Nothing
 
 frameOf :: Exercise -> Maybe { before :: String, after :: String }
 frameOf e = case e.answer of
   Checked c -> Just c.frame
   SelfGraded _ -> Nothing
+  Choice _ -> Nothing
 
 sentence :: String -> String -> String -> String -> Tense -> Person -> Sentence
 sentence before form after infinitive tense person =

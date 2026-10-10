@@ -43,6 +43,10 @@ type State =
   , got :: Int
   , again :: Int
   , typed :: String
+  -- | Whether por / para is answered by tapping rather than typing. A fact
+  -- | about this device, kept in storage beside the accent and the voice, and
+  -- | off until it is asked for. See #38.
+  , buttons :: Boolean
   -- | How far the current question has got.
   , phase :: Phase
   -- | Whatever is over the question, if anything. See `Modal`.
@@ -117,11 +121,15 @@ data Phase
 derive instance Eq Phase
 
 data Message
-  = Loaded { progress :: Progress, syncKey :: Maybe String }
+  = Loaded { progress :: Progress, syncKey :: Maybe String, buttons :: Boolean }
   | Started Instant
   -- | A key, not yet read as anything. See `keyMessage`.
   | Pressed String
   | Typed String
+  -- | Tap an option, by its place in the list. Graded on the spot.
+  | Choose Int
+  -- | Switch por / para between typing and buttons.
+  | ToggleButtons
   -- | Check what was typed, or reveal what a self-graded answer was.
   | Answer
   -- | How the reader says they did, where nothing can check it for them.

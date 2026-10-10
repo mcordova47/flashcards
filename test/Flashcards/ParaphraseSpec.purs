@@ -45,6 +45,7 @@ spec = do
       case (exercise doorOpen).answer of
         SelfGraded g -> g.model `shouldEqual` "La puerta está abierta."
         Checked _ -> "self-graded" `shouldEqual` "checked"
+        Choice _ -> "self-graded" `shouldEqual` "choice"
 
     it "asks nothing before the reveal beyond the prompt" do
       (exercise doorOpen).hint `shouldEqual` ""

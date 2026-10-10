@@ -26,6 +26,7 @@ import Prelude
 import Data.Array as Array
 import Data.Either (Either(..))
 import Data.Bifunctor (lmap)
+import Data.Array.NonEmpty as NonEmpty
 import Data.Maybe (Maybe(..), isJust, isNothing, maybe)
 import Effect.Class (liftEffect)
 import Effect.Now as Now
@@ -53,6 +54,7 @@ import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Curriculum (items, labelled)
 import Flashcards.Verbs.Curriculum as Curriculum
+import Flashcards.Verbs.PorPara as PorPara
 
 -- | No deck, so nothing can be placed by rank — and nothing needs to be. This
 -- | namespace has no payloads older than v5, because it has no payloads older
@@ -71,12 +73,14 @@ init = do
   fork do
     syncKey <- liftEffect $ Sync.adoptKey $ Page.pathFor Page.Verbs
     progress <- liftEffect $ Storage.load namespace fingerprint byRank
-    pure $ Loaded { progress, syncKey: Just syncKey }
+    buttons <- liftEffect Storage.loadButtons
+    pure $ Loaded { progress, syncKey: Just syncKey, buttons }
   pure
     { progress: Progress.empty
     , queue: []
     , shown: Nothing
     , typed: ""
+    , buttons: false
     , at: Nothing
     , got: 0
     , again: 0
@@ -104,10 +108,10 @@ fingerprint = "none"
 
 update :: State -> Message -> Transition Message State
 update state = case _ of
-  Loaded { progress, syncKey } -> do
+  Loaded { progress, syncKey, buttons } -> do
     fork $ pure Sync
     fork $ liftEffect $ Started <$> Now.now
-    pure state { progress = progress, syncKey = syncKey }
+    pure state { progress = progress, syncKey = syncKey, buttons = buttons }
 
   Started now ->
     pure $ asking state
@@ -124,7 +128,7 @@ update state = case _ of
   -- it from behind the sheet.
   Pressed key
     | covered state -> pure state
-    | otherwise -> maybe (pure state) (update state) (keyMessage key)
+    | otherwise -> maybe (pure state) (update state) (keyMessage state key)
 
   Typed text ->
     pure $ typing text state
@@ -149,11 +153,38 @@ update state = case _ of
         pure state { phase = Compared verdict }
       SelfGraded _ ->
         pure state { phase = Revealed }
+      -- Nothing to check: a choice is graded by the tap, so Enter has no
+      -- answer to give until it is followed by `Next`.
+      Choice _ ->
+        pure state
     -- Enter again, having read the comparison, is the same as tapping Next.
     _, Compared _ ->
       pure $ advance state
     _, _ ->
       pure state
+
+  Choose i -> case state.shown, state.phase of
+    Just { answer: Choice { options, expected } }, Asked
+      | Just picked <- NonEmpty.index options i -> do
+          let
+            verdict = matches expected picked
+            grade = if verdict == Wrong then Again else GotIt
+          fork $ liftEffect $ Graded grade <$> Now.now
+          -- The pick is kept in `typed`, which is what the comparison, the
+          -- echo and a note all read, and `typing` already refuses to change
+          -- it once the question has been checked.
+          pure state { typed = picked, phase = Compared verdict }
+    _, _ ->
+      pure state
+
+  -- Takes effect on the question on screen only if it has not been answered,
+  -- so a verdict already given is never swapped out from under the reader.
+  ToggleButtons -> do
+    let on = not state.buttons
+    forkVoid $ liftEffect $ Storage.saveButtons on
+    pure $ case state.phase of
+      Asked -> asking state { buttons = on, typed = "" }
+      _ -> state { buttons = on }
 
   TogglePanel -> case state.modal of
     Just Panel ->
@@ -308,6 +339,12 @@ noteContext state = String.joinWith " · " $ [ Page.pathFor Page.Verbs ] <> case
           ]
         Checked { frame }, _ ->
           [ frame.before <> "[…]" <> frame.after ]
+        Choice { expected, frame }, Compared _ ->
+          [ frame.before <> "[" <> expected <> "]" <> frame.after
+          , "chose “" <> String.trim state.typed <> "”"
+          ]
+        Choice { frame }, _ ->
+          [ frame.before <> "[…]" <> frame.after ]
         SelfGraded _, Asked ->
           []
         SelfGraded _, _ ->
@@ -321,19 +358,29 @@ asking state = state { shown = exercise }
     exercise = do
       slug <- Array.head state.queue
       pool <- Array.find (\p -> p.slug == slug) items
-      pure $ pick (Progress.lookup slug state.progress) pool
+      let picked = pick (Progress.lookup slug state.progress) pool
+      pure $ if state.buttons then PorPara.buttons picked else picked
 
 -- | Whether anything is over the question. See the study page, which has the
 -- | same rule and more to cover.
 covered :: State -> Boolean
 covered state = isJust state.modal
 
-keyMessage :: String -> Maybe Message
-keyMessage = case _ of
+-- | `1` and `2` already mean *Again* and *Got it* on a revealed answer, and
+-- | now also the first and second button of a choice. They cannot collide,
+-- | since a question is one or the other, and `Judge` is ignored unless
+-- | something is revealed while `Choose` is ignored unless a choice is
+-- | waiting. Which one a key is read as follows what is on screen.
+keyMessage :: State -> String -> Maybe Message
+keyMessage state = case _ of
   "Enter" -> Just Answer
-  "1" -> Just $ Judge Again
-  "2" -> Just $ Judge GotIt
+  "1" -> Just $ if choosing then Choose 0 else Judge Again
+  "2" -> Just $ if choosing then Choose 1 else Judge GotIt
   _ -> Nothing
+  where
+    choosing = case _.answer <$> state.shown of
+      Just (Choice _) -> true
+      _ -> false
 
 -- | On to the next question, whatever is left of the queue.
 advance :: State -> State
@@ -425,6 +472,24 @@ view state dispatch =
                 Compared _ | note /= "" -> H.p "milestone remark verb-note" note
                 _ -> H.empty
             ]
+          Choice { expected, frame } ->
+            [ H.h1 "verb-sentence" exercise.prompt
+            , H.p "direction verb-target" $ "→ " <> exercise.hint
+            -- The gap is empty until the answer is in, and then holds the
+            -- right word whichever was tapped, coloured by whether the tap
+            -- was it. The sentence does not move when it fills, because the
+            -- gap is already as wide as the widest option.
+            , H.div "verb-frame"
+              [ H.span "verb-before" frame.before
+              , H.span ("verb-gap" <> mark) $ case state.phase of
+                  Compared _ -> expected
+                  _ -> ""
+              , H.span "verb-after" frame.after
+              ]
+            , case state.phase of
+                Compared verdict -> compared frame expected verdict
+                _ -> H.empty
+            ]
           SelfGraded { model, rubric } ->
             [ H.h1 "verb-prompt" exercise.prompt
             , case state.phase of
@@ -459,6 +524,8 @@ view state dispatch =
         [ H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
         , H.a_ "panel-item" { href: "/" } "Flashcards"
         , H.a_ "panel-item" { href: "/?sync" } "Sync a device"
+        , H.button_ "panel-item" { onClick: dispatch <| ToggleButtons } $
+            if state.buttons then "Type por / para" else "Tap por / para"
         , H.button_ "panel-item" { onClick: dispatch <| WriteNote } "Write a note"
         , H.p "panel-note" syncNote
         ]
@@ -506,6 +573,11 @@ view state dispatch =
     controls = case state.phase of
       Compared _ ->
         [ H.button_ "grade got-it" { onClick: dispatch <| Next, key: "next" } "Next" ]
+      -- One button per option, in place of the single Check. Keyed by the
+      -- option so a button is never reused for a different word.
+      Asked | Just (Choice { options }) <- _.answer <$> state.shown ->
+        NonEmpty.toArray options # Array.mapWithIndex \i option ->
+          H.button_ "grade got-it" { onClick: dispatch <| Choose i, key: option } option
       -- Nothing checked this, so nothing can say how it went but the reader.
       Asked ->
         [ H.button_ "grade got-it" { onClick: dispatch <| Answer, disabled: not answerable, key: "ask" } ask ]

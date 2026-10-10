@@ -19,7 +19,7 @@ import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (CardProgress)
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.PersonShift as PersonShift
-import Flashcards.Verbs.PorPara (Item(..), Preposition(..), exercise, exercises, takes, word)
+import Flashcards.Verbs.PorPara (Item(..), Preposition(..), buttons, exercise, exercises, takes, word)
 import Flashcards.Verbs.Shift as Shift
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
@@ -59,6 +59,22 @@ spec = do
     it "still offers the choice, since saying there is none would answer it" do
       e.hint `shouldEqual` "por / para"
       checked e `shouldEqual` Just { expected: "por", before: "llamo a mi madre dos veces ", after: " semana" }
+
+  -- #38. The same question, answered by tapping.
+  describe "a por / para exercise answered by buttons" do
+    let e = buttons (exercise causeOfYou)
+
+    it "offers por and para, in that order" do
+      choice e `shouldEqual` Just { options: [ "por", "para" ], expected: "por", before: "lo hice ", after: " ti" }
+
+    it "keeps everything else of the question" do
+      let plain = exercise causeOfYou
+      { slug: e.slug, prompt: e.prompt, hint: e.hint, family: e.family }
+        `shouldEqual` { slug: plain.slug, prompt: plain.prompt, hint: plain.hint, family: plain.family }
+
+    it "leaves the other drills alone" do
+      let shifted = Shift.exercises table Bank.sentences
+      Array.any (isChoice <<< _.answer <<< buttons) shifted `shouldEqual` false
 
   describe "the bank" do
     let yielded = pools (exercises sentences)
@@ -119,3 +135,14 @@ checked :: Exercise -> Maybe { expected :: String, before :: String, after :: St
 checked e = case e.answer of
   Checked c -> Just { expected: c.expected, before: c.frame.before, after: c.frame.after }
   SelfGraded _ -> Nothing
+  Choice _ -> Nothing
+
+choice :: Exercise -> Maybe { options :: Array String, expected :: String, before :: String, after :: String }
+choice e = case e.answer of
+  Choice c -> Just { options: NonEmpty.toArray c.options, expected: c.expected, before: c.frame.before, after: c.frame.after }
+  _ -> Nothing
+
+isChoice :: Answer -> Boolean
+isChoice = case _ of
+  Choice _ -> true
+  _ -> false
