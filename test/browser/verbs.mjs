@@ -366,8 +366,10 @@ export default async ({ check, open, blobs }) => {
     return porPara.find(r => r.english === english)
   }
 
-  // Tapped, by the option's label: there is no box to type into (#38).
-  const tap = (page, word) => page.keyboard.press(word === "por" ? "1" : "2")
+  // Tapped, by the option's label: there is no box to type into (#38). The
+  // keys are the second route, and the loop below takes it, so both are read.
+  const tap = async (page, word) => (await page.byText(".grade", word)).tap()
+  const press = (page, word) => page.keyboard.press(word === "por" ? "1" : "2")
   const ppFirst = await ppAsked()
   check("asks the bank's first sentence, by its English", ppFirst, porPara[0])
   check("naming the choice rather than a tense", await pp.text(".verb-target"), "→ por / para")
@@ -405,7 +407,7 @@ export default async ({ check, open, blobs }) => {
     await next(pp)
     const r = await ppAsked()
     if (r.slug === ppMissed.slug) ppAgain = r
-    else await tap(pp, r.answer)
+    else await press(pp, r.answer)
   }
   check("the missed contrast comes round again", ppAgain?.slug, ppMissed.slug)
   check("asking the next sentence of its pool",
