@@ -405,6 +405,8 @@ export default async ({ check, open, base, blobs }) => {
 
   check("the paste field asks the browser not to autofill it",
     await installed.$eval(".pair-paste", e => [e.getAttribute("autocomplete"), e.autocomplete]), ["off", "off"])
+  check("and not to autocorrect what is typed into it",
+    await installed.$eval(".pair-paste", e => e.getAttribute("autocorrect")), "off")
 
   await installed.type(".pair-paste", "not a link")
   ;(await installed.byText(".grade", "Use this link")).click()

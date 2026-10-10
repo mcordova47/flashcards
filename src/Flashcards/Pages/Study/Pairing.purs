@@ -207,6 +207,9 @@ view sheet state dispatch =
             -- A link is neither a contact nor an address, so nothing is stored for it
             -- and a suggestion would only be in the way.
             , autoComplete: "off"
+            -- Typed by hand, a link is not a sentence, and autocorrect would try to make
+            -- it one, the way it turns a right `tuve` into `tube` in the drills.
+            , autoCorrect: "off"
             }
         , H.button_ "grade pair-use" { onClick: dispatch <| UseLink } "Use this link"
         ]
