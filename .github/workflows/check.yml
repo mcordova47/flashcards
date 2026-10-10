@@ -70,6 +70,10 @@ jobs:
       - run: npm run -s check-sentences
       - run: npm run -s check-por-para
 
+      # The issue queue's ordering and what it does with a contradicting label.
+      # Pure node, so it needs neither the build nor GitHub.
+      - run: node test/queue.mjs
+
       - uses: actions/cache@v4
         with:
           path: |

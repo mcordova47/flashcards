@@ -4,6 +4,8 @@
 //   npm run issues                       the report
 //   npm run --silent issues -- --json    the same numbers, machine-readable
 //   npm run issues -- --weeks 4          a different window
+//   npm run issues -- --queue            what to do next, from the labels
+//   npm run --silent issues -- --queue --json
 //
 // `--silent` on the JSON because npm prints its own banner to stdout, and
 // without it the first thing a parser meets is `> flashcards@1.0.0 issues`.
@@ -51,12 +53,23 @@
 // which is what it should: a pull request is not something that queue-jumped.
 
 import { execFileSync } from "child_process"
+import { buildQueue, renderQueue } from "./issue-queue.mjs"
 
 const args = process.argv.slice(2)
 const asJson = args.includes("--json")
 const weeks = Number(args[args.indexOf("--weeks") + 1]) || 8
 
 const gh = a => JSON.parse(execFileSync("gh", a, { encoding: "utf-8", maxBuffer: 32 * 1024 * 1024 }))
+
+// The queue is a different question from how the tracker is moving, so it is
+// answered before any of that is computed. See tools/issue-queue.mjs.
+if (args.includes("--queue")) {
+  const open = gh(["issue", "list", "--state", "open", "--limit", "200", "--json", "number,title,createdAt,labels"])
+  const prs = gh(["pr", "list", "--state", "open", "--limit", "100", "--json", "number,closingIssuesReferences"])
+  const queue = buildQueue(open, prs)
+  console.log(asJson ? JSON.stringify(queue, null, 2) : renderQueue(queue))
+  process.exit(0)
+}
 
 const issues = gh([
   "issue", "list",
