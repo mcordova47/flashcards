@@ -366,14 +366,23 @@ export default async ({ check, open, blobs }) => {
     return porPara.find(r => r.english === english)
   }
 
+  // Tapped, by the option's label: there is no box to type into (#38).
+  const tap = (page, word) => page.keyboard.press(word === "por" ? "1" : "2")
   const ppFirst = await ppAsked()
   check("asks the bank's first sentence, by its English", ppFirst, porPara[0])
   check("naming the choice rather than a tense", await pp.text(".verb-target"), "→ por / para")
-  check("with the box where the preposition goes",
-    [await pp.text(".verb-before"), await pp.text(".verb-after")], [ppFirst.before, ppFirst.after])
+  check("with an empty gap where the preposition goes, and no box",
+    [await pp.text(".verb-before"), await pp.text(".verb-after"),
+     await pp.$eval(".verb-gap", e => e.textContent), await pp.$(".verb-answer")],
+    [ppFirst.before, ppFirst.after, "", null])
+  check("two buttons, por then para",
+    await pp.$$eval(".grade", es => es.map(e => e.textContent)), ["por", "para"])
 
-  await answer(pp, ppFirst.answer)
+  await tap(pp, ppFirst.answer)
+  check("the gap shows the word", await pp.text(".verb-gap"), ppFirst.answer)
   check("a right answer shows the Spanish filled in", await pp.text(".milestone"), `✓ ${ppFirst.full}`)
+  // The grade lands a tick after the tap, which is when the clock answers.
+  await wait(200)
   stored = await pp.stored()
   check("keyed by the contrast, not the sentence",
     stored.cards.filter(c => c.seen !== 3).map(c => [c.slug, c.missed]), [[ppFirst.slug, 0]])
@@ -381,8 +390,13 @@ export default async ({ check, open, blobs }) => {
   await next(pp)
   const ppMissed = await ppAsked()
   check("the next item is the next contrast", ppMissed.slug !== ppFirst.slug, true)
-  await answer(pp, otherWord(ppMissed.answer))
+  await tap(pp, otherWord(ppMissed.answer))
+  check("the gap shows the right word and is marked wrong",
+    [await pp.text(".verb-gap"), await pp.$eval(".verb-gap", e => e.classList.contains("wrong"))], [ppMissed.answer, true])
+  check("once graded only Next is left to tap",
+    await pp.$$eval(".grade", es => es.map(e => e.textContent)), ["Next"])
   check("the other preposition is wrong", await pp.text(".milestone"), `✗ ${ppMissed.full}`)
+  await wait(200)
   stored = await pp.stored()
   check("and graded as missed", stored.cards.find(c => c.slug === ppMissed.slug)?.missed, 1)
 
@@ -391,43 +405,13 @@ export default async ({ check, open, blobs }) => {
     await next(pp)
     const r = await ppAsked()
     if (r.slug === ppMissed.slug) ppAgain = r
-    else await answer(pp, r.answer)
+    else await tap(pp, r.answer)
   }
   check("the missed contrast comes round again", ppAgain?.slug, ppMissed.slug)
   check("asking the next sentence of its pool",
     ppAgain?.english, porPara.filter(r => r.slug === ppMissed.slug)[1].english)
   check("no page errors", pp.errors, [])
   await pp.close()
-
-  // --- por / para by buttons (#38): nothing to type, graded by the tap ---
-  const pb = await open({ path: "/verbs", key: VERBS,
-    seed: behind([...shiftSlugs(), ...personSlugs(), ...errorSlugs, ...corpus.map(c => `paraphrase.${c.id}`)]) })
-  await pb.waitForSelector(".verb-sentence")
-  await wait(400)
-  check("typed by default", await pb.$(".verb-answer") !== null, true)
-  await pb.tap(".panel-toggle")
-  ;(await pb.byText(".panel-item", "Tap por / para")).click()
-  await wait(200)
-  await pb.tap(".panel-toggle")
-  const pbFirst = porPara[0]
-  check("the same sentence, now with no box", [await pb.text(".verb-sentence"), await pb.$(".verb-answer")],
-    [pbFirst.english, null])
-  check("and the gap empty", await pb.$eval(".verb-gap", e => e.textContent), "")
-  check("two buttons, por then para",
-    await pb.$$eval(".grade", es => es.map(e => e.textContent)), ["por", "para"])
-  const wrong = otherWord(pbFirst.answer)
-  await pb.keyboard.press(wrong === "por" ? "1" : "2")
-  check("a key taps the option it is numbered for", await pb.text(".milestone"), `✗ ${pbFirst.full}`)
-  check("the gap shows the right word", await pb.text(".verb-gap"), pbFirst.answer)
-  check("which is marked wrong", await pb.$eval(".verb-gap", e => e.classList.contains("wrong")), true)
-  stored = await pb.stored()
-  check("graded as missed", stored.cards.find(c => c.slug === pbFirst.slug)?.missed, 1)
-  check("once graded only Next is left to tap",
-    (await pb.$$eval(".grade", es => es.map(e => e.textContent))), ["Next"])
-  await pb.tap(".grade")
-  check("the preference is kept", await pb.evaluate(() => localStorage.getItem("flashcards.verbs.answer")), "buttons")
-  check("no page errors", pb.errors, [])
-  await pb.close()
   // --- error correction: a sentence broken on purpose ---
   // The shifts and por / para are put behind us, so the session is the six
   // kinds and the paraphrase. The first four open on a `tener` sentence, and

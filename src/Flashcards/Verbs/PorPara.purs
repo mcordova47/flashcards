@@ -12,7 +12,6 @@ module Flashcards.Verbs.PorPara
   , Preposition(..)
   , Sentence
   , exercise
-  , buttons
   , exercises
   , label
   , slug
@@ -136,14 +135,17 @@ exercise s =
   , label: label s.item
   -- One decision, whichever sense asks it: two in a row is the same choice
   -- made twice.
-  , family
+  , family: "por / para"
   , cell: Nothing
   , prompt: s.english
   , hint: "por / para"
-  , answer: Checked
-      { expected: word s.answer
+  -- Tapped, not typed: with two answers a button is easier on a phone, and
+  -- nothing is lost, since this is recognising which sense the English
+  -- names, not producing a word. See #38.
+  , answer: Choice
+      { options: NonEmpty.cons' (word Por) [ word Para ]
+      , expected: word s.answer
       , frame: { before: s.before, after: s.after }
-      , note: ""
       }
   }
 
@@ -152,25 +154,3 @@ exercise s =
 exercises :: Array Sentence -> Array Exercise
 exercises = map exercise
 
--- | The same question answered by tapping `por` or `para`, for a reader who
--- | has chosen buttons.
--- |
--- | An option on the exercise rather than a second bank, because the sentence,
--- | the English and the item are all unchanged; only what the gap takes
--- | differs. Typing stays the default, since producing the word is harder than
--- | picking it and that is worth keeping for anyone who wants it. Anything
--- | that is not a por / para exercise is returned as it was, so the page can
--- | apply this to whatever it is about to ask. See #38.
-buttons :: Exercise -> Exercise
-buttons e = case e.answer of
-  Checked c | e.family == family ->
-    e { answer = Choice
-          { options: NonEmpty.cons' (word Por) [ word Para ]
-          , expected: c.expected
-          , frame: c.frame
-          }
-      }
-  _ -> e
-
-family :: String
-family = "por / para"
