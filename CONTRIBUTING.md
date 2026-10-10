@@ -207,6 +207,39 @@ of days — so it keeps meaning the same thing when the pace changes. It is not 
 verdict. #7 scores high and is correctly parked; the number says only that it
 will not happen by itself, and closing it is sometimes the right answer.
 
+### What to do next
+
+```
+npm run issues -- --queue
+```
+
+Prints the open issues from their labels: what needs the maintainer first, then
+`next`, `soon` and `later`, then what is parked and anything with no priority
+yet. It is the answer to "where are we", and nothing is kept up to date by hand,
+because it is computed.
+
+| label | means |
+| --- | --- |
+| `priority: next`, `soon`, `later` | how soon it is worth doing |
+| `parked` | not now. The issue says what would change that |
+| `needs-you` | waiting on the maintainer: a decision, or something only they can do |
+| `blocked` | waiting on another issue |
+
+- **Every open issue has exactly one of** `priority: next|soon|later` **or**
+  `parked`. Whoever files an issue sets it. One with neither is listed as
+  untriaged, and one with two is reported as a problem.
+- **`needs-you` is an overlay,** on any tier. Add it when the next step is the
+  maintainer's and say what is needed. Whoever answers removes it. An issue with
+  it is not offered as something to pick up.
+- **`blocked` names its blocker** in a comment, and is removed when that is
+  decided.
+- **A parked issue says what would change that.** Otherwise it is only ignored.
+- Closed issues keep their labels, which does no harm.
+
+When asked what to work on, run it and take the first issue under `next` that is
+neither blocked nor marked as having a pull request. To reprioritise, ask, or
+change the label.
+
 ## Review is a separate pass
 
 Work gets reviewed by someone who did not write it, and the review checks

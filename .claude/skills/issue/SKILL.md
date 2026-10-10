@@ -94,6 +94,9 @@ Open a pull request. In the description:
 - **for each claim, how you checked it**
 
 Tell the maintainer afterwards which issues you filed, with numbers and titles.
+An issue you file gets **exactly one** `priority:` label, or `parked`, and
+`needs-you` if its next step is the maintainer's (`CONTRIBUTING.md`, *What to do
+next*).
 
 Then say so, and stop. Someone who did not write it reviews it.
 

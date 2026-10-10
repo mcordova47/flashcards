@@ -119,6 +119,9 @@ decision or data nobody here has. File it yourself, with the reasoning
 An issue is something `/issue` can pick up. A sentence in a comment is not.
 **Tell the maintainer afterwards**, in your reply: each issue's number and title.
 You file without asking, so the telling is what keeps that safe.
+Label it as you file it: exactly one `priority:` label, or `parked`, and
+`needs-you` if its next step is the maintainer's (`CONTRIBUTING.md`, *What to do
+next*).
 
 **Ignore it.** When it is wrong, already decided, or not worth the change. Say
 so in a line, with the reason, so nobody raises it again. *I checked this and
