@@ -153,4 +153,3 @@ exercise s =
 -- | per item.
 exercises :: Array Sentence -> Array Exercise
 exercises = map exercise
-

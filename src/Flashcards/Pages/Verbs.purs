@@ -24,9 +24,9 @@ module Flashcards.Pages.Verbs
 import Prelude
 
 import Data.Array as Array
+import Data.Array.NonEmpty as NonEmpty
 import Data.Either (Either(..))
 import Data.Bifunctor (lmap)
-import Data.Array.NonEmpty as NonEmpty
 import Data.Maybe (Maybe(..), isJust, isNothing, maybe)
 import Effect.Class (liftEffect)
 import Effect.Now as Now
