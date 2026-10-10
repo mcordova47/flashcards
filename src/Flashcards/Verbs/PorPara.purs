@@ -12,6 +12,7 @@ module Flashcards.Verbs.PorPara
   , Preposition(..)
   , Sentence
   , exercise
+  , buttons
   , exercises
   , label
   , slug
@@ -22,6 +23,7 @@ module Flashcards.Verbs.PorPara
 
 import Prelude
 
+import Data.Array.NonEmpty as NonEmpty
 import Data.Maybe (Maybe(..))
 import Flashcards.Exercise (Answer(..), Exercise)
 import Flashcards.Types.Card (Slug(..))
@@ -134,7 +136,7 @@ exercise s =
   , label: label s.item
   -- One decision, whichever sense asks it: two in a row is the same choice
   -- made twice.
-  , family: "por / para"
+  , family
   , cell: Nothing
   , prompt: s.english
   , hint: "por / para"
@@ -149,3 +151,26 @@ exercise s =
 -- | per item.
 exercises :: Array Sentence -> Array Exercise
 exercises = map exercise
+
+-- | The same question answered by tapping `por` or `para`, for a reader who
+-- | has chosen buttons.
+-- |
+-- | An option on the exercise rather than a second bank, because the sentence,
+-- | the English and the item are all unchanged; only what the gap takes
+-- | differs. Typing stays the default, since producing the word is harder than
+-- | picking it and that is worth keeping for anyone who wants it. Anything
+-- | that is not a por / para exercise is returned as it was, so the page can
+-- | apply this to whatever it is about to ask. See #38.
+buttons :: Exercise -> Exercise
+buttons e = case e.answer of
+  Checked c | e.family == family ->
+    e { answer = Choice
+          { options: NonEmpty.cons' (word Por) [ word Para ]
+          , expected: c.expected
+          , frame: c.frame
+          }
+      }
+  _ -> e
+
+family :: String
+family = "por / para"

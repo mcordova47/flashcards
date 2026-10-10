@@ -209,6 +209,7 @@ spec = do
               c.frame `shouldEqual` { before: "yo ", after: " mucho trabajo" }
               c.note `shouldEqual` "an irregular verb, conjugated as though it were regular"
             SelfGraded _ -> fail "self-graded"
+            Choice _ -> fail "choice"
 
     it "keys by the kind, not the verb" do
       (exercise table deviations dicen StrongImperfect Imperfect <#> _.slug)
@@ -338,16 +339,19 @@ expectedOf :: forall r. { answer :: Answer | r } -> String
 expectedOf e = case e.answer of
   Checked c -> c.expected
   SelfGraded _ -> ""
+  Choice _ -> ""
 
 noteOf :: forall r. { answer :: Answer | r } -> String
 noteOf e = case e.answer of
   Checked c -> c.note
   SelfGraded _ -> ""
+  Choice _ -> ""
 
 frameOf :: forall r. { answer :: Answer | r } -> Maybe { before :: String, after :: String }
 frameOf e = case e.answer of
   Checked c -> Just c.frame
   SelfGraded _ -> Nothing
+  Choice _ -> Nothing
 
 -- | The prompt with its frame taken off: the error as it was typed into the
 -- | sentence.

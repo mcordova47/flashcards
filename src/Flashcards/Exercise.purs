@@ -47,6 +47,12 @@ data Answer
   = Checked { expected :: String, frame :: Frame, note :: String }
   -- | Revealed, and the reader grades themselves against the reasons.
   | SelfGraded { model :: String, rubric :: Rubric }
+  -- | One of a few, tapped, and graded on the spot as `Checked` is. For a
+  -- | question with two answers, which a button answers better than a box:
+  -- | nothing to type, no keyboard over half a phone, and no way to answer
+  -- | with something that is not an option. `frame` is shown with an empty
+  -- | gap, and the reveal fills it. See #38.
+  | Choice { options :: NonEmptyArray String, expected :: String, frame :: Frame }
 
 -- | What sits either side of the box the answer is typed into. Both empty
 -- | is a box on its own.

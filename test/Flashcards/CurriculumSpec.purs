@@ -192,6 +192,7 @@ cells = describe "the cell an exercise says it drills" do
     expected e = case e.answer of
       Checked c -> Just c.expected
       SelfGraded _ -> Nothing
+      Choice _ -> Nothing
 
   -- Which is what makes it safe for the grid to read: a cell named wrongly
   -- would shade a square nothing asks, and nothing else would notice.

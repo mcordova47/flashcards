@@ -16,11 +16,13 @@ module Flashcards.Storage
   , syncedAtKey
   , load
   , loadAccent
+  , loadButtons
   , loadLanguage
   , loadVoice
   , progressKey
   , save
   , saveAccent
+  , saveButtons
   , saveLanguage
   , saveVoice
   , voiceKey
@@ -118,6 +120,24 @@ saveAccent :: String -> String -> Effect Unit
 saveAccent code accent = do
   storage <- localStorage =<< window
   Storage.setItem (accentKey code) accent storage
+
+-- | Whether this device answers a two-way question by tapping. Stored as
+-- | the word `buttons`, so that anything else, absent included, reads as the
+-- | default of typing.
+loadButtons :: Effect Boolean
+loadButtons = do
+  storage <- localStorage =<< window
+  (_ == Just "buttons") <$> Storage.getItem buttonsKey storage
+
+saveButtons :: Boolean -> Effect Unit
+saveButtons on = do
+  storage <- localStorage =<< window
+  Storage.setItem buttonsKey (if on then "buttons" else "typing") storage
+
+-- | Its own key, like the accent and the voice: a fact about this device,
+-- | which must not travel in a backup.
+buttonsKey :: String
+buttonsKey = "flashcards.verbs.answer"
 
 loadVoice :: String -> Effect (Maybe String)
 loadVoice code = do
