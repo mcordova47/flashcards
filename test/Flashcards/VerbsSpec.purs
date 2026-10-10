@@ -48,7 +48,7 @@ spec = do
   describe "typing into the answer box" do
     let
       base =
-        { progress: Progress.empty, queue: [], shown: Nothing, typed: "nada", buttons: false
+        { progress: Progress.empty, queue: [], shown: Nothing, typed: "nada"
         , got: 0, again: 0, phase: Asked, modal: Nothing, at: Nothing
         , syncKey: Nothing, sent: Nothing, offline: false, loaded: true
         }

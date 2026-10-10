@@ -8,6 +8,7 @@ import Prelude
 import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.Maybe (Maybe(..))
+import Data.Foldable (for_)
 import Data.Set as Set
 import Flashcards.Data.Paraphrase.Spanish (prompts)
 import Flashcards.Data.PorPara.Spanish (sentences)
@@ -19,7 +20,7 @@ import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (CardProgress)
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.PersonShift as PersonShift
-import Flashcards.Verbs.PorPara (Item(..), Preposition(..), buttons, exercise, exercises, takes, word)
+import Flashcards.Verbs.PorPara (Item(..), Preposition(..), exercise, exercises, takes, word)
 import Flashcards.Verbs.Shift as Shift
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
@@ -60,21 +61,12 @@ spec = do
       e.hint `shouldEqual` "por / para"
       checked e `shouldEqual` Just { expected: "por", before: "llamo a mi madre dos veces ", after: " semana" }
 
-  -- #38. The same question, answered by tapping.
-  describe "a por / para exercise answered by buttons" do
-    let e = buttons (exercise causeOfYou)
-
-    it "offers por and para, in that order" do
-      choice e `shouldEqual` Just { options: [ "por", "para" ], expected: "por", before: "lo hice ", after: " ti" }
-
-    it "keeps everything else of the question" do
-      let plain = exercise causeOfYou
-      { slug: e.slug, prompt: e.prompt, hint: e.hint, family: e.family }
-        `shouldEqual` { slug: plain.slug, prompt: plain.prompt, hint: plain.hint, family: plain.family }
-
-    it "leaves the other drills alone" do
-      let shifted = Shift.exercises table Bank.sentences
-      Array.any (isChoice <<< _.answer <<< buttons) shifted `shouldEqual` false
+  -- #38. Tapped, so a sense cannot be answered with a third word.
+  describe "a por / para exercise" do
+    it "offers por and para, in that order, whichever is right" do
+      for_ [ Por, Para ] \a ->
+        (choice (exercise causeOfYou { answer = a })) `shouldEqual`
+          Just { options: [ "por", "para" ], expected: word a, before: "lo hice ", after: " ti" }
 
   describe "the bank" do
     let yielded = pools (exercises sentences)
@@ -132,17 +124,9 @@ seenTimes :: Int -> CardProgress
 seenTimes n = { box: 1, due: bottom, seen: n, lapses: 0, missed: 0, direction: Recognition }
 
 checked :: Exercise -> Maybe { expected :: String, before :: String, after :: String }
-checked e = case e.answer of
-  Checked c -> Just { expected: c.expected, before: c.frame.before, after: c.frame.after }
-  SelfGraded _ -> Nothing
-  Choice _ -> Nothing
+checked e = choice e <#> \c -> { expected: c.expected, before: c.before, after: c.after }
 
 choice :: Exercise -> Maybe { options :: Array String, expected :: String, before :: String, after :: String }
 choice e = case e.answer of
   Choice c -> Just { options: NonEmpty.toArray c.options, expected: c.expected, before: c.frame.before, after: c.frame.after }
   _ -> Nothing
-
-isChoice :: Answer -> Boolean
-isChoice = case _ of
-  Choice _ -> true
-  _ -> false

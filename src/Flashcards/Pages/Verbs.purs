@@ -54,7 +54,6 @@ import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Curriculum (items, labelled)
 import Flashcards.Verbs.Curriculum as Curriculum
-import Flashcards.Verbs.PorPara as PorPara
 
 -- | No deck, so nothing can be placed by rank — and nothing needs to be. This
 -- | namespace has no payloads older than v5, because it has no payloads older
@@ -73,14 +72,12 @@ init = do
   fork do
     syncKey <- liftEffect $ Sync.adoptKey $ Page.pathFor Page.Verbs
     progress <- liftEffect $ Storage.load namespace fingerprint byRank
-    buttons <- liftEffect Storage.loadButtons
-    pure $ Loaded { progress, syncKey: Just syncKey, buttons }
+    pure $ Loaded { progress, syncKey: Just syncKey }
   pure
     { progress: Progress.empty
     , queue: []
     , shown: Nothing
     , typed: ""
-    , buttons: false
     , at: Nothing
     , got: 0
     , again: 0
@@ -108,10 +105,10 @@ fingerprint = "none"
 
 update :: State -> Message -> Transition Message State
 update state = case _ of
-  Loaded { progress, syncKey, buttons } -> do
+  Loaded { progress, syncKey } -> do
     fork $ pure Sync
     fork $ liftEffect $ Started <$> Now.now
-    pure state { progress = progress, syncKey = syncKey, buttons = buttons }
+    pure state { progress = progress, syncKey = syncKey }
 
   Started now ->
     pure $ asking state
@@ -176,15 +173,6 @@ update state = case _ of
           pure state { typed = picked, phase = Compared verdict }
     _, _ ->
       pure state
-
-  -- Takes effect on the question on screen only if it has not been answered,
-  -- so a verdict already given is never swapped out from under the reader.
-  ToggleButtons -> do
-    let on = not state.buttons
-    forkVoid $ liftEffect $ Storage.saveButtons on
-    pure $ case state.phase of
-      Asked -> asking state { buttons = on, typed = "" }
-      _ -> state { buttons = on }
 
   TogglePanel -> case state.modal of
     Just Panel ->
@@ -358,8 +346,7 @@ asking state = state { shown = exercise }
     exercise = do
       slug <- Array.head state.queue
       pool <- Array.find (\p -> p.slug == slug) items
-      let picked = pick (Progress.lookup slug state.progress) pool
-      pure $ if state.buttons then PorPara.buttons picked else picked
+      pure $ pick (Progress.lookup slug state.progress) pool
 
 -- | Whether anything is over the question. See the study page, which has the
 -- | same rule and more to cover.
@@ -524,8 +511,6 @@ view state dispatch =
         [ H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
         , H.a_ "panel-item" { href: "/" } "Flashcards"
         , H.a_ "panel-item" { href: "/?sync" } "Sync a device"
-        , H.button_ "panel-item" { onClick: dispatch <| ToggleButtons } $
-            if state.buttons then "Type por / para" else "Tap por / para"
         , H.button_ "panel-item" { onClick: dispatch <| WriteNote } "Write a note"
         , H.p "panel-note" syncNote
         ]
