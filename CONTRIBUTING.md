@@ -240,6 +240,26 @@ When asked what to work on, run it and take the first issue under `next` that is
 neither blocked nor marked as having a pull request. To reprioritise, ask, or
 change the label.
 
+### Notes from the app
+
+`npm run notes` lists what readers wrote in the app (README, *Reading them*). A note
+is a reader's **doubt**, not a finding, and it is handled like this:
+
+- **Check what it claims before writing it up as a defect.** Look it up: a
+  dictionary's sense order, a speaker's first answer, the code. Say what was
+  checked, and call anything unchecked a reading. Two of the first batch of
+  gloss notes turned out to be right, and one, about `gusto`, was the reverse.
+- **File it yourself, without asking.** Put the **whole entry**, stamp and
+  context included, in the issue or in a comment on it. A note about something
+  already tracked goes on that issue. `--filed` checks that the entry is there
+  and refuses if it is not.
+- **Then mark it filed,** `npm run notes -- --filed <key> --issue <n>`, and tell
+  the maintainer which issues you filed and where each note went.
+- **Ask before dismissing.** `--dismiss "<why>"` says the note is *not* worth an
+  issue, which is a judgement the maintainer has not made, and it archives and
+  then deletes the note. Filing is safe to do and dismissing is not, so only the
+  second needs a yes.
+
 ## Review is a separate pass
 
 Work gets reviewed by someone who did not write it, and the review checks
