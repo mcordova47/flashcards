@@ -527,6 +527,25 @@ export default async ({ check, open, blobs }) => {
   check("no page errors", settled.errors, [])
   await settled.close()
 
+  // --- after the cap, with more due ---
+  // Only the tense shift left unseen, which is far more than twenty, so the
+  // first session ends at its cap and the page has to offer the rest (#145).
+  const capped = await open({ path: "/verbs", key: VERBS, seed: behind([...personSlugs(), ...porParaSlugs(), ...errorSlugs, ...corpus.map(r => `paraphrase.${r.id}`)]) })
+  await capped.waitForSelector(".verb-sentence")
+  await wait(400)
+  for (let i = 0; i < 20; i++) {
+    await answer(capped, (await asked(capped)).form)
+    await next(capped)
+  }
+  await capped.waitForSelector(".done-title")
+  const offer = await capped.text(".done-body .grade")
+  check("a finished session with more to do offers another", offer, "Start another")
+  await (await capped.byText(".grade", "Start another")).tap()
+  await capped.waitForSelector(".verb-sentence")
+  check("and it starts one without a reload", await capped.$(".done-title"), null)
+  check("no page errors", capped.errors, [])
+  await capped.close()
+
   // --- the paraphrase, which nothing can check ---
   // The checked drills are put behind us so the session opens on the corpus;
   // every exercise type shares one queue, and the page tells them apart by

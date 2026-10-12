@@ -119,6 +119,13 @@ derive instance Eq Phase
 data Message
   = Loaded { progress :: Progress, syncKey :: Maybe String }
   | Started Instant
+  -- | Start another session, from the progress as it is now. For the done
+  -- | screen, where the last one ended at its cap with more still due.
+  | StartAnother
+  -- | The tab is back in front. Only the done screen cares: its clock was set
+  -- | when it was drawn.
+  | Visible
+  | Woke Instant
   -- | A key, not yet read as anything. See `keyMessage`.
   | Pressed String
   | Typed String
