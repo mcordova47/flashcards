@@ -57,8 +57,8 @@ unavoidable progress queue = max 0 (2 * most - Array.length queue - 1)
 -- | after the second answer is known.
 -- |
 -- | A confusion whose prompts all have one answer is skipped, since no order
--- | can hide that: present / subjunctive has no prompt answered in the
--- | present. That is a gap in the corpus, not in its order: #77.
+-- | can hide that. None is now: present / subjunctive has prompts answered in
+-- | the present too (#77), so its order is checked like the others.
 patterned :: Array Slug -> Array String
 patterned queue = Array.mapMaybe run confusions
   where
@@ -144,14 +144,14 @@ sessions = describe "a verb drill session" do
     counted reviews.sessions `shouldEqual` fewest reviews.sessions
 
   -- The paraphrase corpus opens on thirteen ser / estar prompts, one family,
-  -- and closes on seven saber / conocer prompts. Both land mostly inside one
-  -- session, so some pairs are unavoidable: five in the ser / estar session
-  -- and six in the last, which is mostly saber / conocer. Nowhere else is any
-  -- family more than half a session. Where the count lands moves with every
-  -- change to the bank.
-  it "puts two alike together only in the ser / estar block and the saber / conocer tail" do
-    pairedIn first.sessions `shouldEqual` [ [], [], [], [], [], [], [], [], [], [], [], [ Just "estar / ser" ], [], [], [], [ Just "conocer / saber" ] ]
-    map (\s -> unavoidable s.progress s.queue) first.sessions `shouldEqual` [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 6 ]
+  -- and lands mostly inside one session, so some pairs are unavoidable: five
+  -- in that session. The saber / conocer prompts that close it used to fill
+  -- the last session and cost six more; the nine present-tense subjunctive
+  -- prompts of #77 moved them back far enough that they share it with other
+  -- families. Where the count lands moves with every change to the bank.
+  it "puts two alike together only in the ser / estar block" do
+    pairedIn first.sessions `shouldEqual` [ [], [], [], [], [], [], [], [], [], [], [], [ Just "estar / ser" ], [], [], [], [] ]
+    map (\s -> unavoidable s.progress s.queue) first.sessions `shouldEqual` [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0 ]
 
   -- Met in their order, not the file's: a verb trap's family is its pair,
   -- so the spread keeps those as written, but a tense trap's is its verb,
