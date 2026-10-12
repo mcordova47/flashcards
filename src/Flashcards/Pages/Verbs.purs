@@ -27,6 +27,7 @@ import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.Either (Either(..))
 import Data.Bifunctor (lmap)
+import Data.Map as Map
 import Data.Maybe (Maybe(..), isJust, isNothing, maybe)
 import Effect.Class (liftEffect)
 import Effect.Now as Now
@@ -39,6 +40,7 @@ import Elmish.HTML.Styled as H
 import Flashcards.Exercise (Answer(..), Verdict(..), matches, pick)
 import Flashcards.Html (WithAutofill)
 import Flashcards.Keys (onKeyDown)
+import Flashcards.Moved as Moved
 import Flashcards.Notes.Delivery as Delivery
 import Flashcards.Notes.Sheet as Notes
 import Flashcards.Page as Page
@@ -84,6 +86,7 @@ init = do
     , typed: ""
     , at: Nothing
     , got: 0
+    , before: Map.empty
     , again: 0
     , modal: Nothing
     , phase: Asked
@@ -120,6 +123,7 @@ update state = case _ of
       , queue = Curriculum.session state.progress now
       , got = 0
       , again = 0
+      , before = Map.empty
       , loaded = true
       }
 
@@ -241,6 +245,7 @@ update state = case _ of
         graded = state
           { at = Just now
           , progress = progress
+          , before = Moved.remember slug state.progress state.before
           , queue = queue
           , got = state.got + (if grade == GotIt then 1 else 0)
           , again = state.again + (if grade == Again then 1 else 0)
@@ -431,6 +436,7 @@ view state dispatch =
             if not state.loaded then ""
             else if state.got + state.again == 0 then caughtUp
             else tally
+        , movedLine
         , nextLine
         , anotherButton
         ]
@@ -596,6 +602,12 @@ view state dispatch =
     canStart now = not $ Array.null $ Curriculum.session state.progress now
 
     dueNow now = (Stats.overview now (map _.slug items) state.progress).dueNow
+
+    -- What the session did to the ladder, where it did anything. A count of
+    -- items and not a share of anything, for the reason the sheet gives.
+    movedLine = case Moved.describe (Moved.moved state.before state.progress) of
+      Just said | state.got + state.again > 0 -> H.p "moved" said
+      _ -> H.empty
 
     tally =
       Stats.plural (state.got + state.again) "exercise" <> " · "

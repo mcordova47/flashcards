@@ -7,6 +7,7 @@ import Prelude
 
 import Data.Array as Array
 import Data.Foldable (for_)
+import Data.Map as Map
 import Data.Maybe (Maybe(..))
 import Flashcards.Exercise (Verdict(..))
 import Flashcards.Pages.Verbs.Model (Phase(..), typing)
@@ -49,7 +50,7 @@ spec = do
     let
       base =
         { progress: Progress.empty, queue: [], shown: Nothing, typed: "nada"
-        , got: 0, again: 0, phase: Asked, modal: Nothing, at: Nothing
+        , got: 0, again: 0, before: Map.empty, phase: Asked, modal: Nothing, at: Nothing
         , syncKey: Nothing, sent: Nothing, offline: false, loaded: true
         }
 
