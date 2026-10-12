@@ -118,13 +118,31 @@ spec = describe "the conjugation grid" do
     it "is ready before anything on it has been answered" do
       stateAt "tener" Preterite (build Progress.empty []) `shouldEqual` Just Ready
 
-    it "is being learned once one item on it has" do
+    it "has started once one item on it has been answered" do
       stateAt "tener" Present (build (seen 1 "person.tener.present.1s" Progress.empty) [])
-        `shouldEqual` Just Learning
+        `shouldEqual` Just Early
+
+    -- The point of #146: the square moves with the items on it, not only when
+    -- the last one is mastered, a month on at the soonest.
+    it "climbs as its items do" do
+      let at box = stateAt "tener" Preterite (build (seen box "tener.preterite" Progress.empty) [])
+      map at [ 0, 1, 2, 3, 4, 5 ]
+        `shouldEqual` map Just [ Early, Early, Climbing, Climbing, Nearly, Known ]
+
+    -- Two items on tener present. One at box 3 and one not yet met is a mean
+    -- of 1.5, short of climbing: the square is not ahead of what it has done.
+    it "counts an item not yet met as box 0" do
+      stateAt "tener" Present (build (seen 3 "person.tener.present.1s" Progress.empty) [])
+        `shouldEqual` Just Early
+      stateAt "tener" Present (build (seen 4 "person.tener.present.1s" Progress.empty) [])
+        `shouldEqual` Just Climbing
+      let both box = seen box "person.tener.present.2s" $ seen box "person.tener.present.1s" Progress.empty
+      stateAt "tener" Present (build (both 3) []) `shouldEqual` Just Climbing
+      stateAt "tener" Present (build (both 4) []) `shouldEqual` Just Nearly
 
     it "is known only once every item on it is mastered" do
       let one = seen maxBox "person.tener.present.1s" Progress.empty
-      stateAt "tener" Present (build one []) `shouldEqual` Just Learning
+      stateAt "tener" Present (build one []) `shouldEqual` Just Climbing
       stateAt "tener" Present (build (seen maxBox "person.tener.present.2s" one) []) `shouldEqual` Just Known
 
     -- What the drills ask is what the drills ask, whatever the coverage
@@ -169,7 +187,7 @@ spec = describe "the conjugation grid" do
       Array.filter (\s -> not (Array.elem s shifted)) corrected `shouldEqual` []
       (Array.length corrected > 0) `shouldEqual` true
 
-    it "shows nothing as known or being learned before anything is answered" do
-      Array.filter (\s -> s.state == Known || s.state == Learning) (Array.concatMap _.squares rows)
+    it "shows nothing as known or on the way before anything is answered" do
+      Array.filter (\s -> s.state `Array.elem` [ Known, Nearly, Climbing, Early ]) (Array.concatMap _.squares rows)
         # map (\s -> s.infinitive <> " " <> show s.tense)
         # shouldEqual []

@@ -641,8 +641,8 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* The conjugation grid. Five states, and the two that are not about you are
-   told apart by their edges rather than a colour: a dashed outline is a gap
+/* The conjugation grid. Seven states, three of them a ladder (#146). The two
+   that are not about you are told apart by their edges rather than a colour: a dashed outline is a gap
    someone could fill, a hatch is one left on purpose. Neither is filled, so
    neither reads as a failure sitting among the squares you have done. */
 .grid-legend {
@@ -702,7 +702,11 @@ body {
 }
 
 .square.known, .grid-square.known { background: var(--mastered); }
-.square.learning, .grid-square.learning { background: var(--familiar); }
+/* The ladder, in three steps between the two ends the cards already use. Mixed
+   from the existing colours so the palette stays one, in both themes. */
+.square.nearly, .grid-square.nearly { background: color-mix(in srgb, var(--mastered) 50%, var(--familiar)); }
+.square.climbing, .grid-square.climbing { background: var(--familiar); }
+.square.early, .grid-square.early { background: color-mix(in srgb, var(--familiar) 45%, var(--unseen)); }
 .square.ready, .grid-square.ready { background: var(--unseen); border-color: var(--familiar); }
 .square.unasked, .grid-square.unasked { border: 1.5px dashed var(--faint); }
 .square.left-out, .grid-square.left-out {
@@ -775,6 +779,12 @@ body {
 .answer.many {
   font-size: clamp(1.35rem, 5.5vw, 2rem);
   line-height: 1.25;
+}
+
+.moved {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  color: var(--muted);
 }
 
 .next-due {

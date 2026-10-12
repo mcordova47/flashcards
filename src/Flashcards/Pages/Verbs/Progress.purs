@@ -14,7 +14,7 @@
 -- | *200 of 1000* means something; the drills grow whenever a sentence or a
 -- | prompt is added, and a share of them would fall every time the app got
 -- | better. *Mastered* is a count for the same reason, and the grid's legend
--- | counts nothing at all: its five states add up to the table, and a count
+-- | counts nothing at all: its seven states add up to the table, and a count
 -- | of each would be a share of it by another name.
 module Flashcards.Pages.Verbs.Progress
   ( view
@@ -123,15 +123,18 @@ view items { at: now, open } rows progress dispatch =
     tile value label =
       H.div "tile" [ H.div "tile-value" value, H.div "tile-label" label ]
 
--- | In the order a square moves through them, then the two it never will
--- | until something is written for it or #27 changes its mind.
+-- | From the top of the ladder down, then the three that are not on it: a
+-- | square nothing has met, and the two that never will be until something is
+-- | written for them or #27 changes its mind.
 states :: Array State
-states = [ Known, Learning, Ready, Unasked, LeftOut ]
+states = [ Known, Nearly, Climbing, Early, Ready, Unasked, LeftOut ]
 
 stateClass :: State -> String
 stateClass = case _ of
   Known -> "known"
-  Learning -> "learning"
+  Nearly -> "nearly"
+  Climbing -> "climbing"
+  Early -> "early"
   Ready -> "ready"
   Unasked -> "unasked"
   LeftOut -> "left-out"
@@ -139,7 +142,9 @@ stateClass = case _ of
 stateName :: State -> String
 stateName = case _ of
   Known -> "known"
-  Learning -> "learning"
+  Nearly -> "nearly known"
+  Climbing -> "climbing"
+  Early -> "just started"
   Ready -> "not started"
   Unasked -> "nothing asks this yet"
   LeftOut -> "left out on purpose"
@@ -149,7 +154,9 @@ stateName = case _ of
 explain :: State -> String
 explain = case _ of
   Known -> "Known: everything the drills ask of it is mastered."
-  Learning -> "Being learned."
+  Nearly -> "Nearly known: most of it is a step or two from mastered."
+  Climbing -> "Climbing: on the way up the ladder."
+  Early -> "Just started: most of it has not been met, or was missed."
   Ready -> "A drill asks this, and it has not come up yet."
   Unasked -> "Worth learning, but no drill asks it yet."
   LeftOut -> "Left out on purpose: the regular endings give every form."
