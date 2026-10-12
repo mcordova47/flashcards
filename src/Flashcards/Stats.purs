@@ -14,6 +14,7 @@ module Flashcards.Stats
   , bandSize
   , bands
   , describeDuration
+  , firstMasteredIn
   , leechThreshold
   , leeches
   , masteryOf
@@ -33,7 +34,8 @@ import Data.Int as Int
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
-import Flashcards.Scheduler (maxBox, struggling)
+import Flashcards.Scheduler (applyGrade, maxBox, struggling, Graduation(..))
+import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Card (Card, Slug, rankToInt)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
@@ -219,6 +221,37 @@ nextDueIn now items progress = do
   pure $ Milliseconds $ unwrap (unInstant soonest) - unwrap (unInstant now)
   where
     tracked = Array.mapMaybe (\slug -> Progress.lookup slug progress) items
+
+-- | How long until the first item could be mastered: the soonest any tracked
+-- | item reaches the top box, if each is answered right on the day it falls
+-- | due and not before. `Nothing` when nothing is tracked, or something
+-- | already is mastered, since then the question has been answered.
+-- |
+-- | Played out with the scheduler's own `applyGrade` rather than summed from
+-- | its intervals, so a change to the ladder cannot leave this one behind it.
+-- | An overdue item is answered now, not in the past: the answer is never
+-- | earlier than the moment this is asked.
+-- |
+-- | Why it is worth saying: a ladder of 1, 3, 7, 21 and 60 days means a
+-- | learner who is doing everything right can see no item mastered for weeks,
+-- | and a screen that says nothing about that reads as nothing happening. See
+-- | #146.
+firstMasteredIn :: Instant -> Array Slug -> Progress -> Maybe Milliseconds
+firstMasteredIn now items progress = do
+  guard $ not $ Array.null tracked
+  guard $ Array.all (\cp -> masteryOf (Just cp) /= Mastered) tracked
+  soonest <- minimum $ map (\cp -> reach cp now) tracked
+  pure $ Milliseconds $ unwrap (unInstant soonest) - unwrap (unInstant now)
+  where
+    tracked = Array.mapMaybe (\slug -> Progress.lookup slug progress) items
+
+    -- The moment of the answer that lands it in the top box. Each box climbed
+    -- is one answer, so this ends.
+    reach cp at
+      | cp.box >= maxBox = at
+      | otherwise =
+          let answered = max at cp.due
+          in reach (applyGrade GotIt answered RecognitionOnly (Just cp)) answered
 
 -- | A wait in round human units — "4 hours", "1 day". Deliberately coarse:
 -- | the exact minute is noise when the answer is "come back this evening".

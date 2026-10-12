@@ -15,6 +15,7 @@ import Prelude
 import Data.DateTime.Instant (Instant)
 import Data.Maybe (Maybe)
 import Flashcards.Exercise (Exercise, Verdict)
+import Flashcards.Moved as Moved
 import Flashcards.Notes.Sheet as Notes
 import Flashcards.Sync as Sync
 import Flashcards.Types.Card (Slug)
@@ -42,6 +43,9 @@ type State =
   -- | without taking anything back off the screen.
   , got :: Int
   , again :: Int
+  -- | Where each item stood the first time this session answered it, for the
+  -- | done screen to say what moved. See `Flashcards.Moved`.
+  , before :: Moved.Before
   , typed :: String
   -- | How far the current question has got.
   , phase :: Phase

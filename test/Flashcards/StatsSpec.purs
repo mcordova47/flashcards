@@ -181,6 +181,27 @@ spec = do
     it "has nothing to report on an untouched deck" do
       Stats.nextDueIn now slugs Progress.empty `shouldEqual` Nothing
 
+  describe "when the first item could be mastered" do
+    let wait progress = Stats.firstMasteredIn now slugs progress
+
+    it "plays the ladder out from the item that is furthest along" do
+      -- Box 4 is one right answer from the top, given when it falls due.
+      wait (Progress.empty # card 1 4 1 0 0 5.0 # card 2 3 1 0 0 1.0)
+        `shouldEqual` Just (Milliseconds $ 5.0 * day)
+
+    it "adds each rung's interval after the answer that climbs it" do
+      -- Box 3 due in 2 days: answered then it is box 4 due 21 days on.
+      wait (Progress.empty # card 1 3 1 0 0 2.0) `shouldEqual` Just (Milliseconds $ 23.0 * day)
+      -- Box 2 due in 1: box 3 (+7), box 4 (+21), box 5. 1 + 7 + 21 = 29.
+      wait (Progress.empty # card 1 2 1 0 0 1.0) `shouldEqual` Just (Milliseconds $ 29.0 * day)
+
+    it "answers an overdue item now, not when it fell due" do
+      wait (Progress.empty # card 1 4 1 0 0 (-2.0)) `shouldEqual` Just (Milliseconds 0.0)
+
+    it "has nothing to say once something is mastered, or before anything is tracked" do
+      wait (Progress.empty # card 1 5 1 0 0 30.0 # card 2 3 1 0 0 2.0) `shouldEqual` Nothing
+      wait Progress.empty `shouldEqual` Nothing
+
   describe "describing a wait" do
     it "does not bother with seconds" do
       Stats.describeDuration (Milliseconds 20000.0) `shouldEqual` "under a minute"

@@ -62,6 +62,15 @@ view items { at: now, open } rows progress dispatch =
         if o.answers == 0 then "No answers yet."
         else show o.answers <> " answers · " <> show o.misses <> " wrong"
             <> (if o.dueNow > 0 then " · " <> show o.dueNow <> " due now" else "")
+    -- Only while nothing is mastered, which is when a screen with nothing
+    -- changing needs explaining: the ladder is a month long, and a reader
+    -- doing everything right should be told that is why.
+    , case Stats.firstMasteredIn now (map _.slug items) progress of
+        Just wait ->
+          H.p "tiles-note first-mastered" $
+            "The first can be mastered in " <> Stats.describeDuration wait
+              <> ", answering each when it is due."
+        Nothing -> H.empty
     , if Array.null slipping then H.empty else
         H.fragment
         [ H.h3 "sheet-heading" "Keeps slipping"
