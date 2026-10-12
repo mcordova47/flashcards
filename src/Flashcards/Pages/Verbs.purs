@@ -573,7 +573,8 @@ view state dispatch =
     nextLine = case waitFor, state.at of
       Just wait, Just now
         | state.got + state.again > 0
-        , (Stats.overview now (map _.slug items) state.progress).dueNow == 0 ->
+        , dueNow now == 0
+        , not $ canStart now ->
             H.p "next-due" $ "Next review in " <> wait
       _, _ -> H.empty
 
@@ -583,12 +584,16 @@ view state dispatch =
     -- working through the bank. The count is of reviews, so is left out when
     -- there are none rather than saying 0 due beside a button that works.
     anotherButton = case state.at of
-      Just now | not $ Array.null $ Curriculum.session state.progress now ->
+      Just now | canStart now ->
         H.div "controls"
           [ H.button_ "grade got-it" { onClick: dispatch <| StartAnother } $
               "Start another" <> if dueNow now > 0 then " · " <> show (dueNow now) <> " due" else ""
           ]
       _ -> H.empty
+
+    -- What pressing the button would do, so that it is offered exactly when
+    -- there is something for it to start, and the line above is not.
+    canStart now = not $ Array.null $ Curriculum.session state.progress now
 
     dueNow now = (Stats.overview now (map _.slug items) state.progress).dueNow
 

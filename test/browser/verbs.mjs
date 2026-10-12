@@ -524,6 +524,22 @@ export default async ({ check, open, blobs }) => {
     await settled.text(".done-stats"), "Nothing due for another 9 days.")
   check("and does not promise a review as well",
     await settled.$(".next-due"), null)
+
+  // The tab left open past the wait, and brought back to the front (#145).
+  // The clock is moved on by hand, as the page would find it a week later.
+  await settled.evaluate(() => {
+    const Real = Date, shift = 10 * 86400000
+    window.Date = class extends Real {
+      constructor(...a) { a.length ? super(...a) : super(Real.now() + shift) }
+      static now() { return Real.now() + shift }
+    }
+    Object.defineProperty(document, "visibilityState", { get: () => "visible", configurable: true })
+    document.dispatchEvent(new Event("visibilitychange"))
+  })
+  await wait(400)
+  check("coming back after the wait, the clock is not stale",
+    await settled.text(".done-stats"), "Nothing left to drill.")
+  check("and what is now due can be started", /^Start another · \d+ due$/.test(await settled.text(".done-body .grade") ?? ""), true)
   check("no page errors", settled.errors, [])
   await settled.close()
 
@@ -540,6 +556,7 @@ export default async ({ check, open, blobs }) => {
   await capped.waitForSelector(".done-title")
   const offer = await capped.text(".done-body .grade")
   check("a finished session with more to do offers another", offer, "Start another")
+  check("with no promise of a later review beside it", await capped.$(".next-due"), null)
   await (await capped.byText(".grade", "Start another")).tap()
   await capped.waitForSelector(".verb-sentence")
   check("and it starts one without a reload", await capped.$(".done-title"), null)
