@@ -53,6 +53,7 @@ import Flashcards.Sync as Sync
 import Flashcards.Types.Card (Slug, slugToString)
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress as Progress
+import Flashcards.Visible (onVisible)
 import Flashcards.Verbs.Curriculum (items, labelled)
 import Flashcards.Verbs.Curriculum as Curriculum
 
@@ -70,6 +71,8 @@ init = do
   -- is revealed, which is what makes 1 and 2 safe to press mid-answer.
   forks \{ dispatch } ->
     liftEffect $ onKeyDown $ dispatch <<< Pressed
+  forks \{ dispatch } ->
+    liftEffect $ onVisible $ dispatch Visible
   fork do
     syncKey <- liftEffect $ Sync.adoptKey $ Page.pathFor Page.Verbs
     progress <- liftEffect $ Storage.load namespace fingerprint byRank
@@ -119,6 +122,22 @@ update state = case _ of
       , again = 0
       , loaded = true
       }
+
+  -- From the progress as it is now, as the cards' `StartedAnother` is. The
+  -- same build as `Started`; only the sender differs.
+  StartAnother -> do
+    fork $ liftEffect $ Started <$> Now.now
+    pure state
+
+  Visible -> do
+    fork $ liftEffect $ Woke <$> Now.now
+    pure state
+
+  -- Only between sessions, where the wait the screen names is a sum done at
+  -- the last grade. Mid-session the clock is not shown and moving it would
+  -- change nothing but what is due.
+  Woke now ->
+    pure $ if isNothing state.shown && state.loaded then state { at = Just now } else state
 
   -- Through the update rather than straight to the message it maps to, so
   -- that what a key means can depend on what is on screen. With anything over
@@ -413,6 +432,7 @@ view state dispatch =
             else if state.got + state.again == 0 then caughtUp
             else tally
         , nextLine
+        , anotherButton
         ]
       Just exercise ->
         H.div "done-body" $ case exercise.answer of
@@ -556,6 +576,21 @@ view state dispatch =
         , (Stats.overview now (map _.slug items) state.progress).dueNow == 0 ->
             H.p "next-due" $ "Next review in " <> wait
       _, _ -> H.empty
+
+    -- Offered whenever a session could be built, which is what pressing it
+    -- does: new items count as well as reviews, and `dueNow` counts only items
+    -- already seen, so it alone would hide the button from someone still
+    -- working through the bank. The count is of reviews, so is left out when
+    -- there are none rather than saying 0 due beside a button that works.
+    anotherButton = case state.at of
+      Just now | not $ Array.null $ Curriculum.session state.progress now ->
+        H.div "controls"
+          [ H.button_ "grade got-it" { onClick: dispatch <| StartAnother } $
+              "Start another" <> if dueNow now > 0 then " · " <> show (dueNow now) <> " due" else ""
+          ]
+      _ -> H.empty
+
+    dueNow now = (Stats.overview now (map _.slug items) state.progress).dueNow
 
     tally =
       Stats.plural (state.got + state.again) "exercise" <> " · "
