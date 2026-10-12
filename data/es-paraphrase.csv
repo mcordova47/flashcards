@@ -52,29 +52,38 @@ read-my-letter,"How would you ask me if I read your letter?","¿Leíste mi carta
 grandfather-came-summers,"How would you tell me your grandfather came to your house every summer?","Mi abuelo venía a casa cada verano.",venir,imperfect,3s,tense,preterite,
 always-came-here-kid,"How might you tell me you always came here as a kid?","De niño, siempre venía aquí.",venir,imperfect,1s,tense,preterite,
 hope-arrive-on-time,"How might you tell me you hope I arrive on time?","Espero que llegues a tiempo.",llegar,subjunctive,2s,tense,present,
-want-brother-come,"How might you tell me you want your brother to come?","Quiero que venga mi hermano.",venir,subjunctive,3s,tense,present,
-hope-we-can-go,"How would you tell me you hope we can go?","Espero que podamos ir.",poder,subjunctive,1p,tense,present,
-tell-me-truth,"How would you tell me you don't think I'm telling you everything?","No creo que me digas todo.",decir,subjunctive,2s,tense,present,"Not a request: asking for the truth is dime la verdad, and the imperative is out of scope for the table, so the prompt states a doubt instead"
-call-when-home,"How would you tell me you'll call me when you get home?","Te llamo cuando llegue a casa.",llegar,subjunctive,1s,tense,present,
-important-homework,"How would you tell me it's important that they do their homework?","Es importante que hagan la tarea.",hacer,subjunctive,3p,tense,present,
+know-someone-can-help,"How might you tell me you know someone who can help you?","Conozco a alguien que me puede ayudar.",poder,present,3s,tense,subjunctive,"Indicative because the someone is found: conozco a alguien que me puede ayudar is a particular person who can, where busco a alguien que me pueda ayudar has not found one"
+necessary-do-something,"How might you tell me it's necessary that we do something?","Es necesario que hagamos algo.",hacer,subjunctive,1p,tense,present,
+need-you-put-books,"How would you tell me you need me to put the books on the table?","Necesito que pongas los libros en la mesa.",poner,subjunctive,2s,tense,present,
+brother-says-coming,"How might you tell me your brother says he's coming tomorrow?","Mi hermano dice que viene mañana.",venir,present,3s,tense,subjunctive,"Indicative because dice que reports what he says: it is only dile que, asking him to, that takes venga"
 sorry-cant-come,"How would you tell me you're sorry I can't come?","Siento que no puedas venir.",poder,subjunctive,2s,tense,present,
-want-her-tell-truth,"How would you tell me you want her to tell you the truth?","Quiero que me diga la verdad.",decir,subjunctive,3s,tense,present,
-dont-think-true,"How might you tell me you don't think it's true?","No creo que sea verdad.",ser,subjunctive,3s,tense,present,"sea is ser, and estar is never a choice with verdad, so the verb is not a second decision"
+important-homework,"How would you tell me it's important that they do their homework?","Es importante que hagan la tarea.",hacer,subjunctive,3p,tense,present,
+call-when-home,"How would you tell me you'll call me when you get home?","Te llamo cuando llegue a casa.",llegar,subjunctive,1s,tense,present,
+always-do-when-time,"How would you tell me you always do it when you have time?","Siempre lo hago cuando tengo tiempo.",tener,present,1s,tense,subjunctive,"Indicative because siempre makes cuando a habit: lo hago cuando tenga tiempo is a time that has not come yet"
+want-brother-come,"How might you tell me you want your brother to come?","Quiero que venga mi hermano.",venir,subjunctive,3s,tense,present,
+better-say-nothing,"How might you tell me it's better that we don't say anything?","Es mejor que no digamos nada.",decir,subjunctive,1p,tense,present,
+hope-its-a-boy,"How would you tell me you hope it's a boy?","Espero que sea un niño.",ser,subjunctive,3s,tense,present,"sea is ser, and estar is never a choice for what something is, so the verb is not a second decision"
+know-theyre-coming,"How might you tell me you know they're coming tomorrow?","Sé que vienen mañana.",venir,present,3p,tense,subjunctive,"Indicative because sé que is knowing, not wanting or doubting"
 want-him-set,"How would you tell me you want him to set the table?","Quiero que ponga la mesa.",poner,subjunctive,3s,tense,present,
 do-when-time,"How would you tell me you'll do it when you have time?","Lo hago cuando tenga tiempo.",tener,subjunctive,1s,tense,present,
-eat-when-parents-come,"How would you tell me we'll eat when your parents come?","Comemos cuando vengan mis padres.",venir,subjunctive,3p,tense,present,
-possible-come-tomorrow,"How might you tell me it's possible you'll come here tomorrow?","Es posible que venga aquí mañana.",venir,subjunctive,1s,tense,present,"venir, not ir, because here is where the speaker is: coming to where the listener is would be vaya, so the verb is not a second decision"
-looking-someone-help,"How might you tell me you're looking for someone who can help you?","Busco a alguien que me pueda ayudar.",poder,subjunctive,3s,tense,present,"Subjunctive because the someone is not yet found: busco a alguien que me puede ayudar means a particular person who can"
-better-say-nothing,"How might you tell me it's better that we don't say anything?","Es mejor que no digamos nada.",decir,subjunctive,1p,tense,present,
-leave-before-others-arrive,"How would you tell me we'll leave before the others arrive?","Salimos antes de que lleguen los otros.",llegar,subjunctive,3p,tense,present,"antes de que always takes the subjunctive, whatever the time"
-want-you-do-today,"How would you tell me you want me to do it today?","Quiero que lo hagas hoy.",hacer,subjunctive,2s,tense,present,
-necessary-do-something,"How might you tell me it's necessary that we do something?","Es necesario que hagamos algo.",hacer,subjunctive,1p,tense,present,
-hope-its-a-boy,"How would you tell me you hope it's a boy?","Espero que sea un niño.",ser,subjunctive,3s,tense,present,"sea is ser, and estar is never a choice for what something is, so the verb is not a second decision"
-want-us-friends,"How might you tell me you want us to be friends?","Quiero que seamos amigos.",ser,subjunctive,1p,tense,present,"seamos is ser, and estar is never a choice for what people are to each other, so the verb is not a second decision"
-need-you-put-books,"How would you tell me you need me to put the books on the table?","Necesito que pongas los libros en la mesa.",poner,subjunctive,2s,tense,present,
+true-parents-coming,"How would you tell me it's true that your parents are coming?","Es verdad que vienen mis padres.",venir,present,3p,tense,subjunctive,"Indicative because es verdad que states a fact, where es importante que asks for something"
+tell-me-truth,"How would you tell me you don't think I'm telling you everything?","No creo que me digas todo.",decir,subjunctive,2s,tense,present,"Not a request: asking for the truth is dime la verdad, and the imperative is out of scope for the table, so the prompt states a doubt instead"
 possible-theyre-hungry,"How might you tell me it's possible they're hungry?","Es posible que tengan hambre.",tener,subjunctive,3p,tense,present,
-prefer-they-put-food,"How might you tell me you'd rather they put the food on the table?","Prefiero que pongan la comida en la mesa.",poner,subjunctive,3p,tense,present,"prefiero is preferir with the stem change the table does not hold"
+eat-when-parents-arrive,"How would you tell me we always eat when your parents arrive?","Siempre comemos cuando llegan mis padres.",llegar,present,3p,tense,subjunctive,"Indicative because siempre makes cuando a habit, against comemos cuando vengan mis padres, which has not happened yet"
 hope-good-day,"How would you tell me you hope I have a good day?","Espero que tengas un buen día.",tener,subjunctive,2s,tense,present,"buen is bueno shortened before a masculine noun"
+want-you-do-today,"How would you tell me you want me to do it today?","Quiero que lo hagas hoy.",hacer,subjunctive,2s,tense,present,
+eat-when-parents-come,"How would you tell me we'll eat when your parents come?","Comemos cuando vengan mis padres.",venir,subjunctive,3p,tense,present,
+think-we-can-go,"How would you tell me you think we can go?","Pienso que podemos ir.",poder,present,1p,tense,subjunctive,"Indicative, the pair of espero que podamos ir: pienso que is thought, espero que is hope"
+prefer-they-put-food,"How might you tell me you'd rather they put the food on the table?","Prefiero que pongan la comida en la mesa.",poner,subjunctive,3p,tense,present,"prefiero is preferir with the stem change the table does not hold"
+want-us-friends,"How might you tell me you want us to be friends?","Quiero que seamos amigos.",ser,subjunctive,1p,tense,present,"seamos is ser, and estar is never a choice for what people are to each other, so the verb is not a second decision"
+looking-someone-help,"How might you tell me you're looking for someone who can help you?","Busco a alguien que me pueda ayudar.",poder,subjunctive,3s,tense,present,"Subjunctive because the someone is not yet found: busco a alguien que me puede ayudar means a particular person who can"
+believe-its-true,"How would you tell me you think it's true?","Creo que es verdad.",ser,present,3s,tense,subjunctive,"Indicative because creo que states a belief: it is only no creo que that doubts, and takes sea; es is ser, and estar is never a choice with verdad"
+hope-we-can-go,"How would you tell me you hope we can go?","Espero que podamos ir.",poder,subjunctive,1p,tense,present,
+leave-before-others-arrive,"How would you tell me we'll leave before the others arrive?","Salimos antes de que lleguen los otros.",llegar,subjunctive,3p,tense,present,"antes de que always takes the subjunctive, whatever the time"
+want-her-tell-truth,"How would you tell me you want her to tell you the truth?","Quiero que me diga la verdad.",decir,subjunctive,3s,tense,present,
+call-when-home-daily,"How would you tell me you call me when you get home every day?","Te llamo cuando llego a casa todos los días.",llegar,present,1s,tense,subjunctive,"Indicative because cuando here is a habit, not the future: te llamo cuando llegue a casa is a call that has not happened yet"
+dont-think-true,"How might you tell me you don't think it's true?","No creo que sea verdad.",ser,subjunctive,3s,tense,present,"sea is ser, and estar is never a choice with verdad, so the verb is not a second decision"
+possible-come-tomorrow,"How might you tell me it's possible you'll come here tomorrow?","Es posible que venga aquí mañana.",venir,subjunctive,1s,tense,present,"venir, not ir, because here is where the speaker is: coming to where the listener is would be vaya, so the verb is not a second decision"
 know-this-city,"How might you tell me you know this city?","Conozco esta ciudad.",conocer,present,1s,verb,saber,
 know-drive,"How would you tell me you know how to drive?","Sé conducir.",saber,present,1s,verb,conocer,
 know-where-hotel,"How might you ask me if I know where the hotel is?","¿Sabes dónde está el hotel?",saber,present,2s,verb,conocer,
