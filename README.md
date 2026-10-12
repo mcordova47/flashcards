@@ -921,12 +921,14 @@ The drills' progress sheet ends on the table: 38 verbs by four tenses, the
 most common verb first. Tap a square and its five forms open under its row,
 so it is a reference as well as a score.
 
-A square is in one of five states, and only the first three are about you:
+A square is in one of seven states, and only the first five are about you:
 
 | | |
 | --- | --- |
 | **known** | every item on it mastered |
-| **learning** | something on it answered |
+| **nearly known** | the mean box of its items is 4 or more |
+| **climbing** | the mean box is from 2 to under 4 |
+| **just started** | something on it answered, the mean box under 2 |
 | **not started** | a drill asks it; nothing on it answered yet |
 | **nothing asks this yet** | worth drilling, and no drill reaches it |
 | **left out on purpose** | the coverage says skip for every person |
@@ -935,8 +937,30 @@ Shaded *mastered or not*, the grid would read as almost entirely failure,
 because the sentence bank reaches 29 verbs of 38. The last two states are what
 keep it a map of what to author next rather than a list of what you have not
 done: a dashed outline is a gap someone could fill, a hatch is one left on
-purpose. The legend counts nothing, because five counts adding up to the
+purpose. The legend counts nothing, because seven counts adding up to the
 table are a percentage by another name.
+
+The three between *known* and *not started* are a ladder, because *known* alone
+is a month away: the ladder is 1, 3, 7, 21 and 60 days, a first right answer
+lands in box 3, and a square is known only when every item on it is in box 5, so
+a grid with one shade for everything short of that cannot change for at least
+that long however well it is answered (#146). They are read off the *mean* box
+of the items on a square, with an item not yet met counted as box 0, so a square
+with one of five items answered is not shaded as far along as one with all five.
+The lowest box would be the honest one and the slowest, holding a whole square
+still for as long as its slowest item took; a share at box 4 and up moves in
+jumps. The mean is compared as a sum of boxes against a whole number of items,
+so there is no rounding at the edges.
+
+The sheet also says, while nothing is mastered yet, how soon the first item
+could be (`Stats.firstMasteredIn`, played out with the scheduler's own
+`applyGrade`), and the drills' done screen says what the session moved — *14
+climbed a box · 3 new items met · 2 fell back* (`Flashcards.Moved`). Like a
+milestone it is a subtraction between two standings: the page keeps each item's
+box the first time it is answered, and compares it with the box it has now. A
+new item is *met*, not *climbed*, since its first right answer lands in box 3 and
+counting that as three steps would make the first session the biggest there ever
+is. Neither says anything of a share of a total.
 
 The states come from `Flashcards.Verbs.Grid`. Which items are on a square is
 read from each exercise's `cell`, never from its slug: a pool is on a square
@@ -1338,6 +1362,7 @@ src/Flashcards/
   Page.purs                          which page a path names
   Pages/Study.purs                   the card, the loop, the wiring
   Pages/Verbs.purs                   the drills (#8); both exercises, one loop
+  Moved.purs                         pure; what a session did to the ladder (#146)
   Verbs/Shift.purs                   the tense shift (#16), pure
   Verbs/Correction.purs              error correction and its kinds (#26), pure
   Verbs/Paraphrase.purs              the paraphrase and its rubric (#10), pure

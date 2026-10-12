@@ -508,6 +508,26 @@ export default async ({ check, open, blobs }) => {
   check("no page errors", fixing.errors, [])
   await fixing.close()
 
+  // --- what a session moved (#146) ---
+  // Every item far off at box 5 but one paraphrase at box 3 and due, so the
+  // session is that one item and the done screen has a session to describe.
+  const lone = await open({ path: "/verbs", key: VERBS, seed: {
+    version: formatVersion(), language: "verbs", deck: "none",
+    cards: [...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs,
+            ...corpus.map(r => `paraphrase.${r.id}`)].map(slug => slug === `paraphrase.${corpus[0].id}`
+      ? { slug, box: 3, seen: 2, missed: 0, lapses: 0, direction: "recognition", due: Date.now() - 86400000 }
+      : { slug, box: 5, seen: 8, missed: 0, lapses: 0, direction: "recognition", due: Date.now() + 9 * 86400000 }),
+  } })
+  await lone.waitForSelector(".verb-prompt")
+  check("a done screen says nothing moved before anything has", await lone.$(".moved"), null)
+  await lone.tap(".grade")
+  await (await lone.byText(".grade", "Got it")).click()
+  await lone.waitForSelector(".done-title")
+  await wait(200)
+  check("and afterwards what the session did to the ladder", await lone.text(".moved"), "1 climbed a box")
+  check("no page errors", lone.errors, [])
+  await lone.close()
+
   // --- what is next, when there is nothing now ---
   // As the cards do. Everything at box 5 and far from due, so the session is
   // empty on arrival and the page can only say when something comes back.
@@ -685,6 +705,8 @@ export default async ({ check, open, blobs }) => {
   check("with the raw numbers behind the percentage", await sheet.text(".tiles-note"),
     "60 answers · 22 wrong · 2 due now")
 
+  check("the sheet with something mastered does not say when the first will be", await sheet.$(".first-mastered"), null)
+
   // As the page would name each: a tense shift by verb and tense, a person
   // shift by the pronoun it asked for, a paraphrase by its English.
   const CODES = Object.fromEntries(Object.entries(PRONOUNS).map(([p, c]) => [c, p]))
@@ -725,8 +747,12 @@ export default async ({ check, open, blobs }) => {
     }
     const boxes = items.map(slug => seeded.get(slug)?.box)
     if (boxes.every(b => b >= 5)) return "known"
-    if (boxes.some(b => b !== undefined)) return "learning"
-    return "not started"
+    if (boxes.every(b => b === undefined)) return "not started"
+    // The mean box, an item not yet met counting as 0 (#146).
+    const total = boxes.reduce((sum, b) => sum + (b ?? 0), 0)
+    if (total >= 4 * boxes.length) return "nearly known"
+    if (total >= 2 * boxes.length) return "climbing"
+    return "just started"
   }
   const squares = await sheet.$$eval(".grid-square", es => es.map(e => e.title))
   check("a square for every verb and tense", squares.length, verbs.length * TENSES.length)
@@ -736,11 +762,16 @@ export default async ({ check, open, blobs }) => {
   const expected = verbs.flatMap(inf => TENSES.map(t => `${inf} · ${t} — ${expectedState(inf, t)}`)).sort()
   check("every square in the state the data and the seed give it", [...squares].sort(), expected)
   const tally = state => expected.filter(e => e.endsWith(state)).length
-  check("and all five states are on it", ["known", "learning", "not started", "nothing asks this yet", "left out on purpose"]
-    .map(s => tally(s) > 0), [true, true, true, true, true])
+  // The seed has no square in the middle of the ladder, which the unit spec
+  // covers, along with the boundaries.
+  check("and the states it can show are on it",
+    ["known", "nearly known", "just started", "not started", "nothing asks this yet", "left out on purpose"]
+    .map(s => tally(s) > 0), [true, true, true, true, true, true])
   check("with a legend naming them, and counting none",
     await sheet.$$eval(".grid-legend .legend-item", es => es.map(e => e.textContent)),
-    ["known", "learning", "not started", "nothing asks this yet", "left out on purpose"])
+    ["known", "nearly known", "climbing", "just started", "not started", "nothing asks this yet", "left out on purpose"])
+  check("each shade of the ladder is a different colour",
+    new Set(await sheet.$$eval(".grid-legend .swatch", es => es.slice(0, 5).map(e => getComputedStyle(e).backgroundColor))).size, 5)
 
   // A reference, not only a score: a square opens onto its forms.
   const squareFor = (inf, tense) => `.grid-square[title^="${inf} · ${tense} —"]`
@@ -774,6 +805,23 @@ export default async ({ check, open, blobs }) => {
   check("and it closes", await sheet.$(".sheet"), null)
   check("no page errors", sheet.errors, [])
   await sheet.close()
+
+  // While nothing is mastered the sheet says why that is, and when it ends.
+  const waiting = await open({ path: "/verbs", key: VERBS, seed: {
+    version: formatVersion(), language: "verbs", deck: "none",
+    cards: [...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs,
+            ...corpus.map(r => `paraphrase.${r.id}`)].map(slug =>
+      ({ slug, box: 4, seen: 8, missed: 0, lapses: 0, direction: "recognition", due: Date.now() + 5 * 86400000 })),
+  } })
+  await waiting.waitForSelector(".done-title")
+  await wait(300)
+  await openSheet(waiting)
+  check("a flat sheet says when the first item could be mastered",
+    await waiting.text(".first-mastered"), "The first can be mastered in 5 days, answering each when it is due.")
+  check("and every square is nearly known, not the same shade as a beginner's",
+    await waiting.$$eval(".grid-square.nearly", es => es.length) > 0, true)
+  check("no page errors", waiting.errors, [])
+  await waiting.close()
 
   // Nothing answered is nothing to divide, not 0% or 100%.
   const fresh = await open({ path: "/verbs", key: VERBS })
