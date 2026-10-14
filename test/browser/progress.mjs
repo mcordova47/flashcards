@@ -217,9 +217,9 @@ export default async ({ check, open }) => {
     const rows = await p.$$eval(".remain", es => es.map(e => [...e.children].map(c => c.textContent)))
     check("names the seventeen that are left", rows.length, 17)
     check("soonest first, the graduating card before the recognition-only one",
-      rows.map(r => r[2]), [...Array(12).fill("in 1 day"), ...Array(3).fill("in 4 days"), "in 6 days", "in 12 days"])
+      rows.map(r => r[1]), [...Array(12).fill("in 1 day"), ...Array(3).fill("in 4 days"), "in 6 days", "in 12 days"])
     check("with how often each has slipped, where it has",
-      rows.map(r => r[3]).filter(Boolean).sort(), ["1×", "1×", "2×", "3×"])
+      rows.map(r => r[2]).filter(Boolean).sort(), ["slipped 1×", "slipped 1×", "slipped 2×", "slipped 3×"])
     check("no page errors", p.errors, [])
     await p.close()
   }

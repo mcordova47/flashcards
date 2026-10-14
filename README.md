@@ -337,8 +337,8 @@ absent rather than a guess. Meeting every word is not forecast for the same
 reason (#151).
 
 When at most one session's worth are left, and every one of them is started, the
-sheet also lists them under **Still to master**, soonest first with how often
-each has slipped (`Stats.leftToMaster`). Past the last hundred there is no
+sheet also lists them, last on the sheet and folded, under **Still to master**,
+soonest first with how often each has slipped (`Stats.leftToMaster`). Past the last hundred there is no
 milestone to say, so this is what says *which*. The drills' line about the first
 item is the same walk with a target of one.
 
