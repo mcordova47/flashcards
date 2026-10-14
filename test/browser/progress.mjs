@@ -64,6 +64,11 @@ export default async ({ check, open }) => {
   check("with the raw numbers behind the percentage", await page.text(".tiles-note"),
     `808 answers · 36 wrong · ${PRODUCING} in production · 2 due now`)
 
+  // 100 mastered and only 83 more started: the next milestone is 200, which
+  // needs 100 more, and nobody can say when the other 17 will have been met.
+  check("no date for a milestone the started cards cannot reach", await page.$(".next-milestone"), null)
+  check("and no list, with hundreds still to go", await page.$(".remaining"), null)
+
   check("one bar per hundred words", (await page.$$(".band")).length, 10)
   check("the graduated band reads as mastered",
     await page.$$eval(".band:nth-child(1) .seg", es => es.map(e => e.className)), ["seg mastered"])
@@ -170,6 +175,47 @@ export default async ({ check, open }) => {
     for (let i = 0; i < 20; i++) { await p.tap(".card"); await p.tap(".got-it") }
     await p.waitForSelector(".done-title")
     check("no promise of a future review while cards are waiting", await p.$(".next-due"), null)
+    await p.close()
+  }
+
+  // --- when the last of them could be mastered ---
+  // The issue's learner in miniature: 983 mastered, and 17 left: three
+  // production cards at box 1, thirteen at box 2, and a recognition-only card
+  // at box 4 that has to wait out the 21-day rung.
+  {
+    const T = Date.now()
+    const last = Math.max(...BARRED)
+    const left = [last]
+    for (let r = 1000; left.length < 17; r--) if (r !== last) left.push(r)
+    const cards = []
+    for (let r = 1; r <= 1000; r++) {
+      const i = left.indexOf(r)
+      if (i < 0)
+        cards.push({ slug: slugAt(r), box: BARRED.has(r) ? 5 : 4, seen: 6, missed: 0, lapses: 0,
+                     direction: BARRED.has(r) ? "recognition" : "production", due: T + 30 * DAY })
+      else if (i === 0)
+        cards.push({ slug: slugAt(r), box: 4, seen: 9, missed: 2, lapses: 2,
+                     direction: "recognition", due: T + 12 * DAY })
+      else if (i <= 3)
+        cards.push({ slug: slugAt(r), box: 1, seen: 9, missed: 4, lapses: i === 1 ? 3 : 1,
+                     direction: "production", due: T + 1 * DAY })
+      else
+        cards.push({ slug: slugAt(r), box: 2, seen: 9, missed: 1, lapses: 0,
+                     direction: "production", due: T + 1 * DAY })
+    }
+    const p = await open({ seed: { version: V, deck: FP, cards } })
+    await p.waitForSelector(".done-title")
+    await openSheet(p)
+    check("says what comes next, and that it is the best case",
+      await p.text(".next-milestone"),
+      "Next: all 1000 words mastered — earliest in 12 days, if every review goes right.")
+    const rows = await p.$$eval(".remain", es => es.map(e => [...e.children].map(c => c.textContent)))
+    check("names the seventeen that are left", rows.length, 17)
+    check("soonest first, the recognition-only card last",
+      rows.map(r => r[2]), [...Array(13).fill("in 1 day"), ...Array(3).fill("in 4 days"), "in 12 days"])
+    check("with how often each has slipped, where it has",
+      rows.map(r => r[3]).filter(Boolean).sort(), ["1×", "1×", "2×", "3×"])
+    check("no page errors", p.errors, [])
     await p.close()
   }
 

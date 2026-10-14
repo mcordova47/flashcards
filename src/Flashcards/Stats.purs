@@ -14,9 +14,11 @@ module Flashcards.Stats
   , bandSize
   , bands
   , describeDuration
+  , describeEarliest
   , firstMasteredIn
   , leechThreshold
   , leeches
+  , leftToMaster
   , masteredAt
   , masteredIn
   , masteryOf
@@ -260,7 +262,7 @@ masteredIn now target items progress = do
   let needed = target - Array.length (Array.filter isMastered tracked)
   guard $ needed > 0
   landed <- Array.index (Array.sort $ Array.mapMaybe landing tracked) (needed - 1)
-  pure $ Milliseconds $ unwrap (unInstant landed) - unwrap (unInstant now)
+  pure $ since now landed
   where
     tracked = Array.mapMaybe
       (\item -> Progress.lookup item.slug progress <#> \cp -> { allowed: item.allowed, cp })
@@ -269,6 +271,31 @@ masteredIn now target items progress = do
     isMastered t = masteryOf (Just t.cp) == Mastered
 
     landing t = if isMastered t then Nothing else Just $ masteredAt now t.allowed t.cp
+
+-- | The started items not yet mastered, soonest first, each with how long it
+-- | would take and how often it has slipped: the answer to *which*, for when
+-- | few enough are left to name. Ties go to the one that has slipped most,
+-- | since it is the one least likely to make it.
+-- |
+-- | Only items with progress are here. An unstarted one has no honest date.
+leftToMaster
+  :: forall r
+   . Instant
+  -> Array { slug :: Slug, allowed :: Graduation | r }
+  -> Progress
+  -> Array { item :: { slug :: Slug, allowed :: Graduation | r }, wait :: Milliseconds, lapses :: Int }
+leftToMaster now items progress =
+  Array.sortBy soonest $ Array.mapMaybe toLeft items
+  where
+    toLeft item = do
+      cp <- Progress.lookup item.slug progress
+      guard $ masteryOf (Just cp) /= Mastered
+      pure { item, wait: since now $ masteredAt now item.allowed cp, lapses: cp.lapses }
+
+    soonest a b = compare a.wait b.wait <> compare b.lapses a.lapses
+
+since :: Instant -> Instant -> Milliseconds
+since now later = Milliseconds $ unwrap (unInstant later) - unwrap (unInstant now)
 
 -- | The moment an item is mastered, played out with the scheduler's own
 -- | `applyGrade` rather than summed from its intervals, so a change to the
@@ -303,6 +330,14 @@ describeDuration (Milliseconds ms) =
     else if minutes < 60 then plural minutes "minute"
     else if hours < 24 then plural hours "hour"
     else plural days "day"
+
+-- | A forecast's wait as an adverb of time: "now" when nothing but answering
+-- | what is already due stands in the way, otherwise "in 12 days". Always
+-- | said alongside *earliest*, since it is the best case and not a promise.
+describeEarliest :: Milliseconds -> String
+describeEarliest (Milliseconds ms)
+  | ms < 60000.0 = "now"
+  | otherwise = "in " <> describeDuration (Milliseconds ms)
 
 -- | "1 card", "20 cards". Trivial, and worth having in one place: the session
 -- | tally said "1 cards" for as long as it has existed, which is every time

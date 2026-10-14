@@ -9,6 +9,8 @@ import Data.Array as Array
 import Data.DateTime.Instant (Instant, instant)
 import Data.Maybe (Maybe(..), fromJust)
 import Data.Time.Duration (Milliseconds(..))
+import Data.Tuple.Nested ((/\))
+import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
 import Flashcards.Types.Card (Card, Rank(..), Slug(..))
 import Flashcards.Types.Direction (Direction(..))
@@ -202,6 +204,83 @@ spec = do
       wait (Progress.empty # card 1 5 1 0 0 30.0 # card 2 3 1 0 0 2.0) `shouldEqual` Nothing
       wait Progress.empty `shouldEqual` Nothing
 
+  describe "when a number of items could be mastered" do
+    let
+      item allowed n = { slug: slugAt n, allowed }
+      plain = item Scheduler.RecognitionOnly
+      graduating = item Scheduler.MayGraduate
+      masteredIn target items progress = Stats.masteredIn now target items progress
+
+    -- The shape of the real case: some production cards a few days off and one
+    -- that can only climb the recognition ladder, 12 days from its last rung.
+    it "is the that-many-th earliest of the ones started" do
+      let
+        items = map plain [ 1, 2, 3, 4 ]
+        progress = Progress.empty
+          # producing 1 2 1 0 0 1.0
+          # producing 2 1 1 0 0 1.0
+          # producing 3 2 1 0 0 1.0
+          # card 4 4 1 0 0 12.0
+      -- Box 2 answered when due is box 3, which is mastered for production,
+      -- so one day. Box 1 answered then is box 2 due 3 days on: 1 + 3 = 4.
+      masteredIn 1 items progress `shouldEqual` Just (Milliseconds day)
+      masteredIn 2 items progress `shouldEqual` Just (Milliseconds day)
+      masteredIn 3 items progress `shouldEqual` Just (Milliseconds $ 4.0 * day)
+      masteredIn 4 items progress `shouldEqual` Just (Milliseconds $ 12.0 * day)
+
+    it "counts what is already mastered towards the target" do
+      let
+        items = map plain [ 1, 2, 3 ]
+        progress = Progress.empty # card 1 5 1 0 0 30.0 # card 2 4 1 0 0 5.0 # card 3 4 1 0 0 9.0
+      masteredIn 2 items progress `shouldEqual` Just (Milliseconds $ 5.0 * day)
+      masteredIn 3 items progress `shouldEqual` Just (Milliseconds $ 9.0 * day)
+
+    it "has nothing to say when the target is already met" do
+      let progress = Progress.empty # card 1 5 1 0 0 30.0 # card 2 5 1 0 0 30.0
+      masteredIn 2 (map plain [ 1, 2 ]) progress `shouldEqual` Nothing
+
+    -- Unstarted cards have no date, so a target that needs one has no honest
+    -- answer, and saying nothing is it.
+    it "has nothing to say when too few are started to reach it" do
+      let progress = Progress.empty # card 1 4 1 0 0 5.0
+      masteredIn 1 (map plain [ 1, 2, 3 ]) progress `shouldEqual` Just (Milliseconds $ 5.0 * day)
+      masteredIn 2 (map plain [ 1, 2, 3 ]) progress `shouldEqual` Nothing
+
+    -- Recognition box 3 due in 2 days. Barred from production it climbs to
+    -- box 5: 2 days, then 21 to box 4's answer, so 23 in all.
+    -- Allowed, it graduates on the answer that would make it box 4: back to
+    -- production box 1 (+1), box 2 (+3), box 3 mastered: 2 + 1 + 3 = 6.
+    it "follows whether a card may graduate" do
+      let progress = Progress.empty # card 1 3 1 0 0 2.0
+      masteredIn 1 [ plain 1 ] progress `shouldEqual` Just (Milliseconds $ 23.0 * day)
+      masteredIn 1 [ graduating 1 ] progress `shouldEqual` Just (Milliseconds $ 6.0 * day)
+
+    it "answers an overdue card now, not when it fell due" do
+      masteredIn 1 [ plain 1 ] (Progress.empty # card 1 4 1 0 0 (-3.0))
+        `shouldEqual` Just (Milliseconds 0.0)
+
+  describe "which are left to master" do
+    let
+      item allowed n = { slug: slugAt n, allowed }
+      left = Stats.leftToMaster now (map (item Scheduler.RecognitionOnly) [ 1, 2, 3, 4 ])
+
+    it "lists the started, unmastered ones, soonest first" do
+      let
+        progress = Progress.empty
+          # card 1 4 1 0 0 12.0
+          # card 2 4 1 0 0 5.0
+          # card 3 5 1 0 0 30.0
+      map (\l -> l.item.slug /\ l.wait) (left progress)
+        `shouldEqual` [ slugAt 2 /\ Milliseconds (5.0 * day), slugAt 1 /\ Milliseconds (12.0 * day) ]
+
+    it "puts the one that has slipped most first among equals" do
+      let
+        progress = Progress.empty # card 1 4 5 1 2 5.0 # card 2 4 9 6 7 5.0
+      map _.lapses (left progress) `shouldEqual` [ 7, 2 ]
+
+    it "leaves out what has not been started" do
+      left Progress.empty `shouldEqual` []
+
   describe "describing a wait" do
     it "does not bother with seconds" do
       Stats.describeDuration (Milliseconds 20000.0) `shouldEqual` "under a minute"
@@ -219,6 +298,14 @@ spec = do
     it "rolls up rather than saying 60 minutes or 24 hours" do
       Stats.describeDuration (Milliseconds $ 59.7 * 60000.0) `shouldEqual` "1 hour"
       Stats.describeDuration (Milliseconds $ 23.8 * 3600000.0) `shouldEqual` "1 day"
+
+  describe "saying when" do
+    it "says now when nothing but what is due stands in the way" do
+      Stats.describeEarliest (Milliseconds 0.0) `shouldEqual` "now"
+
+    it "otherwise says how long, as a wait" do
+      Stats.describeEarliest (Milliseconds $ 12.0 * day) `shouldEqual` "in 12 days"
+      Stats.describeEarliest (Milliseconds $ 5.0 * 3600000.0) `shouldEqual` "in 5 hours"
 
   describe "counting things" do
     -- The session tally read "1 cards" from the day it was written, which is

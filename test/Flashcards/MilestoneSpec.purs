@@ -5,6 +5,7 @@ module Test.Flashcards.MilestoneSpec
 
 import Prelude
 
+import Data.Array as Array
 import Data.Maybe (Maybe(..))
 import Flashcards.Milestone (Fanfare(..), Milestone(..))
 import Flashcards.Milestone as Milestone
@@ -84,3 +85,34 @@ spec = do
       Milestone.describe (Hundred 200) `shouldEqual` "You’ve now mastered 200 words!"
       Milestone.describe (EveryWordSeen 1000) `shouldEqual` "You have now met all 1000 words!"
       Milestone.describe Recovered `shouldEqual` "Nothing is slipping any more!"
+
+  describe "the next one a forecast can speak of" do
+    let upcoming mastered = Milestone.upcoming { mastered, total: 1000 }
+
+    it "is the first word until there is one" do
+      upcoming 0 `shouldEqual` Just { milestone: FirstMastered, needs: 1 }
+
+    it "is the next hundred after that" do
+      upcoming 1 `shouldEqual` Just { milestone: Hundred 100, needs: 100 }
+      upcoming 100 `shouldEqual` Just { milestone: Hundred 200, needs: 200 }
+      upcoming 899 `shouldEqual` Just { milestone: Hundred 900, needs: 900 }
+
+    -- With 983 mastered the next hundred is the whole deck, which is what the
+    -- issue's learner sees: `Everything 1000`, 17 more.
+    it "is the end of the deck when the next hundred is the deck" do
+      upcoming 983 `shouldEqual` Just { milestone: Everything 1000, needs: 1000 }
+      Milestone.upcoming { mastered: 910, total: 950 }
+        `shouldEqual` Just { milestone: Everything 950, needs: 950 }
+
+    it "is nothing once every word is mastered, or with no deck" do
+      upcoming 1000 `shouldEqual` Nothing
+      Milestone.upcoming { mastered: 0, total: 0 } `shouldEqual` Nothing
+
+    -- The forecast promises exactly what `reached` would announce: crossing
+    -- to `needs` mastered is the milestone named, for every starting point.
+    it "names what reaching it would announce" do
+      let
+        agrees m = case upcoming m of
+          Just next -> reached (standing m 0) (standing next.needs 0) == Just next.milestone
+          Nothing -> false
+      Array.all agrees (Array.range 0 999) `shouldEqual` true
