@@ -180,13 +180,15 @@ export default async ({ check, open }) => {
 
   // --- when the last of them could be mastered ---
   // The issue's learner in miniature: 983 mastered, and 17 left: three
-  // production cards at box 1, thirteen at box 2, and a recognition-only card
-  // at box 4 that has to wait out the 21-day rung.
+  // production cards at box 1, twelve at box 2, a recognition-only card at box 4
+  // that has to wait out the 21-day rung, and a canonical recognition card at
+  // box 3, which graduates on the answer that would make it box 4 and so lands
+  // sooner (2 + 1 + 3 = 6 days) than the recognition-only ladder would (23).
   {
     const T = Date.now()
     const last = Math.max(...BARRED)
     const left = [last]
-    for (let r = 1000; left.length < 17; r--) if (r !== last) left.push(r)
+    for (let r = 1000; left.length < 17; r--) if (r !== last && !BARRED.has(r)) left.push(r)
     const cards = []
     for (let r = 1; r <= 1000; r++) {
       const i = left.indexOf(r)
@@ -199,6 +201,9 @@ export default async ({ check, open }) => {
       else if (i <= 3)
         cards.push({ slug: slugAt(r), box: 1, seen: 9, missed: 4, lapses: i === 1 ? 3 : 1,
                      direction: "production", due: T + 1 * DAY })
+      else if (i === 4)
+        cards.push({ slug: slugAt(r), box: 3, seen: 9, missed: 1, lapses: 0,
+                     direction: "recognition", due: T + 2 * DAY })
       else
         cards.push({ slug: slugAt(r), box: 2, seen: 9, missed: 1, lapses: 0,
                      direction: "production", due: T + 1 * DAY })
@@ -211,10 +216,38 @@ export default async ({ check, open }) => {
       "Next: all 1000 words mastered — earliest in 12 days, if every review goes right.")
     const rows = await p.$$eval(".remain", es => es.map(e => [...e.children].map(c => c.textContent)))
     check("names the seventeen that are left", rows.length, 17)
-    check("soonest first, the recognition-only card last",
-      rows.map(r => r[2]), [...Array(13).fill("in 1 day"), ...Array(3).fill("in 4 days"), "in 12 days"])
+    check("soonest first, the graduating card before the recognition-only one",
+      rows.map(r => r[2]), [...Array(12).fill("in 1 day"), ...Array(3).fill("in 4 days"), "in 6 days", "in 12 days"])
     check("with how often each has slipped, where it has",
       rows.map(r => r[3]).filter(Boolean).sort(), ["1×", "1×", "2×", "3×"])
+    check("no page errors", p.errors, [])
+    await p.close()
+  }
+
+  // --- eighteen left, but three of them not yet met ---
+  // Few enough to name, yet the list would show fifteen and read as complete,
+  // and there is no date either, since 982 mastered and 15 started is short of
+  // the 1000 the next milestone needs.
+  {
+    const T = Date.now()
+    const top = []
+    for (let r = 1000; top.length < 18; r--) if (!BARRED.has(r)) top.push(r)
+    const unmet = new Set(top.slice(0, 3))
+    const cards = []
+    for (let r = 1; r <= 1000; r++) {
+      if (unmet.has(r)) continue
+      if (top.includes(r))
+        cards.push({ slug: slugAt(r), box: 2, seen: 9, missed: 1, lapses: 0,
+                     direction: "production", due: T + 1 * DAY })
+      else
+        cards.push({ slug: slugAt(r), box: BARRED.has(r) ? 5 : 4, seen: 6, missed: 0, lapses: 0,
+                     direction: BARRED.has(r) ? "recognition" : "production", due: T + 30 * DAY })
+    }
+    const p = await open({ seed: { version: V, deck: FP, cards } })
+    await p.waitForSelector(".prompt")
+    await openSheet(p)
+    check("a list that would leave some out is not shown", await p.$(".remaining"), null)
+    check("nor a date the started cards cannot reach", await p.$(".next-milestone"), null)
     check("no page errors", p.errors, [])
     await p.close()
   }
