@@ -17,6 +17,8 @@ module Flashcards.Stats
   , firstMasteredIn
   , leechThreshold
   , leeches
+  , masteredAt
+  , masteredIn
   , masteryOf
   , nextDueIn
   , overview
@@ -223,35 +225,65 @@ nextDueIn now items progress = do
     tracked = Array.mapMaybe (\slug -> Progress.lookup slug progress) items
 
 -- | How long until the first item could be mastered: the soonest any tracked
--- | item reaches the top box, if each is answered right on the day it falls
--- | due and not before. `Nothing` when nothing is tracked, or something
--- | already is mastered, since then the question has been answered.
+-- | item reaches mastery, if each is answered right on the day it falls due
+-- | and not before. `Nothing` when nothing is tracked, or something already
+-- | is mastered, since then the question has been answered.
 -- |
--- | Played out with the scheduler's own `applyGrade` rather than summed from
--- | its intervals, so a change to the ladder cannot leave this one behind it.
--- | An overdue item is answered now, not in the past: the answer is never
--- | earlier than the moment this is asked.
+-- | The drills have no cards to graduate, so every item is held to the
+-- | recognition ladder: `RecognitionOnly`.
 -- |
 -- | Why it is worth saying: a ladder of 1, 3, 7, 21 and 60 days means a
 -- | learner who is doing everything right can see no item mastered for weeks,
 -- | and a screen that says nothing about that reads as nothing happening. See
 -- | #146.
 firstMasteredIn :: Instant -> Array Slug -> Progress -> Maybe Milliseconds
-firstMasteredIn now items progress = do
-  guard $ not $ Array.null tracked
-  guard $ Array.all (\cp -> masteryOf (Just cp) /= Mastered) tracked
-  soonest <- minimum $ map (\cp -> reach cp now) tracked
-  pure $ Milliseconds $ unwrap (unInstant soonest) - unwrap (unInstant now)
-  where
-    tracked = Array.mapMaybe (\slug -> Progress.lookup slug progress) items
+firstMasteredIn now items progress =
+  masteredIn now 1 (items <#> \slug -> { slug, allowed: RecognitionOnly }) progress
 
-    -- The moment of the answer that lands it in the top box. Each box climbed
-    -- is one answer, so this ends.
-    reach cp at
-      | cp.box >= maxBox = at
+-- | How long until `target` items are mastered, if every answer is right and
+-- | given the day it falls due. `Nothing` when that is already so, and when
+-- | there is no honest answer: fewer items are started than the target needs,
+-- | and how soon an unstarted one is met depends on the reader, which no
+-- | ladder can say.
+-- |
+-- | The target is a count of *mastered* items, so the cards still needed are
+-- | `target - mastered`, and the answer is the moment the that-many-th of the
+-- | started ones lands. See #151.
+masteredIn
+  :: forall r
+   . Instant
+  -> Int
+  -> Array { slug :: Slug, allowed :: Graduation | r }
+  -> Progress
+  -> Maybe Milliseconds
+masteredIn now target items progress = do
+  let needed = target - Array.length (Array.filter isMastered tracked)
+  guard $ needed > 0
+  landed <- Array.index (Array.sort $ Array.mapMaybe landing tracked) (needed - 1)
+  pure $ Milliseconds $ unwrap (unInstant landed) - unwrap (unInstant now)
+  where
+    tracked = Array.mapMaybe
+      (\item -> Progress.lookup item.slug progress <#> \cp -> { allowed: item.allowed, cp })
+      items
+
+    isMastered t = masteryOf (Just t.cp) == Mastered
+
+    landing t = if isMastered t then Nothing else Just $ masteredAt now t.allowed t.cp
+
+-- | The moment an item is mastered, played out with the scheduler's own
+-- | `applyGrade` rather than summed from its intervals, so a change to the
+-- | ladder — or to where a graduating card restarts — cannot leave this one
+-- | behind it. An overdue item is answered now, not in the past: the answer is
+-- | never earlier than the moment this is asked. Each answer climbs a box, so
+-- | this ends.
+masteredAt :: Instant -> Graduation -> CardProgress -> Instant
+masteredAt now allowed = go now
+  where
+    go at cp
+      | masteryOf (Just cp) == Mastered = at
       | otherwise =
           let answered = max at cp.due
-          in reach (applyGrade GotIt answered RecognitionOnly (Just cp)) answered
+          in go answered (applyGrade GotIt answered allowed (Just cp))
 
 -- | A wait in round human units — "4 hours", "1 day". Deliberately coarse:
 -- | the exact minute is noise when the answer is "come back this evening".
