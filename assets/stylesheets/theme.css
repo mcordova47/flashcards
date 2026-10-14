@@ -606,12 +606,14 @@ body {
 .swatch.learning { background: var(--learning); }
 .swatch.unseen { background: var(--unseen); border: 1px solid var(--track); }
 
-.leeches {
+.leeches,
+.remaining {
   display: flex;
   flex-direction: column;
 }
 
-.leech {
+.leech,
+.remain {
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
@@ -619,11 +621,13 @@ body {
   border-bottom: 1px solid var(--track);
 }
 
-.leech-word {
+.leech-word,
+.remain-word {
   font-weight: 600;
 }
 
-.leech-gloss {
+.leech-gloss,
+.remain-gloss {
   flex: 1;
   color: var(--muted);
   font-size: 0.875rem;
@@ -635,10 +639,18 @@ body {
   flex: 1;
 }
 
+.remain-when,
+.remain-slips,
 .leech-count {
   color: var(--faint);
   font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
+}
+
+/* Slips are optional, so the column holds its width and the dates line up. */
+.remain-slips {
+  min-width: 1.5rem;
+  text-align: right;
 }
 
 /* The conjugation grid. Seven states, three of them a ladder (#146). The two

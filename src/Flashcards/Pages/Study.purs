@@ -562,7 +562,7 @@ view state dispatch =
   , case state.modal of
       Nothing -> H.empty
       Just (Panel opened) -> Panel.view opened state dispatch
-      Just (Stats now) -> ProgressSheet.view state.language now state.progress dispatch
+      Just (Stats now) -> ProgressSheet.view state.language state.index now state.progress dispatch
       Just (Pairing sheet) -> Pairing.view sheet state dispatch
       Just (Note open) -> Notes.view open (dispatch <<< Notes)
   , case state.notice of

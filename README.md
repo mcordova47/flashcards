@@ -321,6 +321,27 @@ had already learned — right for scheduling, and fatal for a percentage, since
 it hides exactly the struggles that make you wrong. Accuracy reads as `—` until
 there is something to divide.
 
+Under the tiles the sheet says **when the next milestone could be reached**: *Next:
+all 1000 words mastered — earliest in 12 days, if every review goes right.* It is
+the best case and says so, and it is only said when it is knowable. The milestone
+is the next one that is a count of mastered words (`Milestone.upcoming`: the
+first word, then each hundred, then the end of the deck, the same crossings
+`Milestone.reached` announces). Its date is the that-many-th earliest of the
+cards *already started*, each played out by the scheduler's own `applyGrade`
+until `masteryOf` says mastered (`Stats.masteredIn`), so it follows the ladder
+and the graduation rule rather than a formula that could drift from them, and it
+needs each card's `MayGraduate` or `RecognitionOnly`, which is
+`Deck.isCanonical`. If fewer cards are started than the milestone needs there is
+no date, because when an unmet word is met depends on the reader, and the line is
+absent rather than a guess. Meeting every word is not forecast for the same
+reason (#151).
+
+When at most one session's worth are left, and every one of them is started, the
+sheet also lists them under **Still to master**, soonest first with how often
+each has slipped (`Stats.leftToMaster`). Past the last hundred there is no
+milestone to say, so this is what says *which*. The drills' line about the first
+item is the same walk with a target of one.
+
 **Keeps slipping** uses the opposite measure, and on purpose. Struggling with a
 brand-new word is just learning; forgetting one you had already earned is a
 leech. A word missed eight times on the way in but never since does not appear.

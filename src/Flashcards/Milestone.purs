@@ -10,9 +10,11 @@ module Flashcards.Milestone
   ( Fanfare(..)
   , Milestone(..)
   , Standing
+  , aim
   , describe
   , fanfare
   , reached
+  , upcoming
   )
   where
 
@@ -106,3 +108,36 @@ describe = case _ of
   Hundred n -> "You’ve now mastered " <> show n <> " words!"
   FirstMastered -> "Your first word mastered!"
   Recovered -> "Nothing is slipping any more!"
+
+-- | The next milestone that more mastered words would reach, and how many
+-- | mastered words that takes in all. The ones a forecast can speak of:
+-- | those that are a count of mastered words, which the cards already started
+-- | can bring about. Meeting every word depends on how fast the reader meets
+-- | them, and `Recovered` on what they get wrong, so neither is here.
+-- |
+-- | The hundreds fall out of `reached`'s own rule, and so does the end of
+-- | them: with 983 mastered of 1,000 the next hundred *is* the deck. See #151.
+upcoming
+  :: forall r
+   . { mastered :: Int, total :: Int | r }
+  -> Maybe { milestone :: Milestone, needs :: Int }
+upcoming s =
+  -- A `let` rather than a `where`: PureScript does not bring `where` bindings
+  -- into scope inside guards.
+  let
+    nextHundred = (s.mastered / 100 + 1) * 100
+  in
+    if s.total <= 0 || s.mastered >= s.total then Nothing
+    else if s.mastered == 0 then Just { milestone: FirstMastered, needs: 1 }
+    else if nextHundred >= s.total then Just { milestone: Everything s.total, needs: s.total }
+    else Just { milestone: Hundred nextHundred, needs: nextHundred }
+
+-- | What it is, as a thing still to come: the other half of `describe`, which
+-- | is for once it has happened.
+aim :: Milestone -> String
+aim = case _ of
+  Everything n -> "all " <> show n <> " words mastered"
+  EveryWordSeen n -> "all " <> show n <> " words met"
+  Hundred n -> show n <> " words mastered"
+  FirstMastered -> "your first word mastered"
+  Recovered -> "nothing slipping"
