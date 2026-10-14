@@ -170,7 +170,10 @@ With a short table, and then **one** verdict.
   green. Queue it yourself: `gh pr merge <n> --rebase --auto`, and say so.
 - **Fix, then merge.** Fix items, no re-review needed. Do **not** queue
   auto-merge: it merges the moment checks pass, which would be before the
-  fixes. The author makes them, waits for green, and queues it.
+  fixes. The author pushes them and then queues it: pushing resets the
+  checks, so the merge waits for the new run. Queued *before* the push, it
+  would land the branch as it stands, so the order is the instruction, not
+  waiting.
 - **Fix, then re-review.** The author makes the fixes and says so. Nothing is
   queued until you have looked again.
 - **Needs you.** The list, first. Nothing is queued while it is open.
