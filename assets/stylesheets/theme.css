@@ -626,6 +626,11 @@ body {
   font-weight: 600;
 }
 
+/* No gloss on this list, so the word takes its room and the date and slips sit at the edge. */
+.remain-word {
+  flex: 1;
+}
+
 .leech-gloss,
 .remain-gloss {
   flex: 1;
@@ -647,9 +652,19 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* The list is as long as a session, so it starts folded; the summary is the
+   heading, and the browser's own marker says it opens. */
+.remaining-fold > summary {
+  cursor: pointer;
+}
+
+.remaining-fold .sheet-note {
+  margin-top: 0;
+}
+
 /* Slips are optional, so the column holds its width and the dates line up. */
 .remain-slips {
-  min-width: 1.5rem;
+  min-width: 4.5rem;
   text-align: right;
 }
 

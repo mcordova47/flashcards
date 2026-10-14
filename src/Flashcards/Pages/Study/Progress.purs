@@ -54,18 +54,6 @@ view language index now progress dispatch =
             "Next: " <> Milestone.aim n.milestone <> " — earliest " <> Stats.describeEarliest n.wait
               <> ", if every review goes right."
         Nothing -> H.empty
-    , if not tailListed then H.empty else
-        H.fragment
-        [ H.h3 "sheet-heading" "Still to master"
-        , H.p "sheet-note" "The soonest each could be, if every review goes right."
-        , H.div "remaining" $ left <#> \l ->
-            H.div_ "remain" { key: slugToString l.item.slug }
-            [ H.span "remain-word" l.item.word
-            , H.span "remain-gloss" l.item.english
-            , H.span "remain-when" $ Stats.describeEarliest l.wait
-            , H.span "remain-slips" $ if l.lapses > 0 then show l.lapses <> "×" else ""
-            ]
-        ]
     , H.h3 "sheet-heading" $ "By " <> language.ordering
     , H.div "bands" $ Stats.bands Stats.bandSize language.deck progress <#> \band ->
         H.div_ "band" { key: show band.from }
@@ -90,6 +78,17 @@ view language index now progress dispatch =
             , H.span "leech-count" $ show leech.lapses
             ]
         , H.button_ "grade got-it drill" { onClick: dispatch <| DrillLeeches } drillLabel
+        ]
+    , if not tailListed then H.empty else
+        H.details "remaining-fold"
+        [ H.summary "sheet-heading" $ "Still to master · " <> show (Array.length left)
+        , H.p "sheet-note" "The soonest each could be, if every review goes right."
+        , H.div "remaining" $ left <#> \l ->
+            H.div_ "remain" { key: slugToString l.item.slug }
+            [ H.span "remain-word" l.item.word
+            , H.span "remain-when" $ Stats.describeEarliest l.wait
+            , H.span "remain-slips" $ if l.lapses > 0 then "slipped " <> show l.lapses <> "×" else ""
+            ]
         ]
     ]
   ]
