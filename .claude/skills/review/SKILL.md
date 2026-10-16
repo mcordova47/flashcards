@@ -127,6 +127,14 @@ next*).
 so in a line, with the reason, so nobody raises it again. *I checked this and
 it is fine* is this disposition and is worth saying.
 
+### Check what the pull request does to its issue
+
+`Closes` where it finishes the work. A pull request that says `Refs` for an issue
+it mostly finishes is a **finding**, and you decide it: file the remainder as its
+own issue, and have the author say `Closes`. `Refs` is right only for an umbrella
+with open sub-issues, and even then the boxes it met should be ticked. An issue
+left open with none of them ticked cannot be read without repeating the review.
+
 ### Which one
 
 A finding about what the change touches or claims, with a clear fix, is a fix
