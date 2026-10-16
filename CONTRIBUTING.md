@@ -282,3 +282,10 @@ auto-merge when there is nothing left for anyone to do.
 to leave things. Each item is done, filed as an issue by the author with its
 number in the description, or dropped with a reason, and the author tells the
 maintainer which issues it filed.
+
+**A pull request closes what it finishes.** One that finishes only part of an
+issue still says `Closes`, and files what is left as an issue of its own, so that
+no issue holds both what is done and what is not. `Refs` is for an umbrella with
+open sub-issues. An issue that stays open for any other reason has the boxes the
+pull request met ticked, so that the next reader does not have to repeat the audit
+to learn what remains.

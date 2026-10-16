@@ -93,6 +93,14 @@ Open a pull request. In the description:
   nothing happens after a merge unless someone coordinates it
 - **for each claim, how you checked it**
 
+**Say how the pull request stands to its issue.** If it finishes what the issue
+asks, the description says `Closes #n`. If it finishes only part, **it still
+closes the issue, and what is left becomes its own issue**, linked from the
+description, so that no issue holds both what is done and what is not. `Refs` is
+for an **umbrella** that still has open sub-issues. If an issue must stay open for
+some other reason, tick the boxes the pull request met and strike or reword the
+rest, so that nobody has to repeat the audit to learn what is left.
+
 Tell the maintainer afterwards which issues you filed, with numbers and titles.
 An issue you file gets **exactly one** `priority:` label, or `parked`, and
 `needs-you` if its next step is the maintainer's (`CONTRIBUTING.md`, *What to do
