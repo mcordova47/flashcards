@@ -12,6 +12,7 @@ module Flashcards.Verbs.Curriculum
   , grid
   , labelled
   , session
+  , shuffled
   )
   where
 
@@ -131,34 +132,30 @@ labelled = items <#> \pool -> { slug: pool.slug, label: (NonEmpty.head pool.exer
 -- | it asks the same thing, and so that a sync that brings something in
 -- | reshuffles only because the session itself has changed.
 session :: Progress -> Instant -> Array Slug
-session progress now =
-  Scheduler.spread (family progress) $ shuffled $
-    Scheduler.buildSession (map _.slug items) progress now Scheduler.sessionSize
+session progress now = Scheduler.spread (family progress) $ shuffled progress now
+
+-- | The scheduler's session with its reviews shuffled and everything else
+-- | where it was: `session` before it is spread. Apart so that "where it was"
+-- | can be asked of it, since the spread moves things.
+shuffled :: Progress -> Instant -> Array Slug
+shuffled progress now = fillIn queue (Scheduler.shuffle slugToString seed (Array.filter movable queue))
   where
-    seed queue =
+    queue = Scheduler.buildSession (map _.slug items) progress now Scheduler.sessionSize
+
+    seed =
       show (floor (unwrap (unInstant now) / 86400000.0)) <> "|"
         <> String.joinWith "," (Array.sort $ map slugToString queue)
 
-    shuffled queue =
-      let
-        order = Scheduler.shuffle slugToString (seed queue) (Array.filter movable queue)
-      in
-        fillIn queue order
-
-    movable slug = not (paraphrase slug) && isJust (Progress.lookup slug progress)
-
-    paraphrase slug = String.take 11 (slugToString slug) == "paraphrase."
+    movable slug = not (Paraphrase.isParaphrase slug) && isJust (Progress.lookup slug progress)
 
     -- The shuffled slugs go into the places the movable ones left.
-    fillIn queue order = go queue order
-      where
-        go slots pool = case Array.uncons slots of
-          Nothing -> []
-          Just { head, tail }
-            | not (movable head) -> Array.cons head (go tail pool)
-            | otherwise -> case Array.uncons pool of
-                Just { head: next, tail: rest } -> Array.cons next (go tail rest)
-                Nothing -> slots
+    fillIn slots pool = case Array.uncons slots of
+      Nothing -> []
+      Just { head, tail }
+        | not (movable head) -> Array.cons head (fillIn tail pool)
+        | otherwise -> case Array.uncons pool of
+            Just { head: next, tail: rest } -> Array.cons next (fillIn tail rest)
+            Nothing -> slots
 
 -- | The conjugation grid for this progress: every verb of the table, the most
 -- | common first, for the reason the shifts are met that way. See
