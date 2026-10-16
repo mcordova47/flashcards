@@ -13,6 +13,7 @@ module Flashcards.Scheduler
   , requeue
   , requeueGap
   , sessionSize
+  , shuffle
   , spread
   , struggling
   )
@@ -24,9 +25,13 @@ import Control.Alt ((<|>))
 
 import Data.Array as Array
 import Data.DateTime.Instant (Instant, instant, unInstant)
-import Data.Foldable (maximum)
+import Data.Enum (fromEnum)
+import Data.Foldable (foldl, maximum)
+import Data.Int (toNumber)
 import Data.Maybe (Maybe(..), fromMaybe, isJust, isNothing, maybe)
 import Data.Newtype (unwrap)
+import Data.Number (floor)
+import Data.String as String
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Types.Card (Slug)
 import Flashcards.Types.Direction (Direction(..))
@@ -143,6 +148,34 @@ buildSession items progress now size =
         # Array.sortWith _.due
 
     newCards = Array.filter (isNothing <<< _.state) annotated
+
+-- | The same items in an order that looks random and is not: each is ranked by
+-- | a hash of the seed and its key, so the result is a function of its
+-- | arguments. A reload that rebuilds the session with the same seed asks the
+-- | same thing, which is what `spread` promised and a random shuffle would
+-- | break. See #156.
+-- |
+-- | Takes a key rather than a slug so that the caller says what an item is.
+-- | Ties keep their order, since the sort is stable.
+shuffle :: forall a. (a -> String) -> String -> Array a -> Array a
+shuffle key seed = Array.sortWith \item -> hash (seed <> "|" <> key item)
+
+-- | A string's position among 2^31 - 1, spread well enough that two keys that
+-- | differ only in their last character are not neighbours: the hash is run
+-- | through a Park-Miller generator, because a bare polynomial hash would
+-- | leave `person.morir.present.1s` beside `person.morir.present.2s`, which is
+-- | the clustering this exists to undo. `Number` because the product reaches
+-- | 10^14, past what `Int` holds.
+hash :: String -> Number
+hash s = scramble $ scramble $ scramble $ String.toCodePointArray s # foldl step 7.0
+  where
+    modulus = 2147483647.0
+
+    step h c = remainder (h * 31.0 + toNumber (fromEnum c))
+
+    scramble x = remainder (x * 48271.0)
+
+    remainder x = x - floor (x / modulus) * modulus
 
 -- | The same items, reordered so that no two of one family sit side by side
 -- | wherever anything else could go between them.

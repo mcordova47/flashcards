@@ -281,6 +281,25 @@ spec = do
       Scheduler.requeue (slugAt 99) 6 (slugAt <$> [ 1, 2, 3, 4, 5, 6, 7, 8 ])
         `shouldEqual` (slugAt <$> [ 1, 2, 3, 4, 5, 6, 7, 8, 99 ])
 
+  describe "shuffle" do
+    let
+      keys = [ "a.1", "a.2", "a.3", "a.4", "b.1", "b.2", "b.3", "b.4" ]
+      shuffle = Scheduler.shuffle identity
+
+    it "keeps every item, once" do
+      Array.sort (shuffle "seed" keys) `shouldEqual` keys
+
+    it "is a function of the seed and the items, so a reload asks the same thing" do
+      shuffle "seed" keys `shouldEqual` shuffle "seed" keys
+
+    it "is another order under another seed" do
+      (shuffle "one" keys /= shuffle "two" keys) `shouldEqual` true
+
+    it "does not leave keys that differ in their last character beside each other" do
+      -- A bare polynomial hash would sort these by the last character.
+      (shuffle "seed" keys /= Array.sortWith (\k -> String.drop 2 k) keys) `shouldEqual` true
+      (shuffle "seed" keys /= keys) `shouldEqual` true
+
   -- Families are the first letter, so `t1` and `t2` are two of one verb.
   describe "spread" do
     let
