@@ -13,6 +13,8 @@ module Flashcards.Verbs.Paraphrase
   , Trap(..)
   , exercise
   , exercises
+  , isParaphrase
+  , prefix
   , rubric
   )
   where
@@ -20,9 +22,19 @@ module Flashcards.Verbs.Paraphrase
 import Prelude
 
 import Data.Maybe (Maybe(..))
+import Data.String as String
 import Flashcards.Exercise (Answer(..), Exercise, Rubric)
 import Flashcards.Types.Card (Slug(..))
 import Flashcards.Verbs.Table (Person(..), Tense(..))
+
+-- | What every paraphrase item's slug starts with, named once so that what
+-- | builds the slug and what recognises it cannot drift apart.
+prefix :: String
+prefix = "paraphrase."
+
+-- | Whether a slug is a paraphrase item's.
+isParaphrase :: Slug -> Boolean
+isParaphrase (Slug s) = String.take (String.length prefix) s == prefix
 
 -- | Which of the three targets is the live decision, and so the only line of
 -- | the rubric that is phrased as a choice. A prompt is written *for* one
@@ -82,7 +94,7 @@ rubric p =
 -- | different skills and keep different boxes.
 exercise :: Prompt -> Exercise
 exercise p =
-  { slug: Slug $ "paraphrase." <> p.id
+  { slug: Slug $ prefix <> p.id
   -- The prompt, not the id: `door-open` is for the file, and the English is
   -- what the reader will recognise having been asked.
   , label: p.asked

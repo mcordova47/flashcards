@@ -23,8 +23,9 @@ import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
-import Flashcards.Verbs.Curriculum (byFrequency, family, items, session)
+import Flashcards.Verbs.Curriculum (byFrequency, family, items, session, shuffled)
 import Flashcards.Verbs.Paraphrase (Trap(..))
+import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.Table (formOf)
 import Partial.Unsafe (unsafePartial)
 import Test.Spec (Spec, describe, it)
@@ -152,6 +153,22 @@ shuffling = describe "a session built from items that fall due together" do
   it "asks the same thing on a reload, and something else on another day" do
     session person now `shouldEqual` session person now
     (session person now /= session person (at 102.0)) `shouldEqual` true
+
+  it "leaves the items not yet met, and the paraphrase prompts, where the due order put them" do
+    let
+      seen = Array.take 12 $ Array.filter (starting "person.") $ map _.slug items
+      unseen = Array.take 4 $ Array.filter (starting "querer.") $ map _.slug items
+      paraphrases = Array.take 3 $ Array.filter Paraphrase.isParaphrase $ map _.slug items
+      progress = Array.foldl (\p (Tuple i slug) -> Progress.insert slug (card i) p) Progress.empty $
+        Array.mapWithIndex Tuple (seen <> paraphrases)
+      card i = { box: 1, due: at (100.0 + toNumber i / 1440.0), seen: 1, lapses: 0, missed: 0, direction: Recognition }
+      before = Scheduler.buildSession (map _.slug items) progress now Scheduler.sessionSize
+      kept queue = Array.mapWithIndex Tuple queue # Array.filter \(Tuple _ slug) -> Paraphrase.isParaphrase slug || Array.elem slug unseen
+      after = shuffled progress now
+    -- Only if the test has something to keep still.
+    (Array.length (kept before) > 0) `shouldEqual` true
+    -- Before the spread, which moves things, and which is not what is asked.
+    kept after `shouldEqual` kept before
 
   it "still asks the same items as the due order does" do
     Array.sort (session person now) `shouldEqual` Array.sort (unshuffled person now)
