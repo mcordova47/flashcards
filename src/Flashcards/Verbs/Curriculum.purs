@@ -19,8 +19,10 @@ import Prelude
 
 import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
-import Data.DateTime.Instant (Instant)
-import Data.Maybe (Maybe, fromMaybe)
+import Data.DateTime.Instant (Instant, unInstant)
+import Data.Maybe (Maybe(..), fromMaybe, isJust)
+import Data.Newtype (unwrap)
+import Data.Number (floor)
 import Data.String as String
 import Flashcards.Data.Coverage.Spanish (coverage)
 import Flashcards.Data.Deck.Spanish (deck)
@@ -31,7 +33,7 @@ import Flashcards.Data.Verbs.Spanish (deviations, table)
 import Flashcards.Exercise (Exercise, Pool, pick)
 import Flashcards.Exercise as Exercise
 import Flashcards.Scheduler as Scheduler
-import Flashcards.Types.Card (Slug, rankToInt)
+import Flashcards.Types.Card (Slug, rankToInt, slugToString)
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Correction as Correction
@@ -108,12 +110,55 @@ rank verb =
 labelled :: Array { slug :: Slug, label :: String }
 labelled = items <#> \pool -> { slug: pool.slug, label: (NonEmpty.head pool.exercises).label }
 
--- | The next session: what the scheduler says is due and new, then spread so
--- | that no two of one family are asked back to back. See #51.
+-- | The next session: what the scheduler says is due and new, shuffled and
+-- | then spread so that no two of one family are asked back to back. See #51
+-- | and #156.
+-- |
+-- | The spread keeps the order it is given as nearly as it can, and a due
+-- | order is lumpy: items first met together fall due together, so the twenty
+-- | most overdue are often two verbs' worth of one kind, and spreading that
+-- | alternates between them. Shuffling first is what gives it something to
+-- | keep that is not a block.
+-- |
+-- | Two exceptions, left where the scheduler put them, in the places the rest
+-- | are shuffled around. Items not yet met: their order is the curriculum's,
+-- | most common verb first, and what is introduced next is #65's to change and
+-- | not this. The paraphrase prompts: the order their answers are met in is a
+-- | guarantee (#63, #109) and a shuffle would be a second thing that can break
+-- | it.
+-- |
+-- | Seeded by the day and by what is in the session, so a reload that rebuilds
+-- | it asks the same thing, and so that a sync that brings something in
+-- | reshuffles only because the session itself has changed.
 session :: Progress -> Instant -> Array Slug
 session progress now =
-  Scheduler.spread (family progress) $
+  Scheduler.spread (family progress) $ shuffled $
     Scheduler.buildSession (map _.slug items) progress now Scheduler.sessionSize
+  where
+    seed queue =
+      show (floor (unwrap (unInstant now) / 86400000.0)) <> "|"
+        <> String.joinWith "," (Array.sort $ map slugToString queue)
+
+    shuffled queue =
+      let
+        order = Scheduler.shuffle slugToString (seed queue) (Array.filter movable queue)
+      in
+        fillIn queue order
+
+    movable slug = not (paraphrase slug) && isJust (Progress.lookup slug progress)
+
+    paraphrase slug = String.take 11 (slugToString slug) == "paraphrase."
+
+    -- The shuffled slugs go into the places the movable ones left.
+    fillIn queue order = go queue order
+      where
+        go slots pool = case Array.uncons slots of
+          Nothing -> []
+          Just { head, tail }
+            | not (movable head) -> Array.cons head (go tail pool)
+            | otherwise -> case Array.uncons pool of
+                Just { head: next, tail: rest } -> Array.cons next (go tail rest)
+                Nothing -> slots
 
 -- | The conjugation grid for this progress: every verb of the table, the most
 -- | common first, for the reason the shifts are met that way. See

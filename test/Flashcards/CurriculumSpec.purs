@@ -9,6 +9,7 @@ import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.DateTime.Instant (Instant, instant)
 import Data.Foldable (foldl, maximum)
+import Data.Int (toNumber)
 import Data.Maybe (Maybe(..), fromJust, fromMaybe, isJust)
 import Data.String as String
 import Data.Time.Duration (Milliseconds(..))
@@ -104,8 +105,59 @@ day d = go []
 spec :: Spec Unit
 spec = do
   sessions
+  shuffling
   order
   cells
+
+-- | Positions where a session asks the verb it asked two before: with only a
+-- | verb or two of the same kind due, `spread` keeps them apart by taking the
+-- | earliest item that differs, which is `A B A B A B`. See #156.
+twoBack :: Progress -> Array Slug -> Int
+twoBack progress queue =
+  Array.length $ Array.filter (\(Tuple a b) -> family progress a == family progress b) $
+    Array.zip queue (Array.drop 2 queue)
+
+-- | What `session` was before the shuffle: the due order, spread.
+unshuffled :: Progress -> Instant -> Array Slug
+unshuffled progress now =
+  Scheduler.spread (family progress) $
+    Scheduler.buildSession (map _.slug items) progress now Scheduler.sessionSize
+
+-- | Everything of one kind due on the same day, a minute apart in the order
+-- | the curriculum met it: what a first week's items do, and why the twenty
+-- | most overdue are one or two verbs' worth.
+dueTogether :: (Slug -> Boolean) -> Progress
+dueTogether kind =
+  Array.foldl (\p (Tuple i slug) -> Progress.insert slug (card i) p) Progress.empty $
+    Array.mapWithIndex Tuple $ Array.filter kind $ map _.slug items
+  where
+    card i = { box: 1, due: at (100.0 + toNumber i / 1440.0), seen: 1, lapses: 0, missed: 0, direction: Recognition }
+
+shuffling :: Spec Unit
+shuffling = describe "a session built from items that fall due together" do
+  let
+    now = at 101.0
+    starting prefix = \slug -> String.take (String.length prefix) (slugToString slug) == prefix
+    person = dueTogether (starting "person.")
+    tense = dueTogether (\slug -> not (starting "person." slug || starting "paraphrase." slug || starting "porpara." slug || starting "error." slug))
+
+  it "alternates between two verbs when taken in due order, the complaint of #156" do
+    (twoBack person (unshuffled person now) > 8) `shouldEqual` true
+    (twoBack tense (unshuffled tense now) > 8) `shouldEqual` true
+
+  it "repeats a verb from two back far less once shuffled" do
+    (twoBack person (session person now) <= 6) `shouldEqual` true
+    (twoBack tense (session tense now) <= 6) `shouldEqual` true
+
+  it "asks the same thing on a reload, and something else on another day" do
+    session person now `shouldEqual` session person now
+    (session person now /= session person (at 102.0)) `shouldEqual` true
+
+  it "still asks the same items as the due order does" do
+    Array.sort (session person now) `shouldEqual` Array.sort (unshuffled person now)
+
+  it "leaves no two of one verb together that it need not" do
+    Array.length (together person (session person now)) `shouldEqual` unavoidable person (session person now)
 
 sessions :: Spec Unit
 sessions = describe "a verb drill session" do
