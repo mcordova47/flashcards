@@ -7,6 +7,9 @@ module Flashcards.Scheduler
   , buildSession
   , buildSessionBy
   , firstSightingBox
+  , fuzzFraction
+  , fuzzFrom
+  , fuzzed
   , graduationBox
   , intervalFor
   , maxBox
@@ -32,10 +35,10 @@ import Data.Foldable (foldl, maximum)
 import Data.Int (toNumber)
 import Data.Maybe (Maybe(..), fromMaybe, isJust, isNothing, maybe)
 import Data.Newtype (unwrap)
-import Data.Number (floor)
+import Data.Number (floor, round)
 import Data.String as String
 import Data.Time.Duration (Milliseconds(..))
-import Flashcards.Types.Card (Slug)
+import Flashcards.Types.Card (Slug(..))
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
@@ -129,6 +132,40 @@ intervalFor box = Milliseconds $ day * case box of
   where
     day = 86400000.0
 
+-- | How far an interval of `fuzzFrom` or more is moved either way, as a
+-- | fraction of it. See `fuzzed`.
+fuzzFraction :: Number
+fuzzFraction = 0.15
+
+-- | The shortest interval that is fuzzed. Boxes 1 and 3 days stay exact: a day
+-- | of slack on a one-day interval is a different schedule, not a spread of the
+-- | same one, and a miss lands in them so often that the clumps the fuzz is for
+-- | are not made there. A week and up is where a session's worth of answers
+-- | arrives together and stays together.
+fuzzFrom :: Milliseconds
+fuzzFrom = Milliseconds $ 7.0 * 86400000.0
+
+-- | An interval moved by up to `fuzzFraction` of itself in either direction,
+-- | so that items answered together are not due together. See #159.
+-- |
+-- | Without it every item first answered in one session falls due on one day,
+-- | and the clump never disperses, since each member climbs the ladder
+-- | together. The offset is a function of the slug and the answer's `seen`, not
+-- | a random number: `applyGrade` is pure, and a progress merge arbitrates by
+-- | `seen`, so two devices that hold the same history must compute the same
+-- | date for it. The same item's next answer has a different `seen` and so a
+-- | different offset.
+-- |
+-- | Both directions, so the average interval is the ladder's. Whole
+-- | milliseconds, so a stored date is not a fraction.
+fuzzed :: Slug -> Int -> Milliseconds -> Milliseconds
+fuzzed (Slug s) seen (Milliseconds ms)
+  | Milliseconds ms < fuzzFrom = Milliseconds ms
+  | otherwise = Milliseconds $ round $ ms * (1.0 + fuzzFraction * (2.0 * unit - 1.0))
+  where
+    -- Where the hash falls in [0, 1).
+    unit = hash ("due|" <> s <> "|" <> show seen) / modulus
+
 -- | Due reviews first, most overdue first; then brand-new items in the order
 -- | they were given. The list is never shuffled — its order *is* the
 -- | curriculum, so for the flashcards the next new word is always the most
@@ -193,6 +230,9 @@ roundRobin lists = case Array.filter (not <<< Array.null) lists of
 shuffle :: forall a. (a -> String) -> String -> Array a -> Array a
 shuffle key seed = Array.sortWith \item -> hash (seed <> "|" <> key item)
 
+modulus :: Number
+modulus = 2147483647.0
+
 -- | A string's position among 2^31 - 1, spread well enough that two keys that
 -- | differ only in their last character are not neighbours: the hash is run
 -- | through a Park-Miller generator, because a bare polynomial hash would
@@ -202,8 +242,6 @@ shuffle key seed = Array.sortWith \item -> hash (seed <> "|" <> key item)
 hash :: String -> Number
 hash s = scramble $ scramble $ scramble $ String.toCodePointArray s # foldl step 7.0
   where
-    modulus = 2147483647.0
-
     step h c = remainder (h * 31.0 + toNumber (fromEnum c))
 
     scramble x = remainder (x * 48271.0)
@@ -268,10 +306,10 @@ spread family = go [] Nothing
 -- | except on a word's first ever sighting, which fast-tracks to
 -- | `firstSightingBox`.
 applyGrade :: Slug -> Grade -> Instant -> Graduation -> Maybe CardProgress -> CardProgress
-applyGrade _slug grade now allowed previous =
+applyGrade slug grade now allowed previous =
   { box
   , direction
-  , due: addInterval now $ intervalFor box
+  , due: addInterval now $ fuzzed slug (prev.seen + 1) $ intervalFor box
   , seen: prev.seen + 1
   , lapses
   , missed
