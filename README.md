@@ -1074,6 +1074,13 @@ subject". The half that can be checked is: `sync-sentences` and
 `check-sentences` refuse a marked row with anything but `no` before its verb,
 since `ella [tiene] mucho trabajo` would ask for `ella tenemos`.
 
+The same two tools refuse a marked row with a word that is only true of the
+original subject (#119): a possessive (`mi`, `tu`, `su`, `nuestro` and their
+plurals and feminines) or `juntos`/`juntas`. *[vuelves] a tu trabajo* shifted to
+`yo` is someone else's workplace, and *vales más juntos* needs a group. Reword the
+row (`al trabajo`, `a casa`) rather than unmark it, since the pools are small.
+The unmarked rows are exempt: there the possessive is a clue to the person.
+
 **It takes three persons per verb and tense, not two.** A sentence cannot be
 asked into the person it is already in, so two sentences leave the persons
 they are in with one sentence each. `check-sentences` counts the person-shift

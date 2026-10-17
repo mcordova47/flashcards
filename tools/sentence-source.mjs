@@ -29,6 +29,9 @@ const HEADER = ["Sentence", "Infinitive", "Tense", "Person", "Person shift", "No
 // stop would have to be moved onto whichever form replaces the verb, and the
 // sentence is scaffolding - it is not worth the machinery. See #16.
 const WORDS = /^[a-zñáéíóúü]+( [a-zñáéíóúü]+)*$/
+// Possessives, and the words that need a plural subject. Not `todos`, which is
+// usually the recipient (`[damos] las gracias a todos`) and shifts fine.
+const PERSON_BOUND = /^(mi|mis|tu|tus|su|sus|nuestr[oa]s?|vuestr[oa]s?|juntos|juntas)$/
 const SHAPE = /^((?:[^\[\]]+ )?)\[([^\[\]]+)\]((?: [^\[\]]+)?)$/
 
 // Not the subjunctive, which is a mood and not a tense. See
@@ -80,6 +83,16 @@ export const loadSentences = table => {
     // marked would ask for `ella tenemos mucho trabajo`. See #25.
     else if (personShift === "yes" && shape && !["", "no "].includes(shape[1])) {
       errors.push(`line ${line}: "${shape[1].trim()}" before [${shape[2]}] would stay put when the person moves; a person shift needs the verb alone to carry the person`)
+    }
+    // The other half: a word that is true only of the original subject. A
+    // possessive of the subject's own person (`[vuelves] a tu trabajo` into
+    // `yo` is someone else's workplace) or a word that needs a group
+    // (`[valemos] más juntos` into `tú`). Only marked rows: in the unmarked
+    // ones the possessive is a clue to the person, and helps. See #119, #155.
+    if (personShift === "yes") {
+      for (const word of plain.split(" ").filter(w => PERSON_BOUND.test(w))) {
+        errors.push(`line ${line}: "${word}" is true only of the original subject, so it goes stale when the person moves; reword the row, or leave Person shift empty`)
+      }
     }
     if (seen.has(plain)) errors.push(`line ${line}: ${JSON.stringify(plain)} is already in the bank`)
     seen.add(plain)
