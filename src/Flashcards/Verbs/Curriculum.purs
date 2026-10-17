@@ -62,7 +62,8 @@ import Flashcards.Verbs.Shift as Shift
 -- | no verb to rank, a correction's item is a kind of mistake rather than a
 -- | verb, and the paraphrase corpus runs in blocks by the trap it sets —
 -- | ser / estar, then tense, then saber / conocer — which ranking by verb
--- | would scatter.
+-- | would scatter. The paraphrase is then put in the order that hides its
+-- | traps, by `Paraphrase.arranged`, and not left as its file has it.
 -- | Whether those orders are right is still open.
 -- |
 -- | This is the order new items are met in, not the order they are asked:
@@ -72,7 +73,7 @@ items = Exercise.pools $
   produced
     <> PorPara.exercises PorPara.sentences
     <> corrected
-    <> Paraphrase.exercises prompts
+    <> Paraphrase.exercises (Paraphrase.arranged prompts)
 
 -- | The exercises that have you produce a form: the two shifts, in the order
 -- | they are met. Apart from `corrected` so that `Reach` can ask which cells
@@ -122,24 +123,32 @@ labelled = items <#> \pool -> { slug: pool.slug, label: (NonEmpty.head pool.exer
 -- | alternates between them. Shuffling first is what gives it something to
 -- | keep that is not a block.
 -- |
--- | Two exceptions, left where the scheduler put them, in the places the rest
--- | are shuffled around. Items not yet met: their order is the curriculum's,
--- | most common verb first, and what is introduced next is #65's to change and
--- | not this. The paraphrase prompts: the order their answers are met in is a
--- | guarantee (#63, #109) and a shuffle would be a second thing that can break
--- | it.
+-- | Two exceptions to the shuffle, left where the scheduler put them, in the
+-- | places the rest are shuffled around. Items not yet met: their order is the
+-- | curriculum's, most common verb first, and what is introduced next is #65's
+-- | to change and not this. The paraphrase prompts: the order their answers
+-- | are met in is a guarantee (#63, #109), made by `Paraphrase.arranged`, and
+-- | a shuffle would be a second thing that can break it.
+-- |
+-- | The spread does move them, to keep a verb's prompts apart from its other
+-- | drills, so afterwards they are put back in the places they landed in, in
+-- | the order they were given. The spread is told nothing of traps, and
+-- | what it decides about the rest is untouched by it.
 -- |
 -- | Seeded by the day and by what is in the session, so a reload that rebuilds
 -- | it asks the same thing, and so that a sync that brings something in
 -- | reshuffles only because the session itself has changed.
 session :: Progress -> Instant -> Array Slug
-session progress now = Scheduler.spread (family progress) $ shuffled progress now
+session progress now =
+  fillIn Paraphrase.isParaphrase (Scheduler.spread (family progress) queue) (Array.filter Paraphrase.isParaphrase queue)
+  where
+    queue = shuffled progress now
 
 -- | The scheduler's session with its reviews shuffled and everything else
 -- | where it was: `session` before it is spread. Apart so that "where it was"
 -- | can be asked of it, since the spread moves things.
 shuffled :: Progress -> Instant -> Array Slug
-shuffled progress now = fillIn queue (Scheduler.shuffle slugToString seed (Array.filter movable queue))
+shuffled progress now = fillIn movable queue (Scheduler.shuffle slugToString seed (Array.filter movable queue))
   where
     queue = Scheduler.buildSessionBy kind (map _.slug items) progress now Scheduler.sessionSize
 
@@ -149,14 +158,16 @@ shuffled progress now = fillIn queue (Scheduler.shuffle slugToString seed (Array
 
     movable slug = not (Paraphrase.isParaphrase slug) && isJust (Progress.lookup slug progress)
 
-    -- The shuffled slugs go into the places the movable ones left.
-    fillIn slots pool = case Array.uncons slots of
-      Nothing -> []
-      Just { head, tail }
-        | not (movable head) -> Array.cons head (fillIn tail pool)
-        | otherwise -> case Array.uncons pool of
-            Just { head: next, tail: rest } -> Array.cons next (fillIn tail rest)
-            Nothing -> slots
+-- | `pool` put into the places of `slots` that `movable` picks out, in order,
+-- | and every other slot left as it is.
+fillIn :: (Slug -> Boolean) -> Array Slug -> Array Slug -> Array Slug
+fillIn movable slots pool = case Array.uncons slots of
+  Nothing -> []
+  Just { head, tail }
+    | not (movable head) -> Array.cons head (fillIn movable tail pool)
+    | otherwise -> case Array.uncons pool of
+        Just { head: next, tail: rest } -> Array.cons next (fillIn movable tail rest)
+        Nothing -> slots
 
 -- | The conjugation grid for this progress: every verb of the table, the most
 -- | common first, for the reason the shifts are met that way. See
