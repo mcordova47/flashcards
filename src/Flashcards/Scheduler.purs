@@ -189,13 +189,15 @@ buildSession = buildSessionBy (const "")
 -- | is that kind, in due order, exactly as `buildSession` has it. And what it
 -- | costs is that a very overdue card of a common kind can wait a session
 -- | behind a less overdue one of a rare kind. Only the reviews are chosen this
--- | way; new items follow, in the order they were given, as before.
+-- | way. New items follow, and are taken across kinds in the same way, each
+-- | kind in the order it was given: a kind's new items come due together
+-- | when first met together, which is what clumps them (#65).
 -- |
 -- | Takes the kind rather than knowing one, for the reason `buildSession` takes
 -- | slugs.
 buildSessionBy :: (Slug -> String) -> Array Slug -> Progress -> Instant -> Int -> Array Slug
 buildSessionBy kind items progress now size =
-  Array.take size $ roundRobin groups <> map _.slug newCards
+  Array.take size $ roundRobin groups <> roundRobin fresh
   where
     annotated = items <#> \slug -> { slug, state: Progress.lookup slug progress }
 
@@ -212,6 +214,11 @@ buildSessionBy kind items progress now size =
         map _.slug $ Array.filter (\c -> kind c.slug == k) dueCards
 
     newCards = Array.filter (isNothing <<< _.state) annotated
+
+    -- Kinds in the order the items were given, each keeping its own order.
+    fresh =
+      Array.nub (map (kind <<< _.slug) newCards) <#> \k ->
+        map _.slug $ Array.filter (\c -> kind c.slug == k) newCards
 
 -- | One from each list in turn, until all are empty.
 roundRobin :: forall a. Array (Array a) -> Array a

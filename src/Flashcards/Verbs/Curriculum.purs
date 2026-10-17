@@ -58,13 +58,17 @@ import Flashcards.Verbs.Shift as Shift
 -- |
 -- | Within the two shifts, the most common verb first, for the reason the
 -- | deck puts *que* before *concreto*: see `byFrequency`. The other three
--- | keep their banks' order, and not because it was chosen: por / para has
--- | no verb to rank, a correction's item is a kind of mistake rather than a
+-- | keep their banks' order, and that is now a decision: por / para has no
+-- | verb to rank, a correction's item is a kind of mistake rather than a
 -- | verb, and the paraphrase corpus runs in blocks by the trap it sets —
 -- | ser / estar, then tense, then saber / conocer — which ranking by verb
--- | would scatter. The paraphrase is then put in the order that hides its
--- | traps, by `Paraphrase.arranged`, and not left as its file has it.
--- | Whether those orders are right is still open.
+-- | would scatter. There are few of the first two and the third's order is
+-- | what #63 and #109 guarantee, so there is little to gain from reordering
+-- | any of them within itself.
+-- |
+-- | The order *between* kinds is not what introduces them, though: a session
+-- | takes its new items from each kind in turn, each in the order above (#65).
+-- | Meeting a kind all at once is what makes its items fall due all at once.
 -- |
 -- | This is the order new items are met in, not the order they are asked:
 -- | `session` spreads each session so that no verb comes twice running.
