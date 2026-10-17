@@ -157,7 +157,7 @@ testing.
 
 ```purescript
 buildSession :: Array Card -> Progress -> Instant -> Int -> Array Slug
-applyGrade   :: Grade -> Instant -> Maybe CardProgress -> CardProgress
+applyGrade   :: Slug -> Grade -> Instant -> Maybe CardProgress -> CardProgress
 ```
 
 **Storage lives at the edge.** `Flashcards.Storage` is the only module that

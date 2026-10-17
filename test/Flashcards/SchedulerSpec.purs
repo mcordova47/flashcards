@@ -50,7 +50,7 @@ boxedAt box = Just { box, due: at $ 99.0 * day, seen: 4, lapses: 2, missed: 3, d
 
 -- | Most of these concern a card free to move to production.
 graded :: Grade -> Instant -> Maybe CardProgress -> CardProgress
-graded grade at' = Scheduler.applyGrade grade at' Scheduler.MayGraduate
+graded grade at' = Scheduler.applyGrade (slugAt 1) grade at' Scheduler.MayGraduate
 
 -- | Days from `now` until the card is next due.
 dueInDays :: CardProgress -> Number
@@ -243,14 +243,14 @@ spec = do
 
     it "a card barred from production never graduates, however well it goes" do
       let
-        cp = Scheduler.applyGrade GotIt now Scheduler.RecognitionOnly $
+        cp = Scheduler.applyGrade (slugAt 1) GotIt now Scheduler.RecognitionOnly $
           boxedAt (Scheduler.graduationBox - 1)
       cp.direction `shouldEqual` Recognition
       cp.box `shouldEqual` Scheduler.graduationBox
 
     it "and climbs the full ladder instead of stopping at the graduation box" do
       let
-        climb prev _ = Just $ Scheduler.applyGrade GotIt now Scheduler.RecognitionOnly prev
+        climb prev _ = Just $ Scheduler.applyGrade (slugAt 1) GotIt now Scheduler.RecognitionOnly prev
         after n = Array.foldl climb Nothing (Array.replicate n unit)
       (_.box <$> after 6) `shouldEqual` Just Scheduler.maxBox
       (_.direction <$> after 6) `shouldEqual` Just Recognition

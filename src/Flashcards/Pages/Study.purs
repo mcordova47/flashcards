@@ -195,7 +195,7 @@ update state = case _ of
 
           progress =
             Progress.insert slug
-              (Scheduler.applyGrade grade now allowed $ Progress.lookup slug state.progress)
+              (Scheduler.applyGrade slug grade now allowed $ Progress.lookup slug state.progress)
               state.progress
 
           -- Session-local either way: looping on the ones you keep missing is
