@@ -348,7 +348,8 @@ export default async ({ check, open, blobs }) => {
   check("graded as missed", stored.cards.find(c => c.slug === personMissed.slug)?.missed, 1)
 
   // Comes round again within the session, and from a different sentence:
-  // the pool is why the bank needs three persons per verb and tense.
+  // the pool is why the bank needs four marked rows in four persons per
+  // verb and tense (#118).
   let personAgain = null
   for (let i = 0; i < 10 && !personAgain; i++) {
     await next(persons)
