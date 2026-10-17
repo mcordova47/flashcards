@@ -52,8 +52,10 @@ export default async ({ check, open }) => {
   check("a word missed then learned sits low", first.box, 1)
   const easy = storedAt(saved.cards, 3)
   check("a word known on sight is fast-tracked", easy.box, 3)
-  const days = await page.evaluate(due => Math.round((due - Date.now()) / 86400000), easy.due)
-  check("and is not due again for a week", days, 7)
+  const days = await page.evaluate(due => (due - Date.now()) / 86400000, easy.due)
+  // A week, moved by up to 15% either way (#159): within that, not rounded to 7,
+  // which only holds for a slug whose offset happens to be under half a day.
+  check("and is not due again for about a week", days >= 7 * 0.85 && days <= 7 * 1.15, true)
 
   await page.reload({ waitUntil: "networkidle0" })
   await page.waitForSelector(".prompt")
