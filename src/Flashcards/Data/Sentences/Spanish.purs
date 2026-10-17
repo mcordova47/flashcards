@@ -58,7 +58,7 @@ sentences =
   , { before: "no ", form: "sé", after: " nada", infinitive: "saber", tense: Present, person: Sg1, personShift: true }
   , { before: "no ", form: "sabes", after: " la verdad", infinitive: "saber", tense: Present, person: Sg2, personShift: true }
   , { before: "mi hermana ", form: "sabe", after: " la respuesta", infinitive: "saber", tense: Present, person: Sg3, personShift: false }
-  , { before: "no ", form: "sabemos", after: " su nombre", infinitive: "saber", tense: Present, person: Pl1, personShift: true }
+  , { before: "no ", form: "sabemos", after: " el nombre", infinitive: "saber", tense: Present, person: Pl1, personShift: true }
   , { before: "mis padres ", form: "saben", after: " la noticia", infinitive: "saber", tense: Present, person: Pl3, personShift: false }
   , { before: "", form: "pongo", after: " la mesa", infinitive: "poner", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "pones", after: " la ropa en la cama", infinitive: "poner", tense: Present, person: Sg2, personShift: true }
@@ -104,17 +104,17 @@ sentences =
   , { before: "", form: "sentíamos", after: " el calor del sol", infinitive: "sentir", tense: Imperfect, person: Pl1, personShift: false }
   , { before: "", form: "sienten", after: " mucho calor", infinitive: "sentir", tense: Present, person: Pl3, personShift: true }
   , { before: "los niños ", form: "sentían", after: " miedo", infinitive: "sentir", tense: Imperfect, person: Pl3, personShift: false }
-  , { before: "", form: "conozco", after: " a tu hermano", infinitive: "conocer", tense: Present, person: Sg1, personShift: true }
+  , { before: "", form: "conozco", after: " a un chico", infinitive: "conocer", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "conoces", after: " bien la ciudad", infinitive: "conocer", tense: Present, person: Sg2, personShift: true }
   , { before: "mi madre ", form: "conoce", after: " a mucha gente", infinitive: "conocer", tense: Present, person: Sg3, personShift: false }
-  , { before: "", form: "conocemos", after: " a su familia", infinitive: "conocer", tense: Present, person: Pl1, personShift: true }
+  , { before: "", form: "conocemos", after: " a la familia", infinitive: "conocer", tense: Present, person: Pl1, personShift: true }
   , { before: "", form: "conocen", after: " este lugar", infinitive: "conocer", tense: Present, person: Pl3, personShift: true }
-  , { before: "", form: "doy", after: " un libro a mi amigo", infinitive: "dar", tense: Present, person: Sg1, personShift: true }
-  , { before: "", form: "das", after: " dinero a tu madre", infinitive: "dar", tense: Present, person: Sg2, personShift: true }
+  , { before: "", form: "doy", after: " un libro a un amigo", infinitive: "dar", tense: Present, person: Sg1, personShift: true }
+  , { before: "", form: "das", after: " dinero a una amiga", infinitive: "dar", tense: Present, person: Sg2, personShift: true }
   , { before: "mi padre ", form: "da", after: " clases en la escuela", infinitive: "dar", tense: Present, person: Sg3, personShift: false }
   , { before: "", form: "damos", after: " las gracias a todos", infinitive: "dar", tense: Present, person: Pl1, personShift: true }
   , { before: "", form: "dan", after: " una fiesta", infinitive: "dar", tense: Present, person: Pl3, personShift: true }
-  , { before: "", form: "pienso", after: " en mi familia", infinitive: "pensar", tense: Present, person: Sg1, personShift: true }
+  , { before: "", form: "pienso", after: " en la familia", infinitive: "pensar", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "piensas", after: " mucho en el trabajo", infinitive: "pensar", tense: Present, person: Sg2, personShift: true }
   , { before: "mi hermana ", form: "piensa", after: " en su casa", infinitive: "pensar", tense: Present, person: Sg3, personShift: false }
   , { before: "", form: "pensábamos", after: " en el futuro", infinitive: "pensar", tense: Imperfect, person: Pl1, personShift: false }
@@ -127,31 +127,31 @@ sentences =
   , { before: "", form: "salen", after: " de la casa", infinitive: "salir", tense: Present, person: Pl3, personShift: true }
   , { before: "", form: "salía", after: " muy tarde de casa", infinitive: "salir", tense: Imperfect, person: Sg1, personShift: false }
   , { before: "", form: "vuelvo", after: " tarde a casa", infinitive: "volver", tense: Present, person: Sg1, personShift: true }
-  , { before: "", form: "vuelves", after: " a tu trabajo", infinitive: "volver", tense: Present, person: Sg2, personShift: true }
+  , { before: "", form: "vuelves", after: " al trabajo", infinitive: "volver", tense: Present, person: Sg2, personShift: true }
   , { before: "mi padre ", form: "vuelve", after: " del trabajo", infinitive: "volver", tense: Present, person: Sg3, personShift: false }
-  , { before: "", form: "volvemos", after: " a nuestra casa", infinitive: "volver", tense: Present, person: Pl1, personShift: true }
-  , { before: "", form: "vuelven", after: " a su casa", infinitive: "volver", tense: Present, person: Pl3, personShift: true }
-  , { before: "", form: "valgo", after: " mucho para mi familia", infinitive: "valer", tense: Present, person: Sg1, personShift: true }
+  , { before: "", form: "volvemos", after: " a la casa", infinitive: "volver", tense: Present, person: Pl1, personShift: true }
+  , { before: "", form: "vuelven", after: " a casa", infinitive: "volver", tense: Present, person: Pl3, personShift: true }
+  , { before: "", form: "valgo", after: " mucho para la familia", infinitive: "valer", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "vales", after: " más que nadie", infinitive: "valer", tense: Present, person: Sg2, personShift: true }
   , { before: "este libro ", form: "vale", after: " mucho dinero", infinitive: "valer", tense: Present, person: Sg3, personShift: false }
-  , { before: "", form: "valemos", after: " más juntos", infinitive: "valer", tense: Present, person: Pl1, personShift: true }
+  , { before: "", form: "valemos", after: " más hoy", infinitive: "valer", tense: Present, person: Pl1, personShift: true }
   , { before: "las casas ", form: "valen", after: " mucho", infinitive: "valer", tense: Present, person: Pl3, personShift: false }
   , { before: "", form: "leo", after: " un libro en casa", infinitive: "leer", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "lees", after: " mucho en casa", infinitive: "leer", tense: Present, person: Sg2, personShift: true }
   , { before: "mi madre ", form: "lee", after: " el periódico", infinitive: "leer", tense: Present, person: Sg3, personShift: false }
-  , { before: "", form: "leemos", after: " en nuestra casa", infinitive: "leer", tense: Present, person: Pl1, personShift: true }
+  , { before: "", form: "leemos", after: " en la casa", infinitive: "leer", tense: Present, person: Pl1, personShift: true }
   , { before: "los niños ", form: "leen", after: " muchos libros", infinitive: "leer", tense: Present, person: Pl3, personShift: false }
-  , { before: "", form: "pido", after: " ayuda a mi madre", infinitive: "pedir", tense: Present, person: Sg1, personShift: true }
+  , { before: "", form: "pido", after: " ayuda a un amigo", infinitive: "pedir", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "pides", after: " mucho dinero", infinitive: "pedir", tense: Present, person: Sg2, personShift: true }
   , { before: "mi padre ", form: "pide", after: " la cuenta", infinitive: "pedir", tense: Present, person: Sg3, personShift: false }
   , { before: "", form: "pedíamos", after: " ayuda a todos", infinitive: "pedir", tense: Imperfect, person: Pl1, personShift: false }
-  , { before: "", form: "piden", after: " ayuda a su padre", infinitive: "pedir", tense: Present, person: Pl3, personShift: true }
+  , { before: "", form: "piden", after: " ayuda a un profesor", infinitive: "pedir", tense: Present, person: Pl3, personShift: true }
   , { before: "los niños ", form: "pedían", after: " agua", infinitive: "pedir", tense: Imperfect, person: Pl3, personShift: false }
-  , { before: "", form: "sigo", after: " a mi hermano", infinitive: "seguir", tense: Present, person: Sg1, personShift: true }
+  , { before: "", form: "sigo", after: " a ese chico", infinitive: "seguir", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "sigues", after: " este camino", infinitive: "seguir", tense: Present, person: Sg2, personShift: true }
   , { before: "mi madre ", form: "sigue", after: " en casa", infinitive: "seguir", tense: Present, person: Sg3, personShift: false }
   , { before: "", form: "seguíamos", after: " el camino", infinitive: "seguir", tense: Imperfect, person: Pl1, personShift: false }
-  , { before: "", form: "siguen", after: " a sus padres", infinitive: "seguir", tense: Present, person: Pl3, personShift: true }
+  , { before: "", form: "siguen", after: " a la gente", infinitive: "seguir", tense: Present, person: Pl3, personShift: true }
   , { before: "los niños ", form: "seguían", after: " a su padre", infinitive: "seguir", tense: Imperfect, person: Pl3, personShift: false }
   , { before: "", form: "muero", after: " de sueño", infinitive: "morir", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "mueres", after: " de miedo", infinitive: "morir", tense: Present, person: Sg2, personShift: true }
