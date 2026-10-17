@@ -103,7 +103,7 @@ day d = go []
 
     right p slug =
       Progress.insert slug
-        (Scheduler.applyGrade GotIt (at d) Scheduler.RecognitionOnly (Progress.lookup slug p))
+        (Scheduler.applyGrade slug GotIt (at d) Scheduler.RecognitionOnly (Progress.lookup slug p))
         p
 
 spec :: Spec Unit

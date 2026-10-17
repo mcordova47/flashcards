@@ -265,12 +265,12 @@ masteredIn now target items progress = do
   pure $ since now landed
   where
     tracked = Array.mapMaybe
-      (\item -> Progress.lookup item.slug progress <#> \cp -> { allowed: item.allowed, cp })
+      (\item -> Progress.lookup item.slug progress <#> \cp -> { slug: item.slug, allowed: item.allowed, cp })
       items
 
     isMastered t = masteryOf (Just t.cp) == Mastered
 
-    landing t = if isMastered t then Nothing else Just $ masteredAt now t.allowed t.cp
+    landing t = if isMastered t then Nothing else Just $ masteredAt now t.slug t.allowed t.cp
 
 -- | The started items not yet mastered, soonest first, each with how long it
 -- | would take and how often it has slipped: the answer to *which*, for when
@@ -290,7 +290,7 @@ leftToMaster now items progress =
     toLeft item = do
       cp <- Progress.lookup item.slug progress
       guard $ masteryOf (Just cp) /= Mastered
-      pure { item, wait: since now $ masteredAt now item.allowed cp, lapses: cp.lapses }
+      pure { item, wait: since now $ masteredAt now item.slug item.allowed cp, lapses: cp.lapses }
 
     soonest a b = compare a.wait b.wait <> compare b.lapses a.lapses
 
@@ -303,14 +303,14 @@ since now later = Milliseconds $ unwrap (unInstant later) - unwrap (unInstant no
 -- | behind it. An overdue item is answered now, not in the past: the answer is
 -- | never earlier than the moment this is asked. Each answer climbs a box, so
 -- | this ends.
-masteredAt :: Instant -> Graduation -> CardProgress -> Instant
-masteredAt now allowed = go now
+masteredAt :: Instant -> Slug -> Graduation -> CardProgress -> Instant
+masteredAt now slug allowed = go now
   where
     go at cp
       | masteryOf (Just cp) == Mastered = at
       | otherwise =
           let answered = max at cp.due
-          in go answered (applyGrade GotIt answered allowed (Just cp))
+          in go answered (applyGrade slug GotIt answered allowed (Just cp))
 
 -- | A wait in round human units — "4 hours", "1 day". Deliberately coarse:
 -- | the exact minute is noise when the answer is "come back this evening".

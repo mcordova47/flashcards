@@ -267,8 +267,8 @@ spread family = go [] Nothing
 -- | session ends. `GotIt` promotes it one box and pushes the next review out —
 -- | except on a word's first ever sighting, which fast-tracks to
 -- | `firstSightingBox`.
-applyGrade :: Grade -> Instant -> Graduation -> Maybe CardProgress -> CardProgress
-applyGrade grade now allowed previous =
+applyGrade :: Slug -> Grade -> Instant -> Graduation -> Maybe CardProgress -> CardProgress
+applyGrade _slug grade now allowed previous =
   { box
   , direction
   , due: addInterval now $ intervalFor box

@@ -234,7 +234,7 @@ update state = case _ of
       let
         progress =
           Progress.insert slug
-            (Scheduler.applyGrade grade now Scheduler.RecognitionOnly $
+            (Scheduler.applyGrade slug grade now Scheduler.RecognitionOnly $
                Progress.lookup slug state.progress)
             state.progress
         -- As on the study page: a miss comes round again before the session
