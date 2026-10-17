@@ -10,6 +10,7 @@ import Data.Array.NonEmpty as NonEmpty
 import Data.DateTime.Instant (Instant, instant)
 import Data.Foldable (foldl, maximum)
 import Data.Int (toNumber)
+import Data.Number (floor)
 import Data.Maybe (Maybe(..), fromJust, fromMaybe, isJust)
 import Data.String as String
 import Data.Time.Duration (Milliseconds(..))
@@ -292,6 +293,38 @@ sessions = describe "a verb drill session" do
   -- first of the same verb and the second of another. Spread alone takes the
   -- shift, finds the first prompt alike to it, and so takes the second prompt
   -- ahead of the first.
+  -- What a corpus edit does: rows added and removed anywhere, in any order.
+  -- A pseudo-random generator, so that a failure is one to run again.
+  it "finishes, and keeps every prompt, for any selection of the corpus in any order" do
+    let
+      next seed = remainder (seed * 48271.0)
+      remainder x = x - floor (x / 2147483647.0) * 2147483647.0
+      -- Each prompt kept or not, then the rest dealt out by a sort on a draw.
+      subset seed =
+        let
+          draws = Array.foldl (\acc _ -> Array.snoc acc (next (fromMaybe seed (Array.last acc)))) [ next seed ] (Array.range 1 (2 * Array.length prompts))
+          kept = Array.catMaybes $ Array.zipWith (\p d -> if remainder d / 2147483647.0 < 0.67 then Just (Tuple d p) else Nothing) prompts draws
+        in
+          map (\(Tuple _ p) -> p) $ Array.sortWith (\(Tuple d _) -> remainder (d * 16807.0)) kept
+      ids ps = Array.sort (map _.id ps)
+      seeds = Array.range 1 60 <#> toNumber
+    Array.filter (\seed -> ids (Paraphrase.arranged (subset seed)) /= ids (subset seed)) seeds `shouldEqual` []
+    -- Not vacuous: they are different selections.
+    (Array.length (Array.nub (map (ids <<< subset) seeds)) > 50) `shouldEqual` true
+
+  -- No order exists: eight prompts answered `ser` and one `estar` cannot be
+  -- placed without four `ser` running, and among a dozen others the search
+  -- for one has too many ways to fail to try them all.
+  it "gives up on a selection no order suits, and still keeps every prompt" do
+    let
+      base = fromMaybe (unsafePartial $ fromJust $ Array.head prompts) $ Array.find (\p -> p.verb == "ser" && p.trap == OnVerb) prompts
+      other = Array.filter (\p -> p.trap == OnTense) prompts
+      stuck = map (\n -> base { id = "stuck-" <> show n }) (Array.range 1 8)
+        <> [ base { id = "stuck-estar", verb = "estar", against = "ser" } ]
+        <> Array.take 14 other
+    Array.length (Paraphrase.arranged stuck) `shouldEqual` Array.length stuck
+    Array.sort (map _.id (Paraphrase.arranged stuck)) `shouldEqual` Array.sort (map _.id stuck)
+
   it "meets the paraphrase prompts in their own order, among items that are spread around them" do
     let
       tenseTraps = Array.filter (\p -> p.trap == OnTense) prompts

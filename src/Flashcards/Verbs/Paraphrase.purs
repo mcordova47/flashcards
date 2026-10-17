@@ -24,7 +24,9 @@ import Prelude
 
 import Control.Alt ((<|>))
 import Data.Array as Array
-import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Foldable (foldl)
+import Data.Maybe (Maybe(..), fromMaybe, maybe)
+import Data.Set as Set
 import Data.String as String
 import Flashcards.Exercise (Answer(..), Exercise, Rubric)
 import Flashcards.Types.Card (Slug(..))
@@ -169,20 +171,60 @@ answer p = case p.trap of
 -- | earliest prompt that breaks nothing and still leaves the rest placeable,
 -- | preferring one whose family is not the last's, since the session cannot
 -- | spread what it must leave in place. A confusion whose prompts all have one
--- | answer is left alone, since no order can hide that. If no order meets the
--- | rule at all, the file's own.
+-- | answer is left alone, since no order can hide that.
+-- |
+-- | The search backtracks, remembers the states it has failed, and is capped (`budget` prompts placed, per
+-- | attempt): whether the rest can be placed is not something the pruning
+-- | here can settle, and a corpus where it cannot is one the search would
+-- | otherwise never leave, which `items` would make a page that never loads.
+-- | Out of budget, or with no order at all, it takes the same choice at every
+-- | step without looking ahead, which breaks the rule only where it must.
 -- |
 -- | A function of the prompts, so a reload asks the same thing and adding a
 -- | prompt moves only what it must.
 arranged :: Array Prompt -> Array Prompt
-arranged prompts = fromMaybe prompts $ go true [] prompts <|> go false [] prompts
+arranged prompts =
+  fromMaybe (greedy [] prompts) $
+    (search true [] prompts start).found <|> (search false [] prompts start).found
   where
+    start = { fuel: budget, failed: Set.empty }
+
     -- `apart` is whether to refuse a neighbour of the same family, which is
-    -- tried first and given up on only if it leaves no order.
-    go apart placed = case _ of
-      [] -> Just placed
-      remaining ->
-        Array.findMap (\next -> go apart (Array.snoc placed next.prompt) next.rest) (candidates apart placed remaining)
+    -- tried first and given up on only if it leaves no order. Handed back with
+    -- what is left of the budget is every state found to lead nowhere, so that
+    -- the same one reached another way is not searched again.
+    search apart placed remaining state = case remaining of
+      [] -> { found: Just placed, fuel: state.fuel, failed: state.failed }
+      _ | state.fuel <= 0 -> { found: Nothing, fuel: 0, failed: state.failed }
+        | Set.member key state.failed -> { found: Nothing, fuel: state.fuel, failed: state.failed }
+        | otherwise ->
+            let
+              result = foldl try { found: Nothing, fuel: state.fuel - 1, failed: state.failed } (candidates apart placed remaining)
+            in
+              case result.found of
+                Nothing | result.fuel > 0 -> result { failed = Set.insert key result.failed }
+                _ -> result
+      where
+        try acc next = case acc.found of
+          Just _ -> acc
+          Nothing
+            | acc.fuel <= 0 -> acc
+            | otherwise -> search apart (Array.snoc placed next.prompt) next.rest { fuel: acc.fuel, failed: acc.failed }
+
+        -- All that decides what can follow: what is left, the family just
+        -- placed, and for each confusion the last three answers.
+        key = String.joinWith "," (map _.id remaining)
+          <> "|" <> maybe "" family (Array.last placed)
+          <> "|" <> String.joinWith ";" (Array.nub (map confusion placed) <#> \c ->
+            String.joinWith "," (Array.takeEnd 3 (map answer (Array.filter (\p -> confusion p == c) placed))))
+
+    -- The first choice at every step, and the file's next prompt when there is
+    -- none that breaks nothing.
+    greedy placed remaining = case Array.uncons remaining of
+      Nothing -> placed
+      Just { head, tail } -> case Array.head (candidates false placed remaining) of
+        Just next -> greedy (Array.snoc placed next.prompt) next.rest
+        Nothing -> greedy (Array.snoc placed head) tail
 
     -- Each prompt that can come next, with what is left after it: those of a
     -- different family from the last first, each group in the file's order.
@@ -218,6 +260,13 @@ arranged prompts = fromMaybe prompts $ go true [] prompts <|> go false [] prompt
     shaped = case _ of
       [ a, b, a', b' ] -> a == a' && b == b'
       _ -> false
+
+-- | How many prompts `arranged` may place in one search before it stops
+-- | looking. One that can be arranged straight off takes one a prompt, so 93
+-- | for the corpus; this is room for ten times that in wrong turns, which is
+-- | well under a second where it is all spent.
+budget :: Int
+budget = 1000
 
 -- | `estar / ser` whichever way round the prompt has them, as
 -- | `check-paraphrase` counts them.
