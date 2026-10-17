@@ -248,6 +248,8 @@ export const run = async (name, body, { headless = "new", slowMo } = {}) => {
   const open = async ({ stub, seed, scheme, viewport, path = "/", key = storageKey } = {}) => {
     const page = await browser.newPage()
     await page.setViewport(viewport ?? { width: 390, height: 844, deviceScaleFactor: 2 })
+    // THROTTLE=4 runs the page on a slower CPU, as a loaded runner does.
+    if (process.env.THROTTLE) await (await page.createCDPSession()).send("Emulation.setCPUThrottlingRate", { rate: Number(process.env.THROTTLE) })
     if (scheme) await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: scheme }])
     if (stub) await page.evaluateOnNewDocument(stub)
     page.errors = []
