@@ -23,7 +23,7 @@ import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
-import Flashcards.Verbs.Curriculum (byFrequency, family, items, session, shuffled)
+import Flashcards.Verbs.Curriculum (byFrequency, family, items, kind, session, shuffled)
 import Flashcards.Verbs.Paraphrase (Trap(..))
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.Table (formOf)
@@ -107,6 +107,7 @@ spec :: Spec Unit
 spec = do
   sessions
   shuffling
+  mixing
   order
   cells
 
@@ -162,7 +163,7 @@ shuffling = describe "a session built from items that fall due together" do
       progress = Array.foldl (\p (Tuple i slug) -> Progress.insert slug (card i) p) Progress.empty $
         Array.mapWithIndex Tuple (seen <> paraphrases)
       card i = { box: 1, due: at (100.0 + toNumber i / 1440.0), seen: 1, lapses: 0, missed: 0, direction: Recognition }
-      before = Scheduler.buildSession (map _.slug items) progress now Scheduler.sessionSize
+      before = Scheduler.buildSessionBy kind (map _.slug items) progress now Scheduler.sessionSize
       kept queue = Array.mapWithIndex Tuple queue # Array.filter \(Tuple _ slug) -> Paraphrase.isParaphrase slug || Array.elem slug unseen
       after = shuffled progress now
     -- Only if the test has something to keep still.
@@ -175,6 +176,57 @@ shuffling = describe "a session built from items that fall due together" do
 
   it "leaves no two of one verb together that it need not" do
     Array.length (together person (session person now)) `shouldEqual` unavoidable person (session person now)
+
+-- | The longest stretch of one kind in a session.
+longestRun :: Array Slug -> Int
+longestRun queue = fromMaybe 0 $ maximum $ map NonEmpty.length $ Array.groupBy (\a b -> kind a == kind b) queue
+
+-- | Items of several kinds all due, a minute apart, the earlier kinds being the
+-- | more overdue: a day's due set shaped like the clusters of #158, where the
+-- | twenty most overdue were all one kind because the curriculum met that kind
+-- | first.
+dueInBlocks :: Array (Tuple (Slug -> Boolean) Int) -> Progress
+dueInBlocks blocks =
+  Array.foldl (\p (Tuple i slug) -> Progress.insert slug (card i) p) Progress.empty $
+    Array.mapWithIndex Tuple $ Array.concatMap (\(Tuple belongs n) -> Array.take n $ Array.filter belongs slugs) blocks
+  where
+    slugs = map _.slug items
+    card i = { box: 1, due: at (100.0 + toNumber i / 1440.0), seen: 1, lapses: 0, missed: 0, direction: Recognition }
+
+mixing :: Spec Unit
+mixing = describe "a session built when one kind is due far more than the rest" do
+  let
+    now = at 101.0
+    isKind k slug = kind slug == k
+    -- The 42 of #158's third day, in the order the curriculum met them.
+    crowded = dueInBlocks
+      [ Tuple (isKind "person") 33, Tuple (isKind "porpara") 5, Tuple (isKind "error") 4 ]
+    kinds queue = Array.nub (map kind queue)
+
+  it "tells the kinds apart by the slug" do
+    kinds (map _.slug items) `shouldEqual` [ "tense", "person", "porpara", "error", "paraphrase" ]
+
+  it "takes the twenty from the most overdue block alone when asked for nothing else, which is the complaint" do
+    kinds (Scheduler.buildSession (map _.slug items) crowded now Scheduler.sessionSize) `shouldEqual` [ "person" ]
+
+  it "holds more than one kind whenever more than one is due" do
+    kinds (session crowded now) `shouldEqual` [ "person", "porpara", "error" ]
+
+  it "keeps a run of one kind short" do
+    (longestRun (session crowded now) <= 8) `shouldEqual` true
+
+  it "is a session of one kind when only one kind is due" do
+    let onlyPerson = dueInBlocks [ Tuple (isKind "person") 33 ]
+    kinds (session onlyPerson now) `shouldEqual` [ "person" ]
+    Array.length (session onlyPerson now) `shouldEqual` Scheduler.sessionSize
+
+  it "still takes the most overdue of each kind first" do
+    let
+      queue = Scheduler.buildSessionBy kind (map _.slug items) crowded now Scheduler.sessionSize
+      ofKind k = Array.filter (isKind k) queue
+      dueOrder = Array.filter (\slug -> Array.elem slug queue) (map _.slug items)
+    -- Within a kind the curriculum's order is the due order here.
+    ofKind "person" `shouldEqual` Array.filter (isKind "person") dueOrder
 
 sessions :: Spec Unit
 sessions = describe "a verb drill session" do

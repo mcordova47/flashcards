@@ -10,6 +10,7 @@ module Flashcards.Verbs.Curriculum
   , byFrequency
   , family
   , grid
+  , kind
   , labelled
   , session
   , shuffled
@@ -140,7 +141,7 @@ session progress now = Scheduler.spread (family progress) $ shuffled progress no
 shuffled :: Progress -> Instant -> Array Slug
 shuffled progress now = fillIn queue (Scheduler.shuffle slugToString seed (Array.filter movable queue))
   where
-    queue = Scheduler.buildSession (map _.slug items) progress now Scheduler.sessionSize
+    queue = Scheduler.buildSessionBy kind (map _.slug items) progress now Scheduler.sessionSize
 
     seed =
       show (floor (unwrap (unInstant now) / 86400000.0)) <> "|"
@@ -162,6 +163,22 @@ shuffled progress now = fillIn queue (Scheduler.shuffle slugToString seed (Array
 -- | `Grid.grid`.
 grid :: Progress -> Array VerbRow
 grid = Grid.grid rank table coverage items
+
+-- | What sort of exercise an item is, by the name its module gave the slug:
+-- | the tense shifts have no prefix, and are what is left. Which kinds there
+-- | are matters to `Scheduler.buildSessionBy`, which takes the twenty across
+-- | them, and to nothing else. See #158.
+kind :: Slug -> String
+kind slug = case Array.find (\k -> String.take (String.length k.prefix) (slugToString slug) == k.prefix) named of
+  Just k -> k.name
+  Nothing -> "tense"
+  where
+    named =
+      [ { prefix: "person.", name: "person" }
+      , { prefix: "porpara.", name: "porpara" }
+      , { prefix: "error.", name: "error" }
+      , { prefix: Paraphrase.prefix, name: "paraphrase" }
+      ]
 
 -- | An item's family, as the exercise that will actually be asked has it.
 -- |
