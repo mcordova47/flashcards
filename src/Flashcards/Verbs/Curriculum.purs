@@ -139,7 +139,7 @@ session progress now = Scheduler.spread (family progress) $ shuffled progress no
 -- | where it was: `session` before it is spread. Apart so that "where it was"
 -- | can be asked of it, since the spread moves things.
 shuffled :: Progress -> Instant -> Array Slug
-shuffled progress now = fillIn queue (Scheduler.shuffle slugToString seed (Array.filter movable queue))
+shuffled progress now = fillIn movable queue (Scheduler.shuffle slugToString seed (Array.filter movable queue))
   where
     queue = Scheduler.buildSessionBy kind (map _.slug items) progress now Scheduler.sessionSize
 
@@ -149,14 +149,16 @@ shuffled progress now = fillIn queue (Scheduler.shuffle slugToString seed (Array
 
     movable slug = not (Paraphrase.isParaphrase slug) && isJust (Progress.lookup slug progress)
 
-    -- The shuffled slugs go into the places the movable ones left.
-    fillIn slots pool = case Array.uncons slots of
-      Nothing -> []
-      Just { head, tail }
-        | not (movable head) -> Array.cons head (fillIn tail pool)
-        | otherwise -> case Array.uncons pool of
-            Just { head: next, tail: rest } -> Array.cons next (fillIn tail rest)
-            Nothing -> slots
+-- | `pool` put into the places of `slots` that `movable` picks out, in order,
+-- | and every other slot left as it is.
+fillIn :: (Slug -> Boolean) -> Array Slug -> Array Slug -> Array Slug
+fillIn movable slots pool = case Array.uncons slots of
+  Nothing -> []
+  Just { head, tail }
+    | not (movable head) -> Array.cons head (fillIn movable tail pool)
+    | otherwise -> case Array.uncons pool of
+        Just { head: next, tail: rest } -> Array.cons next (fillIn movable tail rest)
+        Nothing -> slots
 
 -- | The conjugation grid for this progress: every verb of the table, the most
 -- | common first, for the reason the shifts are met that way. See
