@@ -592,6 +592,20 @@ export default async ({ check, open, blobs }) => {
   check("no page errors", capped.errors, [])
   await capped.close()
 
+  // The grade is saved a tick after the click, so wait for the card and not for
+  // a fixed time: a loaded runner has taken longer than 250ms, and
+  // `THROTTLE=4 node test/browser/run.mjs verbs` shows it. Returns the store
+  // as it was found, which lacks the card only if it never came.
+  const saved = async (page, slug) => {
+    let found = null
+    for (let i = 0; i < 40; i++) {
+      await wait(100)
+      found = await page.stored()
+      if (found?.cards?.some(c => c.slug === slug)) break
+    }
+    return found
+  }
+
   // --- the paraphrase, which nothing can check ---
   // The checked drills are put behind us so the session opens on the corpus;
   // every exercise type shares one queue, and the page tells them apart by
@@ -625,15 +639,8 @@ export default async ({ check, open, blobs }) => {
     (await done.stored())?.cards?.some(c => c.slug === `paraphrase.${opener.id}`) ?? false, false)
   check("and leaves the answer up", await done.text(".verb-model"), opener.model)
   await (await done.byText(".grade", "Got it")).click()
-  // Until it is saved and not for a fixed wait: the grade lands a tick after
-  // the click, and a loaded runner has taken longer than 200ms.
-  for (let i = 0; i < 30; i++) {
-    await wait(100)
-    stored = await done.stored()
-    if (stored?.cards?.some(c => c.slug === `paraphrase.${opener.id}`)) break
-  }
+  stored = await saved(done, `paraphrase.${opener.id}`)
   const graded = stored.cards.find(c => c.slug === `paraphrase.${opener.id}`)
-  if (graded === undefined) console.log("  (cards stored:", JSON.stringify(stored.cards.map(c => [c.slug, c.seen]).slice(-5)), ")")
   check("graded under the frozen id", graded?.seen, 1)
   check("as got", graded?.missed, 0)
   check("shares no item with any other drill",
@@ -659,7 +666,9 @@ export default async ({ check, open, blobs }) => {
     const b = [...document.querySelectorAll(".grade")].find(e => e.textContent === "Got it")
     b.click(); b.click()
   })
-  await wait(250)
+  stored = await saved(done, `paraphrase.${twice.id}`)
+  // A second grade would have landed with the first, but give it the time.
+  await wait(150)
   stored = await done.stored()
   check("a double tap grades once, not twice",
     stored.cards.filter(c => c.slug.startsWith("paraphrase.")).map(c => [c.slug, c.seen]).sort(),
@@ -669,8 +678,7 @@ export default async ({ check, open, blobs }) => {
 
   await done.tap(".grade")
   await (await done.byText(".grade", "Again")).click()
-  await wait(200)
-  stored = await done.stored()
+  stored = await saved(done, `paraphrase.${asked2[2].id}`)
   check("a self-graded miss is a miss",
     stored.cards.find(c => c.slug === `paraphrase.${asked2[2].id}`)?.missed, 1)
   check("no page errors", done.errors, [])
