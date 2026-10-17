@@ -295,6 +295,38 @@ spec = do
       Scheduler.requeue (slugAt 99) 6 (slugAt <$> [ 1, 2, 3, 4, 5, 6, 7, 8 ])
         `shouldEqual` (slugAt <$> [ 1, 2, 3, 4, 5, 6, 7, 8, 99 ])
 
+  describe "requeueBy" do
+    let
+      slug = Slug
+      family (Slug s) = String.takeWhile (_ /= String.codePointFromChar '.') s
+      requeueBy = Scheduler.requeueBy family
+      names = map (\(Slug s) -> s)
+      queueOf = map slug
+
+    it "is `requeue` where the usual slot has no relative beside it" do
+      let queue = queueOf [ "x.1", "a.1", "b.1", "c.1", "d.1", "e.1", "f.1", "g.1" ]
+      requeueBy (slug "z.1") 0 queue `shouldEqual` Scheduler.requeue (slug "z.1") 0 queue
+
+    it "takes the slot before when the usual one is beside its family" do
+      -- The usual slot, 5, is against b.2.
+      names (requeueBy (slug "b.9") 0 $ queueOf [ "x.1", "a.1", "b.1", "c.1", "d.1", "b.2", "e.1", "f.1" ])
+        `shouldEqual` [ "x.1", "a.1", "b.1", "c.1", "b.9", "d.1", "b.2", "e.1", "f.1" ]
+
+    it "or the slot after, when the one before is no better" do
+      names (requeueBy (slug "b.9") 0 $ queueOf [ "x.1", "a.1", "c.1", "d.1", "b.1", "e.1", "f.1", "g.1" ])
+        `shouldEqual` [ "x.1", "a.1", "c.1", "d.1", "b.1", "e.1", "b.9", "f.1", "g.1" ]
+
+    it "falls back to the usual slot when everything in reach is beside a relative" do
+      let queue = queueOf [ "x.1", "b.1", "b.2", "b.3", "b.4", "b.5", "b.6", "b.7" ]
+      requeueBy (slug "b.9") 0 queue `shouldEqual` Scheduler.requeue (slug "b.9") 0 queue
+
+    it "is `requeue` whatever the queue, when no two things have different families" do
+      let
+        same = Scheduler.requeueBy (const unit)
+        queue = queueOf [ "a.1", "b.1", "a.2", "c.1", "b.2", "a.3", "c.2", "b.3" ]
+      Array.all (\position -> same (slug "a.9") position queue == Scheduler.requeue (slug "a.9") position queue)
+        (Array.range 0 8) `shouldEqual` true
+
   describe "shuffle" do
     let
       keys = [ "a.1", "a.2", "a.3", "a.4", "b.1", "b.2", "b.3", "b.4" ]

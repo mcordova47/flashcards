@@ -12,6 +12,7 @@ module Flashcards.Scheduler
   , maxBox
   , productionStartBox
   , requeue
+  , requeueBy
   , requeueGap
   , sessionSize
   , shuffle
@@ -315,10 +316,38 @@ applyGrade grade now allowed previous =
 -- | Put a missed card back into the queue a few positions later, so the loop
 -- | closes before the session ends. Lands at the end if there is no room left.
 requeue :: Slug -> Int -> Array Slug -> Array Slug
-requeue slug position queue =
-  fromMaybe (Array.snoc queue slug) $ Array.insertAt target slug queue
+requeue = requeueBy (const unit)
+
+-- | `requeue`, but not beside one of its own family when a slot a place or two
+-- | from the usual one would avoid it. See #64.
+-- |
+-- | `spread` makes a session with no two of one family together, and a miss put
+-- | back blindly can land against one that was already waiting there, which is
+-- | the pair #51 was about. Nearer the usual slot is tried first, and earlier
+-- | before later, so the miss still comes round at about the same distance; if
+-- | every slot in reach is beside a relative, the usual one is taken.
+-- |
+-- | The family is a function of the slug, so a caller whose families depend on
+-- | the progress — as a drill's do, since the exercise asked changes once it
+-- | is graded — passes it the progress as it stands after this grade.
+-- |
+-- | Where nothing has a family worth keeping apart, as with the flashcards,
+-- | every slot is beside a relative and this is `requeue`.
+requeueBy :: forall k. Eq k => (Slug -> k) -> Slug -> Int -> Array Slug -> Array Slug
+requeueBy family slug position queue =
+  fromMaybe (Array.snoc queue slug) $ Array.insertAt slot slug queue
   where
-    target = min (position + requeueGap) (Array.length queue)
+    usual = min (position + requeueGap) (Array.length queue)
+
+    -- Never right behind the card just answered, which is the one being
+    -- requeued.
+    slot = fromMaybe usual $ Array.find apart $ Array.filter reachable $ (usual + _) <$> [ 0, -1, 1, -2, 2 ]
+
+    reachable i = i >= position + 2 && i <= Array.length queue
+
+    apart i = alone (Array.index queue (i - 1)) && alone (Array.index queue i)
+
+    alone = maybe true (\other -> family other /= family slug)
 
 addInterval :: Instant -> Milliseconds -> Instant
 addInterval t (Milliseconds ms) =

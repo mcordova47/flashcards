@@ -238,9 +238,11 @@ update state = case _ of
                Progress.lookup slug state.progress)
             state.progress
         -- As on the study page: a miss comes round again before the session
-        -- ends, and `pick` makes it a different sentence when it does.
+        -- ends, and `pick` makes it a different sentence when it does. Unlike
+        -- there it keeps clear of its own family (#64), the one that sentence
+        -- has, which is why the family is read from the progress just made.
         queue = case grade of
-          Again -> Scheduler.requeue slug 0 state.queue
+          Again -> Scheduler.requeueBy (Curriculum.family progress) slug 0 state.queue
           GotIt -> state.queue
         graded = state
           { at = Just now
