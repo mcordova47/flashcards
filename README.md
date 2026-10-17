@@ -1014,8 +1014,8 @@ the nine verbs (#41, #104) with sentences written in the imperfect too.
 
 **A verb wants five sentences, one in each person.** A shift keeps its
 sentence's person, so a person no sentence is in has its preterite and
-imperfect unreached; and three marked for the person shift, in three persons,
-give every present a pool of two. The first seven verbs were written unevenly and
+imperfect unreached; and the person shift wants four marked in four persons, since
+three give the persons they are in a pool of two (#118). The first seven verbs were written unevenly and
 left eight persons' preterite and imperfect unreached (`ir` missed two); a
 sentence in each of those persons (#104) closed the gap. `ver`, `venir`, `ser` and `saber` (#100), and `poner`, `caer`,
 `oír` and `traer`, and `valer` and `leer`, and `pedir`, `seguir` and `morir` (#104), have one in each. No shift reaches the subjunctive,
@@ -1081,10 +1081,12 @@ plurals and feminines) or `juntos`/`juntas`. *[vuelves] a tu trabajo* shifted to
 row (`al trabajo`, `a casa`) rather than unmark it, since the pools are small.
 The unmarked rows are exempt: there the possessive is a clue to the person.
 
-**It takes three persons per verb and tense, not two.** A sentence cannot be
-asked into the person it is already in, so two sentences leave the persons
-they are in with one sentence each. `check-sentences` counts the person-shift
-items and lists any with only one sentence.
+**It takes four marked rows in four persons per verb and tense.** A sentence
+cannot be asked into the person it is already in, so each row leaves one
+person out of the pool: with three rows the persons they are in have a pool of
+two, which alternates A, B, A, B for ever (#118). Four in four persons leave
+every target three. `check-sentences` refuses an item below three, and the
+person-shift spec asks the same of the compiled bank.
 
 ### Error correction
 

@@ -72,12 +72,12 @@ spec = do
     it "leaves out the sentences that are not marked" do
       (Array.length marked < Array.length sentences) `shouldEqual` true
 
-    -- Which takes three source persons per verb and tense, not two: a
-    -- sentence cannot be asked into its own person, so with two sentences
-    -- the persons they are in each have a pool of one.
-    it "has at least two sentences for every item" do
+    -- A pool of two alternates, A, B, A, B, and a sentence cannot be asked
+    -- into its own person, so this takes four marked rows in four persons
+    -- per verb and tense. Three is the floor #84 and #41 set. See #118.
+    it "has at least three sentences for every item" do
       pools yielded
-        # Array.filter (\p -> NonEmpty.length p.exercises < 2)
+        # Array.filter (\p -> NonEmpty.length p.exercises < 3)
         # map _.slug
         # shouldEqual []
 

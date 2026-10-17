@@ -15,10 +15,10 @@
 // words the learner has not met is a second exercise hiding in the first.
 //
 // It also lists every item whose pool has fewer than two sentences, since a
-// later sighting of those has no different sentence to ask. See #16. For the
-// person shift that takes three source persons per verb and tense, not two:
-// a sentence cannot be asked into the person it is already in, so with two
-// the persons they are in each have a pool of one. See #25.
+// later sighting of those has no different sentence to ask. See #16. The
+// person shift it refuses below three: a pool of two alternates for ever, and
+// since a sentence cannot be asked into the person it is already in, that
+// takes four marked rows in four persons per verb and tense. See #25, #118.
 //
 // And it refuses two sentences around the same words, `[hacemos] la comida`
 // and `[hacen] la comida`. They are two rows and one string: the pool is there
@@ -83,6 +83,10 @@ for (const s of sentences) {
   corrected.set(correction, alike ?? s)
 }
 
+// A person-shift pool of two alternates, A, B, A, B, so the next prompt is the
+// one just seen. Three is the floor #84 and #41 set. See #118.
+const PERSON_POOL = 3
+
 const count = (pools, slug) => pools.set(slug, (pools.get(slug) ?? 0) + 1)
 
 // Mirrors Flashcards.Verbs.Shift.exercises: every sentence, into every
@@ -102,7 +106,7 @@ for (const s of shiftable) {
     count(personPools, `person.${s.infinitive}.${s.tense.name}.${target.name}`)
   }
 }
-const personThin = [...personPools].filter(([, n]) => n < 2)
+const personThin = [...personPools].filter(([, n]) => n < PERSON_POOL)
 
 // As Exercise.matches flattens.
 const bare = form => form.normalize("NFD").replace(/[\u0301\u0308]/g, "").normalize("NFC")
@@ -128,8 +132,9 @@ if (thin.length) {
 }
 console.log(`${shiftable.length} of them take a person shift, ${personPools.size} items`)
 if (personThin.length) {
-  console.log(`${personThin.length} person-shift item(s) with one sentence:`)
-  console.log(`  ${personThin.map(([slug]) => slug).join(" ")}`)
+  wrong += personThin.length
+  console.error(`x ${personThin.length} person-shift item(s) with fewer than ${PERSON_POOL} sentences, so the prompts alternate or repeat:`)
+  console.error(`  ${personThin.map(([slug, n]) => `${slug} (${n})`).join(" ")}`)
 }
 if (blurred.size) {
   console.log(`${blurred.size} answer(s) that only an accent tells from another form of the verb:`)
