@@ -7,6 +7,7 @@ import Prelude
 
 import Data.Array as Array
 import Data.DateTime.Instant (Instant, instant, unInstant)
+import Data.Int as Int
 import Data.Maybe (Maybe(..), fromJust)
 import Data.Newtype (unwrap)
 import Data.String as String
@@ -80,6 +81,19 @@ spec = do
     it "leaves a card alone until it comes due" do
       let progress = Progress.empty # reviewed 7 3 (105.0 * day)
       Scheduler.buildSession deck progress now 3 `shouldEqual` (slugAt <$> [ 1, 2, 3 ])
+
+  describe "buildSessionBy" do
+    let
+      -- Ranks 1-30 are one kind and 31-40 another, and rank 1 is the most overdue.
+      kindOf slug = if Array.elem slug (slugAt <$> Array.range 31 40) then "b" else "a"
+      progress = Array.foldl (\p n -> p # reviewed n 1 ((90.0 + Int.toNumber n / 100.0) * day)) Progress.empty (Array.range 1 40)
+
+    it "takes a due card from each kind in turn, most overdue first within each" do
+      let slugs = Scheduler.buildSessionBy kindOf deck progress now 6
+      slugs `shouldEqual` (slugAt <$> [ 1, 31, 2, 32, 3, 33 ])
+
+    it "is the plain due order when there is only one kind" do
+      Scheduler.buildSessionBy (const "x") deck progress now 6 `shouldEqual` Scheduler.buildSession deck progress now 6
 
   describe "applyGrade" do
     it "fast-tracks a word you knew on sight, skipping the short intervals" do

@@ -5,6 +5,7 @@ module Flashcards.Scheduler
   ( Graduation(..)
   , applyGrade
   , buildSession
+  , buildSessionBy
   , firstSightingBox
   , graduationBox
   , intervalFor
@@ -136,8 +137,27 @@ intervalFor box = Milliseconds $ day * case box of
 -- | item is. That is what lets a second page schedule conjugations with the
 -- | same scheduler rather than a copy of it.
 buildSession :: Array Slug -> Progress -> Instant -> Int -> Array Slug
-buildSession items progress now size =
-  Array.take size $ map _.slug dueCards <> map _.slug newCards
+buildSession = buildSessionBy (const "")
+
+-- | `buildSession`, choosing the due reviews across kinds rather than from the
+-- | top of one: a card from each kind in turn, most overdue first within each
+-- | kind, until the session is full. See #158.
+-- |
+-- | A due list is a block of one kind, because items first met together come
+-- | due together, and cutting a block by due time gives a session of one kind
+-- | that no reordering afterwards can mix. Choosing across kinds is what can.
+-- |
+-- | It cannot mix what is not due: when one kind is all there is, the session
+-- | is that kind, in due order, exactly as `buildSession` has it. And what it
+-- | costs is that a very overdue card of a common kind can wait a session
+-- | behind a less overdue one of a rare kind. Only the reviews are chosen this
+-- | way; new items follow, in the order they were given, as before.
+-- |
+-- | Takes the kind rather than knowing one, for the reason `buildSession` takes
+-- | slugs.
+buildSessionBy :: (Slug -> String) -> Array Slug -> Progress -> Instant -> Int -> Array Slug
+buildSessionBy kind items progress now size =
+  Array.take size $ roundRobin groups <> map _.slug newCards
   where
     annotated = items <#> \slug -> { slug, state: Progress.lookup slug progress }
 
@@ -147,7 +167,19 @@ buildSession items progress now size =
         # Array.filter (\a -> a.due <= now)
         # Array.sortWith _.due
 
+    -- Kinds in the order of their most overdue card, so the first card of the
+    -- session is still the most overdue of all.
+    groups =
+      Array.nub (map (kind <<< _.slug) dueCards) <#> \k ->
+        map _.slug $ Array.filter (\c -> kind c.slug == k) dueCards
+
     newCards = Array.filter (isNothing <<< _.state) annotated
+
+-- | One from each list in turn, until all are empty.
+roundRobin :: forall a. Array (Array a) -> Array a
+roundRobin lists = case Array.filter (not <<< Array.null) lists of
+  [] -> []
+  live -> Array.mapMaybe Array.head live <> roundRobin (map (Array.drop 1) live)
 
 -- | The same items in an order that looks random and is not: each is ranked by
 -- | a hash of the seed and its key, so the result is a function of its
