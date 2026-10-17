@@ -316,6 +316,31 @@ spec = do
       names (requeueBy (slug "b.9") 0 $ queueOf [ "x.1", "a.1", "c.1", "d.1", "b.1", "e.1", "f.1", "g.1" ])
         `shouldEqual` [ "x.1", "a.1", "c.1", "d.1", "b.1", "e.1", "b.9", "f.1", "g.1" ]
 
+    it "never lands right behind the card just answered" do
+      -- Slot 3 is the end and slot 2 is against b.1; slot 1 is clear, and is
+      -- the card just answered's own place.
+      names (requeueBy (slug "b.9") 0 $ queueOf [ "x.1", "a.1", "b.1" ])
+        `shouldEqual` [ "x.1", "a.1", "b.1", "b.9" ]
+
+    it "does not count a slot past the end as clear" do
+      -- Slots 4 and 3 are against b.1; 5 is past the end and has no
+      -- neighbours at all, and 2 is the first that is really clear.
+      names (requeueBy (slug "b.9") 0 $ queueOf [ "x.1", "a.1", "c.1", "b.1" ])
+        `shouldEqual` [ "x.1", "a.1", "b.9", "c.1", "b.1" ]
+
+    it "reaches two slots before the usual one" do
+      names (requeueBy (slug "b.9") 0 $ queueOf [ "x.1", "a.1", "c.1", "d.1", "b.1", "e.1", "b.2", "f.1" ])
+        `shouldEqual` [ "x.1", "a.1", "c.1", "b.9", "d.1", "b.1", "e.1", "b.2", "f.1" ]
+
+    it "and two slots after it" do
+      names (requeueBy (slug "b.9") 0 $ queueOf [ "x.1", "a.1", "c.1", "b.1", "d.1", "b.2", "e.1", "f.1" ])
+        `shouldEqual` [ "x.1", "a.1", "c.1", "b.1", "d.1", "b.2", "e.1", "b.9", "f.1" ]
+
+    it "but no further than that" do
+      -- Slot 8 is clear and is three after the usual one.
+      let queue = queueOf [ "x.1", "a.1", "c.1", "b.1", "d.1", "b.2", "b.3", "b.4", "e.1", "f.1" ]
+      requeueBy (slug "b.9") 0 queue `shouldEqual` Scheduler.requeue (slug "b.9") 0 queue
+
     it "falls back to the usual slot when everything in reach is beside a relative" do
       let queue = queueOf [ "x.1", "b.1", "b.2", "b.3", "b.4", "b.5", "b.6", "b.7" ]
       requeueBy (slug "b.9") 0 queue `shouldEqual` Scheduler.requeue (slug "b.9") 0 queue
