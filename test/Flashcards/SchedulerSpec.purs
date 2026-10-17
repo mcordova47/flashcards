@@ -103,6 +103,15 @@ spec = do
       let slugs = Scheduler.buildSessionBy kindOf deck progress now 6
       slugs `shouldEqual` (slugAt <$> [ 1, 31, 2, 32, 3, 33 ])
 
+    it "takes new items from each kind in turn too, each in the order given" do
+      Scheduler.buildSessionBy kindOf deck Progress.empty now 6
+        `shouldEqual` (slugAt <$> [ 1, 31, 2, 32, 3, 33 ])
+
+    it "puts due reviews ahead of new items of any kind" do
+      let reviewedOne = Progress.empty # reviewed 35 1 (90.0 * day)
+      Array.take 3 (Scheduler.buildSessionBy kindOf deck reviewedOne now 6)
+        `shouldEqual` (slugAt <$> [ 35, 1, 31 ])
+
     it "is the plain due order when there is only one kind" do
       Scheduler.buildSessionBy (const "x") deck progress now 6 `shouldEqual` Scheduler.buildSession deck progress now 6
 

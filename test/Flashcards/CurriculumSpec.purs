@@ -9,7 +9,7 @@ import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.DateTime.Instant (Instant, instant)
 import Control.Alternative (guard)
-import Data.Foldable (all, foldl, maximum)
+import Data.Foldable (all, foldl, for_, maximum)
 import Data.Int (toNumber)
 import Data.Number (floor)
 import Data.Maybe (Maybe(..), fromJust, fromMaybe, isJust)
@@ -111,6 +111,7 @@ spec = do
   sessions
   shuffling
   mixing
+  introduction
   order
   cells
 
@@ -230,6 +231,22 @@ mixing = describe "a session built when one kind is due far more than the rest" 
       dueOrder = Array.filter (\slug -> Array.elem slug queue) (map _.slug items)
     -- Within a kind the curriculum's order is the due order here.
     ofKind "person" `shouldEqual` Array.filter (isKind "person") dueOrder
+
+-- | A first sitting: nothing met, so every kind has new items left.
+introduction :: Spec Unit
+introduction = describe "a session of items not yet met" do
+  let
+    now = at 101.0
+    queue = Scheduler.buildSessionBy kind (map _.slug items) Progress.empty now Scheduler.sessionSize
+    ofKind k = Array.filter (\slug -> kind slug == k) queue
+    allOfKind k = Array.filter (\slug -> kind slug == k) (map _.slug items)
+
+  it "holds every kind, and not the first one alone" do
+    Array.nub (map kind queue) `shouldEqual` [ "tense", "person", "porpara", "error", "paraphrase" ]
+
+  it "takes each kind's items in that kind's own order" do
+    for_ [ "tense", "person", "porpara", "error", "paraphrase" ] \k ->
+      ofKind k `shouldEqual` Array.take (Array.length (ofKind k)) (allOfKind k)
 
 -- | What a prompt is confused between, and what the reader has to say: the
 -- | verb for a verb trap, the tense for a tense trap. As `patterned` reads
@@ -403,7 +420,9 @@ sessions = describe "a verb drill session" do
             progress = Array.foldl (\p (Tuple i slug) -> Progress.insert slug (card i) p) Progress.empty $
               Array.mapWithIndex Tuple queue
             asked = session progress (at 101.0)
-          Array.filter Paraphrase.isParaphrase asked `shouldEqual` [ slugOf opening, slugOf second ]
+          -- Only the two that were due: new paraphrases fill the rest (#65).
+          Array.filter (\slug -> slug == slugOf opening || slug == slugOf second) asked
+            `shouldEqual` [ slugOf opening, slugOf second ]
           -- Not vacuous: the spread does move the second ahead of the first.
           Array.filter Paraphrase.isParaphrase (Scheduler.spread (family progress) queue)
             `shouldEqual` [ slugOf second, slugOf opening ]

@@ -64,6 +64,23 @@ const byFrequency = sentences =>
   sentences.map((s, i) => [s, i]).sort(([a, i], [b, j]) =>
     (deckRank.get(a.infinitive) ?? Infinity) - (deckRank.get(b.infinitive) ?? Infinity) || i - j).map(([s]) => s)
 
+// Items put far behind us: met, at the top box, and not due for a month.
+const later = Date.now() + 30 * 86400000
+const behind = slugs => ({
+  version: formatVersion(), language: "verbs", deck: "none",
+  cards: slugs.map(slug =>
+    ({ slug, box: 5, seen: 3, missed: 0, lapses: 0, direction: "recognition", due: later })),
+})
+
+// A session takes its new items from each kind in turn (#65), so a page that
+// has not been used is a mix of kinds and these suites, which read a shift off
+// every question, cannot tell what they are being asked. Everything but the
+// tense shifts is put behind us, so a first session is shifts alone, as it was
+// before the kinds were interleaved.
+const shiftsOnly = () => behind([
+  ...personSlugs(), ...porParaSlugs(), ...errorSlugs, ...corpus.map(c => `paraphrase.${c.id}`),
+])
+
 // What the page is asking, and what the answer to it is. A pronoun is a
 // person shift and holds the tense; anything else is a tense, and holds the
 // person.
@@ -87,7 +104,7 @@ const answer = async (page, typed) => {
 const next = page => page.tap(".grade")
 
 export default async ({ check, open, blobs }) => {
-  const page = await open({ path: "/verbs", key: VERBS })
+  const page = await open({ path: "/verbs", key: VERBS, seed: shiftsOnly() })
   await page.waitForSelector(".verb-sentence")
   await wait(400)
 
@@ -104,10 +121,12 @@ export default async ({ check, open, blobs }) => {
   check("a right answer shows the sentence moved", await page.text(".milestone"), `✓ ${first.full}`)
   check("with nothing to add, since the prompt named the tense", await page.text(".verb-note"), null)
 
+  // Not the items `shiftsOnly` put behind us, which were met three times.
+  const answered = stored => stored.cards.filter(c => c.seen < 3)
   let stored = await page.stored()
-  check("and is written under the page's own key", stored.cards.length, 1)
-  check("keyed by verb and tense, not by sentence", stored.cards[0].slug, first.slug)
-  check("graded as got", stored.cards[0].missed, 0)
+  check("and is written under the page's own key", answered(stored).length, 1)
+  check("keyed by verb and tense, not by sentence", answered(stored)[0].slug, first.slug)
+  check("graded as got", answered(stored)[0].missed, 0)
   check("through the same codec as everything else", stored.version, formatVersion())
   check("naming its own namespace", stored.language, "verbs")
 
@@ -184,7 +203,7 @@ export default async ({ check, open, blobs }) => {
   await paired.close()
 
   // --- the keyboard, for a drill that is mostly typing ---
-  const keys = await open({ path: "/verbs", key: VERBS })
+  const keys = await open({ path: "/verbs", key: VERBS, seed: shiftsOnly() })
   await keys.waitForSelector(".verb-sentence")
   await wait(400)
   const typed = await asked(keys)
@@ -266,7 +285,7 @@ export default async ({ check, open, blobs }) => {
   check("a tapped button does not take the next Enter as well",
     after.slug !== before.slug, true)
   check("landing one question on, not two",
-    (await keys.stored()).cards.filter(c => c.seen > 0).length, 2)
+    (await keys.stored()).cards.filter(c => c.seen > 0 && c.seen < 3).length, 2)
   // Tapped through, which is how a phone is used with the keyboard down:
   // Enter keeps focus in the box on its own, so it proves nothing here.
   await keys.type(".verb-answer", "nada")
@@ -310,16 +329,12 @@ export default async ({ check, open, blobs }) => {
   await keys.close()
 
   // --- the person shift: the same sentences, the tense held still ---
-  // The tense shift is put behind us so the session opens on the most
+  // Everything but the person shifts is put behind us so the session opens on the most
   // common verb's first sentence marked for a person shift, moved into the
   // first person it is not already in.
-  const later = Date.now() + 30 * 86400000
-  const behind = slugs => ({
-    version: formatVersion(), language: "verbs", deck: "none",
-    cards: slugs.map(slug =>
-      ({ slug, box: 5, seen: 3, missed: 0, lapses: 0, direction: "recognition", due: later })),
-  })
-  const persons = await open({ path: "/verbs", key: VERBS, seed: behind(shiftSlugs()) })
+  const persons = await open({ path: "/verbs", key: VERBS, seed: behind([
+    ...shiftSlugs(), ...porParaSlugs(), ...errorSlugs, ...corpus.map(c => `paraphrase.${c.id}`),
+  ]) })
   await persons.waitForSelector(".verb-sentence")
   await wait(400)
 
