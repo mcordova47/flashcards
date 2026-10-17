@@ -1153,17 +1153,21 @@ still put a confusable verb in front of the learner. Four rows do, on purpose �
 *supe* and *conocí* are there for what their preterites mean — and each says so
 in `Notes`.
 
-**The order of the rows is part of the corpus.** A prompt's trap is its
+**The order of the rows is not part of the corpus.** A prompt's trap is its
 answer — the verb for a verb trap, the tense for a tense trap — so if one
 confusion's prompts are met as *conocer, saber, conocer, saber*, the reader
 can answer the next from its position. No four running may be alike or
 alternate, in the order they are first met; three may, because with two
 answers, refusing both three alike and three alternating leaves only pairs,
-and pairs are predictable after the second answer. `CurriculumSpec` checks
-this against the sessions rather than the file: the spread keeps a verb
-trap's prompts as written, since their family is the pair, but moves a tense
-trap's around, since theirs is the verb. Reordering is safe for progress,
-which is keyed by `Id`. See #63.
+and pairs are predictable after the second answer. `Paraphrase.arranged`
+makes that true of any set of rows, taking the file's order as nearly as the
+rule allows and keeping a verb's prompts apart, and the session leaves the
+prompts in that order however it spreads the rest; so adding a row cannot
+break it, and nobody has to find a swap that works. `CurriculumSpec` checks
+it against the sessions, and against the corpus reversed and cut at every
+length. It holds for the order first met; a session of reviews is cut by due
+date, which is not this. Reordering is safe for progress, which is keyed by
+`Id`. See #63 and #109.
 
 **The rubric is derived, not written.** `Flashcards.Verbs.Paraphrase` turns a
 row into three lines, and only the trap is phrased as a choice:

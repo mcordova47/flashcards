@@ -52,7 +52,7 @@ unavoidable progress queue = max 0 (2 * most - Array.length queue - 1)
 -- | asks them, where four running are alike or alternate: `conocer / saber:
 -- | conocer saber conocer saber ...`. The trap is the answer — the verb for a
 -- | verb trap, the tense for a tense trap — so a short pattern in it lets the
--- | position answer the prompt. See #63.
+-- | position answer the prompt. See #63; `Paraphrase.arranged` is what keeps it.
 -- |
 -- | Four, not three: with only two answers, refusing both three alike and three
 -- | alternating leaves pairs as the one order allowed, and then everything
@@ -264,21 +264,59 @@ sessions = describe "a verb drill session" do
     Array.length reviews.sessions `shouldEqual` 16
     counted reviews.sessions `shouldEqual` fewest reviews.sessions
 
-  -- The paraphrase corpus opens on thirteen ser / estar prompts, one family,
-  -- and lands mostly inside one session, so some pairs are unavoidable: five
-  -- in that session. The saber / conocer prompts that close it used to fill
-  -- the last session and cost six more; the nine present-tense subjunctive
-  -- prompts of #77 moved them back far enough that they share it with other
-  -- families. Where the count lands moves with every change to the bank.
-  it "puts two alike together only in the ser / estar block" do
-    pairedIn first.sessions `shouldEqual` [ [], [], [], [], [], [], [], [], [], [], [], [ Just "estar / ser" ], [], [], [], [] ]
-    map (\s -> unavoidable s.progress s.queue) first.sessions `shouldEqual` [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0 ]
+  -- `Paraphrase.arranged` places the prompts of one family apart, so the
+  -- thirteen ser / estar ones that opened the file and cost five pairs in one
+  -- session no longer do. Not "only in the ser / estar block" any more: none.
+  it "puts no two alike together at all" do
+    pairedIn first.sessions `shouldEqual` Array.replicate 16 []
 
-  -- Met in their order, not the file's: a verb trap's family is its pair,
-  -- so the spread keeps those as written, but a tense trap's is its verb,
-  -- and the spread moves those between sessions and around each other.
+  -- Met in their order, which is `arranged`'s and not the file's.
   it "meets no paraphrase trap's answers in a run of four, alike or alternating" do
     patterned (Array.concatMap _.queue first.sessions) `shouldEqual` []
+
+  -- What #109 asks: not that today's file happens to hold, but that no file
+  -- can break it. The prompts in the file's order, backwards, and with any
+  -- number of them taken off the front or the back, which is what adding or
+  -- removing a batch does to where everything lands.
+  it "holds for the prompts however many there are and whatever order the file keeps them in" do
+    let
+      met ps = map (\p -> Slug ("paraphrase." <> p.id)) (Paraphrase.arranged ps)
+      broken = Array.filter (\ps -> patterned (met ps) /= [])
+        $ [ prompts, Array.reverse prompts ]
+            <> map (\n -> Array.drop n prompts) (Array.range 0 40)
+            <> map (\n -> Array.take n prompts) (Array.range 40 (Array.length prompts))
+            <> map (\n -> Array.drop n (Array.reverse prompts)) (Array.range 0 40)
+    Array.length broken `shouldEqual` 0
+
+  -- A person shift of a verb comes due first, then two tense-trap prompts, the
+  -- first of the same verb and the second of another. Spread alone takes the
+  -- shift, finds the first prompt alike to it, and so takes the second prompt
+  -- ahead of the first.
+  it "meets the paraphrase prompts in their own order, among items that are spread around them" do
+    let
+      tenseTraps = Array.filter (\p -> p.trap == OnTense) prompts
+      pair = Array.head tenseTraps >>= \first ->
+        Array.find (\p -> p.verb /= first.verb) tenseTraps <#> \second -> Tuple first second
+      slugOf p = Slug ("paraphrase." <> p.id)
+      shift verb = Array.find (\slug -> starting' "person." slug && family Progress.empty slug == Just verb) $ map _.slug items
+      card i = { box: 1, due: at (100.0 + toNumber i / 1440.0), seen: 1, lapses: 0, missed: 0, direction: Recognition }
+    case pair of
+      Nothing -> shouldEqual "no two tense traps" "two"
+      Just (Tuple first second) -> case shift first.verb of
+        Nothing -> shouldEqual ("a person shift of " <> first.verb) "none"
+        Just s -> do
+          let
+            queue = [ s, slugOf first, slugOf second ]
+            progress = Array.foldl (\p (Tuple i slug) -> Progress.insert slug (card i) p) Progress.empty $
+              Array.mapWithIndex Tuple queue
+            asked = session progress (at 101.0)
+          Array.filter Paraphrase.isParaphrase asked `shouldEqual` [ slugOf first, slugOf second ]
+          -- Not vacuous: the spread does move the second ahead of the first.
+          Array.filter Paraphrase.isParaphrase (Scheduler.spread (family progress) queue)
+            `shouldEqual` [ slugOf second, slugOf first ]
+
+starting' :: String -> Slug -> Boolean
+starting' prefix slug = String.take (String.length prefix) (slugToString slug) == prefix
 
 order :: Spec Unit
 order = describe "the order new items are met in" do

@@ -11,6 +11,7 @@
 module Flashcards.Verbs.Paraphrase
   ( Prompt
   , Trap(..)
+  , arranged
   , exercise
   , exercises
   , isParaphrase
@@ -21,7 +22,9 @@ module Flashcards.Verbs.Paraphrase
 
 import Prelude
 
-import Data.Maybe (Maybe(..))
+import Control.Alt ((<|>))
+import Data.Array as Array
+import Data.Maybe (Maybe(..), fromMaybe)
 import Data.String as String
 import Flashcards.Exercise (Answer(..), Exercise, Rubric)
 import Flashcards.Types.Card (Slug(..))
@@ -104,9 +107,7 @@ exercise p =
   -- then an estar one is the same choice made twice. Where the trap is the
   -- tense, the verb is given away by nothing, and is what the last answer
   -- would repeat.
-  , family: case p.trap of
-      OnVerb -> pair p.verb p.against
-      OnTense -> p.verb
+  , family: family p
   -- It has a verb, tense and person, and the model answer conjugates them,
   -- but what is graded is whether you chose them, not how you spelled the
   -- result. See `Exercise`.
@@ -131,6 +132,92 @@ exercise p =
 -- | See #84.
 exercises :: Array Prompt -> Array Exercise
 exercises = map exercise
+
+-- | What a prompt's neighbour must differ from for the two not to be alike:
+-- | see `exercise`.
+family :: Prompt -> String
+family p = case p.trap of
+  OnVerb -> pair p.verb p.against
+  OnTense -> p.verb
+
+-- | The two things a prompt can be confused between, as one key: `estar / ser`
+-- | or `present / subjunctive`.
+confusion :: Prompt -> String
+confusion p = case p.trap of
+  OnVerb -> pair p.verb p.against
+  OnTense -> pair (tense p.tense) p.against
+
+-- | What the prompt's reader has to say: the trap is the answer, the verb
+-- | for a verb trap and the tense for a tense trap.
+answer :: Prompt -> String
+answer p = case p.trap of
+  OnVerb -> p.verb
+  OnTense -> tense p.tense
+
+-- | The prompts in the order they should be met, which is a property of what
+-- | they are and not of where the file keeps them. See #109.
+-- |
+-- | Because a trap's answer is the verb or the tense, one confusion's prompts
+-- | met as *conocer, saber, conocer, saber* let the position answer the next.
+-- | So no four of one confusion's answers running, in the order met, may be
+-- | alike or alternate; three may, since with two answers refusing both leaves
+-- | only pairs, and pairs are predictable after the second. See #63, which
+-- | wrote that down and met it by hand-ordering the file, and broke every time
+-- | a sentence was added.
+-- |
+-- | Otherwise the file's order is kept as nearly as it can be: at each step the
+-- | earliest prompt that breaks nothing and still leaves the rest placeable,
+-- | preferring one whose family is not the last's, since the session cannot
+-- | spread what it must leave in place. A confusion whose prompts all have one
+-- | answer is left alone, since no order can hide that. If no order meets the
+-- | rule at all, the file's own.
+-- |
+-- | A function of the prompts, so a reload asks the same thing and adding a
+-- | prompt moves only what it must.
+arranged :: Array Prompt -> Array Prompt
+arranged prompts = fromMaybe prompts $ go true [] prompts <|> go false [] prompts
+  where
+    -- `apart` is whether to refuse a neighbour of the same family, which is
+    -- tried first and given up on only if it leaves no order.
+    go apart placed = case _ of
+      [] -> Just placed
+      remaining ->
+        Array.findMap (\next -> go apart (Array.snoc placed next.prompt) next.rest) (candidates apart placed remaining)
+
+    -- Each prompt that can come next, with what is left after it: those of a
+    -- different family from the last first, each group in the file's order.
+    candidates apart placed remaining =
+      let
+        ok = Array.mapWithIndex (\i c -> { prompt: c, rest: Array.deleteAt i remaining }) remaining
+          # Array.mapMaybe (\o -> o.rest <#> \rest -> { prompt: o.prompt, rest })
+          # Array.filter (allowed placed <<< _.prompt)
+        differs o = Array.last placed # maybeDiffers (family o.prompt)
+        -- No family may be more than half of what is left, or its prompts
+        -- cannot be kept apart however they are placed.
+        placeable o = most o.rest <= (Array.length o.rest + 1) / 2
+      in
+        if apart
+          then Array.filter (\o -> differs o && placeable o) ok
+          else Array.filter differs ok <> Array.filter (not <<< differs) ok
+
+    most rest = fromMaybe 0 $ Array.last $ Array.sort $ map (\p -> Array.length (Array.filter (\q -> family q == family p) rest)) rest
+
+    maybeDiffers f = case _ of
+      Nothing -> true
+      Just last -> family last /= f
+
+    -- Whether `next` would complete a run of four that a reader could see.
+    allowed placed next =
+      not (varied next)
+        || not (shaped (Array.takeEnd 3 (answersOf next placed) <> [ answer next ]))
+
+    answersOf next = map answer <<< Array.filter (\p -> confusion p == confusion next)
+
+    varied next = Array.length (Array.nub (answersOf next prompts)) > 1
+
+    shaped = case _ of
+      [ a, b, a', b' ] -> a == a' && b == b'
+      _ -> false
 
 -- | `estar / ser` whichever way round the prompt has them, as
 -- | `check-paraphrase` counts them.

@@ -423,10 +423,9 @@ export default async ({ check, open, blobs }) => {
   await pp.close()
   // --- error correction: a sentence broken on purpose ---
   // The shifts and por / para are put behind us, so the session is the six
-  // kinds and the paraphrase. The first four open on a `tener` sentence, and
-  // thirteen of the sixteen paraphrase prompts are one family, ser / estar —
-  // more than half the session, so it leads and goes between everything
-  // else (#51). Passed, a prompt moves on by itself.
+  // kinds and the paraphrase, which is arranged so that no family is a block
+  // of it (#109): the kinds come first, most of them, with a prompt among them
+  // where the spread finds a pair alike. Passed, a prompt moves on by itself.
   // The sentence on screen is not in the bank - its verb is broken - so it
   // is found by the words either side of the box.
   const fixing = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs(), ...porParaSlugs()]) })
@@ -477,13 +476,23 @@ export default async ({ check, open, blobs }) => {
   check("the error typed back unchanged is wrong", await fixing.text(".milestone"), `✗ ${retyped.full}`)
   check("and the mistake is named then too", (await fixing.text(".verb-note")) !== null, true)
   stored = await fixing.stored()
-  check("graded as missed", stored.cards.find(c => c.slug === "error.strong-weak")?.missed, 1)
+  // Whichever kind it was: the paraphrase is arranged, not left as a block of
+  // one family, so the order the kinds come in is the spread's and not this
+  // test's to know (#109).
+  const missedKind = stored.cards.filter(c => c.slug.startsWith("error.")).find(c => c.missed === 1)?.slug
+  check("graded as missed", missedKind !== undefined, true)
 
-  // A missing accent is still not the mistake being drilled.
-  await next(fixing)
-  await passParaphrase()
-  const accented = await broken()
-  check("the next fix has an accent to leave off", /[áéíóú]/.test(accented.form), true)
+  // A missing accent is still not the mistake being drilled. Some kind has
+  // one, and is met within the session.
+  let accented = null
+  for (let i = 0; i < 12 && !accented; i++) {
+    await next(fixing)
+    await passParaphrase()
+    const b = await broken()
+    if (/[áéíóú]/.test(b.form)) accented = b
+    else await answer(fixing, b.form)
+  }
+  check("a fix has an accent to leave off", accented !== null, true)
   await answer(fixing, accented.form.normalize("NFD").replace(/[́]/g, ""))
   check("and a fix without it counts", await fixing.text(".verb-accent"), `right — ${accented.form}`)
 
@@ -500,7 +509,7 @@ export default async ({ check, open, blobs }) => {
     }
     const b = await broken()
     await answer(fixing, b.form)
-    if (await seenOf("error.strong-weak") === 2) fixAgain = b
+    if (await seenOf(missedKind) === 2) fixAgain = b
     else await next(fixing)
   }
   check("the missed kind comes round again", fixAgain !== null, true)
