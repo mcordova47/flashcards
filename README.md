@@ -1274,6 +1274,17 @@ Scheduling is Leitner with five boxes:
 | 4 | 3 weeks |
 | 5 | 2 months |
 
+The week and longer are **fuzzed** (#159): moved by up to 15% either way, so
+that items first answered in one session do not all fall due on one day and stay
+together up the ladder. The offset is a function of the slug and the answer's
+`seen`, not a random number, so `applyGrade` stays pure and two devices with the
+same history compute the same date. Boxes 1 and 2 are exact, and so is a miss.
+It applies to the flashcards and the drills alike, since they share
+`applyGrade`, and to the forecast, which plays the ladder out on it: *earliest*
+still means *if every review goes right*, with each date moved by its offset.
+Dates already stored are not touched; a clump disperses as its items are next
+answered.
+
 When there is nothing left to review, the screen says how long the wait is —
 "Nothing due for another 4 hours" — measured to the soonest card still ahead.
 After an ordinary session it appears as a separate line, but only when the

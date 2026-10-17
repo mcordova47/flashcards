@@ -42,6 +42,12 @@ slugs = map _.slug deck
 slugAt :: Int -> Slug
 slugAt n = Slug $ "es" <> show n
 
+-- | An interval of `days` on the `seen`th answer of the card at rank 1, which
+-- | is the ladder's moved by the offset: what the forecasts below are a hand
+-- | calculation of.
+fuzzedDays :: Int -> Number -> Number
+fuzzedDays seen days = Scheduler.fuzzed (slugAt 1) seen (Milliseconds $ days * day) # \(Milliseconds ms) -> ms / day
+
 -- | rank, box, seen, missed, lapses, days until due
 card :: Int -> Int -> Int -> Int -> Int -> Number -> Progress -> Progress
 card = cardIn Recognition
@@ -193,9 +199,10 @@ spec = do
 
     it "adds each rung's interval after the answer that climbs it" do
       -- Box 3 due in 2 days: answered then it is box 4 due 21 days on.
-      wait (Progress.empty # card 1 3 1 0 0 2.0) `shouldEqual` Just (Milliseconds $ 23.0 * day)
-      -- Box 2 due in 1: box 3 (+7), box 4 (+21), box 5. 1 + 7 + 21 = 29.
-      wait (Progress.empty # card 1 2 1 0 0 1.0) `shouldEqual` Just (Milliseconds $ 29.0 * day)
+      -- The 21 is the second answer's, offset as that answer's date is.
+      wait (Progress.empty # card 1 3 1 0 0 2.0) `shouldEqual` Just (Milliseconds $ (2.0 + fuzzedDays 2 21.0) * day)
+      -- Box 2 due in 1: box 3 (+7), box 4 (+21), box 5, on answers 2 and 3.
+      wait (Progress.empty # card 1 2 1 0 0 1.0) `shouldEqual` Just (Milliseconds $ (1.0 + fuzzedDays 2 7.0 + fuzzedDays 3 21.0) * day)
 
     it "answers an overdue item now, not when it fell due" do
       wait (Progress.empty # card 1 4 1 0 0 (-2.0)) `shouldEqual` Just (Milliseconds 0.0)
@@ -252,7 +259,7 @@ spec = do
     -- production box 1 (+1), box 2 (+3), box 3 mastered: 2 + 1 + 3 = 6.
     it "follows whether a card may graduate" do
       let progress = Progress.empty # card 1 3 1 0 0 2.0
-      masteredIn 1 [ plain 1 ] progress `shouldEqual` Just (Milliseconds $ 23.0 * day)
+      masteredIn 1 [ plain 1 ] progress `shouldEqual` Just (Milliseconds $ (2.0 + fuzzedDays 2 21.0) * day)
       masteredIn 1 [ graduating 1 ] progress `shouldEqual` Just (Milliseconds $ 6.0 * day)
 
     it "answers an overdue card now, not when it fell due" do

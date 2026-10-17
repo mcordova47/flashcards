@@ -20,7 +20,7 @@ import Flashcards.Types.Progress (CardProgress, Progress)
 import Flashcards.Types.Progress as Progress
 import Partial.Unsafe (unsafePartial)
 import Test.Spec (Spec, describe, it)
-import Test.Spec.Assertions (shouldEqual)
+import Test.Spec.Assertions (shouldEqual, shouldSatisfy)
 
 day :: Number
 day = 86400000.0
@@ -51,6 +51,17 @@ boxedAt box = Just { box, due: at $ 99.0 * day, seen: 4, lapses: 2, missed: 3, d
 -- | Most of these concern a card free to move to production.
 graded :: Grade -> Instant -> Maybe CardProgress -> CardProgress
 graded grade at' = Scheduler.applyGrade (slugAt 1) grade at' Scheduler.MayGraduate
+
+-- | An interval of `days` as the card at `slugAt 1` has it on its `seen`th
+-- | answer: the ladder's, moved by the offset. The hand calculation the specs
+-- | below compare against, so that they say what the ladder is and not what
+-- | the offset happened to be.
+fuzzedDays :: Int -> Number -> Number
+fuzzedDays seen days = unwrap (Scheduler.fuzzed (slugAt 1) seen (Milliseconds $ days * day)) / day
+
+-- | Compare to a millionth of a day, since the walks below subtract dates.
+roughly :: Array Number -> Array Number
+roughly = map \x -> Int.toNumber (Int.round $ x * 1000000.0) / 1000000.0
 
 -- | Days from `now` until the card is next due.
 dueInDays :: CardProgress -> Number
@@ -99,7 +110,7 @@ spec = do
     it "fast-tracks a word you knew on sight, skipping the short intervals" do
       let cp = graded GotIt now Nothing
       cp.box `shouldEqual` Scheduler.firstSightingBox
-      dueInDays cp `shouldEqual` 7.0
+      dueInDays cp `shouldEqual` fuzzedDays 1 7.0
 
     it "promotes one box at a time once a word has been struggled with" do
       -- Missing it first means the next success is ordinary progress, not a
@@ -117,13 +128,13 @@ spec = do
         retiring = Just { box: Scheduler.maxBox, due: at 0.0, seen: 12, lapses: 1, missed: 4, direction: Production }
         cp = graded GotIt now retiring
       cp.box `shouldEqual` Scheduler.maxBox
-      dueInDays cp `shouldEqual` 60.0
+      dueInDays cp `shouldEqual` fuzzedDays 13 60.0
 
     it "tops recognition out below the graduation box, so the long intervals belong to production" do
       let climbed = graded GotIt now $ boxedAt (Scheduler.graduationBox - 2)
       climbed.box `shouldEqual` (Scheduler.graduationBox - 1)
       climbed.direction `shouldEqual` Recognition
-      dueInDays climbed `shouldEqual` 7.0
+      dueInDays climbed `shouldEqual` fuzzedDays 5 7.0
 
     it "sends a missed card back to box 0, due immediately" do
       let cp = graded Again now $ boxedAt 3
@@ -148,6 +159,41 @@ spec = do
     it "counts every answer as a sighting" do
       (graded Again now $ boxedAt 3).seen `shouldEqual` 5
       (graded GotIt now Nothing).seen `shouldEqual` 1
+
+  describe "fuzzing the interval" do
+    let
+      -- Fifty items first answered right in one session, as a new deck's
+      -- opening stretch is: the clump #159 is about.
+      cohort = deck <#> \slug -> Scheduler.applyGrade slug GotIt now Scheduler.RecognitionOnly Nothing
+
+      daysDue = cohort <#> \cp -> Int.floor $ (unwrap (unInstant cp.due) - unwrap (unInstant now)) / day
+      onDay d = Array.length $ Array.filter (_ == d) daysDue
+
+    it "spreads a cohort answered together across several days, not one" do
+      Array.length (Array.nub daysDue) `shouldSatisfy` (_ >= 3)
+      -- A week out with fifteen percent either side: no day holds more
+      -- than half of them. Unfuzzed, one day held all fifty.
+      (Array.foldl max 0 $ onDay <$> Array.nub daysDue) `shouldSatisfy` (_ <= Array.length deck / 2)
+
+    it "keeps every one within the fraction of the interval" do
+      (cohort <#> dueInDays) `shouldSatisfy` Array.all (\d -> d >= 7.0 * (1.0 - Scheduler.fuzzFraction) && d <= 7.0 * (1.0 + Scheduler.fuzzFraction))
+
+    it "is the same date for the same slug and answer, whoever computes it" do
+      let again = deck <#> \slug -> Scheduler.applyGrade slug GotIt now Scheduler.RecognitionOnly Nothing
+      again `shouldEqual` cohort
+
+    it "is another date for the same slug's next answer" do
+      let
+        dueAt seen = Scheduler.fuzzed (slugAt 1) seen (Milliseconds $ 21.0 * day)
+      Array.length (Array.nub $ dueAt <$> Array.range 1 10) `shouldSatisfy` (_ > 5)
+
+    it "leaves the short intervals exact" do
+      Scheduler.fuzzed (slugAt 1) 2 (Milliseconds day) `shouldEqual` Milliseconds day
+      Scheduler.fuzzed (slugAt 1) 2 (Milliseconds $ 3.0 * day) `shouldEqual` Milliseconds (3.0 * day)
+      Scheduler.fuzzed (slugAt 1) 2 (Milliseconds 0.0) `shouldEqual` Milliseconds 0.0
+
+    it "does not move a card that was missed, which is due now" do
+      dueInDays (graded Again now $ boxedAt 3) `shouldEqual` 0.0
 
   describe "graduating to production" do
     it "flips direction on the answer that would reach the graduation box" do
@@ -217,8 +263,13 @@ spec = do
               }
 
     it "a word you already knew reaches production on the second answer" do
-      map (\s -> s.onDay) (walk [ GotIt, GotIt, GotIt, GotIt, GotIt, GotIt ])
-        `shouldEqual` [ 0.0, 7.0, 8.0, 11.0, 18.0, 39.0 ]
+      -- Intervals of 7, 1, 3, 7 and 21 days, the sevens and the twenty-one
+      -- moved by their own answer's offset.
+      let
+        first = fuzzedDays 1 7.0
+        fourth = first + 1.0 + 3.0 + fuzzedDays 4 7.0
+      roughly (map (\s -> s.onDay) (walk [ GotIt, GotIt, GotIt, GotIt, GotIt, GotIt ]))
+        `shouldEqual` roughly [ 0.0, first, first + 1.0, first + 4.0, fourth, fourth + fuzzedDays 5 21.0 ]
 
     it "and is fully retired after six" do
       map (\s -> s.box) (walk [ GotIt, GotIt, GotIt, GotIt, GotIt, GotIt ])
@@ -230,7 +281,12 @@ spec = do
 
     it "a word you have to learn takes four answers to graduate" do
       let learned = walk [ Again, GotIt, GotIt, GotIt, GotIt, GotIt, GotIt, GotIt ]
-      map (\s -> s.onDay) learned `shouldEqual` [ 0.0, 0.0, 1.0, 4.0, 11.0, 12.0, 15.0, 22.0 ]
+      -- 0, 1, 3, then 7 (answer 4), 1, 3, 7 (answer 7).
+      let
+        fourth = 4.0 + fuzzedDays 4 7.0
+        seventh = fourth + 1.0 + 3.0 + fuzzedDays 7 7.0
+      roughly (map (\s -> s.onDay) learned)
+        `shouldEqual` roughly [ 0.0, 0.0, 1.0, 4.0, fourth, fourth + 1.0, fourth + 4.0, seventh ]
       map (\s -> s.producing) learned
         `shouldEqual` [ false, false, false, false, true, true, true, true ]
 
@@ -239,7 +295,7 @@ spec = do
       map (\s -> s.box) slipped `shouldEqual` [ 3, 1, 2, 0, 1 ]
       map (\s -> s.producing) slipped `shouldEqual` [ false, true, true, true, true ]
       -- Box 0 is due immediately: it comes back in the same session.
-      map (\s -> s.nextIn) slipped `shouldEqual` [ 7.0, 1.0, 3.0, 0.0, 1.0 ]
+      roughly (map (\s -> s.nextIn) slipped) `shouldEqual` roughly [ fuzzedDays 1 7.0, 1.0, 3.0, 0.0, 1.0 ]
 
     it "a card barred from production never graduates, however well it goes" do
       let

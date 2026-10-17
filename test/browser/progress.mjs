@@ -158,7 +158,9 @@ export default async ({ check, open }) => {
     for (let i = 0; i < 20; i++) { await p.tap(".card"); await p.tap(".got-it") }
     await p.waitForSelector(".done-title")
     check("a finished session reports its tally", await p.text(".done-stats"), "20 cards · 20 got it · 0 again")
-    check("and adds when the next review lands", await p.text(".next-due"), "Next review in 7 days")
+    // The soonest of twenty a week out, each moved by up to 15% (#159), so
+    // 6 or 7 days and never the whole week.
+    check("and adds when the next review lands", /^Next review in [67] days$/.test(await p.text(".next-due")), true)
     await p.close()
   }
 
