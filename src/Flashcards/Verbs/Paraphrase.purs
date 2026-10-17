@@ -25,9 +25,11 @@ import Prelude
 import Control.Alt ((<|>))
 import Data.Array as Array
 import Data.Foldable (foldl)
+import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
-import Data.Set as Set
 import Data.String as String
+import Data.Traversable (mapAccumL)
+import Data.Tuple (Tuple(..))
 import Flashcards.Exercise (Answer(..), Exercise, Rubric)
 import Flashcards.Types.Card (Slug(..))
 import Flashcards.Verbs.Table (Person(..), Tense(..))
@@ -167,106 +169,113 @@ answer p = case p.trap of
 -- | wrote that down and met it by hand-ordering the file, and broke every time
 -- | a sentence was added.
 -- |
--- | Otherwise the file's order is kept as nearly as it can be: at each step the
--- | earliest prompt that breaks nothing and still leaves the rest placeable,
--- | preferring one whose family is not the last's, since the session cannot
--- | spread what it must leave in place. A confusion whose prompts all have one
--- | answer is left alone, since no order can hide that.
--- |
--- | The search backtracks, remembers the states it has failed, and is capped (`budget` prompts placed, per
--- | attempt): whether the rest can be placed is not something the pruning
--- | here can settle, and a corpus where it cannot is one the search would
--- | otherwise never leave, which `items` would make a page that never loads.
--- | Out of budget, or with no order at all, it takes the same choice at every
--- | step without looking ahead, which breaks the rule only where it must.
+-- | The rule is about one confusion's prompts in the order they come, and says
+-- | nothing of how they sit among the others, so it is done in two parts. Each
+-- | confusion is put in order alone (`order`), which is exact and takes no
+-- | search, and then the confusions are merged without reordering any of them,
+-- | so the rule holds however the merge goes. The merge takes the file's order
+-- | as nearly as it can, preferring a prompt whose family is not the last's,
+-- | since the session cannot spread what it must leave in place.
 -- |
 -- | A function of the prompts, so a reload asks the same thing and adding a
 -- | prompt moves only what it must.
 arranged :: Array Prompt -> Array Prompt
-arranged prompts =
-  fromMaybe (greedy [] prompts) $
-    (search true [] prompts start).found <|> (search false [] prompts start).found
+arranged prompts = merge [] (map order confusions)
   where
-    start = { fuel: budget, failed: Set.empty }
+    confusions = Array.nub (map confusion prompts) <#> \c -> Array.filter (\p -> confusion p == c) prompts
 
-    -- `apart` is whether to refuse a neighbour of the same family, which is
-    -- tried first and given up on only if it leaves no order. Handed back with
-    -- what is left of the budget is every state found to lead nowhere, so that
-    -- the same one reached another way is not searched again.
-    search apart placed remaining state = case remaining of
-      [] -> { found: Just placed, fuel: state.fuel, failed: state.failed }
-      _ | state.fuel <= 0 -> { found: Nothing, fuel: 0, failed: state.failed }
-        | Set.member key state.failed -> { found: Nothing, fuel: state.fuel, failed: state.failed }
-        | otherwise ->
-            let
-              result = foldl try { found: Nothing, fuel: state.fuel - 1, failed: state.failed } (candidates apart placed remaining)
-            in
-              case result.found of
-                Nothing | result.fuel > 0 -> result { failed = Set.insert key result.failed }
-                _ -> result
-      where
-        try acc next = case acc.found of
-          Just _ -> acc
-          Nothing
-            | acc.fuel <= 0 -> acc
-            | otherwise -> search apart (Array.snoc placed next.prompt) next.rest { fuel: acc.fuel, failed: acc.failed }
+    at p = fromMaybe 0 $ Array.findIndex (\q -> q.id == p.id) prompts
 
-        -- All that decides what can follow: what is left, the family just
-        -- placed, and for each confusion the last three answers.
-        key = String.joinWith "," (map _.id remaining)
-          <> "|" <> maybe "" family (Array.last placed)
-          <> "|" <> String.joinWith ";" (Array.nub (map confusion placed) <#> \c ->
-            String.joinWith "," (Array.takeEnd 3 (map answer (Array.filter (\p -> confusion p == c) placed))))
-
-    -- The first choice at every step, and the file's next prompt when there is
-    -- none that breaks nothing.
-    greedy placed remaining = case Array.uncons remaining of
+    -- The head, of the chains, that is earliest in the file and differs from
+    -- the last placed, and leaves no family more than half of what is left,
+    -- which cannot then be kept apart however it is placed; failing that,
+    -- the earliest that differs; failing that, the earliest.
+    merge placed chains = case Array.uncons (Array.sortWith (at <<< _.head) (Array.mapMaybe Array.uncons chains)) of
       Nothing -> placed
-      Just { head, tail } -> case Array.head (candidates false placed remaining) of
-        Just next -> greedy (Array.snoc placed next.prompt) next.rest
-        Nothing -> greedy (Array.snoc placed head) tail
+      Just { head: first, tail: others } ->
+        let
+          heads = Array.cons first others
+          differs h = maybe true (\l -> family l /= family h.head) (Array.last placed)
+          roomy h = most (remainingAfter h) <= (Array.length (remainingAfter h) + 1) / 2
+          remainingAfter h = Array.concat (chains <#> \chain -> if (_.id <$> Array.head chain) == Just h.head.id then Array.drop 1 chain else chain)
+          chosen = fromMaybe first $
+            Array.find (\h -> differs h && roomy h) heads <|> Array.find differs heads
+          rest = chains <#> \chain -> case Array.uncons chain of
+            Just { head, tail } | head.id == chosen.head.id -> tail
+            _ -> chain
+        in
+          merge (Array.snoc placed chosen.head) rest
 
-    -- Each prompt that can come next, with what is left after it: those of a
-    -- different family from the last first, each group in the file's order.
-    candidates apart placed remaining =
-      let
-        ok = Array.mapWithIndex (\i c -> { prompt: c, rest: Array.deleteAt i remaining }) remaining
-          # Array.mapMaybe (\o -> o.rest <#> \rest -> { prompt: o.prompt, rest })
-          # Array.filter (allowed placed <<< _.prompt)
-        differs o = Array.last placed # maybeDiffers (family o.prompt)
-        -- No family may be more than half of what is left, or its prompts
-        -- cannot be kept apart however they are placed.
-        placeable o = most o.rest <= (Array.length o.rest + 1) / 2
-      in
-        if apart
-          then Array.filter (\o -> differs o && placeable o) ok
-          else Array.filter differs ok <> Array.filter (not <<< differs) ok
+    most ps = fromMaybe 0 $ Array.last $ Array.sort $ map (\p -> Array.length (Array.filter (\q -> family q == family p) ps)) ps
 
-    most rest = fromMaybe 0 $ Array.last $ Array.sort $ map (\p -> Array.length (Array.filter (\q -> family q == family p) rest)) rest
+-- | One confusion's prompts, in file order, put in an order with no run of
+-- | four answers alike or alternating, and otherwise as near the file's as it
+-- | can be: at each step the earliest prompt of each answer is a choice, and
+-- | the earliest of those that still leaves the rest placeable is taken.
+-- |
+-- | "Still leaves the rest placeable" is asked of the count left of each
+-- | answer and the last three placed, which is all the rule looks at, so there
+-- | are few enough of them to remember each one's answer. A confusion with one
+-- | answer is left alone, since no order can hide that, and one with no order
+-- | at all takes at each step the earliest prompt that breaks nothing, or the
+-- | earliest.
+order :: Array Prompt -> Array Prompt
+order prompts = if Array.length answers < 2 then prompts else go Map.empty [] prompts
+  where
+    answers = Array.nub (map answer prompts)
 
-    maybeDiffers f = case _ of
-      Nothing -> true
-      Just last -> family last /= f
+    countsOf ps = answers <#> \a -> Array.length (Array.filter (\p -> answer p == a) ps)
 
-    -- Whether `next` would complete a run of four that a reader could see.
-    allowed placed next =
-      not (varied next)
-        || not (shaped (Array.takeEnd 3 (answersOf next placed) <> [ answer next ]))
+    -- Whether what is left can be laid out after `hist`, with the memory of
+    -- every state asked on the way.
+    placeable memo counts hist
+      | Array.all (_ == 0) counts = Tuple true memo
+      | otherwise =
+          let
+            key = show counts <> "|" <> show hist
+          in
+            case Map.lookup key memo of
+              Just known -> Tuple known memo
+              Nothing ->
+                let
+                  Tuple found memo' = foldl (try counts hist) (Tuple false memo) (Array.range 0 (Array.length answers - 1))
+                in
+                  Tuple found (Map.insert key found memo')
 
-    answersOf next = map answer <<< Array.filter (\p -> confusion p == confusion next)
+    try counts hist (Tuple done memo) i
+      | done = Tuple true memo
+      | otherwise = case Array.index counts i, Array.index answers i of
+          Just n, Just a | n > 0 && not (shaped (Array.takeEnd 3 hist <> [ a ])) ->
+            placeable memo (fromMaybe counts (Array.modifyAt i (_ - 1) counts)) (Array.takeEnd 3 (Array.snoc hist a))
+          _, _ -> Tuple false memo
 
-    varied next = Array.length (Array.nub (answersOf next prompts)) > 1
+    go memo placed remaining = case remaining of
+      [] -> placed
+      _ ->
+        let
+          hist = map answer (Array.takeEnd 3 placed)
+          after p = Array.deleteBy (\a b -> a.id == b.id) p remaining
+          legal p = not (shaped (hist <> [ answer p ]))
+          judge m p =
+            let
+              Tuple ok m' = placeable m (countsOf (after p)) (Array.takeEnd 3 (Array.snoc hist (answer p)))
+            in
+              { accum: m', value: { p, ok: ok && legal p } }
+          viable = mapAccumL judge memo (Array.nubByEq (\p q -> answer p == answer q) remaining)
+          choice = Array.find _.ok viable.value
+            <|> Array.find (legal <<< _.p) viable.value
+            <|> Array.head viable.value
+        in
+          case choice of
+            Just c -> go viable.accum (Array.snoc placed c.p) (after c.p)
+            Nothing -> placed <> remaining
 
-    shaped = case _ of
-      [ a, b, a', b' ] -> a == a' && b == b'
-      _ -> false
-
--- | How many prompts `arranged` may place in one search before it stops
--- | looking. One that can be arranged straight off takes one a prompt, so 93
--- | for the corpus; this is room for ten times that in wrong turns, which is
--- | well under a second where it is all spent.
-budget :: Int
-budget = 1000
+-- | Whether four answers in a row are alike or alternate, which a reader could
+-- | see coming.
+shaped :: Array String -> Boolean
+shaped = case _ of
+  [ a, b, a', b' ] -> a == a' && b == b'
+  _ -> false
 
 -- | `estar / ser` whichever way round the prompt has them, as
 -- | `check-paraphrase` counts them.

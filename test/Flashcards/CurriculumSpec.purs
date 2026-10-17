@@ -8,13 +8,15 @@ import Prelude
 import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.DateTime.Instant (Instant, instant)
-import Data.Foldable (foldl, maximum)
+import Control.Alternative (guard)
+import Data.Foldable (all, foldl, maximum)
 import Data.Int (toNumber)
 import Data.Number (floor)
 import Data.Maybe (Maybe(..), fromJust, fromMaybe, isJust)
+import Data.Set as Set
 import Data.String as String
 import Data.Time.Duration (Milliseconds(..))
-import Data.Tuple (Tuple(..))
+import Data.Tuple (Tuple(..), fst, snd)
 import Flashcards.Data.Paraphrase.Spanish (prompts)
 import Flashcards.Data.Verbs.Spanish (table)
 import Flashcards.Exercise (Answer(..), Exercise)
@@ -25,7 +27,7 @@ import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Curriculum (byFrequency, family, items, kind, session, shuffled)
-import Flashcards.Verbs.Paraphrase (Trap(..))
+import Flashcards.Verbs.Paraphrase (Prompt, Trap(..))
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.Table (formOf)
 import Partial.Unsafe (unsafePartial)
@@ -229,6 +231,49 @@ mixing = describe "a session built when one kind is due far more than the rest" 
     -- Within a kind the curriculum's order is the due order here.
     ofKind "person" `shouldEqual` Array.filter (isKind "person") dueOrder
 
+-- | What a prompt is confused between, and what the reader has to say: the
+-- | verb for a verb trap, the tense for a tense trap. As `patterned` reads
+-- | them, and not taken from the module under test.
+confusionKey :: Prompt -> String
+confusionKey p = case p.trap of
+  OnVerb -> String.joinWith " / " (Array.sort [ p.verb, p.against ])
+  OnTense -> String.joinWith " / " (Array.sort [ String.toLower (show p.tense), p.against ])
+
+answerOf :: Prompt -> String
+answerOf p = case p.trap of
+  OnVerb -> p.verb
+  OnTense -> String.toLower (show p.tense)
+
+-- | A selection's prompts grouped by the two things they are confused between,
+-- | each group's answers in the order given.
+byConfusion :: Array Prompt -> Array (Array String)
+byConfusion ps = Array.nub keys <#> \k -> map snd $ Array.filter (\(Tuple k' _) -> k' == k) keyed
+  where
+    keyed = ps <#> \p -> Tuple (confusionKey p) (answerOf p)
+    keys = map fst keyed
+
+-- | Whether some order of these answers has no run of four alike or
+-- | alternating, found by reaching forward: every (how many of each answer
+-- | are used, the last three) that can follow from none, one at a time, until
+-- | all are used. Independent of `Paraphrase.order`, which asks backward.
+confusionOrderable :: Array String -> Boolean
+confusionOrderable answers =
+  Array.length vals < 2
+    || (not $ Set.isEmpty $ Array.foldl (\states _ -> step states) (Set.singleton (Tuple (map (const 0) vals) [])) answers)
+  where
+    vals = Array.nub answers
+    total = vals <#> \v -> Array.length (Array.filter (_ == v) answers)
+    step states = Set.fromFoldable do
+      Tuple used hist <- Set.toUnfoldable states :: Array _
+      i <- Array.range 0 (Array.length vals - 1)
+      v <- Array.catMaybes [ Array.index vals i ]
+      guard (fromMaybe false $ (<) <$> Array.index used i <*> Array.index total i)
+      guard (not (alike (Array.takeEnd 3 hist <> [ v ])))
+      pure $ Tuple (fromMaybe used (Array.modifyAt i (_ + 1) used)) (Array.takeEnd 3 (Array.snoc hist v))
+    alike = case _ of
+      [ a, b, a', b' ] -> a == a' && b == b'
+      _ -> false
+
 sessions :: Spec Unit
 sessions = describe "a verb drill session" do
   let
@@ -289,13 +334,15 @@ sessions = describe "a verb drill session" do
             <> map (\n -> Array.drop n (Array.reverse prompts)) (Array.range 0 40)
     Array.length broken `shouldEqual` 0
 
-  -- A person shift of a verb comes due first, then two tense-trap prompts, the
-  -- first of the same verb and the second of another. Spread alone takes the
-  -- shift, finds the first prompt alike to it, and so takes the second prompt
-  -- ahead of the first.
   -- What a corpus edit does: rows added and removed anywhere, in any order.
   -- A pseudo-random generator, so that a failure is one to run again.
-  it "finishes, and keeps every prompt, for any selection of the corpus in any order" do
+  --
+  -- The rule is asked only where it can be met. Whether it can is worked out
+  -- here by a different method from `arranged`'s: forward over every state a
+  -- confusion's answers can reach, where `arranged` asks backward and
+  -- remembers. A selection where some confusion cannot be ordered must still
+  -- come back whole.
+  it "meets the rule on every selection of the corpus that can meet it, in any order" do
     let
       next seed = remainder (seed * 48271.0)
       remainder x = x - floor (x / 2147483647.0) * 2147483647.0
@@ -307,46 +354,59 @@ sessions = describe "a verb drill session" do
         in
           map (\(Tuple _ p) -> p) $ Array.sortWith (\(Tuple d _) -> remainder (d * 16807.0)) kept
       ids ps = Array.sort (map _.id ps)
-      seeds = Array.range 1 60 <#> toNumber
-    Array.filter (\seed -> ids (Paraphrase.arranged (subset seed)) /= ids (subset seed)) seeds `shouldEqual` []
-    -- Not vacuous: they are different selections.
-    (Array.length (Array.nub (map (ids <<< subset) seeds)) > 50) `shouldEqual` true
+      met ps = map (\p -> Slug ("paraphrase." <> p.id)) (Paraphrase.arranged ps)
+      seeds = Array.range 1 150 <#> toNumber
+      selections = seeds <#> subset
+      orderable = Array.filter (all confusionOrderable <<< byConfusion) selections
+    Array.filter (\ps -> ids (Paraphrase.arranged ps) /= ids ps) selections `shouldEqual` []
+    Array.filter (\ps -> patterned (met ps) /= []) orderable `shouldEqual` []
+    -- Not vacuous: different selections, and most of them orderable, so that
+    -- it is the rule being asked and not the exceptions.
+    (Array.length (Array.nub (map ids selections)) > 140) `shouldEqual` true
+    (Array.length orderable > 100) `shouldEqual` true
 
   -- No order exists: eight prompts answered `ser` and one `estar` cannot be
-  -- placed without four `ser` running, and among a dozen others the search
-  -- for one has too many ways to fail to try them all.
-  it "gives up on a selection no order suits, and still keeps every prompt" do
+  -- placed without four `ser` running. It comes back whole, with the rest of
+  -- the selection still arranged.
+  it "gives up on a confusion no order suits, and still keeps every prompt" do
     let
       base = fromMaybe (unsafePartial $ fromJust $ Array.head prompts) $ Array.find (\p -> p.verb == "ser" && p.trap == OnVerb) prompts
       other = Array.filter (\p -> p.trap == OnTense) prompts
       stuck = map (\n -> base { id = "stuck-" <> show n }) (Array.range 1 8)
         <> [ base { id = "stuck-estar", verb = "estar", against = "ser" } ]
         <> Array.take 14 other
-    Array.length (Paraphrase.arranged stuck) `shouldEqual` Array.length stuck
     Array.sort (map _.id (Paraphrase.arranged stuck)) `shouldEqual` Array.sort (map _.id stuck)
+    all confusionOrderable (byConfusion stuck) `shouldEqual` false
+    -- Only the confusion with no order is let off.
+    all confusionOrderable (byConfusion (Array.take 14 other)) `shouldEqual` true
+    patterned (map (\p -> Slug ("paraphrase." <> p.id)) (Paraphrase.arranged (Array.take 14 other))) `shouldEqual` []
 
+  -- A person shift of a verb comes due first, then two tense-trap prompts, the
+  -- first of the same verb and the second of another. Spread alone takes the
+  -- shift, finds the first prompt alike to it, and so takes the second prompt
+  -- ahead of the first.
   it "meets the paraphrase prompts in their own order, among items that are spread around them" do
     let
       tenseTraps = Array.filter (\p -> p.trap == OnTense) prompts
-      pair = Array.head tenseTraps >>= \first ->
-        Array.find (\p -> p.verb /= first.verb) tenseTraps <#> \second -> Tuple first second
+      pair = Array.head tenseTraps >>= \opening ->
+        Array.find (\p -> p.verb /= opening.verb) tenseTraps <#> \second -> Tuple opening second
       slugOf p = Slug ("paraphrase." <> p.id)
       shift verb = Array.find (\slug -> starting' "person." slug && family Progress.empty slug == Just verb) $ map _.slug items
       card i = { box: 1, due: at (100.0 + toNumber i / 1440.0), seen: 1, lapses: 0, missed: 0, direction: Recognition }
     case pair of
       Nothing -> shouldEqual "no two tense traps" "two"
-      Just (Tuple first second) -> case shift first.verb of
-        Nothing -> shouldEqual ("a person shift of " <> first.verb) "none"
+      Just (Tuple opening second) -> case shift opening.verb of
+        Nothing -> shouldEqual ("a person shift of " <> opening.verb) "none"
         Just s -> do
           let
-            queue = [ s, slugOf first, slugOf second ]
+            queue = [ s, slugOf opening, slugOf second ]
             progress = Array.foldl (\p (Tuple i slug) -> Progress.insert slug (card i) p) Progress.empty $
               Array.mapWithIndex Tuple queue
             asked = session progress (at 101.0)
-          Array.filter Paraphrase.isParaphrase asked `shouldEqual` [ slugOf first, slugOf second ]
+          Array.filter Paraphrase.isParaphrase asked `shouldEqual` [ slugOf opening, slugOf second ]
           -- Not vacuous: the spread does move the second ahead of the first.
           Array.filter Paraphrase.isParaphrase (Scheduler.spread (family progress) queue)
-            `shouldEqual` [ slugOf second, slugOf first ]
+            `shouldEqual` [ slugOf second, slugOf opening ]
 
 starting' :: String -> Slug -> Boolean
 starting' prefix slug = String.take (String.length prefix) (slugToString slug) == prefix
