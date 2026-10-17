@@ -134,7 +134,7 @@ sentences =
   , { before: "", form: "valgo", after: " mucho para la familia", infinitive: "valer", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "vales", after: " más que nadie", infinitive: "valer", tense: Present, person: Sg2, personShift: true }
   , { before: "este libro ", form: "vale", after: " mucho dinero", infinitive: "valer", tense: Present, person: Sg3, personShift: false }
-  , { before: "", form: "valemos", after: " más hoy", infinitive: "valer", tense: Present, person: Pl1, personShift: true }
+  , { before: "", form: "valemos", after: " más que dinero", infinitive: "valer", tense: Present, person: Pl1, personShift: true }
   , { before: "las casas ", form: "valen", after: " mucho", infinitive: "valer", tense: Present, person: Pl3, personShift: false }
   , { before: "", form: "leo", after: " un libro en casa", infinitive: "leer", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "lees", after: " mucho en casa", infinitive: "leer", tense: Present, person: Sg2, personShift: true }
