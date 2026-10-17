@@ -44,10 +44,12 @@ columns, so the model answer is a worked example, not the only right answer.
 by looking it up in `es-verbs.csv`, and refuses any word outside `es-1000.csv`
 that the row's `Notes` does not explain.
 
-The order of the rows matters too. A trap's answers may not be met four
+The order of the rows does not matter. A trap's answers may not be met four
 running alike or alternating, since the position would then give the answer
-away, and `npm test` checks that (#63). Moving a row is safe for progress,
-which is keyed by `Id`.
+away, and the app puts the prompts in an order that holds that whatever order
+the file keeps them in (`Paraphrase.arranged`, #109); `npm test` checks it
+against the file and against files it is not. Add a row wherever it reads
+best. Moving one is safe for progress, which is keyed by `Id`.
 
 ## `es-por-para.csv` — por / para sentences
 
