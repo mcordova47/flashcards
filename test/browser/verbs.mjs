@@ -625,10 +625,15 @@ export default async ({ check, open, blobs }) => {
     (await done.stored())?.cards?.some(c => c.slug === `paraphrase.${opener.id}`) ?? false, false)
   check("and leaves the answer up", await done.text(".verb-model"), opener.model)
   await (await done.byText(".grade", "Got it")).click()
-  await wait(200)
-
-  stored = await done.stored()
+  // Until it is saved and not for a fixed wait: the grade lands a tick after
+  // the click, and a loaded runner has taken longer than 200ms.
+  for (let i = 0; i < 30; i++) {
+    await wait(100)
+    stored = await done.stored()
+    if (stored?.cards?.some(c => c.slug === `paraphrase.${opener.id}`)) break
+  }
   const graded = stored.cards.find(c => c.slug === `paraphrase.${opener.id}`)
+  if (graded === undefined) console.log("  (cards stored:", JSON.stringify(stored.cards.map(c => [c.slug, c.seen]).slice(-5)), ")")
   check("graded under the frozen id", graded?.seen, 1)
   check("as got", graded?.missed, 0)
   check("shares no item with any other drill",
