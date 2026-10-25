@@ -553,6 +553,53 @@ decks are full of multi-byte words, and `length` would let nearly twice the cap
 through. Responses are `no-store`, and the service worker skips `/api/`
 entirely: a stale blob would silently undo a sync, and nothing offline needs it.
 
+### Another client
+
+A browser game on its own origin studies the same cards and moves the same
+progress (#169). It does not reimplement anything and the server learns
+nothing: the site serves its own compiled core, and the game imports it.
+
+```js
+import * as core from "https://palabras.mcord.dev/core.v1.js"
+```
+
+The only credential is the key, as for the app. The game stores it in
+`localStorage`, pasted once from the pairing link, and sends it in the path of
+`GET` and `PUT /api/progress/<key>/es`. There is nothing else to authenticate
+with, and nothing else the key does not already unlock.
+
+| | |
+| --- | --- |
+| `core.session(progress, now?, language?)` | the slugs to study: what is due, then what is new |
+| `core.card(progress, slug, language?)` | `{ slug, prompt, answers, example, direction }`; turn over to show `answers` |
+| `core.grade(progress, slug, gotIt, now?, language?)` | the progress after one self-graded answer |
+| `core.merge(mine, theirs, language?)` | two histories as one, after a `GET` and before a `PUT` |
+| `core.requeue(slug, position, queue)` | a missed card put back a few places on |
+| `core.empty(language?)`, `core.sessionSize`, `core.version` | |
+
+Progress goes in and out as the string the blob holds, and `null` means none
+yet (the `GET` was a 404). Everything throws on a bad language, slug or
+payload. Self-graded only: the cards are flipped and judged by the player, and
+nothing checks a typed answer.
+
+A study loop is `GET`, `session`, then for each answer `grade`, `GET`,
+`merge`, `PUT`. The merge on every write is what keeps an answer given in this
+app in the meantime. The two are not used at the same time, so the race
+between a `GET` and the `PUT` after it is accepted.
+
+CORS: `/api/progress/` answers cross-origin requests from `https://*.mcord.dev`
+and from `http://localhost:5173` and `http://127.0.0.1:5173`, echoing the
+origin rather than `*`, and answers the preflight a `PUT` with a JSON body
+needs. That decides which pages a browser lets read the response; it is not
+what protects a blob. `core.js` is served with `*`, which is the same public
+code `index.js` already is. `core.js` is the same file as `core.v1.js`; the
+names are the contract, and `test/core.mjs` fails when they or their shapes
+move. A change that breaks the game is `version` 2 and `core.v2.js`, and
+nothing keeps `core.v1.js` after that, so it is a decision about the game.
+
+It works offline once the game has cached the file and the last blob; the app
+needs nothing for that beyond what it already serves.
+
 ### Routing
 
 The catch-all in `netlify.toml` rewrites anything unmatched to `index.html`
