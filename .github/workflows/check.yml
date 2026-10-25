@@ -106,4 +106,6 @@ jobs:
             ~/.cache/spago-nodejs
           key: spago-${{ hashFiles('spago.lock') }}
       - run: npm run build
+      # The contract of the built core.js, which needs the build.
+      - run: node test/core.mjs
       - run: node test/browser/run.mjs
