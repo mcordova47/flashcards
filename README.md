@@ -597,8 +597,9 @@ names are the contract, and `test/core.mjs` fails when they or their shapes
 move. A change that breaks the game is `version` 2 and `core.v2.js`, and
 nothing keeps `core.v1.js` after that, so it is a decision about the game.
 
-It works offline once the game has cached the file and the last blob; the app
-needs nothing for that beyond what it already serves.
+`core.js` is a static, cacheable file, so a game that caches it and the last
+blob has what it needs to study without a connection. Whether it does depends
+on how the game caches them, and no check has shown the game working offline.
 
 ### Routing
 
