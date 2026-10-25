@@ -7,6 +7,7 @@ import Prelude
 
 import Effect (Effect)
 import Test.Flashcards.AccentSpec as AccentSpec
+import Test.Flashcards.CoreSpec as CoreSpec
 import Test.Flashcards.CorrectionSpec as CorrectionSpec
 import Test.Flashcards.CurriculumSpec as CurriculumSpec
 import Test.Flashcards.DeckSpec as DeckSpec
@@ -38,6 +39,7 @@ main = runSpecAndExitProcess [ consoleReporter ] do
   StatsSpec.spec
   DeckSpec.spec
   PayloadSpec.spec
+  CoreSpec.spec
   PageSpec.spec
   SyncSpec.spec
   MilestoneSpec.spec

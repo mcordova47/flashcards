@@ -39,6 +39,18 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
+# The core other clients import (#169). A cross-origin module import is a CORS
+# request, and a static file's headers cannot depend on who asks, so this is
+# `*` where the progress function names its origins. That is fine for this file
+# and for no other: it is the same code and deck `index.js` already serves to
+# anyone, and carries no credential. Revalidating, as `index.js` does, so the
+# game gets a deploy's change when the deploy happens.
+[[headers]]
+  for = "/core*.js"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 # Netlify does not know the .webmanifest extension and falls back to
 # application/octet-stream.
 [[headers]]

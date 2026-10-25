@@ -21,6 +21,18 @@ await build({
   minify: true,
 })
 
+// The core on its own, for another client to import (#169). A module and not an
+// IIFE, since it is imported rather than run. Written under its version as well
+// as bare, so that a client can pin the shape it was written against.
+await build({
+  entryPoints: ["./core.js"],
+  outfile: "./public/core.js",
+  bundle: true,
+  format: "esm",
+  minify: true,
+})
+fs.copyFileSync("./public/core.js", "./public/core.v1.js")
+
 fs.cpSync("assets", "./public/assets", { recursive: true })
 fs.cpSync("index.html", "./public/index.html")
 
