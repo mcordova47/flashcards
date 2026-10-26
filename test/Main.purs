@@ -22,6 +22,7 @@ import Test.Flashcards.ProgressSpec as ProgressSpec
 import Test.Flashcards.ParaphraseSpec as ParaphraseSpec
 import Test.Flashcards.PersonShiftSpec as PersonShiftSpec
 import Test.Flashcards.PorParaSpec as PorParaSpec
+import Test.Flashcards.PronunciationSpec as PronunciationSpec
 import Test.Flashcards.ReachSpec as ReachSpec
 import Test.Flashcards.SchedulerSpec as SchedulerSpec
 import Test.Flashcards.ShiftSpec as ShiftSpec
@@ -51,6 +52,7 @@ main = runSpecAndExitProcess [ consoleReporter ] do
   ParaphraseSpec.spec
   PersonShiftSpec.spec
   PorParaSpec.spec
+  PronunciationSpec.spec
   CorrectionSpec.spec
   CurriculumSpec.spec
   ReachSpec.spec

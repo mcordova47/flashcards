@@ -4,10 +4,12 @@
 module Flashcards.Data.Deck.German
   ( deck
   , fingerprint
+  , pronunciations
   )
   where
 
 import Flashcards.Types.Card (Card, Rank(..), Slug(..))
+import Flashcards.Types.Pronunciation (Dialect)
 
 -- | Content hash of what each rank means. Progress is keyed by slug, so this
 -- | is no longer what protects it - it certifies that a rank still names the
@@ -1025,3 +1027,8 @@ deck =
   , { rank: Rank 1004, slug: Slug "natürlich", english: "of course, naturally", word: "natürlich", example: "Natürlich helfe ich dir." }
   , { rank: Rank 1005, slug: Slug "mal", english: "once; softens a request", word: "mal", example: "Komm mal her!" }
   ]
+
+-- | How each word is said, one entry per `IPA <tag>` column of the CSV and
+-- | keyed by that tag. Empty where the deck has none.
+pronunciations :: Array Dialect
+pronunciations = []

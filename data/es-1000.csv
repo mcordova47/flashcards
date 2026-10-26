@@ -1,1001 +1,1001 @@
-Order,English,Español,Slug
-1,I,yo,yo
-2,to want,querer,querer
-3,this,este,este
-4,yes,sí,sí
-5,no,no,no
-6,to be able to,poder,poder
-7,to speak,hablar,hablar
-8,to find,encontrar,encontrar
-9,to have (own),tener,tener
-10,to need,necesitar,necesitar
-11,where (the place that),donde,donde
-12,that (linking clauses),que,que
-13,the,el / la,el / la
-14,place,lugar,lugar
-15,home,casa,casa
-16,something,algo,algo
-17,that (near you),ese,ese
-18,and,y,y
-19,to see,ver,ver
-20,but,pero,pero
-21,to go (go away/leave),ir(se),ir(se)
-22,"to, at",a,a
-23,to say,decir,decir
-24,or,o,o
-25,a,un,un
-26,more,más,más
-27,"as, like",como,como
-28,"is, oneself",se,se
-29,to come,venir,venir
-30,my,mi,mi
-31,to be (what it is),ser,ser
-32,to be (how or where it is),estar,estar
-33,to live,vivir,vivir
-34,to pass,pasar,pasar
-35,day,día,día
-36,year,año,año
-37,week,semana,semana
-38,month,mes,mes
-39,each,cada,cada
-40,time (duration),tiempo,tiempo
-41,to know,saber,saber
-42,to know (be familiar with),conocer,conocer
-43,to do (to make),hacer,hacer
-44,to practice,practicar,practicar
-45,to arrive,llegar,llegar
-46,"too, also",también,también
-47,when,cuando,cuando
-48,until,hasta,hasta
-49,morning,mañana,mañana
-50,he / she,él / ella,él / ella
-51,is pleasing to (to like),gustar,gustar
-52,me,me,me
-53,"you (one person, object)",te,te
-54,"you, him, her",le,le
-55,us (object),nos,nos
-56,them,les,les
-57,friend,amigo,amigo
-58,food,comida,comida
-59,other,otro,otro
-60,work (job),trabajo,trabajo
-61,"for, through",por,por
-62,"for, in order to",para,para
-63,example,ejemplo,ejemplo
-64,of,de,de
-65,"in, on",en,en
-66,with,con,con
-67,to give,dar,dar
-68,country,país,país
-69,man,hombre,hombre
-70,woman,mujer,mujer
-71,to have (done something),haber,haber
-72,very,muy,muy
-73,much,mucho,mucho
-74,large,grande,grande
-75,less,menos,menos
-76,little,poco,poco
-77,thing,cosa,cosa
-78,if,si,si
-79,our,nuestro,nuestro
-80,always,siempre,siempre
-81,life,vida,vida
-82,afterwards,después,después
-83,then,entonces,entonces
-84,"to put, place",poner,poner
-85,"should, must, to owe",deber,deber
-86,well (properly),bien,bien
-87,between,entre,entre
-88,word,palabra,palabra
-89,now,ahora,ahora
-90,to learn,aprender,aprender
-91,your,tu,tu
-92,to believe,creer,creer
-93,is seeming to (to seem),parecer,parecer
-94,nothing,nada,nada
-95,all,todo,todo
-96,because,porque,porque
-97,to help,ayudar,ayudar
-98,"to ask for, to request",pedir,pedir
-99,to ask (a question),preguntar,preguntar
-100,what,qué,qué
-101,"it, the, him",lo,lo
-102,"his, her, their",su,su
-103,here,aquí,aquí
-104,already,ya,ya
-105,without,sin,sin
-106,time (an occasion),vez,vez
-107,"there is, there are",hay,hay
-108,"on, about",sobre,sobre
-109,you (informal),tú,tú
-110,"some, any (in questions)",alguno,alguno
-111,same,mismo,mismo
-112,"like that, so",así,así
-113,how,cómo,cómo
-114,two,dos,dos
-115,only (pre-2010 spelling),sólo,sólo
-116,first,primero,primero
-117,from,desde,desde
-118,nor,ni,ni
-119,thanks,gracias,gracias
-120,good,bueno,bueno
-121,one,uno,uno
-122,you (formal),usted,usted
-123,"so many, so much",tanto,tanto
-124,Mr.,señor,señor
-125,"such, as, so",tan,tan
-126,who,quién,quién
-127,part,parte,parte
-128,is remaining to (to be left),quedar,quedar
-129,please,por favor,por favor
-130,where? (asking),dónde,dónde
-131,never,nunca,nunca
-132,to lead,llevar,llevar
-133,"to leave behind, to let",dejar,dejar
-134,truth,verdad,verdad
-135,to follow,seguir,seguir
-136,new,nuevo,nuevo
-137,"so, then",pues,pues
-138,to call (be called/name),llamar(se),llamar(se)
-139,best,mejor,mejor
-140,to think,pensar,pensar
-141,that (over there),aquel,aquel
-142,moment,momento,momento
-143,god,dios,dios
-144,"but, rather",sino,sino
-145,"to go out, to leave",salir,salir
-146,to return,volver,volver
-147,form,forma,forma
-148,before (in time),antes,antes
-149,although,aunque,aunque
-150,world,mundo,mundo
-151,three,tres,tres
-152,such,tal,tal
-153,there,ahí,ahí
-154,"to take, to drink",tomar,tomar
-155,certain,cierto,cierto
-156,"to, towards",hacia,hacia
-157,case,caso,caso
-158,night,noche,noche
-159,to feel,sentir,sentir
-160,"then, later",luego,luego
-161,someone,alguien,alguien
-162,"to treat, deal with",tratar,tratar
-163,person,persona,persona
-164,higher,mayor,mayor
-165,last,último,último
-166,single,solo,solo
-167,own,propio,propio
-168,no one,nadie,nadie
-169,whoever,quien,quien
-170,we,nosotros,nosotros
-171,to look,mirar,mirar
-172,father,padre,padre
-173,"time, hour",hora,hora
-174,people,gente,gente
-175,none,ninguno,ninguno
-176,money,dinero,dinero
-177,almost,casi,casi
-178,point,punto,punto
-179,done (made),hecho,hecho
-180,during,durante,durante
-181,any (whichever),cualquier,cualquier
-182,hand,mano,mano
-183,way,manera,manera
-184,which,cual,cual
-185,while,mientras,mientras
-186,to count,contar,contar
-187,end,fin,fin
-188,type,tipo,tipo
-189,clear,claro,claro
-190,"also, besides",además,además
-191,to start,empezar,empezar
-192,to wait,esperar,esperar
-193,today,hoy,hoy
-194,side,lado,lado
-195,son,hijo,hijo
-196,there,allí,allí
-197,this one (pre-2010 spelling),éste,éste
-198,problem,problema,problema
-199,agreement,acuerdo,acuerdo
-200,account,cuenta,cuenta
-201,half (middle),medio,medio
-202,against,contra,contra
-203,out,fuera,fuera
-204,to search,buscar,buscar
-205,within,dentro,dentro
-206,long,largo,largo
-207,"safe, secure",seguro,seguro
-208,to exist,existir,existir
-209,child,niño,niño
-210,to enter,entrar,entrar
-211,mother,madre,madre
-212,however,sin embargo,sin embargo
-213,"only one, unique",único,único
-214,to work,trabajar,trabajar
-215,small,pequeño,pequeño
-216,high,alto,alto
-217,change,cambio,cambio
-218,to write,escribir,escribir
-219,four,cuatro,cuatro
-220,to lose,perder,perder
-221,history,historia,historia
-222,wait,espera,espera
-223,idea,idea,idea
-224,water,agua,agua
-225,to produce,producir,producir
-226,city,ciudad,ciudad
-227,state,estado,estado
-228,mode,modo,modo
-229,name,nombre,nombre
-230,to occur,ocurrir,ocurrir
-231,family,familia,familia
-232,reality,realidad,realidad
-233,to understand,entender,entender
-234,to receive,recibir,recibir
-235,work (of art),obra,obra
-236,important,importante,importante
-237,with me,conmigo,conmigo
-238,wrong,mal,mal
-239,"still, yet",todavía,todavía
-240,reason,razón,razón
-241,as much as,cuanto,cuanto
-242,low; under,bajo,bajo
-243,to remember,recordar,recordar
-244,group,grupo,grupo
-245,love,amor,amor
-246,thousand,mil,mil
-247,mine,mío,mío
-248,human,humano,humano
-249,"to finish, to end",terminar,terminar
-250,to allow,permitir,permitir
-251,to appear,aparecer,aparecer
-252,to get,conseguir,conseguir
-253,afternoon,tarde,tarde
-254,to start,comenzar,comenzar
-255,several,varios,varios
-256,possible,posible,posible
-257,"still, yet",aún,aún
-258,to serve,servir,servir
-259,general,general,general
-260,to take out,sacar,sacar
-261,relationship,relación,relación
-262,five,cinco,cinco
-263,body,cuerpo,cuerpo
-264,with you,contigo,contigo
-265,to maintain,mantener,mantener
-266,faced with,ante,ante
-267,principle,principio,principio
-268,to result,resultar,resultar
-269,equal,igual,igual
-270,too,demasiado,demasiado
-271,town,pueblo,pueblo
-272,second,segundo,segundo
-273,to read,leer,leer
-274,to fall,caer,caer
-275,to change,cambiar,cambiar
-276,eye,ojo,ojo
-277,goodbye,adiós,adiós
-278,street,calle,calle
-279,to present,presentar,presentar
-280,white,blanco,blanco
-281,to create,crear,crear
-282,to open,abrir,abrir
-283,book,libro,libro
-284,different,distinto,distinto
-285,force,fuerza,fuerza
-286,light,luz,luz
-287,according to,según,según
-288,saint,santo,santo
-289,front,frente,frente
-290,to consider,considerar,considerar
-291,really,realmente,realmente
-292,police,policía,policía
-293,to hear,oír,oír
-294,whose,cuyo,cuyo
-295,sense,sentido,sentido
-296,to have just done; to finish,acabar,acabar
-297,step,paso,paso
-298,situation,situación,situación
-299,serious (person),serio,serio
-300,head,cabeza,cabeza
-301,quite,bastante,bastante
-302,brother,hermano,hermano
-303,to convert,convertir,convertir
-304,grace,gracia,gracia
-305,century,siglo,siglo
-306,"last, past",pasado,pasado
-307,bad,malo,malo
-308,land,tierra,tierra
-309,paper,papel,papel
-310,affection,cariño,cariño
-311,"valid, voucher",vale,vale
-312,neither,tampoco,tampoco
-313,social,social,social
-314,old (aged),viejo,viejo
-315,Mrs.,señora,señora
-316,topic,tema,tema
-317,political,político,político
-318,Spanish,Español,Español
-319,dead,muerto,muerto
-320,to win,ganar,ganar
-321,to form,formar,formar
-322,class,clase,clase
-323,fast,rápido,rápido
-324,to bring,traer,traer
-325,"to start from, to divide",partir,partir
-326,to die,morir,morir
-327,even,incluso,incluso
-328,luck,suerte,suerte
-329,"field, country",campo,campo
-330,care,cuidado,cuidado
-331,to accept,aceptar,aceptar
-332,perhaps,quizás,quizás
-333,to perform,realizar,realizar
-334,hundred,ciento,ciento
-335,fear,miedo,miedo
-336,order,orden,orden
-337,door,puerta,puerta
-338,soon,pronto,pronto
-339,to suppose,suponer,suponer
-340,to understand,comprender,comprender
-341,final,final,final
-342,interest,interés,interés
-343,following,siguiente,siguiente
-344,view,vista,vista
-345,to achieve,lograr,lograr
-346,"other, the rest",demás,demás
-347,"you (several people, object)",os,os
-348,boy,chico,chico
-349,difficult,difícil,difícil
-350,how much,cuánto,cuánto
-351,number,número,número
-352,to explain,explicar,explicar
-353,come,venga,venga
-354,black,negro,negro
-355,road,camino,camino
-356,background,fondo,fondo
-357,voice,voz,voz
-358,study,estudio,estudio
-359,necessary,necesario,necesario
-360,there,allá,allá
-361,to touch,tocar,tocar
-362,value,valor,valor
-363,to recognize,reconocer,reconocer
-364,to study,estudiar,estudiar
-365,to reach,alcanzar,alcanzar
-366,to be born,nacer,nacer
-367,to direct,dirigir,dirigir
-368,to run,correr,correr
-369,happy,feliz,feliz
-370,measure,medida,medida
-371,"lesser, younger",menor,menor
-372,war,guerra,guerra
-373,only,solamente,solamente
-374,wife,esposa,esposa
-375,to use,utilizar,utilizar
-376,forward,adelante,adelante
-377,center,centro,centro
-378,which one,cuál,cuál
-379,need,necesidad,necesidad
-380,condition,condición,condición
-381,to pay,pagar,pagar
-382,it,ello,ello
-383,lack,falta,falta
-384,death,muerte,muerte
-385,ten,diez,diez
-386,"through, across",través,través
-387,"ancient, former",antiguo,antiguo
-388,supposed,supuesto,supuesto
-389,age,edad,edad
-390,to play,jugar,jugar
-391,heart,corazón,corazón
-392,face,cara,cara
-393,"boss, chief",jefe,jefe
-394,"era, time",época,época
-395,color,color,color
-396,to listen,escuchar,escuchar
-397,help,ayuda,ayuda
-398,experience,experiencia,experiencia
-399,movement,movimiento,movimiento
-400,to fulfill,cumplir,cumplir
-401,special,especial,especial
-402,different,diferente,diferente
-403,to weigh,pesar,pesar
-404,possibility,posibilidad,posibilidad
-405,to offer,ofrecer,ofrecer
-406,up,arriba,arriba
-407,to discover,descubrir,descubrir
-408,daughter,hija,hija
-409,previous,anterior,anterior
-410,game,juego,juego
-411,to lift (to get up),levantar(se),levantar(se)
-412,poor,pobre,pobre
-413,air,aire,aire
-414,six,seis,seis
-415,to try,intentar,intentar
-416,together,junto,junto
-417,result,resultado,resultado
-418,to use,usar,usar
-419,to decide,decidir,decidir
-420,to repeat,repetir,repetir
-421,to forget,olvidar,olvidar
-422,law,ley,ley
-423,appearance,aspecto,aspecto
-424,foot,pie,pie
-425,to be worth,valer,valer
-426,species,especie,especie
-427,to eat,comer,comer
-428,service,servicio,servicio
-429,close,cerca,cerca
-430,to show,mostrar,mostrar
-431,activity,actividad,actividad
-432,third,tercero,tercero
-433,uncle,tío,tío
-434,to occupy,ocupar,ocupar
-435,"matter, issue",cuestión,cuestión
-436,doubt,duda,duda
-437,at least,siquiera,siquiera
-438,difference,diferencia,diferencia
-439,to move,mover,mover
-440,to continue,continuar,continuar
-441,amount,cantidad,cantidad
-442,action,acción,acción
-443,to happen,suceder,suceder
-444,to set,fijar,fijar
-445,society,sociedad,sociedad
-446,to refer,referir,referir
-447,to bring closer,acercar,acercar
-448,able,capaz,capaz
-449,free,libre,libre
-450,natural,natural,natural
-451,to devote,dedicar,dedicar
-452,weight,peso,peso
-453,effect,efecto,efecto
-454,object,objeto,objeto
-455,doctor,doctor,doctor
-456,true,verdadero,verdadero
-457,enough,suficiente,suficiente
-458,young,joven,joven
-459,"political party, match",partido,partido
-460,economic,económico,económico
-461,"below, downstairs",abajo,abajo
-462,right,derecho,derecho
-463,first (before a noun),primer,primer
-464,importance,importancia,importancia
-465,great,genial,genial
-466,system,sistema,sistema
-467,just,justo,justo
-468,trip,viaje,viaje
-469,soil,suelo,suelo
-470,"respect, in regards to",respecto,respecto
-471,knowledge,conocimiento,conocimiento
-472,freedom,libertad,libertad
-473,above,encima,encima
-474,to buy,comprar,comprar
-475,common,común,común
-476,open,abierto,abierto
-477,next,próximo,próximo
-478,strong,fuerte,fuerte
-479,attention,atención,atención
-480,to rise,subir,subir
-481,effort,esfuerzo,esfuerzo
-482,to avoid,evitar,evitar
-483,rest,resto,resto
-484,is interesting to (to interest),interesar,interesar
-485,"back, backwards",atrás,atrás
-486,area,zona,zona
-487,process,proceso,proceso
-488,alive,vivo,vivo
-489,"to close, shut",cerrar,cerrar
-490,wine,vino,vino
-491,"to throw, cast",echar,echar
-492,to reply,responder,responder
-493,to suffer,sufrir,sufrir
-494,complete,completo,completo
-495,minute,minuto,minuto
-496,school,escuela,escuela
-497,contrary,contrario,contrario
-498,table (furniture),mesa,mesa
-499,real,real,real
-500,occasion,ocasión,ocasión
-501,blood,sangre,sangre
-502,is important to (to matter),importar,importar
-503,public,público,público
-504,car,coche,coche
-505,to obtain,obtener,obtener
-506,program,programa,programa
-507,far,lejos,lejos
-508,seven,siete,siete
-509,huge,enorme,enorme
-510,response,respuesta,respuesta
-511,line,línea,línea
-512,space,espacio,espacio
-513,level,nivel,nivel
-514,peace,paz,paz
-515,government,gobierno,gobierno
-516,"end, cape",cabo,cabo
-517,return,vuelta,vuelta
-518,to observe,observar,observar
-519,to indicate,indicar,indicar
-520,question,pregunta,pregunta
-521,image,imagen,imagen
-522,career,carrera,carrera
-523,fault,culpa,culpa
-524,to imagine,imaginar,imaginar
-525,to be in the habit of,soler,soler
-526,both,ambos,ambos
-527,to accompany,acompañar,acompañar
-528,deep,profundo,profundo
-529,to stop,detener,detener
-530,to develop,desarrollar,desarrollar
-531,eight,ocho,ocho
-532,easy,fácil,fácil
-533,to signal,señalar,señalar
-534,to choose,elegir,elegir
-535,figure,figura,figura
-536,main,principal,principal
-537,to sleep,dormir,dormir
-538,animal,animal,animal
-539,base,base,base
-540,to prepare,preparar,preparar
-541,to propose,proponer,proponer
-542,"to demonstrate, prove",demostrar,demostrar
-543,"party, celebration",fiesta,fiesta
-544,to mean,significar,significar
-545,position,posición,posición
-546,bed,cama,cama
-547,motive,motivo,motivo
-548,test,prueba,prueba
-549,policy,politica,politica
-550,national,nacional,nacional
-551,full (filled up),lleno,lleno
-552,phone,teléfono,teléfono
-553,to gather,reunir,reunir
-554,is missing to (to lack),faltar,faltar
-555,team,equipo,equipo
-556,datum,dato,dato
-557,to wish,desear,desear
-558,"company, firm",empresa,empresa
-559,issue,asunto,asunto
-560,presence,presencia,presencia
-561,"his, hers, theirs",suyo,suyo
-562,culture,cultura,cultura
-563,series,serie,serie
-564,million,millón,millón
-565,to teach,enseñar,enseñar
-566,to build,construir,construir
-567,opportunity,oportunidad,oportunidad
-568,to sell,vender,vender
-569,to kill,matar,matar
-570,to represent,representar,representar
-571,to disappear,desaparecer,desaparecer
-572,"to send, to order",mandar,mandar
-573,character (nature),carácter,carácter
-574,where to? (asking),adónde,adónde
-575,most,mayoría,mayoría
-576,red,rojo,rojo
-577,"after, behind (formal)",tras,tras
-578,top,superior,superior
-579,to walk,andar,andar
-580,short,corto,corto
-581,author,autor,autor
-582,fourth,cuarto,cuarto
-583,sky,cielo,cielo
-584,known,conocido,conocido
-585,to prefer,preferir,preferir
-586,memory (a recollection),recuerdo,recuerdo
-587,to ensure,asegurar,asegurar
-588,forgiveness,perdón,perdón
-589,function,función,función
-590,cause,causa,causa
-591,severe,grave,grave
-592,decision,decisión,decisión
-593,music,música,música
-594,weird (foreign),extraño,extraño
-595,to grow,crecer,crecer
-596,to emerge,surgir,surgir
-597,movie,película,película
-598,expression,expresión,expresión
-599,husband,marido,marido
-600,around,alrededor,alrededor
-601,dog,perro,perro
-602,to deliver,entregar,entregar
-603,river,río,río
-604,exactly,exactamente,exactamente
-605,security,seguridad,seguridad
-606,king,rey,rey
-607,term,término,término
-608,to place,colocar,colocar
-609,metro,metro,metro
-610,doctor,médico,médico
-611,room (bedroom),habitación,habitación
-612,to establish,establecer,establecer
-613,"to keep, to store",guardar,guardar
-614,art,arte,arte
-615,pair,par,par
-616,to start,iniciar,iniciar
-617,fire,fuego,fuego
-618,"to go down, to lower",bajar,bajar
-619,consequence,consecuencia,consecuencia
-620,to note,notar,notar
-621,act,acto,acto
-622,to put inside,meter,meter
-623,absolute,absoluto,absoluto
-624,penalty,pena,pena
-625,to act,actuar,actuar
-626,height,altura,altura
-627,desire,deseo,deseo
-628,"out, outside",afuera,afuera
-629,precisely,precisamente,precisamente
-630,twenty,veinte,veinte
-631,dream,sueño,sueño
-632,"to intend, to claim",pretender,pretender
-633,task,tarea,tarea
-634,coffee,café,café
-635,letter (you send),carta,carta
-636,"barely, just",apenas,apenas
-637,property,propiedad,propiedad
-638,product,producto,producto
-639,personal,personal,personal
-640,simply,simplemente,simplemente
-641,impossible,imposible,imposible
-642,taste,gusto,gusto
-643,to agree,acordar,acordar(se)
-644,site,sitio,sitio
-645,"language, tongue",lengua,lengua
-646,to cut,cortar,cortar
-647,plan,plan,plan
-648,baby,bebé,bebé
-649,to correspond,corresponder,corresponder
-650,to break,romper,romper
-651,never,jamás,jamás
-652,to acquire,adquirir,adquirir
-653,weapon,arma,arma
-654,project,proyecto,proyecto
-655,memory (the faculty),memoria,memoria
-656,origin,origen,origen
-657,element,elemento,elemento
-658,lost,perdido,perdido
-659,English,inglés,inglés
-660,market,mercado,mercado
-661,course,curso,curso
-662,to launch,lanzar,lanzar
-663,given,dado,dado
-664,to take advantage of,aprovechar,aprovechar
-665,interior,interior,interior
-666,hard,duro,duro
-667,to support,apoyar,apoyar
-668,worse,peor,peor
-669,to deny,negar,negar
-670,to advance,avanzar,avanzar
-671,usage,uso,uso
-672,arm,brazo,brazo
-673,"teacher, professor",profesor,profesor
-674,to resolve,resolver,resolver
-675,future,futuro,futuro
-676,half,mitad,mitad
-677,clothing,ropa,ropa
-678,is costly to (to cost),costar,costar
-679,rich,rico,rico
-680,total,total,total
-681,to require,exigir,exigir
-682,opinion,opinión,opinión
-683,to increase,aumentar,aumentar
-684,to collect,recoger,recoger
-685,mouth,boca,boca
-686,address,dirección,dirección
-687,pure,puro,puro
-688,president,presidente,presidente
-689,to abandon,abandonar,abandonar
-690,piece,pieza,pieza
-691,last night,anoche,anoche
-692,professional,profesional,profesional
-693,to impose,imponer,imponer
-694,concerning,acerca,acerca
-695,to force,obligar,obligar
-696,physical,físico,físico
-697,attitude,actitud,actitud
-698,sea,mar,mar
-699,entry,entrada,entrada
-700,contact,contacto,contacto
-701,to apply,aplicar,aplicar
-702,correct,correcto,correcto
-703,capital,capital,capital
-704,title,título,título
-705,behind,detrás,detrás
-706,post,puesto,puesto
-707,material,material,material
-708,blow,golpe,golpe
-709,to dispose,disponer,disponer
-710,communication,comunicación,comunicación
-711,to express,expresar,expresar
-712,sorry,disculpe,disculpe
-713,simple,simple,simple
-714,completely,totalmente,totalmente
-715,to provoke,provocar,provocar
-716,normal,normal,normal
-717,to defend,defender,defender
-718,disease,enfermedad,enfermedad
-719,matter,materia,materia
-720,to take away,quitar,quitar
-721,to conserve,conservar,conservar
-722,modern,moderno,moderno
-723,hospital,hospital,hospital
-724,to depend,depender,depender
-725,nature,naturaleza,naturaleza
-726,capacity,capacidad,capacidad
-727,"current, present-day",actual,actual
-728,to mark,marcar,marcar
-729,distance,distancia,distancia
-730,"full, in the middle of",pleno,pleno
-731,perfect,perfecto,perfecto
-732,closed,cerrado,cerrado
-733,to share,compartir,compartir
-734,quiet,tranquilo,tranquilo
-735,information,información,información
-736,environment,ambiente,ambiente
-737,especially,especialmente,especialmente
-738,development,desarrollo,desarrollo
-739,sun,sol,sol
-740,to consist,consistir,consistir
-741,probably,probablemente,probablemente
-742,to constitute,constituir,constituir
-743,yesterday,ayer,ayer
-744,willing (available),dispuesto,dispuesto
-745,to cover,cubrir,cubrir
-746,to function,funcionar,funcionar
-747,partner,compañero,compañero
-748,nice,bonito,bonito
-749,exit,salida,salida
-750,to fit,caber,caber
-751,awareness,conciencia,conciencia
-752,to meet,atender,atender
-753,sick,enfermo,enfermo
-754,incredible,increíble,increíble
-755,to insist,insistir,insistir
-756,custom,costumbre,costumbre
-757,silly,tonto,tonto
-758,news,noticia,noticia
-759,circumstance,circunstancia,circunstancia
-760,is painful to (to hurt),doler,doler
-761,private,privado,privado
-762,style,estilo,estilo
-763,price,precio,precio
-764,popular,popular,popular
-765,to sit,sentar,sentar
-766,plant,planta,planta
-767,that one (pre-2010 spelling),ése,ése
-768,character (in a story),personaje,personaje
-769,famous,famoso,famoso
-770,hunger,hambre,hambre
-771,success,éxito,éxito
-772,to merit,merecer,merecer
-773,building,edificio,edificio
-774,authority,autoridad,autoridad
-775,stone,piedra,piedra
-776,to include,incluir,incluir
-777,boat,barco,barco
-778,set,conjunto,conjunto
-779,hotel,hotel,hotel
-780,thirty,treinta,treinta
-781,immediate,inmediato,inmediato
-782,to cross,cruzar,cruzar
-783,yours,tuyo,tuyo
-784,to tend,tender,tender
-785,finally,finalmente,finalmente
-786,to advertise,anunciar,anunciar
-787,bath,baño,baño
-788,spirit,espíritu,espíritu
-789,member,miembro,miembro
-790,direct,directo,directo
-791,pleasure,placer,placer
-792,to wake,despertar,despertar
-793,resource,recurso,recurso
-794,wall,pared,pared
-795,error,error,error
-796,accurate,preciso,preciso
-797,miscellaneous,diverso,diverso
-798,difficulty,dificultad,dificultad
-799,to comment,comentar,comentar
-800,to publish,publicar,publicar
-801,"relating to family, a relative",familiar,familiar
-802,will,voluntad,voluntad
-803,meeting,reunión,reunión
-804,model,modelo,modelo
-805,secret,secreto,secreto
-806,to load,cargar,cargar
-807,date,fecha,fecha
-808,to participate,participar,participar
-809,train,tren,tren
-810,to prevent,impedir,impedir
-811,purpose,propósito,propósito
-812,to rescue,salvar,salvar
-813,hurry,prisa,prisa
-814,degree,grado,grado
-815,to escape,escapar,escapar
-816,deal,negocio,negocio
-817,fight,lucha,lucha
-818,to throw,tirar,tirar
-819,whole,entero,entero
-820,interesting,interesante,interesante
-821,wide,amplio,amplio
-822,silence,silencio,silencio
-823,to answer,contestar,contestar
-824,newspaper,periódico,periódico
-825,is worrying to (to worry),preocupar,preocupar
-826,"schoolteacher, master",maestro,maestro
-827,to lend,prestar,prestar
-828,quality,calidad,calidad
-829,salt,sal,sal
-830,to exhibit,exponer,exponer
-831,control,control,control
-832,civil,civil,civil
-833,weird (rare),raro,raro
-834,science,ciencia,ciencia
-835,size,tamaño,tamaño
-836,"chart, painting",cuadro,cuadro
-837,horse,caballo,caballo
-838,responsibility,responsabilidad,responsabilidad
-839,fifty,cincuenta,cincuenta
-840,internal,interno,interno
-841,detail,detalle,detalle
-842,march,marcha,marcha
-843,nine,nueve,nueve
-844,meat,carne,carne
-845,plane,avión,avión
-846,hair,pelo,pelo
-847,thought,pensamiento,pensamiento
-848,to travel,viajar,viajar
-849,charge,cargo,cargo
-850,to separate,separar,separar
-851,construction,construcción,construcción
-852,trial,juicio,juicio
-853,ground,terreno,terreno
-854,floor,piso,piso
-855,"companionship, company",compañia,compañia
-856,gold,oro,oro
-857,to return,regresar,regresar
-858,text,texto,texto
-859,source,fuente,fuente
-860,present,presente,presente
-861,official,oficial,oficial
-862,difinitive,difinitivo,difinitivo
-863,magazine,revista,revista
-864,damage,daño,daño
-865,hope,esperanza,esperanza
-866,machine,máquina,máquina
-867,to contemplate,contemplar,contemplar
-868,"to travel through, cover",recorrer,recorrer
-869,mind,mente,mente
-870,phrase,frase,frase
-871,exercise,ejercicio,ejercicio
-872,"hall, living room",sala,sala
-873,to last,durar,durar
-874,instrument,instrumento,instrumento
-875,that thing,aquello,aquello
-876,defense,defensa,defensa
-877,director,director,director
-878,to withdraw,retirar,retirar
-879,explanation,explicación,explicación
-880,article,artículo,artículo
-881,underneath,debajo,debajo
-882,to remain,permanecer,permanecer
-883,to attend,asistir,asistir
-884,twelve,doce,doce
-885,permission,permiso,permiso
-886,radio,radio,radio
-887,to organize,organizar,organizar
-888,choice,elección,elección
-889,visit,visita,visita
-890,fun,divertido,divertido
-891,to contain,contener,contener
-892,support,apoyo,apoyo
-893,tree,árbol,árbol
-894,to visit,visitar,visitar
-895,to report,informar,informar
-896,encounter,encuentro,encuentro
-897,sex,sexo,sexo
-898,like,parecido,parecido
-899,"ordinary, current (of water)",corriente,corriente
-900,friendly,amable,amable
-901,reading,lectura,lectura
-902,message,mensaje,mensaje
-903,existence,existencia,existencia
-904,"language (speech, style)",lenguaje,lenguaje
-905,costume,traje,traje
-906,to send,enviar,enviar
-907,soul,alma,alma
-908,even,aun,aun
-909,destination,destino,destino
-910,education,educación,educación
-911,to care,cuidar,cuidar
-912,to intervene,intervenir,intervenir
-913,dinner,cena,cena
-914,operation,operación,operación
-915,perfectly,perfectamente,perfectamente
-916,to extend,extender,extender
-917,to check,comprobar,comprobar
-918,note,nota,nota
-919,particular,particular,particular
-920,to delay,tardar,tardar
-921,"in, inside",adentro,adentro
-922,military,militar,militar
-923,song,canción,canción
-924,attached,unido,unido
-925,to discuss,discutir,discutir
-926,to fear,temer,temer
-927,extraordinary,extraordinario,extraordinario
-928,theater,teatro,teatro
-929,to face,enfrentar,enfrentar
-930,"newly, freshly",recién,recién
-931,average,media,media
-932,letter (of the alphabet),letra,letra
-933,feeling,sentimiento,sentimiento
-934,to drive,conducir,conducir
-935,completely,completamente,completamente
-936,cold,frío,frío
-937,to sign,firmar,firmar
-938,solution,solución,solución
-939,health,salud,salud
-940,it works,funciona,funciona
-941,print,impresión,impresión
-942,to complain,quejarse,quejarse
-943,intention,intención,intención
-944,rate,ritmo,ritmo
-945,green,verde,verde
-946,exact,exacto,exacto
-947,to respect,respetar,respetar
-948,terrible,terrible,terrible
-949,bank,banco,banco
-950,via,vía,vía
-951,to hold,sostener,sostener
-952,moon,luna,luna
-953,skin,piel,piel
-954,left (direction),izquierda,izquierda
-955,in front,delante,delante
-956,religious,religioso,religioso
-957,to warn,advertir,advertir
-958,dark,oscuro,oscuro
-959,research,investigación,investigación
-960,heat,calor,calor
-961,shop,tienda,tienda
-962,conversation,conversación,conversación
-963,Christmas,navidad,navidad
-964,summer,verano,verano
-965,respect,respeto,respeto
-966,grandfather,abuelo,abuelo
-967,north,norte,norte
-968,by means of,mediante,mediante
-969,tradition,tradición,tradición
-970,is sufficient to (to be enough),bastar,bastar
-971,couple,pareja,pareja
-972,population,población,población
-973,lawyer,abogado,abogado
-974,daily,diario,diario
-975,honor,honor,honor
-976,blue,azul,azul
-977,to mention,mencionar,mencionar
-978,generation,generación,generación
-979,vision,visión,visión
-980,concrete,concreto,concreto
-981,completed,terminado,terminado
-982,to raise (an issue),plantear,plantear
-983,left behind,dejado,dejado
-984,to test,probar,probar
-985,"to swear, pledge",jurar,jurar
-986,beautiful,hermoso,hermoso
-987,danger,peligro,peligro
-988,confidence,confianza,confianza
-989,to fill,llenar,llenar
-990,simple,sencillo,sencillo
-991,to improve,mejorar,mejorar
-992,concept,concepto,concepto
-993,to highlight,destacar,destacar
-994,wood,madera,madera
-995,to walk,caminar,caminar
-996,to employ,emplear,emplear
-997,to agree,convenir,convenir
-998,energy,energía,energía
-999,to admit,admitir,admitir
-1000,is delightful to (to love),encantar,encantar
+Order,English,Español,Slug,IPA es-MX
+1,I,yo,yo,ʝo
+2,to want,querer,querer,keˈɾeɾ
+3,this,este,este,ˈeste
+4,yes,sí,sí,si
+5,no,no,no,no
+6,to be able to,poder,poder,poˈdeɾ
+7,to speak,hablar,hablar,aˈblaɾ
+8,to find,encontrar,encontrar,enkonˈtɾaɾ
+9,to have (own),tener,tener,teˈneɾ
+10,to need,necesitar,necesitar,nesesiˈtaɾ
+11,where (the place that),donde,donde,ˈdonde
+12,that (linking clauses),que,que,ke
+13,the,el / la,el / la,el / la
+14,place,lugar,lugar,luˈɡaɾ
+15,home,casa,casa,ˈkasa
+16,something,algo,algo,ˈalɡo
+17,that (near you),ese,ese,ˈese
+18,and,y,y,i
+19,to see,ver,ver,beɾ
+20,but,pero,pero,ˈpeɾo
+21,to go (go away/leave),ir(se),ir(se),iɾ(se)
+22,"to, at",a,a,a
+23,to say,decir,decir,deˈsiɾ
+24,or,o,o,o
+25,a,un,un,un
+26,more,más,más,mas
+27,"as, like",como,como,ˈkomo
+28,"is, oneself",se,se,se
+29,to come,venir,venir,beˈniɾ
+30,my,mi,mi,mi
+31,to be (what it is),ser,ser,seɾ
+32,to be (how or where it is),estar,estar,esˈtaɾ
+33,to live,vivir,vivir,biˈbiɾ
+34,to pass,pasar,pasar,paˈsaɾ
+35,day,día,día,ˈdia
+36,year,año,año,ˈaɲo
+37,week,semana,semana,seˈmana
+38,month,mes,mes,mes
+39,each,cada,cada,ˈkada
+40,time (duration),tiempo,tiempo,ˈtjempo
+41,to know,saber,saber,saˈbeɾ
+42,to know (be familiar with),conocer,conocer,konoˈseɾ
+43,to do (to make),hacer,hacer,aˈseɾ
+44,to practice,practicar,practicar,pɾaktiˈkaɾ
+45,to arrive,llegar,llegar,ʝeˈɡaɾ
+46,"too, also",también,también,tamˈbjen
+47,when,cuando,cuando,ˈkwando
+48,until,hasta,hasta,ˈasta
+49,morning,mañana,mañana,maˈɲana
+50,he / she,él / ella,él / ella,el / ˈeʝa
+51,is pleasing to (to like),gustar,gustar,ɡusˈtaɾ
+52,me,me,me,me
+53,"you (one person, object)",te,te,te
+54,"you, him, her",le,le,le
+55,us (object),nos,nos,nos
+56,them,les,les,les
+57,friend,amigo,amigo,aˈmiɡo
+58,food,comida,comida,koˈmida
+59,other,otro,otro,ˈotɾo
+60,work (job),trabajo,trabajo,tɾaˈbaxo
+61,"for, through",por,por,poɾ
+62,"for, in order to",para,para,ˈpaɾa
+63,example,ejemplo,ejemplo,eˈxemplo
+64,of,de,de,de
+65,"in, on",en,en,en
+66,with,con,con,kon
+67,to give,dar,dar,daɾ
+68,country,país,país,paˈis
+69,man,hombre,hombre,ˈombɾe
+70,woman,mujer,mujer,muˈxeɾ
+71,to have (done something),haber,haber,aˈbeɾ
+72,very,muy,muy,mwi
+73,much,mucho,mucho,ˈmutʃo
+74,large,grande,grande,ˈɡɾande
+75,less,menos,menos,ˈmenos
+76,little,poco,poco,ˈpoko
+77,thing,cosa,cosa,ˈkosa
+78,if,si,si,si
+79,our,nuestro,nuestro,ˈnwestɾo
+80,always,siempre,siempre,ˈsjempɾe
+81,life,vida,vida,ˈbida
+82,afterwards,después,después,desˈpwes
+83,then,entonces,entonces,enˈtonses
+84,"to put, place",poner,poner,poˈneɾ
+85,"should, must, to owe",deber,deber,deˈbeɾ
+86,well (properly),bien,bien,bjen
+87,between,entre,entre,ˈentɾe
+88,word,palabra,palabra,paˈlabɾa
+89,now,ahora,ahora,aˈoɾa
+90,to learn,aprender,aprender,apɾenˈdeɾ
+91,your,tu,tu,tu
+92,to believe,creer,creer,kɾeˈeɾ
+93,is seeming to (to seem),parecer,parecer,paɾeˈseɾ
+94,nothing,nada,nada,ˈnada
+95,all,todo,todo,ˈtodo
+96,because,porque,porque,ˈpoɾke
+97,to help,ayudar,ayudar,aʝuˈdaɾ
+98,"to ask for, to request",pedir,pedir,peˈdiɾ
+99,to ask (a question),preguntar,preguntar,pɾeɡunˈtaɾ
+100,what,qué,qué,ke
+101,"it, the, him",lo,lo,lo
+102,"his, her, their",su,su,su
+103,here,aquí,aquí,aˈki
+104,already,ya,ya,ʝa
+105,without,sin,sin,sin
+106,time (an occasion),vez,vez,bes
+107,"there is, there are",hay,hay,aj
+108,"on, about",sobre,sobre,ˈsobɾe
+109,you (informal),tú,tú,tu
+110,"some, any (in questions)",alguno,alguno,alˈɡuno
+111,same,mismo,mismo,ˈmismo
+112,"like that, so",así,así,aˈsi
+113,how,cómo,cómo,ˈkomo
+114,two,dos,dos,dos
+115,only (pre-2010 spelling),sólo,sólo,ˈsolo
+116,first,primero,primero,pɾiˈmeɾo
+117,from,desde,desde,ˈdesde
+118,nor,ni,ni,ni
+119,thanks,gracias,gracias,ˈɡɾasjas
+120,good,bueno,bueno,ˈbweno
+121,one,uno,uno,ˈuno
+122,you (formal),usted,usted,usˈted
+123,"so many, so much",tanto,tanto,ˈtanto
+124,Mr.,señor,señor,seˈɲoɾ
+125,"such, as, so",tan,tan,tan
+126,who,quién,quién,kjen
+127,part,parte,parte,ˈpaɾte
+128,is remaining to (to be left),quedar,quedar,keˈdaɾ
+129,please,por favor,por favor,poɾ faˈboɾ
+130,where? (asking),dónde,dónde,ˈdonde
+131,never,nunca,nunca,ˈnunka
+132,to lead,llevar,llevar,ʝeˈbaɾ
+133,"to leave behind, to let",dejar,dejar,deˈxaɾ
+134,truth,verdad,verdad,beɾˈdad
+135,to follow,seguir,seguir,seˈɡiɾ
+136,new,nuevo,nuevo,ˈnwebo
+137,"so, then",pues,pues,pwes
+138,to call (be called/name),llamar(se),llamar(se),ʝaˈmaɾ(se)
+139,best,mejor,mejor,meˈxoɾ
+140,to think,pensar,pensar,penˈsaɾ
+141,that (over there),aquel,aquel,aˈkel
+142,moment,momento,momento,moˈmento
+143,god,dios,dios,djos
+144,"but, rather",sino,sino,ˈsino
+145,"to go out, to leave",salir,salir,saˈliɾ
+146,to return,volver,volver,bolˈbeɾ
+147,form,forma,forma,ˈfoɾma
+148,before (in time),antes,antes,ˈantes
+149,although,aunque,aunque,ˈawnke
+150,world,mundo,mundo,ˈmundo
+151,three,tres,tres,tɾes
+152,such,tal,tal,tal
+153,there,ahí,ahí,aˈi
+154,"to take, to drink",tomar,tomar,toˈmaɾ
+155,certain,cierto,cierto,ˈsjeɾto
+156,"to, towards",hacia,hacia,ˈasja
+157,case,caso,caso,ˈkaso
+158,night,noche,noche,ˈnotʃe
+159,to feel,sentir,sentir,senˈtiɾ
+160,"then, later",luego,luego,ˈlweɡo
+161,someone,alguien,alguien,ˈalɡjen
+162,"to treat, deal with",tratar,tratar,tɾaˈtaɾ
+163,person,persona,persona,peɾˈsona
+164,higher,mayor,mayor,maˈʝoɾ
+165,last,último,último,ˈultimo
+166,single,solo,solo,ˈsolo
+167,own,propio,propio,ˈpɾopjo
+168,no one,nadie,nadie,ˈnadje
+169,whoever,quien,quien,kjen
+170,we,nosotros,nosotros,noˈsotɾos
+171,to look,mirar,mirar,miˈɾaɾ
+172,father,padre,padre,ˈpadɾe
+173,"time, hour",hora,hora,ˈoɾa
+174,people,gente,gente,ˈxente
+175,none,ninguno,ninguno,ninˈɡuno
+176,money,dinero,dinero,diˈneɾo
+177,almost,casi,casi,ˈkasi
+178,point,punto,punto,ˈpunto
+179,done (made),hecho,hecho,ˈetʃo
+180,during,durante,durante,duˈɾante
+181,any (whichever),cualquier,cualquier,kwalˈkjeɾ
+182,hand,mano,mano,ˈmano
+183,way,manera,manera,maˈneɾa
+184,which,cual,cual,kwal
+185,while,mientras,mientras,ˈmjentɾas
+186,to count,contar,contar,konˈtaɾ
+187,end,fin,fin,fin
+188,type,tipo,tipo,ˈtipo
+189,clear,claro,claro,ˈklaɾo
+190,"also, besides",además,además,adeˈmas
+191,to start,empezar,empezar,empeˈsaɾ
+192,to wait,esperar,esperar,espeˈɾaɾ
+193,today,hoy,hoy,oj
+194,side,lado,lado,ˈlado
+195,son,hijo,hijo,ˈixo
+196,there,allí,allí,aˈʝi
+197,this one (pre-2010 spelling),éste,éste,ˈeste
+198,problem,problema,problema,pɾoˈblema
+199,agreement,acuerdo,acuerdo,aˈkweɾdo
+200,account,cuenta,cuenta,ˈkwenta
+201,half (middle),medio,medio,ˈmedjo
+202,against,contra,contra,ˈkontɾa
+203,out,fuera,fuera,ˈfweɾa
+204,to search,buscar,buscar,busˈkaɾ
+205,within,dentro,dentro,ˈdentɾo
+206,long,largo,largo,ˈlaɾɡo
+207,"safe, secure",seguro,seguro,seˈɡuɾo
+208,to exist,existir,existir,eksisˈtiɾ
+209,child,niño,niño,ˈniɲo
+210,to enter,entrar,entrar,enˈtɾaɾ
+211,mother,madre,madre,ˈmadɾe
+212,however,sin embargo,sin embargo,sin emˈbaɾɡo
+213,"only one, unique",único,único,ˈuniko
+214,to work,trabajar,trabajar,tɾabaˈxaɾ
+215,small,pequeño,pequeño,peˈkeɲo
+216,high,alto,alto,ˈalto
+217,change,cambio,cambio,ˈkambjo
+218,to write,escribir,escribir,eskɾiˈbiɾ
+219,four,cuatro,cuatro,ˈkwatɾo
+220,to lose,perder,perder,peɾˈdeɾ
+221,history,historia,historia,isˈtoɾja
+222,wait,espera,espera,esˈpeɾa
+223,idea,idea,idea,iˈdea
+224,water,agua,agua,ˈaɡwa
+225,to produce,producir,producir,pɾoduˈsiɾ
+226,city,ciudad,ciudad,sjuˈdad
+227,state,estado,estado,esˈtado
+228,mode,modo,modo,ˈmodo
+229,name,nombre,nombre,ˈnombɾe
+230,to occur,ocurrir,ocurrir,okuˈriɾ
+231,family,familia,familia,faˈmilja
+232,reality,realidad,realidad,realiˈdad
+233,to understand,entender,entender,entenˈdeɾ
+234,to receive,recibir,recibir,resiˈbiɾ
+235,work (of art),obra,obra,ˈobɾa
+236,important,importante,importante,impoɾˈtante
+237,with me,conmigo,conmigo,konˈmiɡo
+238,wrong,mal,mal,mal
+239,"still, yet",todavía,todavía,todaˈbia
+240,reason,razón,razón,raˈson
+241,as much as,cuanto,cuanto,ˈkwanto
+242,low; under,bajo,bajo,ˈbaxo
+243,to remember,recordar,recordar,rekoɾˈdaɾ
+244,group,grupo,grupo,ˈɡɾupo
+245,love,amor,amor,aˈmoɾ
+246,thousand,mil,mil,mil
+247,mine,mío,mío,ˈmio
+248,human,humano,humano,uˈmano
+249,"to finish, to end",terminar,terminar,teɾmiˈnaɾ
+250,to allow,permitir,permitir,peɾmiˈtiɾ
+251,to appear,aparecer,aparecer,apaɾeˈseɾ
+252,to get,conseguir,conseguir,konseˈɡiɾ
+253,afternoon,tarde,tarde,ˈtaɾde
+254,to start,comenzar,comenzar,komenˈsaɾ
+255,several,varios,varios,ˈbaɾjos
+256,possible,posible,posible,poˈsible
+257,"still, yet",aún,aún,aˈun
+258,to serve,servir,servir,seɾˈbiɾ
+259,general,general,general,xeneˈɾal
+260,to take out,sacar,sacar,saˈkaɾ
+261,relationship,relación,relación,relaˈsjon
+262,five,cinco,cinco,ˈsinko
+263,body,cuerpo,cuerpo,ˈkweɾpo
+264,with you,contigo,contigo,konˈtiɡo
+265,to maintain,mantener,mantener,manteˈneɾ
+266,faced with,ante,ante,ˈante
+267,principle,principio,principio,pɾinˈsipjo
+268,to result,resultar,resultar,resulˈtaɾ
+269,equal,igual,igual,iˈɡwal
+270,too,demasiado,demasiado,demaˈsjado
+271,town,pueblo,pueblo,ˈpweblo
+272,second,segundo,segundo,seˈɡundo
+273,to read,leer,leer,leˈeɾ
+274,to fall,caer,caer,kaˈeɾ
+275,to change,cambiar,cambiar,kamˈbjaɾ
+276,eye,ojo,ojo,ˈoxo
+277,goodbye,adiós,adiós,aˈdjos
+278,street,calle,calle,ˈkaʝe
+279,to present,presentar,presentar,pɾesenˈtaɾ
+280,white,blanco,blanco,ˈblanko
+281,to create,crear,crear,kɾeˈaɾ
+282,to open,abrir,abrir,aˈbɾiɾ
+283,book,libro,libro,ˈlibɾo
+284,different,distinto,distinto,disˈtinto
+285,force,fuerza,fuerza,ˈfweɾsa
+286,light,luz,luz,lus
+287,according to,según,según,seˈɡun
+288,saint,santo,santo,ˈsanto
+289,front,frente,frente,ˈfɾente
+290,to consider,considerar,considerar,konsideˈɾaɾ
+291,really,realmente,realmente,realˈmente
+292,police,policía,policía,poliˈsia
+293,to hear,oír,oír,oˈiɾ
+294,whose,cuyo,cuyo,ˈkuʝo
+295,sense,sentido,sentido,senˈtido
+296,to have just done; to finish,acabar,acabar,akaˈbaɾ
+297,step,paso,paso,ˈpaso
+298,situation,situación,situación,sitwaˈsjon
+299,serious (person),serio,serio,ˈseɾjo
+300,head,cabeza,cabeza,kaˈbesa
+301,quite,bastante,bastante,basˈtante
+302,brother,hermano,hermano,eɾˈmano
+303,to convert,convertir,convertir,konbeɾˈtiɾ
+304,grace,gracia,gracia,ˈɡɾasja
+305,century,siglo,siglo,ˈsiɡlo
+306,"last, past",pasado,pasado,paˈsado
+307,bad,malo,malo,ˈmalo
+308,land,tierra,tierra,ˈtjera
+309,paper,papel,papel,paˈpel
+310,affection,cariño,cariño,kaˈɾiɲo
+311,"valid, voucher",vale,vale,ˈbale
+312,neither,tampoco,tampoco,tamˈpoko
+313,social,social,social,soˈsjal
+314,old (aged),viejo,viejo,ˈbjexo
+315,Mrs.,señora,señora,seˈɲoɾa
+316,topic,tema,tema,ˈtema
+317,political,político,político,poˈlitiko
+318,Spanish,Español,Español,espaˈɲol
+319,dead,muerto,muerto,ˈmweɾto
+320,to win,ganar,ganar,ɡaˈnaɾ
+321,to form,formar,formar,foɾˈmaɾ
+322,class,clase,clase,ˈklase
+323,fast,rápido,rápido,ˈrapido
+324,to bring,traer,traer,tɾaˈeɾ
+325,"to start from, to divide",partir,partir,paɾˈtiɾ
+326,to die,morir,morir,moˈɾiɾ
+327,even,incluso,incluso,inˈkluso
+328,luck,suerte,suerte,ˈsweɾte
+329,"field, country",campo,campo,ˈkampo
+330,care,cuidado,cuidado,kwiˈdado
+331,to accept,aceptar,aceptar,asepˈtaɾ
+332,perhaps,quizás,quizás,kiˈsas
+333,to perform,realizar,realizar,realiˈsaɾ
+334,hundred,ciento,ciento,ˈsjento
+335,fear,miedo,miedo,ˈmjedo
+336,order,orden,orden,ˈoɾden
+337,door,puerta,puerta,ˈpweɾta
+338,soon,pronto,pronto,ˈpɾonto
+339,to suppose,suponer,suponer,supoˈneɾ
+340,to understand,comprender,comprender,kompɾenˈdeɾ
+341,final,final,final,fiˈnal
+342,interest,interés,interés,inteˈɾes
+343,following,siguiente,siguiente,siˈɡjente
+344,view,vista,vista,ˈbista
+345,to achieve,lograr,lograr,loˈɡɾaɾ
+346,"other, the rest",demás,demás,deˈmas
+347,"you (several people, object)",os,os,os
+348,boy,chico,chico,ˈtʃiko
+349,difficult,difícil,difícil,diˈfisil
+350,how much,cuánto,cuánto,ˈkwanto
+351,number,número,número,ˈnumeɾo
+352,to explain,explicar,explicar,ekspliˈkaɾ
+353,come,venga,venga,ˈbenɡa
+354,black,negro,negro,ˈneɡɾo
+355,road,camino,camino,kaˈmino
+356,background,fondo,fondo,ˈfondo
+357,voice,voz,voz,bos
+358,study,estudio,estudio,esˈtudjo
+359,necessary,necesario,necesario,neseˈsaɾjo
+360,there,allá,allá,aˈʝa
+361,to touch,tocar,tocar,toˈkaɾ
+362,value,valor,valor,baˈloɾ
+363,to recognize,reconocer,reconocer,rekonoˈseɾ
+364,to study,estudiar,estudiar,estuˈdjaɾ
+365,to reach,alcanzar,alcanzar,alkanˈsaɾ
+366,to be born,nacer,nacer,naˈseɾ
+367,to direct,dirigir,dirigir,diɾiˈxiɾ
+368,to run,correr,correr,koˈreɾ
+369,happy,feliz,feliz,feˈlis
+370,measure,medida,medida,meˈdida
+371,"lesser, younger",menor,menor,meˈnoɾ
+372,war,guerra,guerra,ˈɡera
+373,only,solamente,solamente,solaˈmente
+374,wife,esposa,esposa,esˈposa
+375,to use,utilizar,utilizar,utiliˈsaɾ
+376,forward,adelante,adelante,adeˈlante
+377,center,centro,centro,ˈsentɾo
+378,which one,cuál,cuál,kwal
+379,need,necesidad,necesidad,nesesiˈdad
+380,condition,condición,condición,kondiˈsjon
+381,to pay,pagar,pagar,paˈɡaɾ
+382,it,ello,ello,ˈeʝo
+383,lack,falta,falta,ˈfalta
+384,death,muerte,muerte,ˈmweɾte
+385,ten,diez,diez,djes
+386,"through, across",través,través,tɾaˈbes
+387,"ancient, former",antiguo,antiguo,anˈtiɡwo
+388,supposed,supuesto,supuesto,suˈpwesto
+389,age,edad,edad,eˈdad
+390,to play,jugar,jugar,xuˈɡaɾ
+391,heart,corazón,corazón,koɾaˈson
+392,face,cara,cara,ˈkaɾa
+393,"boss, chief",jefe,jefe,ˈxefe
+394,"era, time",época,época,ˈepoka
+395,color,color,color,koˈloɾ
+396,to listen,escuchar,escuchar,eskuˈtʃaɾ
+397,help,ayuda,ayuda,aˈʝuda
+398,experience,experiencia,experiencia,ekspeˈɾjensja
+399,movement,movimiento,movimiento,mobiˈmjento
+400,to fulfill,cumplir,cumplir,kumˈpliɾ
+401,special,especial,especial,espeˈsjal
+402,different,diferente,diferente,difeˈɾente
+403,to weigh,pesar,pesar,peˈsaɾ
+404,possibility,posibilidad,posibilidad,posibiliˈdad
+405,to offer,ofrecer,ofrecer,ofɾeˈseɾ
+406,up,arriba,arriba,aˈriba
+407,to discover,descubrir,descubrir,deskuˈbɾiɾ
+408,daughter,hija,hija,ˈixa
+409,previous,anterior,anterior,anteˈɾjoɾ
+410,game,juego,juego,ˈxweɡo
+411,to lift (to get up),levantar(se),levantar(se),lebanˈtaɾ(se)
+412,poor,pobre,pobre,ˈpobɾe
+413,air,aire,aire,ˈajɾe
+414,six,seis,seis,sejs
+415,to try,intentar,intentar,intenˈtaɾ
+416,together,junto,junto,ˈxunto
+417,result,resultado,resultado,resulˈtado
+418,to use,usar,usar,uˈsaɾ
+419,to decide,decidir,decidir,desiˈdiɾ
+420,to repeat,repetir,repetir,repeˈtiɾ
+421,to forget,olvidar,olvidar,olbiˈdaɾ
+422,law,ley,ley,lej
+423,appearance,aspecto,aspecto,asˈpekto
+424,foot,pie,pie,pje
+425,to be worth,valer,valer,baˈleɾ
+426,species,especie,especie,esˈpesje
+427,to eat,comer,comer,koˈmeɾ
+428,service,servicio,servicio,seɾˈbisjo
+429,close,cerca,cerca,ˈseɾka
+430,to show,mostrar,mostrar,mosˈtɾaɾ
+431,activity,actividad,actividad,aktibiˈdad
+432,third,tercero,tercero,teɾˈseɾo
+433,uncle,tío,tío,ˈtio
+434,to occupy,ocupar,ocupar,okuˈpaɾ
+435,"matter, issue",cuestión,cuestión,kwesˈtjon
+436,doubt,duda,duda,ˈduda
+437,at least,siquiera,siquiera,siˈkjeɾa
+438,difference,diferencia,diferencia,difeˈɾensja
+439,to move,mover,mover,moˈbeɾ
+440,to continue,continuar,continuar,kontiˈnwaɾ
+441,amount,cantidad,cantidad,kantiˈdad
+442,action,acción,acción,akˈsjon
+443,to happen,suceder,suceder,suseˈdeɾ
+444,to set,fijar,fijar,fiˈxaɾ
+445,society,sociedad,sociedad,sosjeˈdad
+446,to refer,referir,referir,refeˈɾiɾ
+447,to bring closer,acercar,acercar,aseɾˈkaɾ
+448,able,capaz,capaz,kaˈpas
+449,free,libre,libre,ˈlibɾe
+450,natural,natural,natural,natuˈɾal
+451,to devote,dedicar,dedicar,dediˈkaɾ
+452,weight,peso,peso,ˈpeso
+453,effect,efecto,efecto,eˈfekto
+454,object,objeto,objeto,obˈxeto
+455,doctor,doctor,doctor,dokˈtoɾ
+456,true,verdadero,verdadero,beɾdaˈdeɾo
+457,enough,suficiente,suficiente,sufiˈsjente
+458,young,joven,joven,ˈxoben
+459,"political party, match",partido,partido,paɾˈtido
+460,economic,económico,económico,ekoˈnomiko
+461,"below, downstairs",abajo,abajo,aˈbaxo
+462,right,derecho,derecho,deˈɾetʃo
+463,first (before a noun),primer,primer,pɾiˈmeɾ
+464,importance,importancia,importancia,impoɾˈtansja
+465,great,genial,genial,xeˈnjal
+466,system,sistema,sistema,sisˈtema
+467,just,justo,justo,ˈxusto
+468,trip,viaje,viaje,ˈbjaxe
+469,soil,suelo,suelo,ˈswelo
+470,"respect, in regards to",respecto,respecto,resˈpekto
+471,knowledge,conocimiento,conocimiento,konosiˈmjento
+472,freedom,libertad,libertad,libeɾˈtad
+473,above,encima,encima,enˈsima
+474,to buy,comprar,comprar,komˈpɾaɾ
+475,common,común,común,koˈmun
+476,open,abierto,abierto,aˈbjeɾto
+477,next,próximo,próximo,ˈpɾoksimo
+478,strong,fuerte,fuerte,ˈfweɾte
+479,attention,atención,atención,atenˈsjon
+480,to rise,subir,subir,suˈbiɾ
+481,effort,esfuerzo,esfuerzo,esˈfweɾso
+482,to avoid,evitar,evitar,ebiˈtaɾ
+483,rest,resto,resto,ˈresto
+484,is interesting to (to interest),interesar,interesar,inteɾeˈsaɾ
+485,"back, backwards",atrás,atrás,aˈtɾas
+486,area,zona,zona,ˈsona
+487,process,proceso,proceso,pɾoˈseso
+488,alive,vivo,vivo,ˈbibo
+489,"to close, shut",cerrar,cerrar,seˈraɾ
+490,wine,vino,vino,ˈbino
+491,"to throw, cast",echar,echar,eˈtʃaɾ
+492,to reply,responder,responder,responˈdeɾ
+493,to suffer,sufrir,sufrir,suˈfɾiɾ
+494,complete,completo,completo,komˈpleto
+495,minute,minuto,minuto,miˈnuto
+496,school,escuela,escuela,esˈkwela
+497,contrary,contrario,contrario,konˈtɾaɾjo
+498,table (furniture),mesa,mesa,ˈmesa
+499,real,real,real,reˈal
+500,occasion,ocasión,ocasión,okaˈsjon
+501,blood,sangre,sangre,ˈsanɡɾe
+502,is important to (to matter),importar,importar,impoɾˈtaɾ
+503,public,público,público,ˈpubliko
+504,car,coche,coche,ˈkotʃe
+505,to obtain,obtener,obtener,obteˈneɾ
+506,program,programa,programa,pɾoˈɡɾama
+507,far,lejos,lejos,ˈlexos
+508,seven,siete,siete,ˈsjete
+509,huge,enorme,enorme,eˈnoɾme
+510,response,respuesta,respuesta,resˈpwesta
+511,line,línea,línea,ˈlinea
+512,space,espacio,espacio,esˈpasjo
+513,level,nivel,nivel,niˈbel
+514,peace,paz,paz,pas
+515,government,gobierno,gobierno,ɡoˈbjeɾno
+516,"end, cape",cabo,cabo,ˈkabo
+517,return,vuelta,vuelta,ˈbwelta
+518,to observe,observar,observar,obseɾˈbaɾ
+519,to indicate,indicar,indicar,indiˈkaɾ
+520,question,pregunta,pregunta,pɾeˈɡunta
+521,image,imagen,imagen,iˈmaxen
+522,career,carrera,carrera,kaˈreɾa
+523,fault,culpa,culpa,ˈkulpa
+524,to imagine,imaginar,imaginar,imaxiˈnaɾ
+525,to be in the habit of,soler,soler,soˈleɾ
+526,both,ambos,ambos,ˈambos
+527,to accompany,acompañar,acompañar,akompaˈɲaɾ
+528,deep,profundo,profundo,pɾoˈfundo
+529,to stop,detener,detener,deteˈneɾ
+530,to develop,desarrollar,desarrollar,desaroˈʝaɾ
+531,eight,ocho,ocho,ˈotʃo
+532,easy,fácil,fácil,ˈfasil
+533,to signal,señalar,señalar,seɲaˈlaɾ
+534,to choose,elegir,elegir,eleˈxiɾ
+535,figure,figura,figura,fiˈɡuɾa
+536,main,principal,principal,pɾinsiˈpal
+537,to sleep,dormir,dormir,doɾˈmiɾ
+538,animal,animal,animal,aniˈmal
+539,base,base,base,ˈbase
+540,to prepare,preparar,preparar,pɾepaˈɾaɾ
+541,to propose,proponer,proponer,pɾopoˈneɾ
+542,"to demonstrate, prove",demostrar,demostrar,demosˈtɾaɾ
+543,"party, celebration",fiesta,fiesta,ˈfjesta
+544,to mean,significar,significar,siɡnifiˈkaɾ
+545,position,posición,posición,posiˈsjon
+546,bed,cama,cama,ˈkama
+547,motive,motivo,motivo,moˈtibo
+548,test,prueba,prueba,ˈpɾweba
+549,policy,politica,politica,poˈlitika
+550,national,nacional,nacional,nasjoˈnal
+551,full (filled up),lleno,lleno,ˈʝeno
+552,phone,teléfono,teléfono,teˈlefono
+553,to gather,reunir,reunir,reuˈniɾ
+554,is missing to (to lack),faltar,faltar,falˈtaɾ
+555,team,equipo,equipo,eˈkipo
+556,datum,dato,dato,ˈdato
+557,to wish,desear,desear,deseˈaɾ
+558,"company, firm",empresa,empresa,emˈpɾesa
+559,issue,asunto,asunto,aˈsunto
+560,presence,presencia,presencia,pɾeˈsensja
+561,"his, hers, theirs",suyo,suyo,ˈsuʝo
+562,culture,cultura,cultura,kulˈtuɾa
+563,series,serie,serie,ˈseɾje
+564,million,millón,millón,miˈʝon
+565,to teach,enseñar,enseñar,enseˈɲaɾ
+566,to build,construir,construir,konsˈtɾwiɾ
+567,opportunity,oportunidad,oportunidad,opoɾtuniˈdad
+568,to sell,vender,vender,benˈdeɾ
+569,to kill,matar,matar,maˈtaɾ
+570,to represent,representar,representar,repɾesenˈtaɾ
+571,to disappear,desaparecer,desaparecer,desapaɾeˈseɾ
+572,"to send, to order",mandar,mandar,manˈdaɾ
+573,character (nature),carácter,carácter,kaˈɾakteɾ
+574,where to? (asking),adónde,adónde,aˈdonde
+575,most,mayoría,mayoría,maʝoˈɾia
+576,red,rojo,rojo,ˈroxo
+577,"after, behind (formal)",tras,tras,tɾas
+578,top,superior,superior,supeˈɾjoɾ
+579,to walk,andar,andar,anˈdaɾ
+580,short,corto,corto,ˈkoɾto
+581,author,autor,autor,awˈtoɾ
+582,fourth,cuarto,cuarto,ˈkwaɾto
+583,sky,cielo,cielo,ˈsjelo
+584,known,conocido,conocido,konoˈsido
+585,to prefer,preferir,preferir,pɾefeˈɾiɾ
+586,memory (a recollection),recuerdo,recuerdo,reˈkweɾdo
+587,to ensure,asegurar,asegurar,aseɡuˈɾaɾ
+588,forgiveness,perdón,perdón,peɾˈdon
+589,function,función,función,funˈsjon
+590,cause,causa,causa,ˈkawsa
+591,severe,grave,grave,ˈɡɾabe
+592,decision,decisión,decisión,desiˈsjon
+593,music,música,música,ˈmusika
+594,weird (foreign),extraño,extraño,eksˈtɾaɲo
+595,to grow,crecer,crecer,kɾeˈseɾ
+596,to emerge,surgir,surgir,suɾˈxiɾ
+597,movie,película,película,peˈlikula
+598,expression,expresión,expresión,ekspɾeˈsjon
+599,husband,marido,marido,maˈɾido
+600,around,alrededor,alrededor,alredeˈdoɾ
+601,dog,perro,perro,ˈpero
+602,to deliver,entregar,entregar,entɾeˈɡaɾ
+603,river,río,río,ˈrio
+604,exactly,exactamente,exactamente,eksaktaˈmente
+605,security,seguridad,seguridad,seɡuɾiˈdad
+606,king,rey,rey,rej
+607,term,término,término,ˈteɾmino
+608,to place,colocar,colocar,koloˈkaɾ
+609,metro,metro,metro,ˈmetɾo
+610,doctor,médico,médico,ˈmediko
+611,room (bedroom),habitación,habitación,abitaˈsjon
+612,to establish,establecer,establecer,estableˈseɾ
+613,"to keep, to store",guardar,guardar,ɡwaɾˈdaɾ
+614,art,arte,arte,ˈaɾte
+615,pair,par,par,paɾ
+616,to start,iniciar,iniciar,iniˈsjaɾ
+617,fire,fuego,fuego,ˈfweɡo
+618,"to go down, to lower",bajar,bajar,baˈxaɾ
+619,consequence,consecuencia,consecuencia,konseˈkwensja
+620,to note,notar,notar,noˈtaɾ
+621,act,acto,acto,ˈakto
+622,to put inside,meter,meter,meˈteɾ
+623,absolute,absoluto,absoluto,absoˈluto
+624,penalty,pena,pena,ˈpena
+625,to act,actuar,actuar,akˈtwaɾ
+626,height,altura,altura,alˈtuɾa
+627,desire,deseo,deseo,deˈseo
+628,"out, outside",afuera,afuera,aˈfweɾa
+629,precisely,precisamente,precisamente,pɾesisaˈmente
+630,twenty,veinte,veinte,ˈbejnte
+631,dream,sueño,sueño,ˈsweɲo
+632,"to intend, to claim",pretender,pretender,pɾetenˈdeɾ
+633,task,tarea,tarea,taˈɾea
+634,coffee,café,café,kaˈfe
+635,letter (you send),carta,carta,ˈkaɾta
+636,"barely, just",apenas,apenas,aˈpenas
+637,property,propiedad,propiedad,pɾopjeˈdad
+638,product,producto,producto,pɾoˈdukto
+639,personal,personal,personal,peɾsoˈnal
+640,simply,simplemente,simplemente,simpleˈmente
+641,impossible,imposible,imposible,impoˈsible
+642,taste,gusto,gusto,ˈɡusto
+643,to agree,acordar,acordar(se),akoɾˈdaɾ
+644,site,sitio,sitio,ˈsitjo
+645,"language, tongue",lengua,lengua,ˈlenɡwa
+646,to cut,cortar,cortar,koɾˈtaɾ
+647,plan,plan,plan,plan
+648,baby,bebé,bebé,beˈbe
+649,to correspond,corresponder,corresponder,koresponˈdeɾ
+650,to break,romper,romper,romˈpeɾ
+651,never,jamás,jamás,xaˈmas
+652,to acquire,adquirir,adquirir,adkiˈɾiɾ
+653,weapon,arma,arma,ˈaɾma
+654,project,proyecto,proyecto,pɾoˈʝekto
+655,memory (the faculty),memoria,memoria,meˈmoɾja
+656,origin,origen,origen,oˈɾixen
+657,element,elemento,elemento,eleˈmento
+658,lost,perdido,perdido,peɾˈdido
+659,English,inglés,inglés,inˈɡles
+660,market,mercado,mercado,meɾˈkado
+661,course,curso,curso,ˈkuɾso
+662,to launch,lanzar,lanzar,lanˈsaɾ
+663,given,dado,dado,ˈdado
+664,to take advantage of,aprovechar,aprovechar,apɾobeˈtʃaɾ
+665,interior,interior,interior,inteˈɾjoɾ
+666,hard,duro,duro,ˈduɾo
+667,to support,apoyar,apoyar,apoˈʝaɾ
+668,worse,peor,peor,peˈoɾ
+669,to deny,negar,negar,neˈɡaɾ
+670,to advance,avanzar,avanzar,abanˈsaɾ
+671,usage,uso,uso,ˈuso
+672,arm,brazo,brazo,ˈbɾaso
+673,"teacher, professor",profesor,profesor,pɾofeˈsoɾ
+674,to resolve,resolver,resolver,resolˈbeɾ
+675,future,futuro,futuro,fuˈtuɾo
+676,half,mitad,mitad,miˈtad
+677,clothing,ropa,ropa,ˈropa
+678,is costly to (to cost),costar,costar,kosˈtaɾ
+679,rich,rico,rico,ˈriko
+680,total,total,total,toˈtal
+681,to require,exigir,exigir,eksiˈxiɾ
+682,opinion,opinión,opinión,opiˈnjon
+683,to increase,aumentar,aumentar,awmenˈtaɾ
+684,to collect,recoger,recoger,rekoˈxeɾ
+685,mouth,boca,boca,ˈboka
+686,address,dirección,dirección,diɾekˈsjon
+687,pure,puro,puro,ˈpuɾo
+688,president,presidente,presidente,pɾesiˈdente
+689,to abandon,abandonar,abandonar,abandoˈnaɾ
+690,piece,pieza,pieza,ˈpjesa
+691,last night,anoche,anoche,aˈnotʃe
+692,professional,profesional,profesional,pɾofesjoˈnal
+693,to impose,imponer,imponer,impoˈneɾ
+694,concerning,acerca,acerca,aˈseɾka
+695,to force,obligar,obligar,obliˈɡaɾ
+696,physical,físico,físico,ˈfisiko
+697,attitude,actitud,actitud,aktiˈtud
+698,sea,mar,mar,maɾ
+699,entry,entrada,entrada,enˈtɾada
+700,contact,contacto,contacto,konˈtakto
+701,to apply,aplicar,aplicar,apliˈkaɾ
+702,correct,correcto,correcto,koˈrekto
+703,capital,capital,capital,kapiˈtal
+704,title,título,título,ˈtitulo
+705,behind,detrás,detrás,deˈtɾas
+706,post,puesto,puesto,ˈpwesto
+707,material,material,material,mateˈɾjal
+708,blow,golpe,golpe,ˈɡolpe
+709,to dispose,disponer,disponer,dispoˈneɾ
+710,communication,comunicación,comunicación,komunikaˈsjon
+711,to express,expresar,expresar,ekspɾeˈsaɾ
+712,sorry,disculpe,disculpe,disˈkulpe
+713,simple,simple,simple,ˈsimple
+714,completely,totalmente,totalmente,totalˈmente
+715,to provoke,provocar,provocar,pɾoboˈkaɾ
+716,normal,normal,normal,noɾˈmal
+717,to defend,defender,defender,defenˈdeɾ
+718,disease,enfermedad,enfermedad,enfeɾmeˈdad
+719,matter,materia,materia,maˈteɾja
+720,to take away,quitar,quitar,kiˈtaɾ
+721,to conserve,conservar,conservar,konseɾˈbaɾ
+722,modern,moderno,moderno,moˈdeɾno
+723,hospital,hospital,hospital,ospiˈtal
+724,to depend,depender,depender,depenˈdeɾ
+725,nature,naturaleza,naturaleza,natuɾaˈlesa
+726,capacity,capacidad,capacidad,kapasiˈdad
+727,"current, present-day",actual,actual,akˈtwal
+728,to mark,marcar,marcar,maɾˈkaɾ
+729,distance,distancia,distancia,disˈtansja
+730,"full, in the middle of",pleno,pleno,ˈpleno
+731,perfect,perfecto,perfecto,peɾˈfekto
+732,closed,cerrado,cerrado,seˈrado
+733,to share,compartir,compartir,kompaɾˈtiɾ
+734,quiet,tranquilo,tranquilo,tɾanˈkilo
+735,information,información,información,infoɾmaˈsjon
+736,environment,ambiente,ambiente,amˈbjente
+737,especially,especialmente,especialmente,espesjalˈmente
+738,development,desarrollo,desarrollo,desaˈroʝo
+739,sun,sol,sol,sol
+740,to consist,consistir,consistir,konsisˈtiɾ
+741,probably,probablemente,probablemente,pɾobableˈmente
+742,to constitute,constituir,constituir,konstiˈtwiɾ
+743,yesterday,ayer,ayer,aˈʝeɾ
+744,willing (available),dispuesto,dispuesto,disˈpwesto
+745,to cover,cubrir,cubrir,kuˈbɾiɾ
+746,to function,funcionar,funcionar,funsjoˈnaɾ
+747,partner,compañero,compañero,kompaˈɲeɾo
+748,nice,bonito,bonito,boˈnito
+749,exit,salida,salida,saˈlida
+750,to fit,caber,caber,kaˈbeɾ
+751,awareness,conciencia,conciencia,konˈsjensja
+752,to meet,atender,atender,atenˈdeɾ
+753,sick,enfermo,enfermo,enˈfeɾmo
+754,incredible,increíble,increíble,inkɾeˈible
+755,to insist,insistir,insistir,insisˈtiɾ
+756,custom,costumbre,costumbre,kosˈtumbɾe
+757,silly,tonto,tonto,ˈtonto
+758,news,noticia,noticia,noˈtisja
+759,circumstance,circunstancia,circunstancia,siɾkunsˈtansja
+760,is painful to (to hurt),doler,doler,doˈleɾ
+761,private,privado,privado,pɾiˈbado
+762,style,estilo,estilo,esˈtilo
+763,price,precio,precio,ˈpɾesjo
+764,popular,popular,popular,popuˈlaɾ
+765,to sit,sentar,sentar,senˈtaɾ
+766,plant,planta,planta,ˈplanta
+767,that one (pre-2010 spelling),ése,ése,ˈese
+768,character (in a story),personaje,personaje,peɾsoˈnaxe
+769,famous,famoso,famoso,faˈmoso
+770,hunger,hambre,hambre,ˈambɾe
+771,success,éxito,éxito,ˈeksito
+772,to merit,merecer,merecer,meɾeˈseɾ
+773,building,edificio,edificio,ediˈfisjo
+774,authority,autoridad,autoridad,awtoɾiˈdad
+775,stone,piedra,piedra,ˈpjedɾa
+776,to include,incluir,incluir,inˈklwiɾ
+777,boat,barco,barco,ˈbaɾko
+778,set,conjunto,conjunto,konˈxunto
+779,hotel,hotel,hotel,oˈtel
+780,thirty,treinta,treinta,ˈtɾejnta
+781,immediate,inmediato,inmediato,inmeˈdjato
+782,to cross,cruzar,cruzar,kɾuˈsaɾ
+783,yours,tuyo,tuyo,ˈtuʝo
+784,to tend,tender,tender,tenˈdeɾ
+785,finally,finalmente,finalmente,finalˈmente
+786,to advertise,anunciar,anunciar,anunˈsjaɾ
+787,bath,baño,baño,ˈbaɲo
+788,spirit,espíritu,espíritu,esˈpiɾitu
+789,member,miembro,miembro,ˈmjembɾo
+790,direct,directo,directo,diˈɾekto
+791,pleasure,placer,placer,plaˈseɾ
+792,to wake,despertar,despertar,despeɾˈtaɾ
+793,resource,recurso,recurso,reˈkuɾso
+794,wall,pared,pared,paˈɾed
+795,error,error,error,eˈroɾ
+796,accurate,preciso,preciso,pɾeˈsiso
+797,miscellaneous,diverso,diverso,diˈbeɾso
+798,difficulty,dificultad,dificultad,difikulˈtad
+799,to comment,comentar,comentar,komenˈtaɾ
+800,to publish,publicar,publicar,publiˈkaɾ
+801,"relating to family, a relative",familiar,familiar,famiˈljaɾ
+802,will,voluntad,voluntad,bolunˈtad
+803,meeting,reunión,reunión,reuˈnjon
+804,model,modelo,modelo,moˈdelo
+805,secret,secreto,secreto,seˈkɾeto
+806,to load,cargar,cargar,kaɾˈɡaɾ
+807,date,fecha,fecha,ˈfetʃa
+808,to participate,participar,participar,paɾtisiˈpaɾ
+809,train,tren,tren,tɾen
+810,to prevent,impedir,impedir,impeˈdiɾ
+811,purpose,propósito,propósito,pɾoˈposito
+812,to rescue,salvar,salvar,salˈbaɾ
+813,hurry,prisa,prisa,ˈpɾisa
+814,degree,grado,grado,ˈɡɾado
+815,to escape,escapar,escapar,eskaˈpaɾ
+816,deal,negocio,negocio,neˈɡosjo
+817,fight,lucha,lucha,ˈlutʃa
+818,to throw,tirar,tirar,tiˈɾaɾ
+819,whole,entero,entero,enˈteɾo
+820,interesting,interesante,interesante,inteɾeˈsante
+821,wide,amplio,amplio,ˈampljo
+822,silence,silencio,silencio,siˈlensjo
+823,to answer,contestar,contestar,kontesˈtaɾ
+824,newspaper,periódico,periódico,peˈɾjodiko
+825,is worrying to (to worry),preocupar,preocupar,pɾeokuˈpaɾ
+826,"schoolteacher, master",maestro,maestro,maˈestɾo
+827,to lend,prestar,prestar,pɾesˈtaɾ
+828,quality,calidad,calidad,kaliˈdad
+829,salt,sal,sal,sal
+830,to exhibit,exponer,exponer,ekspoˈneɾ
+831,control,control,control,konˈtɾol
+832,civil,civil,civil,siˈbil
+833,weird (rare),raro,raro,ˈraɾo
+834,science,ciencia,ciencia,ˈsjensja
+835,size,tamaño,tamaño,taˈmaɲo
+836,"chart, painting",cuadro,cuadro,ˈkwadɾo
+837,horse,caballo,caballo,kaˈbaʝo
+838,responsibility,responsabilidad,responsabilidad,responsabiliˈdad
+839,fifty,cincuenta,cincuenta,sinˈkwenta
+840,internal,interno,interno,inˈteɾno
+841,detail,detalle,detalle,deˈtaʝe
+842,march,marcha,marcha,ˈmaɾtʃa
+843,nine,nueve,nueve,ˈnwebe
+844,meat,carne,carne,ˈkaɾne
+845,plane,avión,avión,aˈbjon
+846,hair,pelo,pelo,ˈpelo
+847,thought,pensamiento,pensamiento,pensaˈmjento
+848,to travel,viajar,viajar,bjaˈxaɾ
+849,charge,cargo,cargo,ˈkaɾɡo
+850,to separate,separar,separar,sepaˈɾaɾ
+851,construction,construcción,construcción,konstɾukˈsjon
+852,trial,juicio,juicio,ˈxwisjo
+853,ground,terreno,terreno,teˈreno
+854,floor,piso,piso,ˈpiso
+855,"companionship, company",compañia,compañia,kompaˈɲia
+856,gold,oro,oro,ˈoɾo
+857,to return,regresar,regresar,reɡɾeˈsaɾ
+858,text,texto,texto,ˈteksto
+859,source,fuente,fuente,ˈfwente
+860,present,presente,presente,pɾeˈsente
+861,official,oficial,oficial,ofiˈsjal
+862,difinitive,difinitivo,difinitivo,definiˈtibo
+863,magazine,revista,revista,reˈbista
+864,damage,daño,daño,ˈdaɲo
+865,hope,esperanza,esperanza,espeˈɾansa
+866,machine,máquina,máquina,ˈmakina
+867,to contemplate,contemplar,contemplar,kontemˈplaɾ
+868,"to travel through, cover",recorrer,recorrer,rekoˈreɾ
+869,mind,mente,mente,ˈmente
+870,phrase,frase,frase,ˈfɾase
+871,exercise,ejercicio,ejercicio,exeɾˈsisjo
+872,"hall, living room",sala,sala,ˈsala
+873,to last,durar,durar,duˈɾaɾ
+874,instrument,instrumento,instrumento,instɾuˈmento
+875,that thing,aquello,aquello,aˈkeʝo
+876,defense,defensa,defensa,deˈfensa
+877,director,director,director,diɾekˈtoɾ
+878,to withdraw,retirar,retirar,retiˈɾaɾ
+879,explanation,explicación,explicación,eksplikaˈsjon
+880,article,artículo,artículo,aɾˈtikulo
+881,underneath,debajo,debajo,deˈbaxo
+882,to remain,permanecer,permanecer,peɾmaneˈseɾ
+883,to attend,asistir,asistir,asisˈtiɾ
+884,twelve,doce,doce,ˈdose
+885,permission,permiso,permiso,peɾˈmiso
+886,radio,radio,radio,ˈradjo
+887,to organize,organizar,organizar,oɾɡaniˈsaɾ
+888,choice,elección,elección,elekˈsjon
+889,visit,visita,visita,biˈsita
+890,fun,divertido,divertido,dibeɾˈtido
+891,to contain,contener,contener,konteˈneɾ
+892,support,apoyo,apoyo,aˈpoʝo
+893,tree,árbol,árbol,ˈaɾbol
+894,to visit,visitar,visitar,bisiˈtaɾ
+895,to report,informar,informar,infoɾˈmaɾ
+896,encounter,encuentro,encuentro,enˈkwentɾo
+897,sex,sexo,sexo,ˈsekso
+898,like,parecido,parecido,paɾeˈsido
+899,"ordinary, current (of water)",corriente,corriente,koˈrjente
+900,friendly,amable,amable,aˈmable
+901,reading,lectura,lectura,lekˈtuɾa
+902,message,mensaje,mensaje,menˈsaxe
+903,existence,existencia,existencia,eksisˈtensja
+904,"language (speech, style)",lenguaje,lenguaje,lenˈɡwaxe
+905,costume,traje,traje,ˈtɾaxe
+906,to send,enviar,enviar,enˈbjaɾ
+907,soul,alma,alma,ˈalma
+908,even,aun,aun,awn
+909,destination,destino,destino,desˈtino
+910,education,educación,educación,edukaˈsjon
+911,to care,cuidar,cuidar,kwiˈdaɾ
+912,to intervene,intervenir,intervenir,inteɾbeˈniɾ
+913,dinner,cena,cena,ˈsena
+914,operation,operación,operación,opeɾaˈsjon
+915,perfectly,perfectamente,perfectamente,peɾfektaˈmente
+916,to extend,extender,extender,ekstenˈdeɾ
+917,to check,comprobar,comprobar,kompɾoˈbaɾ
+918,note,nota,nota,ˈnota
+919,particular,particular,particular,paɾtikuˈlaɾ
+920,to delay,tardar,tardar,taɾˈdaɾ
+921,"in, inside",adentro,adentro,aˈdentɾo
+922,military,militar,militar,miliˈtaɾ
+923,song,canción,canción,kanˈsjon
+924,attached,unido,unido,uˈnido
+925,to discuss,discutir,discutir,diskuˈtiɾ
+926,to fear,temer,temer,teˈmeɾ
+927,extraordinary,extraordinario,extraordinario,ekstɾaoɾdiˈnaɾjo
+928,theater,teatro,teatro,teˈatɾo
+929,to face,enfrentar,enfrentar,enfɾenˈtaɾ
+930,"newly, freshly",recién,recién,reˈsjen
+931,average,media,media,ˈmedja
+932,letter (of the alphabet),letra,letra,ˈletɾa
+933,feeling,sentimiento,sentimiento,sentiˈmjento
+934,to drive,conducir,conducir,konduˈsiɾ
+935,completely,completamente,completamente,kompletaˈmente
+936,cold,frío,frío,ˈfɾio
+937,to sign,firmar,firmar,fiɾˈmaɾ
+938,solution,solución,solución,soluˈsjon
+939,health,salud,salud,saˈlud
+940,it works,funciona,funciona,funˈsjona
+941,print,impresión,impresión,impɾeˈsjon
+942,to complain,quejarse,quejarse,keˈxaɾse
+943,intention,intención,intención,intenˈsjon
+944,rate,ritmo,ritmo,ˈritmo
+945,green,verde,verde,ˈbeɾde
+946,exact,exacto,exacto,ekˈsakto
+947,to respect,respetar,respetar,respeˈtaɾ
+948,terrible,terrible,terrible,teˈrible
+949,bank,banco,banco,ˈbanko
+950,via,vía,vía,ˈbia
+951,to hold,sostener,sostener,sosteˈneɾ
+952,moon,luna,luna,ˈluna
+953,skin,piel,piel,pjel
+954,left (direction),izquierda,izquierda,isˈkjeɾda
+955,in front,delante,delante,deˈlante
+956,religious,religioso,religioso,reliˈxjoso
+957,to warn,advertir,advertir,adbeɾˈtiɾ
+958,dark,oscuro,oscuro,osˈkuɾo
+959,research,investigación,investigación,inbestiɡaˈsjon
+960,heat,calor,calor,kaˈloɾ
+961,shop,tienda,tienda,ˈtjenda
+962,conversation,conversación,conversación,konbeɾsaˈsjon
+963,Christmas,navidad,navidad,nabiˈdad
+964,summer,verano,verano,beˈɾano
+965,respect,respeto,respeto,resˈpeto
+966,grandfather,abuelo,abuelo,aˈbwelo
+967,north,norte,norte,ˈnoɾte
+968,by means of,mediante,mediante,meˈdjante
+969,tradition,tradición,tradición,tɾadiˈsjon
+970,is sufficient to (to be enough),bastar,bastar,basˈtaɾ
+971,couple,pareja,pareja,paˈɾexa
+972,population,población,población,poblaˈsjon
+973,lawyer,abogado,abogado,aboˈɡado
+974,daily,diario,diario,ˈdjaɾjo
+975,honor,honor,honor,oˈnoɾ
+976,blue,azul,azul,aˈsul
+977,to mention,mencionar,mencionar,mensjoˈnaɾ
+978,generation,generación,generación,xeneɾaˈsjon
+979,vision,visión,visión,biˈsjon
+980,concrete,concreto,concreto,konˈkɾeto
+981,completed,terminado,terminado,teɾmiˈnado
+982,to raise (an issue),plantear,plantear,planteˈaɾ
+983,left behind,dejado,dejado,deˈxado
+984,to test,probar,probar,pɾoˈbaɾ
+985,"to swear, pledge",jurar,jurar,xuˈɾaɾ
+986,beautiful,hermoso,hermoso,eɾˈmoso
+987,danger,peligro,peligro,peˈliɡɾo
+988,confidence,confianza,confianza,konˈfjansa
+989,to fill,llenar,llenar,ʝeˈnaɾ
+990,simple,sencillo,sencillo,senˈsiʝo
+991,to improve,mejorar,mejorar,mexoˈɾaɾ
+992,concept,concepto,concepto,konˈsepto
+993,to highlight,destacar,destacar,destaˈkaɾ
+994,wood,madera,madera,maˈdeɾa
+995,to walk,caminar,caminar,kamiˈnaɾ
+996,to employ,emplear,emplear,empleˈaɾ
+997,to agree,convenir,convenir,konbeˈniɾ
+998,energy,energía,energía,eneɾˈxia
+999,to admit,admitir,admitir,admiˈtiɾ
+1000,is delightful to (to love),encantar,encantar,enkanˈtaɾ

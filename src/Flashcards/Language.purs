@@ -24,12 +24,15 @@ import Data.Maybe (Maybe)
 import Flashcards.Data.Deck.German as German
 import Flashcards.Data.Deck.Spanish as Spanish
 import Flashcards.Types.Card (Card)
+import Flashcards.Types.Pronunciation (Dialect)
 
 type Language =
   { code :: String
   , name :: String
   , deck :: Array Card
   , fingerprint :: String
+  -- | How the words are said, by dialect tag. Empty for a deck with no IPA column.
+  , pronunciations :: Array Dialect
   -- | Accents to prefer when the device offers a choice, best first.
   , accents :: Array String
   -- | What a rank means in this deck. The two sources order their words on
@@ -48,6 +51,7 @@ spanish =
   , name: "Spanish"
   , deck: Spanish.deck
   , fingerprint: Spanish.fingerprint
+  , pronunciations: Spanish.pronunciations
   -- Latin American Spanish is what a learner in the US is far more likely to
   -- meet, and Castilian's *ceceo* is a real difference to train into the ear.
   , accents: [ "es-MX", "es-ES" ]
@@ -63,6 +67,7 @@ german =
   , name: "German"
   , deck: German.deck
   , fingerprint: German.fingerprint
+  , pronunciations: German.pronunciations
   , accents: [ "de-DE", "de-AT", "de-CH" ]
   -- A course vocabulary list, A1 then A2, alphabetical within each unit. Rank
   -- is a position in that curriculum, not a claim about how common a word is.

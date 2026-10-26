@@ -65,6 +65,7 @@ jobs:
 
       # Structural only: deviations from the regular pattern are its output,
       # not a failure, and it exits zero for them.
+      - run: npm run -s check-ipa
       - run: npm run -s check-verbs
       - run: npm run -s check-paraphrase
       - run: npm run -s check-sentences
