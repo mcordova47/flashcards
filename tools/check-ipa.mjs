@@ -11,7 +11,11 @@
 //     (a slashed row, a phrase and a `(se)` row are each transcribed word by
 //     word);
 //   - every word of more than one syllable has exactly one stress mark, and
-//     one of a single syllable has none.
+//     one of a single syllable has none, and the mark is before a vowel;
+//   - no slash, bracket or space inside a word: only the word side's own
+//     " / " and a trailing "(se)" are allowed.
+//
+// It does not check *where* the mark falls, which would need a syllabifier.
 //
 // It cannot say a transcription is the right one for its word. That is a
 // person's review, and this is only what survives it.
@@ -53,7 +57,13 @@ for (const lang of LANGUAGES) {
       }
       if (ipa.includes("(se)") !== word.includes("(se)")) problem(rank, word, `${JSON.stringify(ipa)} and the word side disagree about (se)`)
 
+      // The separator and the clitic are the word side's own and are the only
+      // slashes and brackets a stored value may have. Anything left in a word
+      // is a delimiter pasted in from a dictionary, or a stray one.
+      if ((cells[at] ?? "") !== ipa) problem(rank, word, `${JSON.stringify(ipa)} has leading or trailing space`)
       for (const part of have) {
+        if (/[\/()\s]/.test(part)) problem(rank, word, `${JSON.stringify(part)} has a slash, bracket or space inside a word`)
+        if (part.includes("ˈ") && !/ˈ[^aeiou]*[aeiou]/.test(part)) problem(rank, word, `${JSON.stringify(part)} has a stress mark with no vowel after it`)
         const marks = [...part].filter(c => c === "ˈ").length
         const n = syllables(part)
         if (n > 1 && marks !== 1) problem(rank, word, `${JSON.stringify(part)} has ${n} syllables and ${marks} stress marks`)
