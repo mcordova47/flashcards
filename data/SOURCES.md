@@ -39,7 +39,9 @@ The first draft came from spelling, by `tools/draft-ipa.mjs`, and was then read
 row by row. That script is not run again: the column is now the source and a
 correction is an edit to it. `npm run check-ipa` refuses an empty cell, a
 character outside the dialect's inventory, a different number of words from the
-word side, and a missing or extra stress mark. It cannot say a transcription is
+word side, a slash, bracket or space inside a word, and a missing, extra or
+vowel-less stress mark. It does not check which syllable the mark is on, and
+it cannot say a transcription is
 the right one for its word.
 
 ## `de-1000.csv` — German
