@@ -7,6 +7,41 @@ list and since corrected extensively — see the closed deck-cleanup issues for
 what changed and why. It began in a Google Sheet, which stopped being the source
 in #131 and is no longer shared.
 
+### `IPA es-MX`
+
+The last column of `es-1000.csv` is how each word is said, in IPA, for
+**Mexican Spanish**. The header carries the dialect as a BCP 47 tag, so another
+dialect is another column (`IPA es-ES`, `IPA es-AR`) and an entry for its tag in
+`tools/ipa-source.mjs`; the generated deck holds them keyed by tag
+(`pronunciations`) and a reader asks for one by tag. Nothing shows it yet (#175).
+
+What `es-MX` means:
+
+- **seseo**: `z` and `c` before `e`/`i` are /s/, never /θ/.
+- **yeísmo**: `ll` and `y` are the same sound, written `ʝ`.
+- `s` is kept at the end of a syllable and word; no aspiration.
+- **Broad, phonemic**: the phonemes, not the allophones. `b`/`v` are /b/, `d` is
+  /d/, `g` is /ɡ/ (U+0261), and `n` stays /n/ before `k` or `b`.
+- `r` is `r` word-initially, after `n`/`l`/`s` and for `rr`, and `ɾ` otherwise.
+- `x` is `ks` in all eighteen words that have one; none is /s/, /x/ or /ʃ/.
+- Stress is `ˈ` before the stressed syllable. A one-syllable word has no mark and
+  a longer one has exactly one. Words are not split into syllables: `i`/`u` next
+  to a vowel is the glide `j`/`w` in a diphthong (`ˈbjen`) and the vowel in a
+  hiatus (`ˈdia`, `paˈis`), so the symbols already say which.
+- No slashes or brackets in the stored value; whoever shows it adds them.
+
+Rows that are not one plain word keep the shape of the word side, so a reader
+splits them the way it splits the word: `el / la` is `el / la`, `por favor` is
+`poɾ faˈboɾ` (each word marked on its own), and `ir(se)` is `iɾ(se)`, the
+clitic written on as it is on the word side. `Español` is a word like the others.
+
+The first draft came from spelling, by `tools/draft-ipa.mjs`, and was then read
+row by row. That script is not run again: the column is now the source and a
+correction is an edit to it. `npm run check-ipa` refuses an empty cell, a
+character outside the dialect's inventory, a different number of words from the
+word side, and a missing or extra stress mark. It cannot say a transcription is
+the right one for its word.
+
 ## `de-1000.csv` — German
 
 Sourced from [onewholearns.com/vocabulary/top-1000][owl] and imported the same way.

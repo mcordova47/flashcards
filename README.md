@@ -38,6 +38,7 @@ npm start        # http://localhost:8000
 | `npm run sync-coverage` | Regenerate the coverage module from `data/es-verb-coverage.csv` — the verdicts, not the reasons |
 | `npm run sync-paraphrase` | Regenerate the paraphrase prompt module from `data/es-paraphrase.csv` |
 | `npm run check-paraphrase` | Prove every paraphrase model answer uses the form it claims, in deck vocabulary |
+| `npm run check-ipa` | Refuse a missing, malformed or unstressed `IPA <tag>` transcription |
 | `npm run check-sentences` | Prove every shift sentence against the table, in deck vocabulary |
 | `npm run sync-por-para` | Regenerate the por / para sentence module from `data/es-por-para.csv` |
 | `npm run check-por-para` | Prove every por / para contrast asks both sides and every sense only its own, in deck vocabulary |
