@@ -15,7 +15,7 @@ import Flashcards.Types.Pronunciation (Dialect)
 -- | is no longer what protects it - it certifies that a rank still names the
 -- | word it named, which is all that placing a pre-v5 payload needs.
 fingerprint :: String
-fingerprint = "f321a7d5a5b9"
+fingerprint = "4a37f1e7b883"
 
 -- | The index into this deck is meaningful: it is the order cards are
 -- | introduced in.
@@ -569,7 +569,7 @@ deck =
   , { rank: Rank 546, slug: Slug "cama", english: "bed", word: "cama", example: "" }
   , { rank: Rank 547, slug: Slug "motivo", english: "motive", word: "motivo", example: "" }
   , { rank: Rank 548, slug: Slug "prueba", english: "test", word: "prueba", example: "" }
-  , { rank: Rank 549, slug: Slug "politica", english: "policy", word: "politica", example: "" }
+  , { rank: Rank 549, slug: Slug "politica", english: "policy", word: "política", example: "" }
   , { rank: Rank 550, slug: Slug "nacional", english: "national", word: "nacional", example: "" }
   , { rank: Rank 551, slug: Slug "lleno", english: "full (filled up)", word: "lleno", example: "" }
   , { rank: Rank 552, slug: Slug "teléfono", english: "phone", word: "teléfono", example: "" }
@@ -875,14 +875,14 @@ deck =
   , { rank: Rank 852, slug: Slug "juicio", english: "trial", word: "juicio", example: "" }
   , { rank: Rank 853, slug: Slug "terreno", english: "ground", word: "terreno", example: "" }
   , { rank: Rank 854, slug: Slug "piso", english: "floor", word: "piso", example: "" }
-  , { rank: Rank 855, slug: Slug "compañia", english: "companionship, company", word: "compañia", example: "" }
+  , { rank: Rank 855, slug: Slug "compañia", english: "companionship, company", word: "compañía", example: "" }
   , { rank: Rank 856, slug: Slug "oro", english: "gold", word: "oro", example: "" }
   , { rank: Rank 857, slug: Slug "regresar", english: "to return", word: "regresar", example: "" }
   , { rank: Rank 858, slug: Slug "texto", english: "text", word: "texto", example: "" }
   , { rank: Rank 859, slug: Slug "fuente", english: "source", word: "fuente", example: "" }
   , { rank: Rank 860, slug: Slug "presente", english: "present", word: "presente", example: "" }
   , { rank: Rank 861, slug: Slug "oficial", english: "official", word: "oficial", example: "" }
-  , { rank: Rank 862, slug: Slug "difinitivo", english: "difinitive", word: "difinitivo", example: "" }
+  , { rank: Rank 862, slug: Slug "difinitivo", english: "definitive", word: "definitivo", example: "" }
   , { rank: Rank 863, slug: Slug "revista", english: "magazine", word: "revista", example: "" }
   , { rank: Rank 864, slug: Slug "daño", english: "damage", word: "daño", example: "" }
   , { rank: Rank 865, slug: Slug "esperanza", english: "hope", word: "esperanza", example: "" }
