@@ -47,6 +47,13 @@ export const card = (progress, slug, language = "es") => {
 export const grade = (progress, slug, gotIt, now = Date.now(), language = "es") =>
   must(Core.grade(language)(stored(progress))(slug)(gotIt)(now)).progress
 
+// How a word is said: the transcription alone, without slashes or brackets, or
+// `null` for a slug the deck does not have, a dialect it has no column for, and
+// a language with no IPA (German). It is the transcription of the Spanish word,
+// so pass the card's own `slug`, or one of its `answers` that is itself a slug.
+export const ipa = (slug, dialect = "es-MX", language = "es") =>
+  must(Core.ipa(language)(dialect)(slug)).ipa || null
+
 // Two histories as one, for after a `GET` and before a `PUT`.
 export const merge = (mine, theirs, language = "es") =>
   must(Core.merge(language)(stored(mine))(stored(theirs))).progress

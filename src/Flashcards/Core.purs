@@ -20,10 +20,12 @@
 module Flashcards.Core
   ( Card
   , Graded
+  , Ipa
   , Merged
   , Queue
   , empty
   , grade
+  , ipa
   , merge
   , requeue
   , session
@@ -47,6 +49,7 @@ import Flashcards.Types.Card (Slug(..), slugToString)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
+import Flashcards.Types.Pronunciation as Pronunciation
 import Flashcards.Types.Progress as Progress
 
 type Queue = { error :: String, slugs :: Array String }
@@ -65,6 +68,10 @@ type Card =
   }
 
 type Graded = { error :: String, progress :: String }
+
+-- | `ipa` is empty when the deck has no transcription to give. A transcription
+-- | is never empty, so the empty string cannot be mistaken for one.
+type Ipa = { error :: String, ipa :: String }
 
 type Merged = { error :: String, progress :: String }
 
@@ -149,6 +156,13 @@ grade code raw slug gotIt ms = withLanguage { error: "", progress: "" } code \la
         case Deck.card (Slug slug) index of
           Nothing -> { error: "No such card: " <> slug, progress: "" }
           Just _ -> { error: "", progress: save language $ Progress.insert (Slug slug) updated progress }
+
+-- | How a word is said, in one dialect: `Pronunciation.ipa` behind the same
+-- | language lookup as the rest. Empty for a dialect the deck has no column
+-- | for, a slug outside it, and a deck with no IPA at all.
+ipa :: String -> String -> String -> Ipa
+ipa code tag slug = withLanguage { error: "", ipa: "" } code \language ->
+  { error: "", ipa: fromMaybe "" $ Pronunciation.ipa tag (Slug slug) language.pronunciations }
 
 -- | Two histories as one: what the app does with what the server holds. Run
 -- | on every `GET` before the `PUT`, so that an answer given on the other

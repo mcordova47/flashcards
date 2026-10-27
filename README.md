@@ -574,9 +574,22 @@ with, and nothing else the key does not already unlock.
 | `core.session(progress, now?, language?)` | the slugs to study: what is due, then what is new |
 | `core.card(progress, slug, language?)` | `{ slug, prompt, answers, example, direction }`; turn over to show `answers` |
 | `core.grade(progress, slug, gotIt, now?, language?)` | the progress after one self-graded answer |
+| `core.ipa(slug, dialect?, language?)` | how the word is said, e.g. `"keˈɾeɾ"`, or `null` |
 | `core.merge(mine, theirs, language?)` | two histories as one, after a `GET` and before a `PUT` |
 | `core.requeue(slug, position, queue)` | a missed card put back a few places on |
 | `core.empty(language?)`, `core.sessionSize`, `core.version` | |
+
+`core.ipa` is the transcription of the **Spanish word**, with no slashes or
+brackets (stress is `ˈ`), and `dialect` defaults to `es-MX`, the only column
+there is. For a recognition card pass the card's own `slug`. For a production
+card the prompt is English and the words are in `answers`, which are the cards'
+`word`s and not their slugs. They are the same string for all but four cards
+(`politica`, `acordar(se)`, `compañia`, `difinitivo`), so an answer word works
+except for those four, which get `null`; a client that wants all of them
+carries the slug of the card it graded. `null` is also what a slug outside the
+deck gets, a dialect the deck has no column for, and
+German, which has none. Nothing is transcribed for the drills' verb forms or
+the example sentences.
 
 Progress goes in and out as the string the blob holds, and `null` means none
 yet (the `GET` was a 404). Everything throws on a bad language, slug or

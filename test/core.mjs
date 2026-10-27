@@ -30,7 +30,7 @@ const entry = (progress, slug) => cards(progress).find(c => c.slug === slug)
 console.log("\nThe core other clients import")
 
 check("it exports exactly this surface", Object.keys(core).sort(),
-  ["card", "empty", "grade", "merge", "requeue", "session", "sessionSize", "version"])
+  ["card", "empty", "grade", "ipa", "merge", "requeue", "session", "sessionSize", "version"])
 check("at this version", core.version, 1)
 
 const fresh = core.session(null, NOW)
@@ -63,6 +63,13 @@ check("and the side further along on a card wins it",
   entry(core.merge(core.grade(a, fresh[0], true, NOW + DAY), a), fresh[0]).seen, 2)
 check("merging with nothing stored is the history itself", slugs(core.merge(a, null)), [fresh[0]])
 
+check("a card's slug has its transcription, in the one dialect there is",
+  [core.ipa("yo"), core.ipa("querer", "es-MX"), core.ipa("querer", "es-MX", "es")], ["ʝo", "keˈɾeɾ", "keˈɾeɾ"])
+check("and every card in a session has one", fresh.every(s => typeof core.ipa(s) === "string"), true)
+check("null for a slug, a dialect and a language that have none",
+  [core.ipa("petunia"), core.ipa("yo", "es-ES"), core.ipa("Haus", "es-MX", "de"), core.ipa("Haus", "de-DE", "de")],
+  [null, null, null, null])
+
 check("a miss comes back a few places on", core.requeue("x", 0, ["a", "b", "c", "d", "e", "f"]).indexOf("x") > 1, true)
 
 // A module import across origins is refused without this, and nothing else in
@@ -75,6 +82,7 @@ check("and the versioned file is the bare one",
   fs.readFileSync("public/core.js", "utf8") === fs.readFileSync("public/core.v1.js", "utf8"), true)
 
 throws("a language there is not is refused", () => core.session(null, NOW, "xx"))
+throws("so is a language for a transcription", () => core.ipa("yo", "es-MX", "xx"))
 throws("so is a card there is not", () => core.grade(null, "no-such-card", true, NOW))
 throws("so is progress that is not progress", () => core.session("{not json", NOW))
 throws("and progress for the other language", () => core.session(core.empty("de"), NOW, "es"))

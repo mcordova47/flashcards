@@ -9,7 +9,7 @@ import Data.Array as Array
 import Data.DateTime.Instant (Instant, instant)
 import Data.Either (Either(..))
 import Data.Int (toNumber)
-import Data.Maybe (Maybe(..), fromJust)
+import Data.Maybe (Maybe(..), fromJust, fromMaybe)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Core as Core
 import Flashcards.Deck as Deck
@@ -21,6 +21,7 @@ import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
+import Flashcards.Types.Pronunciation as Pronunciation
 import Partial.Unsafe (unsafePartial)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
@@ -86,3 +87,23 @@ spec = do
     it "builds the session the page builds" do
       (Core.session "es" "" start).slugs `shouldEqual`
         map slugToString (Scheduler.buildSession (map _.slug language.deck) Progress.empty (at start) Scheduler.sessionSize)
+
+  describe "the core's transcription, against Pronunciation.ipa" do
+    it "gives a transcription for every word the deck has one for" do
+      Array.all
+        (\c -> (Core.ipa "es" "es-MX" (slugToString c.slug)).ipa == fromMaybe "" (Pronunciation.ipa "es-MX" c.slug language.pronunciations))
+        language.deck
+        `shouldEqual` true
+
+    it "reads the same word as the deck does" do
+      (Core.ipa "es" "es-MX" "querer").ipa `shouldEqual` "keˈɾeɾ"
+
+    it "is empty for a slug, a dialect and a language that have none" do
+      map (\r -> r.ipa)
+        [ Core.ipa "es" "es-MX" "petunia"
+        , Core.ipa "es" "es-ES" "yo"
+        , Core.ipa "de" "es-MX" "Haus"
+        ] `shouldEqual` [ "", "", "" ]
+
+    it "refuses a language there is not, as the rest do" do
+      (Core.ipa "xx" "es-MX" "yo").error `shouldEqual` "No such language: xx"
