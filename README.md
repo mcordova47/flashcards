@@ -580,7 +580,10 @@ with, and nothing else the key does not already unlock.
 | `core.empty(language?)`, `core.sessionSize`, `core.version` | |
 
 `core.ipa` is the transcription of the **Spanish word**, with no slashes or
-brackets (stress is `ˈ`), and `dialect` defaults to `es-MX`, the only column
+brackets round it (stress is `ˈ`). It follows the word's own shape, so the seven
+rows that are a pair, a phrase or a `(se)` verb (`el / la`, `él / ella`,
+`por favor`, `sin embargo`, `ir(se)`, `llamar(se)`, `levantar(se)`) keep their
+` / `, space or `(se)`, and `dialect` defaults to `es-MX`, the only column
 there is. For a recognition card pass the card's own `slug`. For a production
 card the prompt is English and the words are in `answers`, which are the cards'
 `word`s and not their slugs. They are the same string for all but four cards

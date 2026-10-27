@@ -47,7 +47,8 @@ export const card = (progress, slug, language = "es") => {
 export const grade = (progress, slug, gotIt, now = Date.now(), language = "es") =>
   must(Core.grade(language)(stored(progress))(slug)(gotIt)(now)).progress
 
-// How a word is said: the transcription alone, without slashes or brackets, or
+// How a word is said: the transcription alone, with no delimiters round it (but
+// the seven pairs, phrases and `(se)` verbs keep their ` / `, space or `(se)`), or
 // `null` for a slug the deck does not have, a dialect it has no column for, and
 // a language with no IPA (German). It is the transcription of the Spanish word,
 // so pass the card's own `slug`, or one of its `answers` that is itself a slug.
