@@ -101,7 +101,8 @@ for an **umbrella** that still has open sub-issues. If an issue must stay open f
 some other reason, tick the boxes the pull request met and strike or reword the
 rest, so that nobody has to repeat the audit to learn what is left.
 
-Tell the maintainer afterwards which issues you filed, with numbers and titles.
+Tell the maintainer afterwards which issues you filed, with numbers and titles, in
+the one report *Have it reviewed* describes, not a message of its own.
 An issue you file gets **exactly one** `priority:` label, or `parked`, and
 `needs-you` if its next step is the maintainer's (`CONTRIBUTING.md`, *What to do
 next*).
@@ -129,9 +130,11 @@ the review was an agent you started.
 - **Ready to merge.** The reviewer queued it. Nothing for you to do.
 - **Fix, then merge.** Make the fixes, push, queue auto-merge, as below.
 - **Fix, then re-review.** Make the fixes, push, and start **one** more reviewer,
-  new and not the first one asked again, with the same prompt. If that review still
-  has fix items, **stop** and tell the maintainer. Two rounds that do not settle it
-  is a disagreement, not something a third run resolves.
+  new and not the first one asked again, with the same prompt. If that review's
+  verdict is again *fix, then re-review* or *needs you*, **stop** and tell the
+  maintainer: two rounds that do not settle it are a disagreement, not something a
+  third run resolves. If it is *fix, then merge*, make those fixes and queue
+  auto-merge.
 - **Needs you.** Stop. Nothing is queued while the list is open.
 
 Skip all of this only when the maintainer has said not to for this pull request. Do
