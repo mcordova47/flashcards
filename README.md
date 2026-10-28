@@ -406,7 +406,7 @@ Loading **merges** rather than replaces. `Progress.merge` compares the two
 histories card by card: `seen` only ever increases on a given device, so
 between two records for the same card the one with more sightings has strictly
 more history behind it and wins. No timestamps to reconcile, no lost sessions. A Netlify Function
-over Netlify Blobs, deployed by the same `git push` as the rest:
+over Netlify Blobs, deployed with the rest when the maintainer moves `production`:
 
 ```
 GET  /api/progress/<key>/<lang>   the stored blob, or 404
