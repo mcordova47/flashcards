@@ -1,5 +1,6 @@
-# Refuses a broken merge. Netlify still builds and deploys on its own; this
-# says whether what it deployed should have gone in. See #23.
+# Refuses a broken merge. A merge to main is not a deploy: Netlify builds the
+# production branch, which the maintainer moves in batches. This says whether
+# what was merged should have been. See #23.
 name: check
 
 # Both, and they answer different questions. `pull_request` tests the *merge

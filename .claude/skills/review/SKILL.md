@@ -28,6 +28,9 @@ git worktree add --detach .claude/worktrees/review-<n> $(git rev-parse origin/<t
 
 ## Let CI run the gate
 
+*Merged is not live* (`CONTRIBUTING.md`): look at the pull request's deploy preview
+for anything visual, not at the live site, which may be a batch behind `main`.
+
 **Do not run `npm run verify` over someone else's branch.** CI already has:
 the `pull_request` trigger builds and tests the *merge result*, and `strict`
 means a branch cannot land while it is behind, so a green check is a green

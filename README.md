@@ -138,8 +138,10 @@ operating system lends it a decoder, which Linux does not, so in CI the
 pairing-by-camera checks run against the bundled decoder alone, and the log
 says the platform's was skipped. `npm run verify` on a Mac runs both.
 
-Netlify still builds and deploys on push, independently. CI does not gate the
-deploy; it says whether a push should have been made.
+Netlify deploys the `production` branch, which the maintainer moves by hand
+(`git push origin main:production`), so a merge to `main` is not a deploy and CI
+is what says whether it should have been merged. See *Merged is not live* in
+`CONTRIBUTING.md`.
 
 ## How it works
 
@@ -1507,7 +1509,8 @@ test/Flashcards/SchedulerSpec.purs
 
 ## Deploying
 
-Netlify picks up `netlify.toml` as-is: build `npm run build`, publish `public/`.
+Netlify picks up `netlify.toml` as-is: build `npm run build`, publish `public/`,
+from the `production` branch (see *Merged is not live* in `CONTRIBUTING.md`).
 Any static host works — there is nothing to run server-side. Free tier,
 indefinitely.
 
