@@ -85,13 +85,13 @@ sentences =
   , { before: "la fiesta ", form: "empieza", after: " a las nueve", infinitive: "empezar", tense: Present, person: Sg3, personShift: false }
   , { before: "", form: "empezábamos", after: " a comer", infinitive: "empezar", tense: Imperfect, person: Pl1, personShift: false }
   , { before: "", form: "empiezan", after: " a hablar", infinitive: "empezar", tense: Present, person: Pl3, personShift: true }
-  , { before: "", form: "empezaba", after: " el libro", infinitive: "empezar", tense: Imperfect, person: Sg1, personShift: false }
+  , { before: "yo ", form: "empezaba", after: " el libro", infinitive: "empezar", tense: Imperfect, person: Sg1, personShift: false }
   , { before: "", form: "juego", after: " con los niños", infinitive: "jugar", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "juegas", after: " muy bien", infinitive: "jugar", tense: Present, person: Sg2, personShift: true }
   , { before: "mi hija ", form: "juega", after: " en la calle", infinitive: "jugar", tense: Present, person: Sg3, personShift: false }
   , { before: "", form: "jugábamos", after: " juntos", infinitive: "jugar", tense: Imperfect, person: Pl1, personShift: false }
   , { before: "", form: "juegan", after: " en la escuela", infinitive: "jugar", tense: Present, person: Pl3, personShift: true }
-  , { before: "", form: "jugaba", after: " con mis amigos", infinitive: "jugar", tense: Imperfect, person: Sg1, personShift: false }
+  , { before: "yo ", form: "jugaba", after: " con mis amigos", infinitive: "jugar", tense: Imperfect, person: Sg1, personShift: false }
   , { before: "", form: "duermo", after: " ocho horas", infinitive: "dormir", tense: Present, person: Sg1, personShift: true }
   , { before: "no ", form: "duermes", after: " bien", infinitive: "dormir", tense: Present, person: Sg2, personShift: true }
   , { before: "el niño ", form: "duerme", after: " en su cama", infinitive: "dormir", tense: Present, person: Sg3, personShift: false }
@@ -119,13 +119,13 @@ sentences =
   , { before: "mi hermana ", form: "piensa", after: " en su casa", infinitive: "pensar", tense: Present, person: Sg3, personShift: false }
   , { before: "", form: "pensábamos", after: " en el futuro", infinitive: "pensar", tense: Imperfect, person: Pl1, personShift: false }
   , { before: "", form: "piensan", after: " en la fiesta", infinitive: "pensar", tense: Present, person: Pl3, personShift: true }
-  , { before: "", form: "pensaba", after: " mucho en mi trabajo", infinitive: "pensar", tense: Imperfect, person: Sg1, personShift: false }
+  , { before: "yo ", form: "pensaba", after: " mucho en mi trabajo", infinitive: "pensar", tense: Imperfect, person: Sg1, personShift: false }
   , { before: "", form: "salgo", after: " de casa a las ocho", infinitive: "salir", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "sales", after: " del trabajo muy tarde", infinitive: "salir", tense: Present, person: Sg2, personShift: true }
   , { before: "mi madre ", form: "sale", after: " de la escuela", infinitive: "salir", tense: Present, person: Sg3, personShift: false }
   , { before: "", form: "salíamos", after: " de la ciudad", infinitive: "salir", tense: Imperfect, person: Pl1, personShift: false }
   , { before: "", form: "salen", after: " de la casa", infinitive: "salir", tense: Present, person: Pl3, personShift: true }
-  , { before: "", form: "salía", after: " muy tarde de casa", infinitive: "salir", tense: Imperfect, person: Sg1, personShift: false }
+  , { before: "yo ", form: "salía", after: " muy tarde de casa", infinitive: "salir", tense: Imperfect, person: Sg1, personShift: false }
   , { before: "", form: "vuelvo", after: " tarde a casa", infinitive: "volver", tense: Present, person: Sg1, personShift: true }
   , { before: "", form: "vuelves", after: " al trabajo", infinitive: "volver", tense: Present, person: Sg2, personShift: true }
   , { before: "mi padre ", form: "vuelve", after: " del trabajo", infinitive: "volver", tense: Present, person: Sg3, personShift: false }
