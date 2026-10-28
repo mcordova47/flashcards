@@ -143,7 +143,7 @@ prompts =
     , trap: OnTense, against: "preterite"
     }
   , { id: "mother-read-nightly", asked: "How would you tell me your mother read to you every night as a kid?"
-    , model: "De niño, mi madre me leía todas las noches."
+    , model: "Cuando era niño, mi madre me leía todas las noches."
     , verb: "leer", tense: Imperfect, person: Sg3
     , trap: OnTense, against: "preterite"
     }
@@ -228,7 +228,7 @@ prompts =
     , trap: OnTense, against: "preterite"
     }
   , { id: "had-to-leave-early", asked: "How might you tell me we had to leave early yesterday?"
-    , model: "Ayer tuvimos que salir pronto."
+    , model: "Ayer tuvimos que salir temprano."
     , verb: "tener", tense: Preterite, person: Pl1
     , trap: OnTense, against: "imperfect"
     }
