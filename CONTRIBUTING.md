@@ -55,14 +55,25 @@ yourself.
 ## Merged is not live
 
 Merging to `main` does not deploy. Netlify's production branch is `production`,
-and the maintainer moves it, in batches:
+and the maintainer moves it, in batches. From GitHub, run the `deploy` workflow:
+the Actions tab, the GitHub mobile app, or
+
+```
+gh workflow run deploy
+```
+
+It fast-forwards `production` to `main`, and refuses if that is not a
+fast-forward or if `data` and `browser` have not both passed on the commit it
+would ship. It prints the commits it ships, so its run log is the deploy note, and
+`-f dry_run=true` says what would ship and pushes nothing. Nothing runs it on a
+schedule. The same thing by hand, which is also what to do if the workflow cannot:
 
 ```
 git push origin main:production
 ```
 
 That is the one deploy, and it should be a fast-forward. **No agent pushes
-`production`.** The reason is cost: a production deploy draws on a monthly credit
+`production` or runs the `deploy` workflow**, which is the same push. The reason is cost: a production deploy draws on a monthly credit
 pool that every site on the team shares, and when it runs out they all pause.
 Deploy previews are understood not to draw on it (not yet confirmed against the
 usage page), so they stay on, and a change to look at on a phone is looked at

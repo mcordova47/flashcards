@@ -83,9 +83,9 @@ had not checked.
 
 ## Handing it over
 
-Open a pull request. **Never push `production`**: merged is not live, and moving
-it is the maintainer's, in batches (`CONTRIBUTING.md`, *Merged is not live*). In the
-description:
+Open a pull request. **Never push `production` or run the `deploy` workflow**:
+merged is not live, and moving it is the maintainer's, in batches
+(`CONTRIBUTING.md`, *Merged is not live*). In the description:
 
 - what changed, file by file
 - anything in the issue you disagreed with, and what you did instead

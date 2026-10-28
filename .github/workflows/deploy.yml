@@ -1,0 +1,91 @@
+# Moves the production branch to main, which is the deploy: Netlify builds
+# `production` and nothing else (CONTRIBUTING.md, *Merged is not live*). The
+# same thing as `git push origin main:production`, from the Actions tab, the
+# GitHub mobile app or `gh workflow run deploy`.
+#
+# Only someone with write access can run it, and it only ever fast-forwards: it
+# will not rewind `production`, and it will not ship a commit whose checks have
+# not passed. Nothing runs it on a schedule.
+name: deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Say what would ship and push nothing
+        type: boolean
+        default: false
+
+# `checks: read` is for the gate below, `contents: write` for the push.
+permissions:
+  contents: write
+  checks: read
+
+# Two runs at once would race to push the same branch. Queue them rather than
+# cancel one: a cancelled deploy is a button that did nothing.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Run from another branch, this would be an edited copy of itself.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: What would ship
+        id: ship
+        run: |
+          git fetch --no-tags origin production || {
+            echo "::error::There is no production branch yet. Create it once: git push origin origin/main:refs/heads/production"
+            exit 1
+          }
+          head=$(git rev-parse origin/main)
+          echo "head=$head" >> "$GITHUB_OUTPUT"
+          if [ "$head" = "$(git rev-parse origin/production)" ]; then
+            echo "production is already main ($head): nothing to deploy."
+            echo "nothing=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # A fast-forward only. If production has something main does not, it
+          # was pushed by hand and a push from here would throw it away.
+          if ! git merge-base --is-ancestor origin/production origin/main; then
+            echo "::error::production is not an ancestor of main, so this would not be a fast-forward. Look at git log origin/main..origin/production before doing anything."
+            exit 1
+          fi
+          echo "Shipping $(git rev-list --count origin/production..origin/main) commit(s):"
+          git log --oneline origin/production..origin/main
+
+      # The `check` workflow's two jobs, on the commit about to ship. Still
+      # running counts as not passed: a deploy of a commit nobody has an answer
+      # for is the thing this refuses.
+      - name: Checks passed on that commit
+        if: steps.ship.outputs.nothing != 'true'
+        run: |
+          runs=$(gh api "repos/$GITHUB_REPOSITORY/commits/$HEAD/check-runs?per_page=100" \
+            --jq '[.check_runs[] | select(.name == "data" or .name == "browser")] | map("\(.name)=\(.conclusion // .status)") | sort | join(" ")')
+          echo "checks on $HEAD: ${runs:-none}"
+          if [ "$runs" != "browser=success data=success" ]; then
+            echo "::error::data and browser have not both passed on $HEAD. Wait for them, or look at why they did not."
+            exit 1
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD: ${{ steps.ship.outputs.head }}
+
+      - name: Move production to main
+        if: steps.ship.outputs.nothing != 'true' && !inputs.dry_run
+        run: git push origin "$HEAD:refs/heads/production"
+        env:
+          HEAD: ${{ steps.ship.outputs.head }}
+
+      - name: Dry run
+        if: steps.ship.outputs.nothing != 'true' && inputs.dry_run
+        run: |
+          echo "Dry run, so nothing was pushed. Would have moved production to $HEAD."
+        env:
+          HEAD: ${{ steps.ship.outputs.head }}
