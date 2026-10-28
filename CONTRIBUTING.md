@@ -52,6 +52,33 @@ gh pr merge <n> --rebase --auto
 The branch is deleted when it merges. The worktree is not, so remove that
 yourself.
 
+## Merged is not live
+
+Merging to `main` does not deploy. Netlify's production branch is `production`,
+and the maintainer moves it, in batches:
+
+```
+git push origin main:production
+```
+
+That is the one deploy, and it should be a fast-forward. **No agent pushes
+`production`.** The reason is cost: a production deploy draws on a monthly credit
+pool that every site on the team shares, and when it runs out they all pause.
+Deploy previews are understood not to draw on it (not yet confirmed against the
+usage page), so they stay on, and a change to look at on a phone is looked at
+there.
+
+What follows from it:
+
+- "Merged" and "live" are two states, and a change is only live after the next
+  batch. Say which you mean. A check against "the deployed site" is a check of
+  `production`, which may be behind `main`.
+- Anything that reads the live site lags the same way: the notes and the progress
+  they come from, and `core.js`, which the game imports from the production site.
+- Branch deploys are off, or `main` would still build on every merge and the
+  setting would only have changed a name. If a merge to `main` shows up as a
+  deploy, that setting is the first place to look.
+
 ## A worktree each
 
 ```
