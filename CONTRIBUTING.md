@@ -270,6 +270,13 @@ check and where most of the real findings have been.
 
 `/review <n>` is the procedure: where to stand, what to re-run, what to say.
 
+**An author's agent starts its own reviewer.** Once a pull request is open, `/issue`
+starts one fresh subagent whose prompt is `/review <n>` and nothing more, carries out
+the fix items, and starts one more reviewer if the verdict says to re-review. A second
+round that still wants fixes stops and goes to the maintainer. The maintainer is told
+the verdict and that the reviewer was an agent, which shares the author's model and
+habits: it checks the claims, and a person still decides what it cannot.
+
 **A review ends with every finding decided.** Each one is fixed in the pull
 request by its author, filed as an issue by the reviewer, or ignored with a
 reason. None is deferred to a follow-up, because a follow-up is only done if
