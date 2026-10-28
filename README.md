@@ -140,8 +140,8 @@ says the platform's was skipped. `npm run verify` on a Mac runs both.
 
 Netlify deploys the `production` branch, which the maintainer moves by hand (the
 `deploy` workflow, or `git push origin main:production`), so a merge to `main` is
-not a deploy and CI is what says whether it should have been merged. See *Merged is not live* in
-`CONTRIBUTING.md`.
+not a deploy and CI is what says whether it should have been merged. See *Merged
+is not live* in `CONTRIBUTING.md`.
 
 ## How it works
 

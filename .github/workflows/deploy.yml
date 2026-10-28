@@ -77,6 +77,20 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           HEAD: ${{ steps.ship.outputs.head }}
 
+      # GitHub refuses a push made with `GITHUB_TOKEN` that creates or changes
+      # a file under .github/workflows, and that token cannot be given the
+      # permission to. Any commit in the batch counts, even one a later commit
+      # undoes. Said here, where a dry run sees it too, rather than as a failed
+      # push after the checks have passed.
+      - name: No workflow file in the batch
+        if: steps.ship.outputs.nothing != 'true'
+        run: |
+          touched=$(git log --format= --name-only origin/production..origin/main -- .github/workflows | sort -u)
+          if [ -n "$touched" ]; then
+            echo "::error::This batch changes workflow files ($(echo $touched | tr '\n' ' ')), which the Actions token cannot push. Push it by hand: git push origin origin/main:refs/heads/production"
+            exit 1
+          fi
+
       - name: Move production to main
         if: steps.ship.outputs.nothing != 'true' && !inputs.dry_run
         run: git push origin "$HEAD:refs/heads/production"
