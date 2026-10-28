@@ -189,5 +189,10 @@ With a short table, and then **one** verdict.
 Then tell the maintainer: the verdict, each issue you filed with its number and
 title, and the one line to paste to the author.
 
+If the author's agent started you (`/issue` does, once a pull request is open), your
+final message goes back to it and not to the maintainer. Put the same things in it,
+and say the fix items in full: it carries them out from what you return, and it
+cannot ask you what you meant. Do not push to its branch, as always.
+
 If auto-merge stalls because the branch is behind `main`, it needs a rebase;
 `CONTRIBUTING.md` says how.

@@ -106,11 +106,46 @@ An issue you file gets **exactly one** `priority:` label, or `parked`, and
 `needs-you` if its next step is the maintainer's (`CONTRIBUTING.md`, *What to do
 next*).
 
-Then say so, and stop. Someone who did not write it reviews it.
+## Have it reviewed
+
+You do not review your own pull request. Start someone who did not write it: one
+subagent, with the Agent tool, whose whole prompt is
+
+```
+/review <n>
+```
+
+Nothing else. Not a summary, not what you are worried about, not what you checked.
+A reviewer told what to look for looks there and agrees with you; one that is only
+given the number reads the pull request, its issue and its claims for itself, which
+is what `/review` asks of it. Wait for it. Its final message is the review, with
+the verdict, the issues it filed and the fixes it wants.
+
+Then do what *When a review is left for you* says, reading that message as the
+review you were told about. A fresh reviewer is not a person, though: it has the
+same model and the same habits as you, so say in what you tell the maintainer that
+the review was an agent you started.
+
+- **Ready to merge.** The reviewer queued it. Nothing for you to do.
+- **Fix, then merge.** Make the fixes, push, queue auto-merge, as below.
+- **Fix, then re-review.** Make the fixes, push, and start **one** more reviewer,
+  new and not the first one asked again, with the same prompt. If that review still
+  has fix items, **stop** and tell the maintainer. Two rounds that do not settle it
+  is a disagreement, not something a third run resolves.
+- **Needs you.** Stop. Nothing is queued while the list is open.
+
+Skip all of this only when the maintainer has said not to for this pull request. Do
+not judge a change small enough to skip: the changes that looked too small to
+review are where the findings have been.
+
+Tell the maintainer, in one message: the pull request, the verdict (each round's, if
+there was a second), every issue the reviewer filed and every issue you filed, with
+numbers and titles, and whether auto-merge is queued.
 
 ## When a review is left for you
 
-You are told a review is waiting. Read it (`gh pr view <n> --comments`, and the
+You are told a review is waiting, or you have just had one back from the reviewer
+you started. Read it (`gh pr view <n> --comments`, and the
 review itself).
 
 - **Carry out its fix items, all of them and only them.** Do not widen the change.
@@ -121,4 +156,6 @@ review itself).
 - Push, and wait for `gh pr checks <n>` to go green.
 - Then do what the verdict says. **Fix, then merge:** queue
   `gh pr merge <n> --rebase --auto`. **Fix, then re-review:** say the fixes are
-  done and stop. If you opened or were handed a thread, resolve it once fixed.
+  done and stop, unless you started the reviewer yourself, in which case *Have it
+  reviewed* says what comes next. If you opened or were handed a thread, resolve it
+  once fixed.
