@@ -25,7 +25,7 @@ reading-when-called,"How would you tell me you were reading when I called?","Le�
 where-met-wife,"How would you ask me where I met my wife?","¿Dónde conociste a tu esposa?",conocer,preterite,2s,tense,imperfect,"conocer, not saber, because it is a person, so the verb is not a second decision"
 slept-badly,"How would you tell me you slept badly last night?","Anoche dormí mal.",dormir,preterite,1s,tense,imperfect,
 brother-couldnt-read,"How would you tell me your brother didn't know how to read as a kid?","De niño, mi hermano no sabía leer.",saber,imperfect,3s,tense,preterite,"saber, not conocer, because it is how to do something, so the verb is not a second decision"
-mother-read-nightly,"How would you tell me your mother read to you every night as a kid?","De niño, mi madre me leía todas las noches.",leer,imperfect,3s,tense,preterite,
+mother-read-nightly,"How would you tell me your mother read to you every night as a kid?","Cuando era niño, mi madre me leía todas las noches.",leer,imperfect,3s,tense,preterite,"Cuando era niña if the speaker is a girl; era is the same imperfect as leía, so the tense is not a second decision"
 found-out-truth,"How would you tell me you found out the truth yesterday?","Ayer supe la verdad.",saber,preterite,1s,tense,imperfect,"The preterite of saber means found out, which is the lesson; saber, not conocer, because a truth is a fact, so the verb is not a second decision"
 already-knew-answer,"How might you tell me you already knew the answer?","Ya sabía la respuesta.",saber,imperfect,1s,tense,preterite,"saber, not conocer, because an answer is a fact, so the verb is not a second decision"
 children-played-afternoons,"How would you tell me the children played in the street every afternoon?","Los niños jugaban en la calle todas las tardes.",jugar,imperfect,3p,tense,preterite,
@@ -42,7 +42,7 @@ kids-played-all-afternoon,"How might you tell me the children played all afterno
 father-read-paper,"How might you tell me your father read the newspaper this morning?","Esta mañana mi padre leyó el periódico.",leer,preterite,3s,tense,imperfect,
 brother-played-well,"How would you tell me your brother played very well last night?","Anoche mi hermano jugó muy bien.",jugar,preterite,3s,tense,imperfect,
 grandparents-read-paper,"How might you tell me your grandparents read the newspaper every morning?","Mis abuelos leían el periódico todas las mañanas.",leer,imperfect,3p,tense,preterite,
-had-to-leave-early,"How might you tell me we had to leave early yesterday?","Ayer tuvimos que salir pronto.",tener,preterite,1p,tense,imperfect,
+had-to-leave-early,"How might you tell me we had to leave early yesterday?","Ayer tuvimos que salir temprano.",tener,preterite,1p,tense,imperfect,"Temprano is not a deck word; it means early everywhere, where pronto means soon outside Spain"
 slept-well-last-night,"How might you ask me if I slept well last night?","¿Dormiste bien anoche?",dormir,preterite,2s,tense,imperfect,
 sister-found-out-news,"How would you tell me your sister found out the news this morning?","Esta mañana mi hermana supo la noticia.",saber,preterite,3s,tense,imperfect,"saber, not conocer, because news is a fact, so the verb is not a second decision"
 when-found-out,"How might you ask me when I found out?","¿Cuándo lo supiste?",saber,preterite,2s,tense,imperfect,"cuándo is cuando asking; saber, not conocer, because what was found out is a fact, so the verb is not a second decision"
