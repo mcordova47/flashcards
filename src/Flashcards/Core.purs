@@ -22,11 +22,13 @@ module Flashcards.Core
   , Graded
   , Ipa
   , Merged
+  , Overview
   , Queue
   , empty
   , grade
   , ipa
   , merge
+  , overview
   , requeue
   , session
   , sessionSize
@@ -38,13 +40,15 @@ import Prelude hiding (show)
 
 import Data.DateTime.Instant (Instant, instant)
 import Data.Either (Either(..))
-import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Maybe (Maybe(..), fromMaybe, isJust, maybe)
+import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Flashcards.Deck as Deck
 import Flashcards.Language (Language)
 import Flashcards.Language as Language
 import Flashcards.Payload as Payload
 import Flashcards.Scheduler as Scheduler
+import Flashcards.Stats as Stats
 import Flashcards.Types.Card (Slug(..), slugToString)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
@@ -74,6 +78,21 @@ type Graded = { error :: String, progress :: String }
 type Ipa = { error :: String, ipa :: String }
 
 type Merged = { error :: String, progress :: String }
+
+-- | The figures of the progress page that say what is known and when to come
+-- | back. `nextDueIn` is milliseconds and only means something when
+-- | `hasNext`: a `Maybe` is not readable from JavaScript, so the flag carries
+-- | the `Nothing` and `core.js` turns the pair into a number or `null`.
+type Overview =
+  { error :: String
+  , total :: Int
+  , seen :: Int
+  , mastered :: Int
+  , dueNow :: Int
+  , dueTomorrow :: Int
+  , hasNext :: Boolean
+  , nextDueIn :: Number
+  }
 
 withLanguage :: forall r. { error :: String | r } -> String -> (Language -> { error :: String | r }) -> { error :: String | r }
 withLanguage failed code f = case Language.byCode code of
@@ -163,6 +182,33 @@ grade code raw slug gotIt ms = withLanguage { error: "", progress: "" } code \la
 ipa :: String -> String -> String -> Ipa
 ipa code tag slug = withLanguage { error: "", ipa: "" } code \language ->
   { error: "", ipa: fromMaybe "" $ Pronunciation.ipa tag (Slug slug) language.pronunciations }
+
+-- | What the progress page counts, from `Stats.overview` and `Stats.nextDueIn`
+-- | over the deck's slugs, so a slug no longer in the deck is not counted. The
+-- | other figures of `Stats.overview` (answers, misses, accuracy, producing)
+-- | are left out on purpose.
+overview :: String -> String -> Number -> Overview
+overview code raw ms = withLanguage blank code \language ->
+  case load language raw, now ms of
+    Left e, _ -> blank { error = e }
+    _, Left e -> blank { error = e }
+    Right progress, Right at ->
+      let
+        slugs = map _.slug language.deck
+        o = Stats.overview at slugs progress
+        next = Stats.nextDueIn at slugs progress
+      in
+        { error: ""
+        , total: o.total
+        , seen: o.seen
+        , mastered: o.mastered
+        , dueNow: o.dueNow
+        , dueTomorrow: o.dueTomorrow
+        , hasNext: isJust next
+        , nextDueIn: maybe 0.0 unwrap next
+        }
+  where
+    blank = { error: "", total: 0, seen: 0, mastered: 0, dueNow: 0, dueTomorrow: 0, hasNext: false, nextDueIn: 0.0 }
 
 -- | Two histories as one: what the app does with what the server holds. Run
 -- | on every `GET` before the `PUT`, so that an answer given on the other

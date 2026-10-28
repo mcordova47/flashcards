@@ -30,7 +30,7 @@ const entry = (progress, slug) => cards(progress).find(c => c.slug === slug)
 console.log("\nThe core other clients import")
 
 check("it exports exactly this surface", Object.keys(core).sort(),
-  ["card", "empty", "grade", "ipa", "merge", "requeue", "session", "sessionSize", "version"])
+  ["card", "empty", "grade", "ipa", "merge", "overview", "requeue", "session", "sessionSize", "version"])
 check("at this version", core.version, 1)
 
 const fresh = core.session(null, NOW)
@@ -69,6 +69,21 @@ check("and every card in a session has one", fresh.every(s => typeof core.ipa(s)
 check("null for a slug, a dialect and a language that have none",
   [core.ipa("petunia"), core.ipa("yo", "es-ES"), core.ipa("Haus", "es-MX", "de"), core.ipa("Haus", "de-DE", "de")],
   [null, null, null, null])
+
+const idle = core.overview(null, NOW)
+check("an overview has what a client shows", Object.keys(idle).sort(),
+  ["dueNow", "dueTomorrow", "mastered", "nextDueIn", "seen", "total"])
+check("nothing stored is zeroes and no next time, over the whole deck",
+  [idle.seen, idle.mastered, idle.dueNow, idle.dueTomorrow, idle.nextDueIn, idle.total > 0], [0, 0, 0, 0, null, true])
+check("the empty string and an empty history say the same", [core.overview("", NOW), core.overview(core.empty(), NOW)], [idle, idle])
+const met = core.overview(after, NOW + 3600000)
+check("a card answered an hour ago is seen, not due, and due again in what is left of its box",
+  [met.seen, met.dueNow, met.nextDueIn > 0, Number.isInteger(met.nextDueIn)], [1, 0, true, true])
+check("and once it is due it is counted, with nothing ahead", (o => [o.dueNow, o.nextDueIn])(core.overview(after, NOW + 400 * DAY)), [1, null])
+const due = entry(after, fresh[0]).due
+check("a card due within a day is counted as due tomorrow, and not before",
+  [core.overview(after, due - 0.5 * DAY).dueTomorrow, core.overview(after, due - 2 * DAY).dueTomorrow], [1, 0])
+throws("an unknown language throws", () => core.overview(null, NOW, "xx"))
 
 check("a miss comes back a few places on", core.requeue("x", 0, ["a", "b", "c", "d", "e", "f"]).indexOf("x") > 1, true)
 
