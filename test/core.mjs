@@ -83,6 +83,9 @@ check("and once it is due it is counted, with nothing ahead", (o => [o.dueNow, o
 const due = entry(after, fresh[0]).due
 check("a card due within a day is counted as due tomorrow, and not before",
   [core.overview(after, due - 0.5 * DAY).dueTomorrow, core.overview(after, due - 2 * DAY).dueTomorrow], [1, 0])
+const orphaned = JSON.stringify({ ...JSON.parse(after), cards: [...cards(after), { ...entry(after, fresh[0]), slug: "no-longer-in-the-deck", due: NOW }] })
+check("history for a slug no longer in the deck is not counted",
+  [core.overview(orphaned, NOW + 400 * DAY).seen, core.overview(orphaned, NOW + 400 * DAY).dueNow], [1, 1])
 throws("an unknown language throws", () => core.overview(null, NOW, "xx"))
 
 check("a miss comes back a few places on", core.requeue("x", 0, ["a", "b", "c", "d", "e", "f"]).indexOf("x") > 1, true)

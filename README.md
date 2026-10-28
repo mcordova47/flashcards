@@ -600,8 +600,8 @@ leaves out the accuracy, answers, misses and producing counts on purpose.
 `mastered` is **being able to produce the word** (production box 3 or higher),
 or, for a card barred from production, reaching the last recognition box: the
 app's own sense of known, not "recognised once", so a client may show it as
-"known". All counts are whole numbers over the cards in the deck that have
-progress, so `seen <= total`, `mastered <= seen`, `dueNow <= seen` and
+"known". All counts are whole numbers. `total` is every word in the deck, and the
+others are over the cards that have progress, so `seen <= total`, `mastered <= seen`, `dueNow <= seen` and
 `dueTomorrow <= seen - dueNow` (due after `now` and within 24 hours) always
 hold, and history for a slug no longer in the deck is not counted. `dueNow`
 counts `due <= now` and `nextDueIn` (ms) looks only at cards due after `now`,
