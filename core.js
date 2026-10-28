@@ -55,6 +55,17 @@ export const grade = (progress, slug, gotIt, now = Date.now(), language = "es") 
 export const ipa = (slug, dialect = "es-MX", language = "es") =>
   must(Core.ipa(language)(dialect)(slug)).ipa || null
 
+// What is known and what is due, as the progress page counts them: `total`,
+// `seen`, `mastered` (production box 3 or higher, or the last recognition box
+// for a card barred from production, so "known" in the app's sense), `dueNow`,
+// `dueTomorrow` (after `now`, within 24 hours) and `nextDueIn`, the ms to the
+// soonest card not yet due, or `null` when there is none. `null` progress is
+// zeroes and `null`.
+export const overview = (progress, now = Date.now(), language = "es") => {
+  const { error, hasNext, nextDueIn, ...rest } = must(Core.overview(language)(stored(progress))(now))
+  return { ...rest, nextDueIn: hasNext ? nextDueIn : null }
+}
+
 // Two histories as one, for after a `GET` and before a `PUT`.
 export const merge = (mine, theirs, language = "es") =>
   must(Core.merge(language)(stored(mine))(stored(theirs))).progress

@@ -577,6 +577,7 @@ with, and nothing else the key does not already unlock.
 | `core.ipa(slug, dialect?, language?)` | how the word is said, e.g. `"keˈɾeɾ"`, or `null` |
 | `core.merge(mine, theirs, language?)` | two histories as one, after a `GET` and before a `PUT` |
 | `core.requeue(slug, position, queue)` | a missed card put back a few places on |
+| `core.overview(progress, now?, language?)` | `{ total, seen, mastered, dueNow, dueTomorrow, nextDueIn }`, as the progress page counts them |
 | `core.empty(language?)`, `core.sessionSize`, `core.version` | |
 
 `core.ipa` is the transcription of the **Spanish word**, with no slashes or
@@ -593,6 +594,20 @@ carries the slug of the card it graded. `null` is also what a slug outside the
 deck gets, a dialect the deck has no column for, and
 German, which has none. Nothing is transcribed for the drills' verb forms or
 the example sentences.
+
+`core.overview` is `Stats.overview` and `Stats.nextDueIn` over the deck, and
+leaves out the accuracy, answers, misses and producing counts on purpose.
+`mastered` is **being able to produce the word** (production box 3 or higher),
+or, for a card barred from production, reaching the last recognition box: the
+app's own sense of known, not "recognised once", so a client may show it as
+"known". All counts are whole numbers over the cards in the deck that have
+progress, so `seen <= total`, `mastered <= seen`, `dueNow <= seen` and
+`dueTomorrow <= seen - dueNow` (due after `now` and within 24 hours) always
+hold, and history for a slug no longer in the deck is not counted. `dueNow`
+counts `due <= now` and `nextDueIn` (ms) looks only at cards due after `now`,
+so with `dueNow` at 0 it is the time to the next card, and above 0 it is the
+time to the soonest one still ahead. It is `null` when none is. `null` progress
+is zeroes and `null`.
 
 Progress goes in and out as the string the blob holds, and `null` means none
 yet (the `GET` was a 404). Everything throws on a bad language, slug or
