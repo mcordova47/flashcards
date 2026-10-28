@@ -47,6 +47,11 @@ const { sentences, errors } = loadSentences(verbs)
 for (const e of [...tableErrors, ...errors]) console.error(`x ${e}`)
 if (tableErrors.length || errors.length) process.exit(1)
 
+// Mirrors Flashcards.Verbs.Correction.subject, and Table.pronoun under it.
+const PRONOUNS = { "1s": "yo", "2s": "tú", "3s": "él", "1p": "nosotros", "3p": "ellos" }
+const subjectless = s => ["", "no"].includes(s.before.trim())
+const subject = s => subjectless(s) ? `${PRONOUNS[s.person.name]} ` : ""
+
 const table = new Map(verbs.map(v => [v.infinitive, v.cells]))
 const known = knownWords(verbs)
 let wrong = 0
@@ -56,15 +61,21 @@ for (const s of sentences) {
     wrong++
     console.error(`x line ${s.line}: [${s.form}] is tagged ${s.infinitive} ${s.tense.name} ${s.person.name}, which the table has as ${expected}`)
   }
+  // A form another person of the same verb and tense shares, with no subject
+  // to say which: the imperfect's `empezaba` is `yo` and `él` alike. A shift
+  // keeps the sentence's person, so the answer is one of two and the card
+  // does not say. Read off the table, not a list of tenses, so the subjunctive
+  // is covered if it is ever used. See #155.
+  const sharers = PERSONS.filter(p => p.name !== s.person.name && table.get(s.infinitive).get(`${s.tense.name}.${p.name}`) === s.form)
+  if (sharers.length && subjectless(s)) {
+    wrong++
+    console.error(`x line ${s.line}: [${s.form}] is also ${s.infinitive}'s ${s.tense.name} ${sharers.map(p => p.name).join(", ")}, and no subject is written, so a shift cannot say which person to answer for; write one`)
+  }
   for (const word of unexplained(known, s.before + s.after, s.notes)) {
     wrong++
     console.error(`x line ${s.line}: ${word} is not a deck word or a regular inflection of one; say why in Notes`)
   }
 }
-
-// Mirrors Flashcards.Verbs.Correction.subject, and Table.pronoun under it.
-const PRONOUNS = { "1s": "yo", "2s": "tú", "3s": "él", "1p": "nosotros", "3p": "ellos" }
-const subject = s => ["", "no"].includes(s.before.trim()) ? `${PRONOUNS[s.person.name]} ` : ""
 
 const frames = new Map(), corrected = new Map()
 for (const s of sentences) {
