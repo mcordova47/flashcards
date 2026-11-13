@@ -4,9 +4,14 @@
 -- | It is a bottom sheet and every feature so far has wanted a row in it, so
 -- | it has grown past half the viewport. The next one that wants space should
 -- | reorganise this rather than make it taller — which is why `Sync now` is a
--- | link on the line it answers rather than a row of its own, and why the
--- | note shares a row with the drills: neither is about the deck in front of
--- | you, and both take you somewhere else.
+-- | link on the line it answers rather than a row of its own.
+-- |
+-- | A line that reports on a row sits directly under it, in the same group
+-- | (`panel-group`), so that the words-seen count reads as part of *See your
+-- | progress* and the sync state as part of *Sync another device* rather than
+-- | as footers under everything. The note is not about the deck in front of
+-- | you, and is feedback rather than somewhere to go, so it is the quiet line
+-- | at the bottom.
 module Flashcards.Pages.Study.Panel
   ( view
   )
@@ -37,20 +42,22 @@ view opened state dispatch =
     [ languagePicker
     , accentPicker
     , voicePicker
-    , H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
-    , H.button_ "panel-item" { onClick: dispatch <| ShowPairing } "Sync another device"
+    , H.div "panel-group"
+      [ H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
+      , H.p "panel-note" $
+          show (Progress.seenCount state.progress) <> " of "
+            <> show (Array.length state.language.deck) <> " words seen"
+      ]
     -- An anchor, not a message: a page change is a page load here, so this
     -- needs no router and puts no notion of "which page" into any state. It
     -- is also the only way to find the drills at all.
-    , H.div "panel-pair"
-      [ H.a_ "panel-item" { href: Page.pathFor Page.Verbs } "Verb drills"
-      , H.button_ "panel-item" { onClick: dispatch <| WriteNote } "Write a note"
+    , H.a_ "panel-item" { href: Page.pathFor Page.Verbs } "Verb drills"
+    , H.div "panel-group"
+      [ H.button_ "panel-item" { onClick: dispatch <| ShowPairing } "Sync another device"
+      , H.p ("panel-note sync" <> if settled then "" else " pending") $
+          [ H.span "sync-state" syncNote ] <> retry
       ]
-    , H.p "panel-note" $
-        show (Progress.seenCount state.progress) <> " of "
-          <> show (Array.length state.language.deck) <> " words seen"
-    , H.p ("panel-note sync" <> if settled then "" else " pending") $
-        [ H.span "sync-state" syncNote ] <> retry
+    , H.button_ "panel-item panel-quiet" { onClick: dispatch <| WriteNote } "Write a note"
     ]
   ]
   where

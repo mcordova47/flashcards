@@ -545,9 +545,11 @@ view state dispatch =
       , H.div "panel"
         [ H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
         , H.a_ "panel-item" { href: "/" } "Flashcards"
-        , H.a_ "panel-item" { href: "/?sync" } "Sync a device"
-        , H.button_ "panel-item" { onClick: dispatch <| WriteNote } "Write a note"
-        , H.p "panel-note" syncNote
+        , H.div "panel-group"
+          [ H.a_ "panel-item" { href: "/?sync" } "Sync another device"
+          , H.p "panel-note" syncNote
+          ]
+        , H.button_ "panel-item panel-quiet" { onClick: dispatch <| WriteNote } "Write a note"
         ]
       ]
 
