@@ -947,7 +947,6 @@ body {
 
 /* --- notes --- */
 
-/* Two panel items side by side, so a new one costs the panel no height. */
 /* A row and the line that reports on it, closer to each other than to the
    next row, so that the caption reads as the row's. */
 .panel-group {
@@ -966,14 +965,14 @@ body {
 /* Feedback rather than a destination: no ghost, small, at the bottom. */
 .panel-item.panel-quiet {
   background: none;
-  color: var(--faint);
+  color: var(--muted);
   font-size: 0.875rem;
   text-align: center;
-  padding: 0.6rem 1rem;
+  padding: 0.85rem 1rem;
 }
 
 .panel-item.panel-quiet:hover {
-  color: var(--muted);
+  color: var(--fg);
 }
 
 .note-context {
