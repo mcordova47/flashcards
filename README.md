@@ -869,7 +869,7 @@ them, and each was carrying the dependency for one line:
 
 **The pages link to each other, with anchors and nothing else.** *Verb
 drills* sits in the cards' ••• menu, and the drills have a ••• of their own
-holding *Flashcards* and *Sync a device*. All three are plain `<a href>` — a page change is a page load here, so they
+holding *Flashcards* and *Sync another device*. All three are plain `<a href>` — a page change is a page load here, so they
 need no router and leave no notion of "which page" in any component's state.
 
 They were not linked at first, which was a mistake rather than a stance: the
@@ -878,7 +878,7 @@ drills could only be reached by typing the URL, and on iOS the manifest's
 back points at `/` rather than `/es`, so it lands on whichever language was
 last chosen rather than overriding it.
 
-**Finding pairing from the drills.** Its menu's *Sync a device* points at
+**Finding pairing from the drills.** Its menu's *Sync another device* points at
 `/?sync`, which opens the pairing sheet rather than dropping you on the cards
 to hunt through the ••• menu. The menu exists because the top bar is for the
 session: pips need the width, and three small things crowded against them on a

@@ -577,7 +577,7 @@ topBar session dispatch =
       Nothing -> []
       Just s -> s.queue # Array.mapWithIndex \i _ ->
         H.div_ ("pip" <> if i < s.position then " done" else "") { key: show i } H.empty
-  , H.button_ "panel-toggle" { onClick: dispatch <| TogglePanel, title: "Progress" } "•••"
+  , H.button_ "panel-toggle" { onClick: dispatch <| TogglePanel, title: "Menu" } "•••"
   ]
 
 currentCard :: DeckIndex.Index -> Session -> Maybe Card
