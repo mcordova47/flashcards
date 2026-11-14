@@ -205,6 +205,11 @@ the build (`build.mjs`, `dev.mjs`, esbuild or spago configuration), to
 cannot vouch for itself or for the thing it runs, and local feedback is the point.
 Run `npm run verify` and `npm test` before you propose it.
 
+Changing what `core.js` exports has a second question, whether it needs a new
+version for the game that imports it: the README's *What a client of `core.v1.js`
+can rely on* says which changes do, and `test/core.mjs` and `CoreSpec` failing
+is a decision, not a test to update.
+
 **When CI goes red:**
 
 - Read which suite and which check failed before doing anything else.
