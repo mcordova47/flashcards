@@ -54,9 +54,14 @@ Two cases where that is not the whole answer, and neither is "run everything":
   the green check was produced by the old one, and what it proves is a
   question rather than an answer.
 
-The author runs the gate before proposing, per `CONTRIBUTING.md`, so that a
-red branch never reaches a reviewer. The reviewer does not run it again. That
-asymmetry is the point: you are here to check what CI cannot.
+The author does **not** wait for CI before the review starts (`CONTRIBUTING.md`,
+*Before you propose it*), so the checks may be pending or red when you arrive.
+Report the state of `gh pr checks <n>` in the review. If one is red, name which
+suite failed, and say if it looks like the known notes-suite flake (a navigation
+timeout or detached frame, #199). Do not investigate a red check beyond that, and
+do not call a branch ready to merge while a required check is red. Auto-merge
+waits for the checks, so queuing it on a pending branch is fine. You do not run
+the gate yourself. That is the point: you are here to check what CI cannot.
 
 ## The claims are the work
 

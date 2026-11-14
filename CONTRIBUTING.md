@@ -181,17 +181,42 @@ decision, an alternative that was rejected, or a thing that was surprising.
 
 ## Before you propose it
 
-```
-npm run verify     # the data checks, the build, and the browser suites
-npm test           # the pure core, in seconds
-```
+CI is the gate. It tests the merge result, `main`'s checks are required, and the
+author's own full `npm run verify` (about four minutes) only repeats what CI is
+about to do, before the pull request opens, so that the reviewer cannot start
+until it finishes. It does not buy certainty either: the notes suite throws on
+about a quarter of runs on `main` too (#199). So before opening the pull request
+run only:
 
-`verify` is the gate. If a browser suite throws it is retried once — that is
-for Puppeteer's `detached Frame` under load, which is real. A suite that fails
-a *check* is not retried, and that is the app being wrong.
+1. `npm test` (seconds), always.
+2. **The browser suites the change touches.** Find them by searching
+   `test/browser/` for the selectors, labels and routes the change alters, run
+   `npm run build`, then each suite with `node test/browser/run.mjs <name>`.
+   **If you cannot say which suites touch it, run `npm run verify`.**
+3. **The data checks, if a CSV changed:** `npm run sync`, and commit what it
+   writes, or CI will refuse the push and tell you to.
 
-If you changed a CSV, run `npm run sync` and commit what it writes, or CI will
-refuse the push and tell you to.
+Then open the pull request and **start the reviewer at once**. Do not wait for CI
+to finish before the review starts, and do not run the full `verify` first.
+
+**Where the full local gate stays required:** a change to `.github/workflows`, to
+the build (`build.mjs`, `dev.mjs`, esbuild or spago configuration), to
+`package.json` scripts or dependencies, or to `sw.js` or `core.js`. In those, CI
+cannot vouch for itself or for the thing it runs, and local feedback is the point.
+Run `npm run verify` and `npm test` before you propose it.
+
+**When CI goes red:**
+
+- Read which suite and which check failed before doing anything else.
+- If it is a throw from the notes suite (a navigation timeout, a detached frame;
+  see #199), **re-run the failed jobs once**. If it fails again it is real; do not
+  re-run a second time. A suite that fails a *check* is never a flake: that is the
+  app being wrong.
+- Otherwise it is a regression. Fix it.
+
+**Fixes after a review:** push them **at once** and do not wait for CI on the old
+commit to finish. A push cancels the run in flight, so waiting buys nothing. Put
+all of the review's fix items in one push.
 
 ## Prove the claims
 

@@ -72,7 +72,11 @@ between everyone in it, so a build of yours lands under someone else's test
 run. `main` is protected and direct pushes are refused.
 
 Follow `CONTRIBUTING.md`: one commit per deliverable, enabling refactors first,
-`npm run verify` and `npm test` before you propose anything.
+and the checks in *Before you propose it*: `npm test`, the browser suites the
+change touches, and the data checks if a CSV changed. The full `npm run verify`
+is required only for the named exceptions there (workflows, the build,
+`package.json`, `sw.js`, `core.js`) or when you cannot say which suites a change
+touches. CI is the gate, not your local run.
 
 ## Proving it
 
@@ -110,6 +114,9 @@ An issue you file gets **exactly one** `priority:` label, or `parked`, and
 next*).
 
 ## Have it reviewed
+
+Start the reviewer **as soon as the pull request opens**. Do not wait for CI: it
+may still be pending, or red, when the review starts, and the reviewer reports it.
 
 You do not review your own pull request. Start someone who did not write it: one
 subagent, with the Agent tool, whose whole prompt is
@@ -158,7 +165,9 @@ review itself).
 - **Say how you checked each fix**, in a comment on the pull request.
 - **If you think an item is wrong, say so there and stop.** Do not skip it
   silently. That makes it a question for the maintainer.
-- Push, and wait for `gh pr checks <n>` to go green.
+- Push **all** the fix items **at once**, in one push, and do not wait for CI on
+  the old commit: a push cancels the run in flight, so waiting buys nothing. Then
+  wait for `gh pr checks <n>` to go green.
 - Then do what the verdict says. **Fix, then merge:** queue
   `gh pr merge <n> --rebase --auto`. **Fix, then re-review:** say the fixes are
   done and stop, unless you started the reviewer yourself, in which case *Have it
