@@ -52,6 +52,7 @@ import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
 import Flashcards.Storage as Storage
 import Flashcards.Sync as Sync
+import Flashcards.Tabs as Tabs
 import Flashcards.Types.Card (Slug, slugToString)
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress as Progress
@@ -527,6 +528,7 @@ view state dispatch =
                   ]
             ]
   , H.div "controls" controls
+  , Tabs.view { current: Tabs.Grammar, unavailable: Nothing }
   -- No wildcard, so that another kind of modal fails to compile here rather
   -- than opening onto nothing.
   , case state.modal of

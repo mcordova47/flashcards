@@ -43,6 +43,10 @@ type Language =
   -- | Spoken when trying out an accent or a voice. Chosen to make the
   -- | difference between accents audible, not just to demonstrate the voice.
   , preview :: String
+  -- | Whether the Grammar page has anything for this language. It has no
+  -- | language of its own and is Spanish only, so the tabs say so for any
+  -- | other rather than offering a page that would show Spanish.
+  , grammar :: Boolean
   }
 
 spanish :: Language
@@ -59,6 +63,7 @@ spanish =
   , done: "¡Bien hecho!"
   -- "grah-thee-as" in Spain against "grah-see-as" in Mexico.
   , preview: "gracias"
+  , grammar: true
   }
 
 german :: Language
@@ -76,6 +81,7 @@ german =
   -- Final -ig is the clearest regional tell: /ɪç/ in the north against /ɪk/
   -- further south.
   , preview: "richtig"
+  , grammar: false
   }
 
 all :: Array Language

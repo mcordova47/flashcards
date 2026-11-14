@@ -55,9 +55,10 @@ body {
   max-width: 34rem;
   margin: 0 auto;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr auto auto;
   gap: 0.5rem;
-  padding: max(0.75rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+  /* No bottom padding: the tab bar is the last row and carries the safe area. */
+  padding: max(0.75rem, env(safe-area-inset-top)) 1rem 0;
 }
 
 .topbar {
@@ -1276,4 +1277,62 @@ body {
   .deck-progress.marked .fill {
     animation: none;
   }
+}
+
+/* The tab bar: always the last row, flat and never filled, so the weight of the
+   filled buttons above it tells the two apart. Full width of the column,
+   which is why it takes back the 1rem the column pads with. */
+.tabs {
+  grid-row: 4;
+  display: flex;
+  margin: 0.25rem -1rem 0;
+  padding: 0.35rem 1rem max(0.6rem, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--track);
+}
+
+.tab {
+  appearance: none;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.4rem 0;
+  border: 0;
+  background: none;
+  color: var(--faint);
+  font: inherit;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab.on {
+  color: var(--accent);
+  font-weight: 600;
+  cursor: default;
+}
+
+/* Present and says why when tapped, but plainly not on offer. */
+.tab.off {
+  opacity: 0.45;
+}
+
+.tab-icon {
+  width: 1.45rem;
+  height: 1.45rem;
+  background: currentColor;
+  -webkit-mask: var(--tab-icon) center / contain no-repeat;
+  mask: var(--tab-icon) center / contain no-repeat;
+}
+
+.tab-icon.vocab {
+  --tab-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3.5' y='7' width='14' height='11' rx='2.2'/%3E%3Cpath d='M7.5 7V5.6A1.6 1.6 0 0 1 9.1 4h9.3A2.1 2.1 0 0 1 20.5 6.1V14'/%3E%3C/svg%3E");
+}
+
+.tab-icon.grammar {
+  --tab-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round'%3E%3Cpath d='M4.5 7.5h15M4.5 12h15M4.5 16.5h8.5'/%3E%3C/svg%3E");
 }

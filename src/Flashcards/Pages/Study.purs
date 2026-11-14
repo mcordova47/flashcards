@@ -37,6 +37,7 @@ import Flashcards.Pages.Study.Model (Message, Modal, State) as Model
 import Flashcards.Pages.Study.Pairing as Pairing
 import Flashcards.Pages.Study.Panel as Panel
 import Flashcards.Pages.Study.Progress as ProgressSheet
+import Flashcards.Tabs as Tabs
 import Flashcards.Payload as Payload
 import Flashcards.Route as Route
 import Flashcards.Scheduler as Scheduler
@@ -279,6 +280,9 @@ update state = case _ of
 
   DismissNotice ->
     pure state { notice = Nothing }
+
+  GrammarUnavailable ->
+    noticing state "Grammar is only in Spanish for now"
 
   -- The progress sheet names the words that keep slipping and then does
   -- nothing about them. This is the whole of doing something: the queue is
@@ -554,9 +558,9 @@ view :: State -> Dispatch Message -> ReactElement
 view state dispatch =
   H.fragment
   [ case state.screen of
-      Loading -> H.div "app" H.empty
+      Loading -> H.div "app" $ tabs state dispatch
       Studying session -> studyingView state session dispatch
-      Complete summary -> completeView (isJust state.undo) state.language state.progress summary dispatch
+      Complete summary -> completeView (isJust state.undo) state.language state.progress summary (tabs state dispatch) dispatch
   -- No wildcard, so that another kind of modal fails to compile here rather
   -- than opening onto nothing.
   , case state.modal of
@@ -569,6 +573,14 @@ view state dispatch =
       Nothing -> H.empty
       Just message -> H.div "notice" message
   ]
+
+-- | Vocab is where we are. Grammar is a link, unless it has nothing for the
+-- | language being studied, in which case tapping it says so.
+tabs :: State -> Dispatch Message -> ReactElement
+tabs state dispatch = Tabs.view
+  { current: Tabs.Vocab
+  , unavailable: if state.language.grammar then Nothing else Just $ dispatch <| GrammarUnavailable
+  }
 
 topBar :: Maybe Session -> Dispatch Message -> ReactElement
 topBar session dispatch =
@@ -590,6 +602,7 @@ studyingView state session dispatch =
   [ topBar (Just session) dispatch
   , H.div_ "card" { onClick: dispatch <| Flip } face
   , H.div "controls" controls
+  , tabs state dispatch
   ]
   where
     face = case currentCard state.index session of
@@ -651,8 +664,8 @@ studyingView state session dispatch =
       | otherwise =
           [ H.p "hint" "tap anywhere to flip" ]
 
-completeView :: Boolean -> Language -> Progress -> Summary -> Dispatch Message -> ReactElement
-completeView undoable language progress summary dispatch =
+completeView :: Boolean -> Language -> Progress -> Summary -> ReactElement -> Dispatch Message -> ReactElement
+completeView undoable language progress summary tabBar dispatch =
   H.div "app"
   [ topBar Nothing dispatch
   , H.div "done-body"
@@ -673,6 +686,7 @@ completeView undoable language progress summary dispatch =
     ]
   , H.div "controls"
     [ H.button_ "grade got-it" { onClick: dispatch <| StartAnother } cta ]
+  , tabBar
   ]
   where
     seen = Progress.seenCount progress
