@@ -1,5 +1,6 @@
 -- | The `•••` menu: what is being studied, how it sounds, where the progress
--- | stands, and the two things that open a sheet of their own.
+-- | stands, and the two things that open a sheet of their own. Moving between
+-- | Vocab and Grammar is not here: that is the tab bar, `Flashcards.Tabs`.
 -- |
 -- | It is a bottom sheet and every feature so far has wanted a row in it, so
 -- | it has grown past half the viewport. The next one that wants space should
@@ -28,7 +29,6 @@ import Elmish (Dispatch, ReactElement, (<|))
 import Elmish.HTML.Styled as H
 import Flashcards.Accent as Accent
 import Flashcards.Language as Language
-import Flashcards.Page as Page
 import Flashcards.Pages.Study.Model (Message(..), State)
 import Flashcards.Stats as Stats
 import Flashcards.Types.Progress as Progress
@@ -48,10 +48,6 @@ view opened state dispatch =
           show (Progress.seenCount state.progress) <> " of "
             <> show (Array.length state.language.deck) <> " words seen"
       ]
-    -- An anchor, not a message: a page change is a page load here, so this
-    -- needs no router and puts no notion of "which page" into any state. It
-    -- is also the only way to find the drills at all.
-    , H.a_ "panel-item" { href: Page.pathFor Page.Verbs } "Verb drills"
     , H.div "panel-group"
       [ H.button_ "panel-item" { onClick: dispatch <| ShowPairing } "Sync another device"
       , H.p ("panel-note sync" <> if settled then "" else " pending") $

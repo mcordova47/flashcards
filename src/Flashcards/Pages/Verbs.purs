@@ -538,15 +538,15 @@ view state dispatch =
       Just (Note open) -> Notes.view open (dispatch <<< Notes)
   ]
   where
-    -- Both anchors: a page change is a page load here, so they need no router
-    -- and leave no notion of "which page" in any state. Pairing lives on the
+    -- An anchor: a page change is a page load here, so it needs no router and
+    -- leaves no notion of "which page" in any state. Pairing lives on the
     -- cards page and is one thing for the whole app — both pages use one key.
+    -- The way back to the cards is the tab bar, not a row here.
     panel =
       H.fragment
       [ H.div_ "backdrop" { onClick: dispatch <| TogglePanel } H.empty
       , H.div "panel"
         [ H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
-        , H.a_ "panel-item" { href: "/" } "Flashcards"
         , H.div "panel-group"
           [ H.a_ "panel-item" { href: "/?sync" } "Sync another device"
           , H.p "panel-note" syncNote

@@ -867,16 +867,27 @@ them, and each was carrying the dependency for one line:
 - **`Sync.adoptKey`** lived in the flashcards' pairing sheet. It is about the
   key, and both pages want one, so it is in `Sync`.
 
-**The pages link to each other, with anchors and nothing else.** *Verb
-drills* sits in the cards' ••• menu, and the drills have a ••• of their own
-holding *Flashcards* and *Sync another device*. All three are plain `<a href>` — a page change is a page load here, so they
-need no router and leave no notion of "which page" in any component's state.
+**The pages link to each other, with anchors and nothing else.** A tab bar,
+*Vocab* and *Grammar*, is the last row of every screen on both pages
+(`Flashcards.Tabs`), and the drills' ••• menu holds *Sync another device*. All
+of them are plain `<a href>` — a page change is a page load here, so they need
+no router and leave no notion of "which page" in any component's state. The
+tab you are on is a `span`, not a link to where you already are.
 
 They were not linked at first, which was a mistake rather than a stance: the
 drills could only be reached by typing the URL, and on iOS the manifest's
-`start_url` is `/`, so an installed app could never open them at all. The way
-back points at `/` rather than `/es`, so it lands on whichever language was
-last chosen rather than overriding it.
+`start_url` is `/`, so an installed app could never open them at all. They
+were then a row in each page's ••• menu, which made the biggest choice the app
+offers a two-tap move; the tab bar replaced those rows. *Vocab* points at `/`
+rather than `/es`, so it lands on whichever language was last chosen rather
+than overriding it.
+
+**Grammar is Spanish only, and the tab says so.** The drills have no language
+of their own, so `Language.grammar` is the one place that says which language
+has them. With a language that does not, the Grammar tab stays where it is,
+dimmed, and tapping it raises the same notice the cards use ("Grammar is only
+in Spanish for now") rather than navigating. It is never hidden, so the layout
+is the same in every language.
 
 **Finding pairing from the drills.** Its menu's *Sync another device* points at
 `/?sync`, which opens the pairing sheet rather than dropping you on the cards
