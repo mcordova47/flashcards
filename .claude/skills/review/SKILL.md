@@ -26,6 +26,20 @@ instead, which disturbs nothing:
 git worktree add --detach .claude/worktrees/review-<n> $(git rev-parse origin/<their-branch>)
 ```
 
+A detached worktree has no `node_modules`. Most reviews do not need one, because
+you run only what you planted against. If you must run a suite, link the main
+checkout's rather than installing:
+
+```
+ln -s "$(git rev-parse --show-toplevel)/node_modules" .claude/worktrees/review-<n>/node_modules
+```
+
+(Run from the main checkout. `npm ci` in the worktree also works, at about 320MB.)
+`.gitignore` ignores a symlink as well as a directory, so the worktree still
+removes with plain `git worktree remove .claude/worktrees/review-<n>`. If that
+refuses, something else is untracked there: look at it, and do not reach for
+`--force` (`CONTRIBUTING.md`, *A worktree each*).
+
 ## Let CI run the gate
 
 *Merged is not live* (`CONTRIBUTING.md`): look at the pull request's deploy preview
