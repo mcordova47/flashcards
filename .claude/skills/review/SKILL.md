@@ -32,10 +32,11 @@ git worktree add --detach .claude/worktrees/review-<n> $(git rev-parse origin/<t
 for anything visual, not at the live site, which may be a batch behind `main`.
 
 **Do not run `npm run verify` over someone else's branch.** CI already has:
-the `pull_request` trigger builds and tests the *merge result*, and `strict`
-means a branch cannot land while it is behind, so a green check is a green
-merge. Repeating it costs four minutes and tells you what `gh pr checks <n>`
-tells you in one second.
+the `pull_request` trigger builds and tests the *merge result*. A branch no
+longer has to be up to date to land (`strict` is off), so a green check means
+green against the `main` of the moment CI ran, not necessarily the `main` it
+lands on; the run on `push` to `main` is the net for that. Repeating it costs
+four minutes and tells you what `gh pr checks <n>` tells you in one second.
 
 ```
 gh pr checks <n>
@@ -43,8 +44,11 @@ gh pr checks <n>
 
 Two cases where that is not the whole answer, and neither is "run everything":
 
-- **The branch is behind `main`.** Then CI's run is against an older merge
-  base. Say so and let the update re-run it. Testing the merge yourself only
+- **The branch is behind `main`.** That is allowed now, and CI's run is against
+  the `main` of when it ran. Do not ask for a rebase for its own sake. Ask
+  for one only if the branch conflicts, or if the change touches what `main` has
+  since changed (generated data modules, the drift check) and you cannot tell
+  from the diff that the two work together. Testing the merge yourself only
   learns what CI will learn anyway.
 - **The pull request changes the workflow, or what the workflow runs.** Then
   the green check was produced by the old one, and what it proves is a
@@ -197,5 +201,6 @@ final message goes back to it and not to the maintainer. Put the same things in 
 and say the fix items in full: it carries them out from what you return, and it
 cannot ask you what you meant. Do not push to its branch, as always.
 
-If auto-merge stalls because the branch is behind `main`, it needs a rebase;
+If auto-merge stalls, the branch conflicts with `main` or a required check has not
+passed; being behind `main` no longer stalls it. A conflict needs a rebase, and
 `CONTRIBUTING.md` says how.
