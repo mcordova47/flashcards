@@ -629,8 +629,48 @@ needs. That decides which pages a browser lets read the response; it is not
 what protects a blob. `core.js` is served with `*`, which is the same public
 code `index.js` already is. `core.js` is the same file as `core.v1.js`; the
 names are the contract, and `test/core.mjs` fails when they or their shapes
-move. A change that breaks the game is `version` 2 and `core.v2.js`, and
-nothing keeps `core.v1.js` after that, so it is a decision about the game.
+move. What that means for a change is the next section.
+
+#### What a client of `core.v1.js` can rely on
+
+**Stays `v1`:** adding an export (`ipa` and `overview` were added this way,
+after `v1` was first imported) and adding a field to a record or object an
+export returns. A client must therefore ignore fields it does not know.
+Behaviour that only follows the app is not a contract change either: the
+scheduler, the deck and the grading rules reach `core.v1.js` in the same deploy
+as the app, because it is built from the same code, and that is what it is for.
+
+**Needs `v2`:** removing or renaming an export; changing a field's meaning,
+type or units; changing a function's arguments or their order; or changing what
+a function returns for the same input in a way that breaks a client that
+followed this section (for example `mastered` counting something else). A
+change that stops an old saved payload from loading is a `v2` too.
+
+**How long `v1` lasts.** `core.v1.js` is a copy of the build, so a `v2` does not
+keep it by itself: whoever introduces `v2` also has to keep `core.v1.js`
+serving the old shapes (a shim over the new core, or a build from the old
+tag), in the same pull request. It is retired only when the maintainer says the
+game has moved, and no date is promised. A retirement is announced here, in
+this section, in the commit that removes the file, and by the maintainer to
+the game's repository. Until then `v1` is not removed.
+
+**`core.js` without a version is not for a client that cannot tolerate
+change.** It is the current build and may change shape at any deploy, including
+to what would be `v2`. Import `core.v<n>.js`.
+
+**The contract is pinned by `test/core.mjs` and `CoreSpec`** (`test/Flashcards/CoreSpec.purs`).
+`test/core.mjs` fails on the export list and on each shape; `CoreSpec` fails when
+grading, merging or the figures stop matching the app. A failing one is a
+decision, not a test to update: either the change is wrong, or it is a `v2`.
+Adding an export updates the list in `test/core.mjs` on purpose, in the same pull
+request as the export, and says so.
+
+Grading, for whoever changes it: the grade-and-save step is one function,
+`Deck.gradeCard`, which both `Core.grade` and the cards page's `Answered`
+call, and `Deck.graduation` is the canonical-gloss rule it applies. There is
+no second copy to keep in step. The drills (`Pages/Verbs.purs`) apply
+`Scheduler.applyGrade` directly with `RecognitionOnly`, which is the other
+place a grade is applied.
 
 `core.js` is a static, cacheable file, so a game that caches it and the last
 blob has what it needs to study without a connection. Whether it does depends
