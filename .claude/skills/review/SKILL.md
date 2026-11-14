@@ -186,8 +186,9 @@ With a short table, and then **one** verdict.
 | the same fault in an untouched module | issue | #140 |
 | a `TODO` the author left | ignore | already tracked in #98 |
 
-- **Ready to merge.** No fix items, nothing needs the maintainer, checks are
-  green. Queue it yourself: `gh pr merge <n> --rebase --auto`, and say so.
+- **Ready to merge.** No fix items, nothing needs the maintainer, and no
+  required check is red. Queue it yourself, it waits for pending checks:
+  `gh pr merge <n> --rebase --auto`, and say so.
 - **Fix, then merge.** Fix items, no re-review needed. Do **not** queue
   auto-merge: it merges the moment checks pass, which would be before the
   fixes. The author pushes them and then queues it: pushing resets the
