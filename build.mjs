@@ -46,3 +46,4 @@ const version = hash.digest("hex").slice(0, 12)
 fs.writeFileSync("./public/sw.js", fs.readFileSync("sw.js", "utf-8").replace("__VERSION__", version))
 
 console.log(`✅ Build complete! (service worker cache: ${version})`)
+// plant

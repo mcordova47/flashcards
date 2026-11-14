@@ -378,3 +378,4 @@ no issue holds both what is done and what is not. `Refs` is for an umbrella with
 open sub-issues. An issue that stays open for any other reason has the boxes the
 pull request met ticked, so that the next reader does not have to repeat the audit
 to learn what remains.
+
