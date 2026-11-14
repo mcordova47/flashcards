@@ -12,8 +12,9 @@ apply it to someone else's branch.
 
 ## Read what you are reviewing
 
-Before anything else, read all three. Each is something you would otherwise
-review without.
+Before anything else, read these three. Each is something you would otherwise
+review without. The first two are commands; the diff comes once you are standing
+in the worktree below.
 
 ```
 gh pr view <n> --comments
@@ -30,9 +31,9 @@ gh issue view <issue> --comments
   asked, and because correcting that issue is yours alone (*Own what is yours*).
   Corrections live in comments, so the body is the stale half: reading it without
   them means editing it from the wrong text.
-- **The diff,** from the worktree below and not from `gh pr diff`:
+- **The diff,** from the worktree and not from `gh pr diff`:
   `git diff origin/main...HEAD` there shows what the branch changes against its
-  merge base, and you are about to be standing in it anyway.
+  merge base, and you are standing in it anyway.
 
 If `gh issue view` prints nothing (it has done so here, with no error), ask for the
 fields instead: `gh issue view <n> --json title,state,body,comments`.
