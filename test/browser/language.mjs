@@ -23,12 +23,27 @@ export default async ({ check, open }) => {
   await page.tap(".got-it")
   check("studied one Spanish card", (await page.stored()).cards.length, 1)
 
+  const asked = await page.text(".prompt")
   await page.tap(".panel-toggle")
-  const langs = await labels(page, ".lang")
-  check("the panel offers both languages", langs, ["Spanish", "German"])
+  // A setting that opens the device's picker, not a toggle or a button that
+  // cycles: a tap must never change the whole deck without saying to what.
+  check("the panel shows the language as a setting",
+    [await page.text(".setting-label"), await page.text(".setting-value")], ["Language", "Spanish"])
+  check("whose picker offers both languages",
+    await labels(page, ".setting-select option"), ["Spanish", "German"])
+  check("and has Spanish chosen", await page.$eval(".setting-select", e => e.value), "es")
+  check("opening the menu changes nothing about the card", await page.text(".prompt"), asked)
+  // The select is laid invisibly over the row, so that a tap anywhere on it
+  // opens the picker: a label alone does not, on a phone.
+  check("and a tap anywhere along the row lands on the picker",
+    await page.evaluate(() => {
+      const r = document.querySelector(".setting").getBoundingClientRect()
+      return [0.05, 0.5, 0.95].map(f =>
+        document.elementFromPoint(r.left + r.width * f, r.top + r.height / 2).className)
+    }), ["setting-select", "setting-select", "setting-select"])
   check("Spanish accents only", await labels(page, ".accent"), ["Spain", "Mexico"])
 
-  ;(await page.byText(".lang", "German")).click()
+  await page.select(".setting-select", "de")
   await wait(600)
   check("switching shows a German card", await page.text(".prompt"), "am")
   check("and says which language to answer in", await page.text(".direction"), "answer in English")
@@ -84,7 +99,7 @@ export default async ({ check, open }) => {
 
   // Switching makes the address bar copyable.
   await shared.tap(".panel-toggle")
-  ;(await shared.byText(".lang", "German")).click()
+  await shared.select(".setting-select", "de")
   await wait(600)
   check("switching rewrites the path", new URL(shared.url()).pathname, "/de")
   check("without stacking history entries",

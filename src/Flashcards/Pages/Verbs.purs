@@ -546,7 +546,15 @@ view state dispatch =
       H.fragment
       [ H.div_ "backdrop" { onClick: dispatch <| TogglePanel } H.empty
       , H.div "panel"
-        [ H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
+        -- The same row as on the cards, in the same place, so that the menu does
+        -- not change shape between the pages. The drills have no language of
+        -- their own and are Spanish only, so this says so and does nothing.
+        [ H.div "setting na"
+          [ H.span "setting-label" "Language"
+          , H.span "setting-value" "Spanish only"
+          ]
+        , H.div "panel-rule" H.empty
+        , H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
         , H.div "panel-group"
           [ H.a_ "panel-item" { href: "/?sync" } "Sync another device"
           , H.p "panel-note" syncNote

@@ -1336,3 +1336,63 @@ body {
 .tab-icon.grammar {
   --tab-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round'%3E%3Cpath d='M4.5 7.5h15M4.5 12h15M4.5 16.5h8.5'/%3E%3C/svg%3E");
 }
+
+/* A setting: borderless, the label on the left and the value on the right, like
+   the voice row. The ghost rows below are what you do; these are what is set. */
+.setting {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-radius: 12px;
+  padding: 0.55rem 0.85rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.setting-value {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.setting-value::after {
+  content: " ›";
+  color: var(--faint);
+  font-weight: 400;
+}
+
+/* Nothing to change: no chevron, and quieter. */
+.setting.na .setting-value {
+  color: var(--faint);
+}
+
+.setting.na .setting-value::after {
+  content: "";
+}
+
+/* Invisible and over the whole row, so a tap anywhere on it opens the
+   device's picker. 16px at least, or iOS zooms the page on focus. */
+.setting-select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  font-size: 16px;
+  cursor: pointer;
+  appearance: none;
+  border: 0;
+}
+
+.setting:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* Between the settings and the rows that do things. */
+.panel-rule {
+  height: 1px;
+  margin: 0.1rem 0.25rem;
+  background: var(--track);
+}

@@ -315,6 +315,10 @@ export default async ({ check, open, blobs }) => {
   check("nothing but pips and the dots in the top bar",
     await keys.$$eval(".topbar > *", es => es.map(e => e.className)), ["pips", "panel-toggle"])
   await keys.tap(".panel-toggle")
+  // Same row as on the cards, in the same place, so the menu keeps its shape.
+  check("the menu says the drills are Spanish only, as a row that does nothing",
+    [await keys.text(".setting-label"), await keys.text(".setting-value"), await keys.$(".setting-select")],
+    ["Language", "Spanish only", null])
   check("the menu points only to where pairing is, the way back being the tab bar",
     await keys.$$eval("a.panel-item", es => es.map(e => e.getAttribute("href"))), ["/?sync"])
   check("and the Vocab tab goes back to the cards",
