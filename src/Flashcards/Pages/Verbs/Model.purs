@@ -21,6 +21,7 @@ import Flashcards.Sync as Sync
 import Flashcards.Types.Card (Slug)
 import Flashcards.Types.Grade (Grade)
 import Flashcards.Types.Progress (Progress)
+import Flashcards.Verbs.Curriculum as Curriculum
 import Flashcards.Verbs.Table (Tense)
 
 -- | Its own namespace, so its progress is its own blob on the server and its
@@ -28,7 +29,7 @@ import Flashcards.Verbs.Table (Tense)
 -- | `Storage.progressKey`, rather than a second place that spells the key out. The *pairing* key is shared, so a device paired for
 -- | the flashcards is already paired for this — one key, both pages.
 namespace :: String
-namespace = "verbs"
+namespace = Curriculum.namespace
 
 type State =
   { progress :: Progress

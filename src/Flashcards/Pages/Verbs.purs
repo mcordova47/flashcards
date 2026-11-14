@@ -97,19 +97,8 @@ init = do
     , loaded: false
     }
 
--- | There is nothing for a fingerprint to certify here, and there never will
--- | be.
--- |
--- | What one attests is that a rank still names the word it named when the
--- | payload was written — which matters only for entries keyed by rank, and
--- | this namespace has none: it was born at v5 and `byRank` above is `const
--- | Nothing`. `Payload.adopt` reaches for the fingerprint only when some entry
--- | lacks a slug, so for these payloads it is never compared.
--- |
--- | #12 generated one for the table anyway, for a later use that, for the
--- | reason above, never comes. #20 took it out.
 fingerprint :: String
-fingerprint = "none"
+fingerprint = Curriculum.fingerprint
 
 update :: State -> Message -> Transition Message State
 update state = case _ of
@@ -233,14 +222,9 @@ update state = case _ of
       pure state
     Just slug -> do
       let
-        -- The drills never graduate (no production side), so this is not
-        -- `Deck.gradeCard`, which is the cards' rule. If the drills move
-        -- into `Flashcards.Core` (#172), that grade must make this same call.
-        progress =
-          Progress.insert slug
-            (Scheduler.applyGrade slug grade now Scheduler.RecognitionOnly $
-               Progress.lookup slug state.progress)
-            state.progress
+        -- `Curriculum.gradeDrill`, not `Deck.gradeCard`: drills never
+        -- graduate. `Flashcards.Core.drillGrade` calls the same function (#172).
+        progress = Curriculum.gradeDrill slug grade now state.progress
         -- As on the study page: a miss comes round again before the session
         -- ends, and `pick` makes it a different sentence when it does. Unlike
         -- there it keeps clear of its own family (#64), the one that sentence
