@@ -211,7 +211,7 @@ data Message
   -- | Grammar was tapped with a language it has nothing for.
   | GrammarUnavailable
   | SpeakCurrent
-  | ChooseAccent String
+  | CycleAccent
   | ChooseLanguage String
   | VoicesAvailable (Array Accent.Voice)
   | CycleVoice

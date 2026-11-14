@@ -36,25 +36,24 @@ export default async ({ check, open }) => {
   check("interrupting an utterance in flight", await page.evaluate(() => window.__cancels), 1)
 
   await page.tap(".panel-toggle")
-  check("one option per locale, not per voice",
-    await page.$$eval(".accent", es => es.map(e => e.textContent)), ["Spain", "Mexico"])
-  check("Mexican by default",
-    await page.$$eval(".accent.chosen", es => es.map(e => e.textContent)), ["Mexico"])
+  check("one accent row, not one per voice, on Mexican by default",
+    await page.$$eval(".panel-accent-name", es => es.map(e => e.textContent)), ["Mexico"])
   check("the voice row shows the automatic pick", await page.text(".panel-voice-name"), "Paulina")
 
   await page.tap(".panel-voice")
   check("cycling moves off a pick that may not work",
-    await page.text(".panel-voice-name"), "Rocko (Spanish (Mexico))")
+    await page.text(".panel-voice-name"), "Rocko")
   await spokenAtLeast(page, 3)
   check("previewing it with the word that shows the difference",
     (await page.spoken()).at(-1), { text: "gracias", lang: "es-MX", rate: 0.9, voice: "Rocko (Spanish (Mexico))" })
   await page.tap(".panel-voice")
-  check("and keeps going", await page.text(".panel-voice-name"), "Eddy (Spanish (Mexico))")
+  check("and keeps going", await page.text(".panel-voice-name"), "Eddy")
   await page.tap(".panel-voice")
   check("wrapping around", await page.text(".panel-voice-name"), "Paulina")
 
-  ;(await page.byText(".accent", "Spain")).click()
+  await page.tap(".panel-accent")
   await wait(150)
+  check("cycling the accent wraps to Spain", await page.text(".panel-accent-name"), "Spain")
   check("switching accent repicks that accent's voice", await page.text(".panel-voice-name"), "Mónica")
   check("and persists the choice",
     await page.evaluate(() => localStorage.getItem("flashcards.es.accent")), "es-ES")
@@ -75,7 +74,7 @@ export default async ({ check, open }) => {
   await solo.waitForSelector(".prompt")
   await wait(450)
   await solo.tap(".panel-toggle")
-  check("no accent picker when there is one locale", (await solo.$$(".accent")).length, 0)
+  check("no accent row when there is one locale", (await solo.$$(".panel-accent")).length, 0)
   // Not a control with one voice, but still named - a listed voice can be a
   // dud, and its name is where working that out starts.
   check("the lone voice is still named", await solo.text(".panel-voice-name"), "Mónica")

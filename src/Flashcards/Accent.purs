@@ -7,7 +7,9 @@ module Flashcards.Accent
   , forLanguage
   , label
   , locales
+  , displayName
   , nextIn
+  , nextLocale
   , preferred
   , resolve
   , resolveVoice
@@ -79,6 +81,21 @@ nextIn locale current voices =
     Nothing -> Array.head names
   where
     names = voicesIn locale voices
+
+-- | The next locale, wrapping at the end; the first when there is no current.
+nextLocale :: Maybe String -> Array String -> Maybe String
+nextLocale current available =
+  case current >>= flip Array.elemIndex available of
+    Just i -> Array.index available $ (i + 1) `mod` Array.length available
+    Nothing -> Array.head available
+
+-- | A voice's name as shown: without the parenthesised region Apple appends,
+-- | so "Eddy (Spanish (Mexico))" reads "Eddy". Display only: the stored name
+-- | and the one handed to the engine stay whole, since that is the identifier.
+displayName :: String -> String
+displayName name = case String.indexOf (Pattern " (") name of
+  Just i | i > 0 -> String.take i name
+  _ -> name
 
 -- | Locales the deck is plausibly spoken in. Anything unrecognised shows its
 -- | raw tag, which is ugly but honest and beats hiding a real option.
