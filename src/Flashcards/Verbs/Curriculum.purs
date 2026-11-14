@@ -9,9 +9,12 @@ module Flashcards.Verbs.Curriculum
   , corrected
   , byFrequency
   , family
+  , fingerprint
+  , gradeDrill
   , grid
   , kind
   , labelled
+  , namespace
   , session
   , shuffled
   )
@@ -36,6 +39,7 @@ import Flashcards.Exercise (Exercise, Pool, pick)
 import Flashcards.Exercise as Exercise
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Types.Card (Slug, rankToInt, slugToString)
+import Flashcards.Types.Grade (Grade)
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Correction as Correction
@@ -204,3 +208,31 @@ family :: Progress -> Slug -> Maybe String
 family progress slug =
   Array.find (\p -> p.slug == slug) items <#> \pool ->
     (pick (Progress.lookup slug progress) pool).family
+
+-- | The drills' own namespace: their progress is a blob of its own on the
+-- | server, under this name where the flashcards' is under a language code, and
+-- | a key of its own in storage. Here and not in the page so that
+-- | `Flashcards.Core` can name it without importing a page. See #172.
+namespace :: String
+namespace = "verbs"
+
+-- | There is nothing for a fingerprint to certify here, and there never will
+-- | be.
+-- |
+-- | What one attests is that a rank still names the word it named when the
+-- | payload was written, which matters only for entries keyed by rank, and this
+-- | namespace has none: it was born at v5 and nothing in it is placed by rank,
+-- | so `Payload.adopt` never compares it. #12 generated one for the table
+-- | anyway, for a use that never came. #20 took it out.
+fingerprint :: String
+fingerprint = "none"
+
+-- | One graded answer, applied. Drills never graduate (they have no production
+-- | side) and their slugs are not deck cards, so this is not `Deck.gradeCard`:
+-- | it is `Scheduler.applyGrade` with `RecognitionOnly`. The drills page and
+-- | `Flashcards.Core.drillGrade` both call it, so there is one copy.
+gradeDrill :: Slug -> Grade -> Instant -> Progress -> Progress
+gradeDrill slug grade now progress =
+  Progress.insert slug
+    (Scheduler.applyGrade slug grade now Scheduler.RecognitionOnly $ Progress.lookup slug progress)
+    progress
