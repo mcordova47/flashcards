@@ -114,3 +114,23 @@ spec = do
 
     it "shows an unrecognised tag rather than hiding the option" do
       Accent.label "es-GQ" `shouldEqual` "es-GQ"
+
+  describe "cycling the accent" do
+    it "moves to the next locale and wraps" do
+      Accent.nextLocale (Just "es-ES") [ "es-ES", "es-MX" ] `shouldEqual` Just "es-MX"
+      Accent.nextLocale (Just "es-MX") [ "es-ES", "es-MX" ] `shouldEqual` Just "es-ES"
+
+    it "starts at the first when the current one is gone or unset" do
+      Accent.nextLocale Nothing [ "es-ES", "es-MX" ] `shouldEqual` Just "es-ES"
+      Accent.nextLocale (Just "es-AR") [ "es-ES", "es-MX" ] `shouldEqual` Just "es-ES"
+
+    it "has nothing to cycle to with no locales" do
+      Accent.nextLocale (Just "es-MX") [] `shouldEqual` Nothing
+
+  describe "voice display names" do
+    it "drops the parenthesised region" do
+      Accent.displayName "Eddy (Spanish (Mexico))" `shouldEqual` "Eddy"
+
+    it "leaves a plain name alone" do
+      Accent.displayName "Paulina" `shouldEqual` "Paulina"
+      Accent.displayName "(odd)" `shouldEqual` "(odd)"

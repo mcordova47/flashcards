@@ -41,7 +41,7 @@ export default async ({ check, open }) => {
       return [0.05, 0.5, 0.95].map(f =>
         document.elementFromPoint(r.left + r.width * f, r.top + r.height / 2).className)
     }), ["setting-select", "setting-select", "setting-select"])
-  check("Spanish accents only", await labels(page, ".accent"), ["Spain", "Mexico"])
+  check("a Spanish accent, which cycles", await page.text(".panel-accent-name"), "Mexico")
 
   await page.select(".setting-select", "de")
   await wait(600)
@@ -50,13 +50,14 @@ export default async ({ check, open }) => {
 
   await page.tap(".panel-toggle")
   // Locales sort by tag, so de-AT precedes de-DE, just as es-ES precedes es-MX.
-  check("now offering German accents", await labels(page, ".accent"), ["Austria", "Germany"])
+  check("now offering a German accent", await page.text(".panel-accent-name"), "Germany")
   check("with a German voice picked", await page.text(".panel-voice-name"), "Anna")
-  ;(await page.byText(".accent", "Austria")).click()
+  await page.tap(".panel-accent")
   await wait(300)
+  check("cycling goes to the other German accent", await page.text(".panel-accent-name"), "Austria")
   check("a lone voice is named but not a control", await page.text(".panel-voice-name"), "Petra")
   check("and it previews in German, not Spanish", (await page.spoken()).at(-1).text, "richtig")
-  ;(await page.byText(".accent", "Germany")).click()
+  await page.tap(".panel-accent")
   await wait(300)
   await page.dismiss()
 

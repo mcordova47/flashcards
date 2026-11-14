@@ -449,13 +449,15 @@ update state = case _ of
   Notes message ->
     notes state message
 
-  ChooseAccent accent -> do
-    let voice = Accent.autoVoice accent state.voices
-    forkVoid $ liftEffect $ Storage.saveAccent state.language.code accent
-    for_ voice \v -> forkVoid $ liftEffect $ Storage.saveVoice state.language.code v
-    forkVoid $ liftEffect $
-      Speech.speak state.language.code (fromMaybe "" voice) accent state.language.preview
-    pure state { accent = Just accent, savedAccent = Just accent, voice = voice, savedVoice = voice }
+  CycleAccent -> case Accent.nextLocale state.accent (Accent.locales state.voices) of
+    Nothing -> pure state
+    Just accent -> do
+      let voice = Accent.autoVoice accent state.voices
+      forkVoid $ liftEffect $ Storage.saveAccent state.language.code accent
+      for_ voice \v -> forkVoid $ liftEffect $ Storage.saveVoice state.language.code v
+      forkVoid $ liftEffect $
+        Speech.speak state.language.code (fromMaybe "" voice) accent state.language.preview
+      pure state { accent = Just accent, savedAccent = Just accent, voice = voice, savedVoice = voice }
 
   -- Only once the answer is showing: hearing it beforehand would give it away.
   SpeakCurrent -> case state.screen of

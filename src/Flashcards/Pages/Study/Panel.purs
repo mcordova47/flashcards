@@ -22,7 +22,7 @@ import Prelude
 
 import Data.Array as Array
 import Data.DateTime.Instant (Instant, unInstant)
-import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Elmish (Dispatch, ReactElement, (<|))
@@ -125,11 +125,11 @@ view opened state dispatch =
     accentPicker
       | Array.length available < 2 = H.empty
       | otherwise =
-          H.div "segmented accents" $ available <#> \accent ->
-            H.button_
-              ("segment accent" <> if Just accent == state.accent then " chosen" else "")
-              { key: accent, onClick: dispatch <| ChooseAccent accent }
-              (Accent.label accent)
+          H.button_ "panel-accent" { onClick: dispatch <| CycleAccent }
+          [ H.span "panel-accent-label" "Accent"
+          , H.span "panel-accent-name" $
+              maybe "—" Accent.label state.accent
+          ]
 
     -- A listed voice can have nothing behind it, and no API says so. Cycling
     -- lets the ear settle what the code cannot detect.
@@ -141,11 +141,11 @@ view opened state dispatch =
         H.empty
       [ only ] ->
         H.div "panel-voice sole"
-        [ H.span "panel-voice-label" "Voice", H.span "panel-voice-name" only ]
+        [ H.span "panel-voice-label" "Voice", H.span "panel-voice-name" $ Accent.displayName only ]
       _ ->
         H.button_ "panel-voice" { onClick: dispatch <| CycleVoice }
         [ H.span "panel-voice-label" "Voice"
-        , H.span "panel-voice-name" $ fromMaybe "—" state.voice
+        , H.span "panel-voice-name" $ maybe "—" Accent.displayName state.voice
         ]
 
 -- | How long ago something happened, in the units the panel wants.
