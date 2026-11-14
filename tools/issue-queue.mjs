@@ -10,6 +10,7 @@
 //   parked                          not now; the issue says what would change that
 //   needs-you                       waiting on the maintainer, whatever its tier
 //   blocked                         waiting on another issue; a comment says which
+//   quick-win                       small and self-contained; shown, never reorders
 //
 // Pure, and given the issues and the open pull requests rather than fetching
 // them, so test/queue.mjs can say what it does with a bad label without GitHub.
@@ -39,6 +40,7 @@ export const buildQueue = (issues, prs, now = new Date()) => {
     tier,
     age: Math.floor((now - new Date(i.createdAt)) / DAY),
     blocked: names(i).includes("blocked"),
+    quickWin: names(i).includes("quick-win"),
     inFlight: inFlight.get(i.number) ?? [],
   })
 
@@ -91,7 +93,7 @@ export const buildQueue = (issues, prs, now = new Date()) => {
 }
 
 const flags = r =>
-  (r.blocked ? "  [blocked]" : "") + (r.inFlight.length ? `  [PR ${r.inFlight.map(n => "#" + n).join(", ")}]` : "")
+  (r.quickWin ? "  [quick win]" : "") + (r.blocked ? "  [blocked]" : "") + (r.inFlight.length ? `  [PR ${r.inFlight.map(n => "#" + n).join(", ")}]` : "")
 
 export const renderQueue = q => {
   const line = (r, withTier) =>

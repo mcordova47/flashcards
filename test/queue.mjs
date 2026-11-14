@@ -37,6 +37,12 @@ console.log("\nThe issue queue")
 }
 
 {
+  const r = q([issue(4, 5, "priority: soon"), issue(6, 1, "priority: soon", "quick-win")])
+  check("a quick win says so", r.tiers.soon.map(x => x.quickWin), [false, true])
+  check("and does not jump its tier", numbers(r.tiers.soon), [4, 6])
+}
+
+{
   const r = q([
     issue(1, 5, "priority: soon"),
     issue(7, 50, "priority: soon", "needs-you"),
@@ -85,6 +91,7 @@ console.log("\nThe issue queue")
   ]))
   check("the text leads with what needs the maintainer", text.indexOf("Needs you") < text.indexOf("Next"), true)
   check("marks a blocked issue", /#1\s.*\[blocked\]/.test(text), true)
+  check("marks a quick win", /#7\s.*\[quick win\]/.test(renderQueue(q([issue(7, 1, "priority: later", "quick-win")]))), true)
   check("flags the untriaged", text.includes("Untriaged"), true)
   check("says when nothing needs the maintainer", renderQueue(q([issue(1, 1, "priority: next")])).includes("Needs you: nothing"), true)
 }
