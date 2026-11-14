@@ -13,10 +13,10 @@
 -- | non-empty `error` and an otherwise empty record, not an `Either`, because
 -- | a PureScript `Either` is not something JavaScript can read.
 -- |
--- | The cards page and this module apply a grade in the same two steps, and
--- | `Study.purs` does not call this: the page's `Answered` also moves the
--- | screen on, which is why it was not made to. `CoreSpec` pins this against
--- | `Scheduler.applyGrade` directly so that the two cannot quietly disagree.
+-- | Grading is `Deck.gradeCard`, which the cards page calls too: this module
+-- | is the string-in, string-out shell round it, because the page holds typed
+-- | progress and a round trip through JSON per answer would buy it nothing.
+-- | `CoreSpec` pins the result against `Scheduler.applyGrade` worked by hand.
 module Flashcards.Core
   ( Card
   , Graded
@@ -158,7 +158,8 @@ show code raw slug = withLanguage blank code \language ->
     blank = { error: "", slug: "", prompt: "", answers: [], example: "", direction: "" }
 
 -- | Record one answer. Only the card that carries the production question for
--- | its English side may graduate, the rule `Study.purs` applies in `Answered`.
+-- | its English side may graduate; `Deck.gradeCard` applies that rule, and the
+-- | cards page calls the same function, so there is one copy (#173).
 grade :: String -> String -> String -> Boolean -> Number -> Graded
 grade code raw slug gotIt ms = withLanguage { error: "", progress: "" } code \language ->
   case load language raw, now ms of
@@ -167,14 +168,10 @@ grade code raw slug gotIt ms = withLanguage { error: "", progress: "" } code \la
     Right progress, Right at ->
       let
         index = Deck.index language.deck
-        allowed = case Deck.card (Slug slug) index of
-          Just c | Deck.isCanonical c index -> Scheduler.MayGraduate
-          _ -> Scheduler.RecognitionOnly
-        updated = Scheduler.applyGrade (Slug slug) (if gotIt then GotIt else Again) at allowed (Progress.lookup (Slug slug) progress)
       in
         case Deck.card (Slug slug) index of
           Nothing -> { error: "No such card: " <> slug, progress: "" }
-          Just _ -> { error: "", progress: save language $ Progress.insert (Slug slug) updated progress }
+          Just _ -> { error: "", progress: save language $ Deck.gradeCard index (Slug slug) (if gotIt then GotIt else Again) at progress }
 
 -- | How a word is said, in one dialect: `Pronunciation.ipa` behind the same
 -- | language lookup as the rest. Empty for a dialect the deck has no column

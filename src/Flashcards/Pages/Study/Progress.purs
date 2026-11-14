@@ -98,13 +98,13 @@ view language index now progress dispatch =
     slipping = Stats.leeches Stats.leechThreshold language.deck progress
 
     -- A card may graduate only if it carries the production question for its
-    -- English side, the same rule `Study` applies when it grades one. The
-    -- forecast follows the scheduler, so it has to ask the same question.
+    -- English side: `Deck.graduation`, the rule grading applies. The forecast
+    -- follows the scheduler, so it has to ask the same question.
     items = language.deck <#> \c ->
       { slug: c.slug
       , word: c.word
       , english: c.english
-      , allowed: if Deck.isCanonical c index then Scheduler.MayGraduate else Scheduler.RecognitionOnly
+      , allowed: Deck.graduation c index
       }
 
     -- Only when the started cards can reach it, and nothing otherwise: a date

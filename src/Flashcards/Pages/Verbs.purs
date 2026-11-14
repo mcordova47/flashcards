@@ -233,6 +233,9 @@ update state = case _ of
       pure state
     Just slug -> do
       let
+        -- The drills never graduate (no production side), so this is not
+        -- `Deck.gradeCard`, which is the cards' rule. If the drills move
+        -- into `Flashcards.Core` (#172), that grade must make this same call.
         progress =
           Progress.insert slug
             (Scheduler.applyGrade slug grade now Scheduler.RecognitionOnly $
