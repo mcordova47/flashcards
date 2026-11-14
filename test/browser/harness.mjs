@@ -280,7 +280,9 @@ export const run = async (name, body, { headless = "new", slowMo } = {}) => {
     page.spoken = () => page.evaluate(() => window.__spoken.filter(u => u.text.trim() !== ""))
     page.byText = async (sel, label) => {
       for (const h of await page.$$(sel)) {
-        if (await h.evaluate(e => e.textContent) === label) return h
+        // A row that carries a figure beside its label (`.panel-label`) is
+        // found by the label alone, so the figure can change without the lookup.
+        if (await h.evaluate(e => (e.querySelector(".panel-label") ?? e).textContent) === label) return h
       }
       throw new Error(`no ${sel} labelled "${label}"`)
     }

@@ -7,12 +7,11 @@
 -- | reorganise this rather than make it taller — which is why `Sync now` is a
 -- | link on the line it answers rather than a row of its own.
 -- |
--- | A line that reports on a row sits directly under it, in the same group
--- | (`panel-group`), so that the words-seen count reads as part of *See your
--- | progress* and the sync state as part of *Sync another device* rather than
--- | as footers under everything. The note is not about the deck in front of
--- | you, and is feedback rather than somewhere to go, so it is the quiet line
--- | at the bottom.
+-- | The words-seen count is a figure on the right of *See your progress*
+-- | (`N seen`, no total: the deck's size is on the progress sheet). A line that
+-- | reports on a row sits directly under it, in the same group
+-- | (`panel-group`), so that the sync state reads as part of *Sync another
+-- | device* rather than as a footer under everything.
 module Flashcards.Pages.Study.Panel
   ( view
   )
@@ -45,10 +44,10 @@ view opened state dispatch =
     , voicePicker
     , H.div "panel-rule" H.empty
     , H.div "panel-group"
-      [ H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
-      , H.p "panel-note" $
-          show (Progress.seenCount state.progress) <> " of "
-            <> show (Array.length state.language.deck) <> " words seen"
+      [ H.button_ "panel-item panel-split" { onClick: dispatch <| ShowStats }
+          [ H.span "panel-label" "See your progress"
+          , H.span "panel-seen" $ show (Progress.seenCount state.progress) <> " seen"
+          ]
       ]
     , H.div "panel-group"
       [ H.button_ "panel-item" { onClick: dispatch <| ShowPairing } "Sync another device"

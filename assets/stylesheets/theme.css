@@ -930,6 +930,23 @@ body {
   margin-bottom: 0.4rem;
 }
 
+/* A row with a label and one short figure on its right. The label may shrink
+   and wrap; the figure never does. */
+.panel-split {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.panel-split .panel-seen {
+  flex: none;
+  color: var(--faint);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
 .panel-group .panel-note {
   margin: 0;
   padding: 0 1rem;
