@@ -30,7 +30,8 @@ const entry = (progress, slug) => cards(progress).find(c => c.slug === slug)
 console.log("\nThe core other clients import")
 
 check("it exports exactly this surface", Object.keys(core).sort(),
-  ["card", "empty", "grade", "ipa", "merge", "overview", "requeue", "session", "sessionSize", "version"])
+  ["card", "drillCheck", "drillEmpty", "drillGrade", "drillMerge", "drillNamespace", "drillQuestion", "drillRequeue", "drillSession",
+    "empty", "grade", "ipa", "merge", "overview", "requeue", "session", "sessionSize", "version"])
 check("at this version", core.version, 1)
 
 const fresh = core.session(null, NOW)
@@ -89,6 +90,74 @@ check("history for a slug no longer in the deck is not counted",
 throws("an unknown language throws", () => core.overview(null, NOW, "xx"))
 
 check("a miss comes back a few places on", core.requeue("x", 0, ["a", "b", "c", "d", "e", "f"]).indexOf("x") > 1, true)
+
+// The verb drills (#172): their own namespace, and an answer the core checks.
+console.log("\nThe drills")
+
+const drills = core.drillSession(null, NOW)
+check("a client with no drill progress is given a full session of distinct slugs",
+  [drills.length, new Set(drills).size, typeof drills[0]], [core.sessionSize, core.sessionSize, "string"])
+check("and the same one for the empty string and for an empty history",
+  [core.drillSession("", NOW), core.drillSession(core.drillEmpty(), NOW)], [drills, drills])
+check("the drills are a namespace of their own", core.drillNamespace, "verbs")
+check("and their saved progress says so", JSON.parse(core.drillEmpty()).language, "verbs")
+throws("so the cards will not take it", () => core.session(core.drillEmpty(), NOW))
+throws("and the drills will not take the cards'", () => core.drillSession(core.empty(), NOW))
+
+const questions = drills.map(slug => core.drillQuestion(null, slug))
+const kinds = k => questions.filter(q => q.kind === k)
+check("a session has all three kinds of question", ["checked", "choice", "selfGraded"].map(k => kinds(k).length > 0), [true, true, true])
+check("a question has what a client shows, and never the answer",
+  questions.every(q => JSON.stringify(Object.keys(q).sort()) ===
+    JSON.stringify(["after", "before", "hint", "kind", "label", "options", "prompt", "slug"])), true)
+check("only a choice has options, and the expected answer is among them",
+  kinds("choice").every(q => q.options.length >= 2 && q.options.includes(core.drillCheck(null, q.slug, q.options[0]).expected)) &&
+  [...kinds("checked"), ...kinds("selfGraded")].every(q => q.options.length === 0), true)
+
+const typed = kinds("checked").find(q => q.slug === "querer.imperfect")
+const answer = core.drillCheck(null, typed.slug, "").expected
+check("a wrong answer is wrong, and says what was expected, as the app does",
+  [core.drillCheck(null, typed.slug, "zzz").verdict, core.drillCheck(null, typed.slug, "zzz").gotIt, answer], ["wrong", false, "querías"])
+check("the right one is exact, whatever the case, space or full stop",
+  (v => [v.verdict, v.gotIt])(core.drillCheck(null, typed.slug, "  QUERÍAS. ")), ["exact", true])
+check("one missing its accent counts, and says it was only that",
+  (v => [v.verdict, v.gotIt])(core.drillCheck(null, typed.slug, "querias")), ["unaccented", true])
+const noted = kinds("checked").find(q => q.slug === "error.regularised")
+check("an error correction explains itself once it is checked, not before",
+  [core.drillCheck(null, noted.slug, "tengo").note !== "", Object.values(noted).some(v => typeof v === "string" && v.includes("regular verb"))], [true, false])
+const pick = kinds("choice")[0]
+check("a tapped option is checked the same way",
+  [core.drillCheck(null, pick.slug, "por").verdict, core.drillCheck(null, pick.slug, "para").verdict].sort(), ["exact", "wrong"])
+throws("something that is not one of the options is refused", () => core.drillCheck(null, pick.slug, "pero"))
+const said = kinds("selfGraded")[0]
+check("a self-graded question is not judged: it comes back with a model answer and its reasons",
+  (v => [v.verdict, v.gotIt, typeof v.expected, v.expected !== "", Array.isArray(v.rubric) && v.rubric.length > 0])(core.drillCheck(null, said.slug, "")),
+  [null, null, "string", true, true])
+throws("a slug that is not a drill is refused", () => core.drillQuestion(null, "yo"))
+
+const drilled = core.drillGrade(null, typed.slug, true, NOW)
+check("a drilled answer is recorded under its slug, in the drills' own format",
+  [entry(drilled, typed.slug).seen, JSON.parse(drilled).language], [1, "verbs"])
+check("a right one and a wrong one leave different boxes",
+  entry(core.drillGrade(null, typed.slug, false, NOW), typed.slug).box === entry(drilled, typed.slug).box, false)
+check("the drill answered is no longer due, and is due again later",
+  [core.drillSession(drilled, NOW).includes(typed.slug), core.drillSession(drilled, NOW + 400 * DAY).includes(typed.slug)], [false, true])
+let run = null
+for (let i = 0; i < 8; i++) run = core.drillGrade(run, typed.slug, true, NOW + i * 30 * DAY)
+check("drills never graduate to production, however many are right", [entry(run, typed.slug).direction, entry(run, typed.slug).seen], ["recognition", 8])
+throws("a slug that is not a drill cannot be graded", () => core.drillGrade(null, "yo", true, NOW))
+
+const missed = core.drillGrade(null, drills[0], false, NOW)
+const again = core.drillRequeue(missed, drills[0], drills)
+check("a miss comes back a few places on, with nothing lost",
+  [again.length, again.indexOf(drills[0], 1) > 1, [...again].sort().join()], [drills.length + 1, true, [...drills, drills[0]].sort().join()])
+
+const da = core.drillGrade(null, drills[0], true, NOW)
+const db = core.drillGrade(null, drills[1], true, NOW)
+check("merging drill histories keeps what each side answered, in either order",
+  [cards(core.drillMerge(da, db)).map(c => c.slug).sort(), cards(core.drillMerge(db, da)).map(c => c.slug).sort()],
+  [[drills[0], drills[1]].sort(), [drills[0], drills[1]].sort()])
+check("and merging with nothing stored is the history itself", cards(core.drillMerge(da, null)).map(c => c.slug), [drills[0]])
 
 // A module import across origins is refused without this, and nothing else in
 // the repository would notice: the file is served, and only a browser on
