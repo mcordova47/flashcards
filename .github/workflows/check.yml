@@ -28,23 +28,73 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
+  # Whether this change needs the suites at all. A pull request that touches
+  # only Markdown (outside `.claude/` and `data/`, which are instructions agents
+  # follow and the source of generated modules) does not. It runs in seconds
+  # and every other job reads its answer.
+  #
+  # The jobs below are skipped *step by step*, never as whole jobs, where a
+  # check is read by name. `data` and `browser` finish in seconds and report
+  # `success`; a job skipped by a condition would report `skipped`, which branch
+  # protection accepts but `deploy` does not (it requires exactly
+  # `browser=success data=success` on the commit it ships), so a Markdown-only
+  # head commit would be refused. `main` and anything not a pull request always
+  # run everything: it is the net for what a pull request missed.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.detect.outputs.code }}
+    steps:
+      # On a pull request this is the merge commit, whose first parent is the
+      # base. Depth 2 reaches it. `--no-renames` lists both sides of a rename,
+      # so a .js file renamed to .md is not mistaken for documentation.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - id: detect
+        run: |
+          code=true
+          if [ "$EVENT" = "pull_request" ]; then
+            files=$(git diff --no-renames --name-only HEAD^1 HEAD)
+            echo "$files"
+            # An empty list is not evidence of documentation: run everything.
+            if [ -n "$files" ]; then
+              code=false
+              while IFS= read -r f; do
+                case "$f" in
+                  .claude/*|data/*) code=true ;;
+                  *.md) ;;
+                  *) code=true ;;
+                esac
+              done <<< "$files"
+            fi
+          fi
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          echo "code=$code"
+        env:
+          EVENT: ${{ github.event_name }}
+
   # Seconds, no browser. The drift check is the one thing nothing else covers:
   # the app reads the generated modules, people read the CSVs, and a commit
   # that edits one without the other would otherwise ship the old cells.
   data:
+    needs: changes
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        if: needs.changes.outputs.code == 'true'
         with:
           node-version: 24
           cache: npm
-      - run: npm ci
+      - if: needs.changes.outputs.code == 'true'
+        run: npm ci
 
       # Every generator is deterministic, so a module regenerated from its CSV
       # is byte-identical unless one of them is stale. Run before anything else
       # can touch the tree.
       - name: Generated modules match their CSVs
+        if: needs.changes.outputs.code == 'true'
         run: |
           npm run -s sync
           if [ -n "$(git status --porcelain)" ]; then
@@ -59,7 +109,7 @@ jobs:
       # never HEAD, which already has the change. A deliberate one carries the
       # `slug-change` label; pushes to main are not compared with themselves.
       - name: No slug changed on a word still in the deck
-        if: github.event_name == 'pull_request'
+        if: needs.changes.outputs.code == 'true' && github.event_name == 'pull_request'
         run: |
           git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
           node tools/check-slugs.mjs --base "origin/${{ github.base_ref }}" $FLAGS
@@ -68,29 +118,39 @@ jobs:
 
       # Structural only: deviations from the regular pattern are its output,
       # not a failure, and it exits zero for them.
-      - run: npm run -s check-ipa
-      - run: npm run -s check-verbs
-      - run: npm run -s check-paraphrase
-      - run: npm run -s check-sentences
-      - run: npm run -s check-por-para
+      - if: needs.changes.outputs.code == 'true'
+        run: npm run -s check-ipa
+      - if: needs.changes.outputs.code == 'true'
+        run: npm run -s check-verbs
+      - if: needs.changes.outputs.code == 'true'
+        run: npm run -s check-paraphrase
+      - if: needs.changes.outputs.code == 'true'
+        run: npm run -s check-sentences
+      - if: needs.changes.outputs.code == 'true'
+        run: npm run -s check-por-para
 
       # The issue queue's ordering and what it does with a contradicting label.
       # Pure node, so it needs neither the build nor GitHub.
-      - run: node test/queue.mjs
-      - run: node test/cors.mjs
+      - if: needs.changes.outputs.code == 'true'
+        run: node test/queue.mjs
+      - if: needs.changes.outputs.code == 'true'
+        run: node test/cors.mjs
 
       - uses: actions/cache@v4
+        if: needs.changes.outputs.code == 'true'
         with:
           path: |
             .spago
             ~/.cache/spago-nodejs
           key: spago-${{ hashFiles('spago.lock') }}
-      - run: npm test
+      - if: needs.changes.outputs.code == 'true'
+        run: npm test
 
       # The notes endpoint and `npm run notes`, against Netlify's own local
       # blob server. After `npm test`, which builds the output/ it checks the
       # listing against.
-      - run: node test/notes.mjs
+      - if: needs.changes.outputs.code == 'true'
+        run: node test/notes.mjs
 
   # The browser suites, in parallel. They are about 370 s of work, measured
   # one at a time, and each shard repeats about 35 s of install and build, so
@@ -112,6 +172,8 @@ jobs:
   # ubuntu-latest ships Chrome at /usr/bin/google-chrome, which the harness
   # already looks for.
   browser-shard:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     name: browser-shard ${{ matrix.group }}
     runs-on: ubuntu-latest
     strategy:
@@ -149,14 +211,20 @@ jobs:
 
   # The check that branch protection and `deploy` require. It runs whatever the
   # shards did (`always`), and passes only if every one of them passed: a
-  # skipped or cancelled shard is not a pass.
+  # skipped or cancelled shard is not a pass, except when `changes` skipped them
+  # on purpose, which is the one case where `success` is the right answer.
   browser:
-    needs: browser-shard
+    needs: [changes, browser-shard]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "browser-shard: $RESULT"
-          [ "$RESULT" = "success" ]
+          echo "code changed: $CODE; browser-shard: $RESULT"
+          if [ "$CODE" = "false" ]; then
+            [ "$RESULT" = "skipped" ]
+          else
+            [ "$RESULT" = "success" ]
+          fi
         env:
+          CODE: ${{ needs.changes.outputs.code }}
           RESULT: ${{ needs.browser-shard.result }}
