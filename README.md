@@ -28,11 +28,12 @@ npm start        # http://localhost:8000
 | `npm start` | Dev server, rebuilds on change |
 | `npm run build` | Compile and bundle into `public/` |
 | `npm test` | Unit specs — the pure core |
-| `npm run verify` | The paraphrase, sentence and por / para checks, then browser suites against a real Chrome |
+| `npm run verify` | `check-slugs` first, then the IPA, paraphrase, sentence and por / para checks, the node tests and browser suites against a real Chrome |
 | `npm run sync` | Regenerate every data module from its CSV — what CI checks is already done |
 | `npm run sync-deck` | Regenerate the deck module from `data/es-1000.csv` |
 | `npm run sync-verbs` | Regenerate the conjugation module from `data/es-verbs.csv` |
 | `npm run sync-sentences` | Regenerate the shift sentence module from `data/es-sentences.csv` |
+| `npm run check-slugs` | Refuse a changed slug on a word still in the deck, against `origin/main` — `--base <ref>` for another, `--drop-pins` to report and exit zero |
 | `npm run check-verbs` | Print every paradigm that deviates from the regular pattern — the review of the table |
 | `npm run verb-coverage` | Recommend, for every cell, whether it is worth drilling — the input to #27 |
 | `npm run sync-coverage` | Regenerate the coverage module from `data/es-verb-coverage.csv` — the verdicts, not the reasons |
