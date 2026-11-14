@@ -418,7 +418,7 @@ body {
 
 .panel-voice-name::after,
 .panel-accent-name::after {
-  content: "›";
+  content: " ›";
   color: var(--faint);
   font-weight: 400;
 }
