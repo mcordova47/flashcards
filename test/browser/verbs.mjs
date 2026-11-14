@@ -876,4 +876,23 @@ export default async ({ check, open, blobs }) => {
   check("and lists nothing as slipping", await fresh.$(".leeches"), null)
   check("no page errors", fresh.errors, [])
   await fresh.close()
+
+  // Typing is a render per key, and a render once built a whole session for a
+  // button on a screen that was not showing (#190: ~90 ms a key, a third of a
+  // second on a phone). Time is too noisy to assert on a runner, so count
+  // instead: a session is built out of `filter`, and the render of an open
+  // question needs none. Unfixed, six keys made tens of thousands of calls.
+  const typing = await open({ path: "/verbs", key: VERBS })
+  await typing.waitForSelector(".verb-answer")
+  await typing.evaluate(() => {
+    window.__filters = 0
+    const filter = Array.prototype.filter
+    Array.prototype.filter = function (...args) { window.__filters++; return filter.apply(this, args) }
+  })
+  await typing.type(".verb-answer", "abcdef")
+  await wait(100)
+  check("typing in the box builds no session", await typing.evaluate(() => window.__filters) < 500, true)
+  check("and the keys still land", await typing.$eval(".verb-answer", e => e.value), "abcdef")
+  check("no page errors", typing.errors, [])
+  await typing.close()
 }
