@@ -104,6 +104,7 @@ export const VOICES = [
   { name: "Mónica", lang: "es-ES" },
   { name: "Eddy (Spanish (Mexico))", lang: "es-MX" },
   { name: "Paulina", lang: "es-MX" },
+  { name: "Paulina (Enhanced)", lang: "es-MX" },
   { name: "Rocko (Spanish (Mexico))", lang: "es-MX" },
 ]
 

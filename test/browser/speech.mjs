@@ -41,8 +41,10 @@ export default async ({ check, open }) => {
   check("the voice row shows the automatic pick", await page.text(".panel-voice-name"), "Paulina")
 
   await page.tap(".panel-voice")
-  check("cycling moves off a pick that may not work",
-    await page.text(".panel-voice-name"), "Rocko")
+  check("cycling moves off a pick that may not work, and the quality voice reads differently",
+    await page.text(".panel-voice-name"), "Paulina (Enhanced)")
+  await page.tap(".panel-voice")
+  check("then on to the next voice", await page.text(".panel-voice-name"), "Rocko")
   await spokenAtLeast(page, 3)
   check("previewing it with the word that shows the difference",
     (await page.spoken()).at(-1), { text: "gracias", lang: "es-MX", rate: 0.9, voice: "Rocko (Spanish (Mexico))" })

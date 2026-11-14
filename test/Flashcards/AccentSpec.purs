@@ -128,9 +128,25 @@ spec = do
       Accent.nextLocale (Just "es-MX") [] `shouldEqual` Nothing
 
   describe "voice display names" do
-    it "drops the parenthesised region" do
-      Accent.displayName "Eddy (Spanish (Mexico))" `shouldEqual` "Eddy"
+    let
+      shown names = map (Accent.displayName names) names
+
+    it "drops the nested parenthesised region" do
+      Accent.displayName [ "Eddy (Spanish (Mexico))" ] "Eddy (Spanish (Mexico))" `shouldEqual` "Eddy"
 
     it "leaves a plain name alone" do
-      Accent.displayName "Paulina" `shouldEqual` "Paulina"
-      Accent.displayName "(odd)" `shouldEqual` "(odd)"
+      Accent.displayName [ "Paulina" ] "Paulina" `shouldEqual` "Paulina"
+      Accent.displayName [ "(odd)" ] "(odd)" `shouldEqual` "(odd)"
+
+    it "keeps a single-level quality suffix" do
+      Accent.displayName [ "Paulina (Enhanced)" ] "Paulina (Enhanced)" `shouldEqual` "Paulina (Enhanced)"
+
+    it "keeps Paulina and Paulina (Enhanced) distinct" do
+      shown [ "Paulina", "Paulina (Enhanced)" ] `shouldEqual` [ "Paulina", "Paulina (Enhanced)" ]
+
+    it "falls back to full names when stripping would collide" do
+      let names = [ "Eddy (Spanish (Mexico))", "Eddy (Spanish (Spain))", "Mónica" ]
+      shown names `shouldEqual` names
+
+    it "still strips when the stripped name is unique" do
+      shown [ "Eddy (Spanish (Mexico))", "Paulina" ] `shouldEqual` [ "Eddy", "Paulina" ]
