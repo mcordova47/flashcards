@@ -10,6 +10,33 @@ description: Review a pull request in this repository against its own claims. Us
 Read `CONTRIBUTING.md` first, **Prove the claims** especially. This is how to
 apply it to someone else's branch.
 
+## Read what you are reviewing
+
+Before anything else, read all three. Each is something you would otherwise
+review without.
+
+```
+gh pr view <n> --comments
+gh issue view <issue> --comments
+```
+
+- **The pull request and its comments.** The claims are the work, and *how each
+  claim was checked* is in the description. The comments are what has already been
+  raised and what the author answered, so a second pass does not raise it again.
+  `required_conversation_resolution` is on, so an open line thread is blocking the
+  merge. `gh pr view` does not list line comments (`reviewThreads` is not a field
+  of it), so read those with `gh api repos/{owner}/{repo}/pulls/<n>/comments`.
+- **The issue it closes, with `--comments`.** To check the branch does what was
+  asked, and because correcting that issue is yours alone (*Own what is yours*).
+  Corrections live in comments, so the body is the stale half: reading it without
+  them means editing it from the wrong text.
+- **The diff,** from the worktree below and not from `gh pr diff`:
+  `git diff origin/main...HEAD` there shows what the branch changes against its
+  merge base, and you are about to be standing in it anyway.
+
+If `gh issue view` prints nothing (it has done so here, with no error), ask for the
+fields instead: `gh issue view <n> --json title,state,body,comments`.
+
 ## Somewhere to stand
 
 The shared checkout is usually on somebody's branch with their work in it.
@@ -188,6 +215,14 @@ so in a line, with the reason, so nobody raises it again. *I checked this and
 it is fine* is this disposition and is worth saying.
 
 ### Check what the pull request does to its issue
+
+**Ticking the *Done when* boxes is yours, because you verify the claims and you
+are the only one who edits the issue.** The author lists, in the description, each
+box the pull request meets and how it was checked; you confirm each, then tick it
+in the body (`gh issue edit`, which replaces the whole body, so read it first and
+change only the boxes). A box the author asserts and you could not confirm stays
+unticked, with a reason on the issue. Do it when the pull request closes the issue
+as well as when it leaves it open: the closed issue is what a later reader sees.
 
 `Closes` where it finishes the work. A pull request that says `Refs` for an issue
 it mostly finishes is a **finding**, and you decide it: file the remainder as its
