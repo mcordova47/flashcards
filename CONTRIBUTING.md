@@ -6,20 +6,29 @@ changes to it get made.
 
 ## Branch, pull request, merge
 
-`main` is protected: the `data` and `browser` checks must pass, and a branch
-must be up to date with main before it merges. Everything arrives as a pull
-request, which is what lets two pieces of work proceed without silently
-landing on top of each other.
+`main` is protected: the `data` and `browser` checks must pass before a pull
+request merges. Everything arrives as a pull request, which is what lets two
+pieces of work proceed without silently landing on top of each other.
+
+A branch does **not** have to be up to date with `main`. GitHub's "Require
+branches to be up to date before merging" was turned off on 2026-11-14 (#206), so
+a green pull request can land while `main` has moved on. That is the
+maintainer's setting and can be turned back on; nothing here depends on it
+staying off.
 
 The protection does not apply to admins, so the repository owner can still
 push directly. That is an escape hatch and not the workflow — a direct push is
 how two agents end up editing the same file with neither knowing.
 
 CI runs on the pull request, and on `main` afterwards. Those answer different
-questions: the pull request tests the **merge result**, which no branch
-contains, and `main` catches anything that gets in another way. Two branches
-that each pass alone can break together — the drift check especially, since a
-regenerated module is only stale relative to whatever else landed.
+questions: the pull request tests the **merge result** as of the moment the run
+started, which no branch contains, and `main` catches what that run could not
+see. With the up-to-date rule off, that is now the net for two pull requests
+that each pass alone and do not work together: each was tested against a `main`
+that did not yet have the other. The likeliest place is the generated data
+modules and the drift check, which is only stale relative to whatever else
+landed. A red `main` cannot reach production, because the `deploy` workflow
+refuses a commit whose checks have not passed (*Merged is not live*).
 
 Merges are **rebase only** — the pull request's commits are replayed onto main
 one at a time, and no merge commit is made. Squash is turned off on purpose. A
@@ -28,22 +37,23 @@ needed it, and squashing the two welds a change that was provably behaviour
 preserving onto one that was not, which is the distinction the split existed
 to make.
 
-So freshen a branch by rebasing it, not by merging main into it:
+Rebase a branch when it conflicts with `main`, or when you want to test against
+the current `main` before it lands. A merge no longer requires it:
 
 ```
 git fetch origin && git rebase origin/main
 git push --force-with-lease
 ```
 
-`git merge main` satisfies the up-to-date rule too, but the merge commit it
-makes says nothing and the rebase drops it on the way in regardless. Use
+Rebase rather than merging main into the branch: the merge commit it makes says
+nothing and the rebase-only merge drops it on the way in regardless. Use
 `--force-with-lease` and not `--force`: it refuses when the remote moved under
 you, which is exactly the case worth catching. That is a different rule from
 the worktree one below — force-pushing your own pull request branch is
 routine, `git worktree remove --force` is not.
 
 Auto-merge is on, so a pull request can be queued to land the moment its
-checks come back green:
+checks come back green (it waits for `data` and `browser`, not for a rebase):
 
 ```
 gh pr merge <n> --rebase --auto
