@@ -21,7 +21,7 @@ fingerprint = "4a37f1e7b883"
 -- | introduced in.
 deck :: Array Card
 deck =
-  [ { rank: Rank 1, slug: Slug "yo", english: "I", word: "yo", example: "" }
+  [ { rank: Rank 1, slug: Slug "yo-x", english: "I", word: "yo", example: "" }
   , { rank: Rank 2, slug: Slug "querer", english: "to want", word: "querer", example: "" }
   , { rank: Rank 3, slug: Slug "este", english: "this", word: "este", example: "" }
   , { rank: Rank 4, slug: Slug "sí", english: "yes", word: "sí", example: "" }
@@ -1029,7 +1029,7 @@ pronunciations :: Array Dialect
 pronunciations =
   [ { tag: "es-MX"
     , entries:
-        [ { slug: Slug "yo", ipa: "ʝo" }
+        [ { slug: Slug "yo-x", ipa: "ʝo" }
         , { slug: Slug "querer", ipa: "keˈɾeɾ" }
         , { slug: Slug "este", ipa: "ˈeste" }
         , { slug: Slug "sí", ipa: "si" }
