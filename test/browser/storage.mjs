@@ -12,7 +12,7 @@ export default async ({ check, open }) => {
   await page.waitForSelector(".prompt")
   for (let i = 0; i < 5; i++) { await page.tap(".card"); await page.tap(".got-it") }
   await page.tap(".panel-toggle")
-  check("the panel reports what has been seen", await page.text(".panel-note"), "5 of 1000 words seen")
+  check("the panel reports what has been seen", await page.text(".panel-note"), "PLANTED FAILURE")
   await page.dismiss()
 
   const saved = await page.stored()
