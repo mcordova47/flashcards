@@ -72,7 +72,7 @@ export default async ({ check, open }) => {
   const german = await open()
   await german.waitForSelector(".prompt")
   await german.tap(".panel-toggle")
-  ;(await german.byText(".lang", "German")).click()
+  await german.select(".setting-select", "de")
   await wait(600)
   await german.waitForSelector(".prompt")
   check("with German chosen, Grammar is still there but off",
@@ -92,7 +92,7 @@ export default async ({ check, open }) => {
 
   // And choosing Spanish again gives the link back.
   await german.tap(".panel-toggle")
-  ;(await german.byText(".lang", "Spanish")).click()
+  await german.select(".setting-select", "es")
   await wait(600)
   check("Spanish brings Grammar back as a link",
     (await tabs(german)).map(t => [t.label, t.tag, t.off]), [["Vocab", "SPAN", false], ["Grammar", "A", false]])

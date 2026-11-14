@@ -26,6 +26,7 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (unwrap)
 import Data.Time.Duration (Milliseconds(..))
 import Elmish (Dispatch, ReactElement, (<|))
+import Elmish.HTML.Events as E
 import Elmish.HTML.Styled as H
 import Flashcards.Accent as Accent
 import Flashcards.Language as Language
@@ -39,9 +40,10 @@ view opened state dispatch =
   H.fragment
   [ H.div_ "backdrop" { onClick: dispatch <| TogglePanel } H.empty
   , H.div "panel"
-    [ languagePicker
+    [ languageRow
     , accentPicker
     , voicePicker
+    , H.div "panel-rule" H.empty
     , H.div "panel-group"
       [ H.button_ "panel-item" { onClick: dispatch <| ShowStats } "See your progress"
       , H.p "panel-note" $
@@ -91,15 +93,31 @@ view opened state dispatch =
         " · last synced " <> Stats.describeDuration (elapsed at opened) <> " ago"
       _ -> ""
 
+    -- A setting, not a toggle: the row looks like the voice row, and a tap opens
+    -- the device's own picker. Cycling in place was rejected because the tap is
+    -- blind (you see where you are, not where you would land) and it changes
+    -- the whole deck and rebuilds the session; this takes two deliberate taps
+    -- and scales to any number of languages.
+    --
+    -- The `select` is laid invisibly over the row, so the whole row opens the
+    -- picker, which a `label` alone does not do on a phone. What the row says
+    -- is drawn from state rather than read back from the select, so the two
+    -- cannot disagree about which language this is.
+    --
     -- Only worth showing once there is more than one deck to switch between.
-    languagePicker
+    languageRow
       | Array.length Language.all < 2 = H.empty
       | otherwise =
-          H.div "segmented langs" $ Language.all <#> \l ->
-            H.button_
-              ("segment lang" <> if l.code == state.language.code then " chosen" else "")
-              { key: l.code, onClick: dispatch <| ChooseLanguage l.code }
-              l.name
+          H.div "setting"
+          [ H.span "setting-label" "Language"
+          , H.span "setting-value" state.language.name
+          , H.select_ "setting-select"
+              { value: state.language.code
+              , "aria-label": "Language"
+              , onChange: dispatch <| ChooseLanguage <<< E.selectSelectedValue
+              } $
+              Language.all <#> \l -> H.option_ "" { key: l.code, value: l.code } l.name
+          ]
 
     available = Accent.locales state.voices
 
