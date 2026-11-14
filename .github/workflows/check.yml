@@ -111,9 +111,10 @@ jobs:
       - name: No slug changed on a word still in the deck
         if: needs.changes.outputs.code == 'true' && github.event_name == 'pull_request'
         run: |
-          git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
-          node tools/check-slugs.mjs --base "origin/${{ github.base_ref }}" $FLAGS
+          git fetch --no-tags --depth=1 origin "$BASE_REF"
+          node tools/check-slugs.mjs --base "origin/$BASE_REF" $FLAGS
         env:
+          BASE_REF: ${{ github.base_ref }}
           FLAGS: ${{ contains(github.event.pull_request.labels.*.name, 'slug-change') && '--drop-pins' || '' }}
 
       # Structural only: deviations from the regular pattern are its output,
