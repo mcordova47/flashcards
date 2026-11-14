@@ -46,8 +46,21 @@ try {
 let lostAny = false
 for (const lang of LANGUAGES) {
   let previous
+  // Only a file the base does not have may skip. Any other failure is a git
+  // error, and a check that passes on one proves nothing.
+  try { git("cat-file", "-e", `${base}:${lang.csv}`) }
+  catch (e) {
+    if (!/does not exist|exists on disk, but not in/i.test(String(e.stderr))) {
+      console.error(`x could not read ${lang.csv} on ${base}: ${String(e.stderr || e.message).trim()}`)
+      process.exit(1)
+    }
+    console.log(`[${lang.code}] ${lang.csv} is not on ${base}; nothing to compare`); continue
+  }
   try { previous = git("show", `${base}:${lang.csv}`) }
-  catch { console.log(`[${lang.code}] ${lang.csv} is not on ${base}; nothing to compare`); continue }
+  catch (e) {
+    console.error(`x could not read ${lang.csv} on ${base}: ${String(e.stderr || e.message).trim()}`)
+    process.exit(1)
+  }
 
   const before = cardsIn(previous, lang.column)
   const after = cardsIn(fs.readFileSync(lang.csv, "utf-8"), lang.column)
