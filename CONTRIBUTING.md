@@ -77,10 +77,16 @@ git push origin main:production
 
 That is the one deploy, and it should be a fast-forward. **No agent pushes
 `production` or runs the `deploy` workflow**, which is the same push. The reason
-is cost: a production deploy draws on a monthly credit pool that every site on
-the team shares, and when it runs out they all pause. Deploy previews are
-understood not to draw on it (not yet confirmed against the usage page), so they
-stay on, and a change to look at on a phone is looked at there.
+is cost: every production build draws on the team's monthly allowance of 300
+build minutes, which all of its sites share. A snapshot of Netlify's usage page
+(the team is badged Free and Legacy; read 2026-11-14): 7 of 300 minutes used so
+far in November, 80 in September and 98 in October, before the most frequently
+deployed projects were moved to a `production` branch. What happens when the
+allowance runs out has not been checked against anything about the legacy plan,
+so do not assume it. Whether deploy previews count against it is also not
+confirmed: the usage page counts builds per project and does not separate them
+from production builds, so it cannot settle the question. They stay on for now,
+and a change to look at on a phone is looked at there.
 
 What follows from it:
 
