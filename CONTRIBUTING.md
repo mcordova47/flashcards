@@ -306,6 +306,7 @@ because it is computed.
 | `parked` | not now. The issue says what would change that |
 | `needs-you` | waiting on the maintainer: a decision, or something only they can do |
 | `blocked` | waiting on another issue |
+| `quick-win` | small and self-contained: one short sitting, no design to settle first |
 
 - **Every open issue has exactly one of** `priority: next|soon|later` **or**
   `parked`. Whoever files an issue sets it. One with neither is listed as
@@ -316,6 +317,9 @@ because it is computed.
 - **`blocked` names its blocker** in a comment, and is removed when that is
   decided.
 - **A parked issue says what would change that.** Otherwise it is only ignored.
+- **`quick-win` is about size, not priority,** and sits alongside a tier. It is
+  not `good first issue`, which is about how much of the codebase a newcomer
+  has to know.
 - Closed issues keep their labels, which does no harm.
 
 When asked what to work on, run it and take the first issue under `next` that is
