@@ -614,8 +614,8 @@ is zeroes and `null`.
 
 Progress goes in and out as the string the blob holds, and `null` means none
 yet (the `GET` was a 404). Everything throws on a bad language, slug or
-payload. Self-graded only: the cards are flipped and judged by the player, and
-nothing checks a typed answer.
+payload. The cards are self-graded: they are flipped and judged by the player,
+and nothing checks a typed answer. The verb drills, below, are checked.
 
 A study loop is `GET`, `session`, then for each answer `grade`, `GET`,
 `merge`, `PUT`. The merge on every write is what keeps an answer given in this
@@ -668,9 +668,69 @@ request as the export, and says so.
 Grading, for whoever changes it: the grade-and-save step is one function,
 `Deck.gradeCard`, which both `Core.grade` and the cards page's `Answered`
 call, and `Deck.graduation` is the canonical-gloss rule it applies. There is
-no second copy to keep in step. The drills (`Pages/Verbs.purs`) apply
-`Scheduler.applyGrade` directly with `RecognitionOnly`, which is the other
-place a grade is applied.
+no second copy to keep in step. The drills' grade is the other one,
+`Curriculum.gradeDrill`: `Scheduler.applyGrade` with `RecognitionOnly`, called by
+both `Pages/Verbs.purs` and `Core.drillGrade`.
+
+#### The verb drills
+
+The drills (`/verbs`) are a namespace of their own: their progress is a blob under
+`core.drillNamespace` (`"verbs"`) in the place where the cards have a language, so
+`GET` and `PUT /api/progress/<key>/verbs`, and the same key. These calls have no
+`language` argument, because the drills are Spanish. A card's progress is refused
+by the drills and the reverse (the saved JSON carries its namespace), so the two
+cannot be mixed up.
+
+| | |
+| --- | --- |
+| `core.drillSession(progress, now?)` | the slugs to drill, in the order the drills page asks them |
+| `core.drillQuestion(progress, slug)` | `{ slug, kind, label, prompt, hint, before, after, options }`; no answer in it |
+| `core.drillCheck(progress, slug, given)` | `{ verdict, gotIt, expected, note, rubric }`: what was typed (or the option tapped) against the answer |
+| `core.drillGrade(progress, slug, gotIt, now?)` | the progress after one answer |
+| `core.drillRequeue(progress, slug, queue, position?)` | the queue with a missed drill put back |
+| `core.drillMerge(mine, theirs)` | two histories as one |
+| `core.drillEmpty()`, `core.drillNamespace` | |
+
+`kind` is `"checked"` (a box, with `before` and `after` round it), `"choice"` (tap
+one of `options`, shown in a gap between `before` and `after`) or `"selfGraded"`
+(the paraphrase: read, reveal, judge). `drillCheck` is `Exercise.matches`, so case,
+surrounding space and a final `.`, `!` or `?` are ignored and a missing accent
+counts, as `verdict: "unaccented"`, the same as in the app. `gotIt` is how the app
+grades it. It, and `verdict`, are `null` for a `"selfGraded"` question, which the
+core cannot judge: `expected` is then the model answer and `rubric` the reasons to
+judge it against, and the player decides what to pass to `drillGrade`. `expected`
+is only in `drillCheck`'s answer, so a client asks before it can know.
+
+Which exercise a drill asks is a function of its progress, and it moves when a grade
+is recorded. Call `drillQuestion` and `drillCheck` with the progress as it stood
+**before** `drillGrade`, and keep the question across the grade, as the page does.
+
+A miss is requeued in the drills, as for the cards, but not by `requeue`: the page
+calls `Scheduler.requeueBy` with the drill's family (its verb) so that the miss does
+not land beside another of the same verb (#64). `drillRequeue` is that, and needs
+the progress **after** `drillGrade`, because the next sentence it asks is decided by
+the grade. `queue` has the drill just answered at `position` (0 if it is still first).
+
+A drill session is `GET`, `drillSession`, then for each: `drillQuestion`,
+`drillCheck`, `drillGrade`, `drillRequeue` on a miss; then `GET`, `drillMerge`, `PUT`,
+as above. The drills page shows it after its next sync.
+
+```js
+const key = localStorage.getItem("key")
+const url = `https://palabras.mcord.dev/api/progress/${key}/${core.drillNamespace}`
+let progress = (await fetch(url).then(r => (r.ok ? r.text() : null)))
+let queue = core.drillSession(progress)
+const q = core.drillQuestion(progress, queue[0])      // show q.prompt, q.before, a box, q.after
+const r = core.drillCheck(progress, queue[0], "quería") // r.verdict, r.expected, r.note
+progress = core.drillGrade(progress, queue[0], r.gotIt)
+if (!r.gotIt) queue = core.drillRequeue(progress, queue[0], queue)
+queue = queue.slice(1)
+progress = core.drillMerge(progress, await fetch(url).then(r => (r.ok ? r.text() : null)))
+await fetch(url, { method: "PUT", body: progress })
+```
+
+The drills' grade is `Curriculum.gradeDrill`, which the drills page calls too. It is
+not `Deck.gradeCard`: drills never graduate and their slugs are not cards.
 
 `core.js` is a static, cacheable file, so a game that caches it and the last
 blob has what it needs to study without a connection. Whether it does depends

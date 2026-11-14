@@ -9,20 +9,23 @@ import Data.Array as Array
 import Data.DateTime.Instant (Instant, instant)
 import Data.Either (Either(..))
 import Data.Int (toNumber)
+import Data.Array.NonEmpty as NonEmpty
 import Data.Maybe (Maybe(..), fromJust, fromMaybe, isJust)
 import Data.Time.Duration (Milliseconds(..))
 import Data.Tuple (Tuple(..))
 import Flashcards.Core as Core
 import Flashcards.Deck as Deck
+import Flashcards.Exercise (Answer(..), Verdict(..), matches)
 import Flashcards.Language as Language
 import Flashcards.Payload as Payload
 import Flashcards.Scheduler as Scheduler
 import Flashcards.Stats as Stats
-import Flashcards.Types.Card (Card, slugToString)
+import Flashcards.Types.Card (Card, Slug(..), slugToString)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Grade (Grade(..))
 import Flashcards.Types.Progress (Progress)
 import Flashcards.Types.Progress as Progress
+import Flashcards.Verbs.Curriculum as Curriculum
 import Flashcards.Types.Pronunciation as Pronunciation
 import Partial.Unsafe (unsafePartial)
 import Test.Spec (Spec, describe, it)
@@ -184,3 +187,64 @@ spec = do
 
     it "refuses a language there is not, as the rest do" do
       (Core.ipa "xx" "es-MX" "yo").error `shouldEqual` "No such language: xx"
+
+  describe "the core's drills, against what the drills page does" do
+    let
+      parsedDrills raw = case Payload.parse Curriculum.namespace Curriculum.fingerprint (const Nothing) raw of
+        Right p -> p
+        Left _ -> Progress.empty
+
+      -- By hand, as the page's Graded step was before it was lifted: the
+      -- scheduler, with no graduation, and not `Curriculum.gradeDrill` or
+      -- anything else the core calls.
+      drillByHand slug grade n = Array.foldl step Progress.empty (Array.range 1 n)
+        where
+        step progress i =
+          Progress.insert slug
+            (Scheduler.applyGrade slug grade (at (start + toNumber i * day)) Scheduler.RecognitionOnly (Progress.lookup slug progress))
+            progress
+
+      drillThroughCore slug gotIt n = parsedDrills $ Array.foldl
+        (\raw i -> (Core.drillGrade raw (slugToString slug) gotIt (start + toNumber i * day)).progress)
+        (Core.drillEmpty)
+        (Array.range 1 n)
+
+      slug = Slug "querer.imperfect"
+
+    it "applies a grade as Scheduler.applyGrade does with RecognitionOnly, right or wrong, over a run" do
+      Progress.entries (drillThroughCore slug true 12) `shouldEqual` Progress.entries (drillByHand slug GotIt 12)
+      Progress.entries (drillThroughCore slug false 3) `shouldEqual` Progress.entries (drillByHand slug Again 3)
+
+    it "never graduates a drill to production" do
+      (Progress.lookup slug (drillThroughCore slug true 12) <#> _.direction) `shouldEqual` Just Recognition
+
+    it "refuses a card as a drill, and a drill as a card" do
+      [ (Core.drillGrade Core.drillEmpty "yo" true start).error
+      , (Core.grade "es" "" "querer.imperfect" true start).error
+      ] `shouldEqual` [ "No such drill: yo", "No such card: querer.imperfect" ]
+
+    it "builds the session the page builds" do
+      (Core.drillSession "" start).slugs `shouldEqual` map slugToString (Curriculum.session Progress.empty (at start))
+
+    it "checks every drill as Exercise.matches does, and gives what the page would grade" do
+      let
+        verdictName = case _ of
+          Exact -> "exact"
+          Unaccented -> "unaccented"
+          Wrong -> "wrong"
+        expectedOf pool = case (NonEmpty.head pool.exercises).answer of
+          Checked { expected } -> Just expected
+          Choice { expected } -> Just expected
+          SelfGraded _ -> Nothing
+        -- The progress is empty, so the exercise asked is each pool's first.
+        results = Curriculum.items # Array.mapMaybe \pool -> expectedOf pool <#> \expected ->
+          map (\given -> { got: Core.drillCheck "" (slugToString pool.slug) given, want: matches expected given })
+            [ expected, expected <> ".", "x" ]
+      -- A choice refuses what is not an option, so only the first two are
+      -- compared for those: the error is the point, not a verdict.
+      Array.all
+        ( Array.all \r -> r.got.error /= "" ||
+            (r.got.verdict == verdictName r.want && r.got.gotIt == (r.want /= Wrong) && r.got.graded)
+        )
+        results
+        `shouldEqual` true
