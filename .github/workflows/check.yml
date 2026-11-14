@@ -112,6 +112,7 @@ jobs:
   # ubuntu-latest ships Chrome at /usr/bin/google-chrome, which the harness
   # already looks for.
   browser-shard:
+    name: browser-shard ${{ matrix.group }}
     runs-on: ubuntu-latest
     strategy:
       # Let every shard report, so one red suite does not hide another.
