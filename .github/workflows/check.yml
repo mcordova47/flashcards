@@ -7,7 +7,9 @@ name: check
 # result*, which is the thing being asked about and which no branch contains -
 # two branches that each pass alone can break together, and the drift check is
 # exactly the kind that would only notice on the merge commit. `push` on main
-# keeps the safety net for anything that lands without a pull request.
+# is the net for anything that lands without a pull request, and, since a branch
+# no longer has to be up to date to merge (#206), for two pull requests that each
+# passed against a `main` that did not yet have the other.
 #
 # Branches are left to their pull request rather than run on every push, or
 # every run happens twice.
@@ -90,10 +92,41 @@ jobs:
       # listing against.
       - run: node test/notes.mjs
 
-  # About three minutes. ubuntu-latest ships Chrome at /usr/bin/google-chrome,
-  # which the harness already looks for.
-  browser:
+  # The browser suites, in parallel. They are about 370 s of work, measured
+  # one at a time, and each shard repeats about 35 s of install and build, so
+  # four shards of roughly equal length are worth about 130 s of wall time
+  # against 416 s for one job. More than four buys little.
+  #
+  # These jobs are NOT the `browser` check. Branch protection and the `deploy`
+  # workflow both read a check run named exactly `browser` (deploy refuses
+  # unless it sees `browser=success data=success`), so the shards are named
+  # `browser-shard` and the job after them is the one called `browser`.
+  #
+  # The first three shards name their suites; the fourth takes everything those
+  # do not (`--not`), so a suite added to test/browser/run.mjs runs somewhere
+  # without anyone having to remember to list it here. Grouped by measured time
+  # (seconds, locally, one at a time): progress 83 + offline 4 + speech 10;
+  # verbs 68 + study 12 + keys 15; milestone 45 + sync 40 + production 15; and
+  # the rest: notes 49 + language 16 + tabs 17 + storage 11.
+  #
+  # ubuntu-latest ships Chrome at /usr/bin/google-chrome, which the harness
+  # already looks for.
+  browser-shard:
     runs-on: ubuntu-latest
+    strategy:
+      # Let every shard report, so one red suite does not hide another.
+      fail-fast: false
+      matrix:
+        include:
+          - group: 1
+            suites: progress offline speech
+            core: true
+          - group: 2
+            suites: verbs study keys
+          - group: 3
+            suites: milestone sync production
+          - group: 4
+            suites: --not progress offline speech verbs study keys milestone sync production
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -108,6 +141,21 @@ jobs:
             ~/.cache/spago-nodejs
           key: spago-${{ hashFiles('spago.lock') }}
       - run: npm run build
-      # The contract of the built core.js, which needs the build.
-      - run: node test/core.mjs
-      - run: node test/browser/run.mjs
+      # The contract of the built core.js, which needs the build. Once, not per shard.
+      - if: matrix.core
+        run: node test/core.mjs
+      - run: node test/browser/run.mjs ${{ matrix.suites }}
+
+  # The check that branch protection and `deploy` require. It runs whatever the
+  # shards did (`always`), and passes only if every one of them passed: a
+  # skipped or cancelled shard is not a pass.
+  browser:
+    needs: browser-shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "browser-shard: $RESULT"
+          [ "$RESULT" = "success" ]
+        env:
+          RESULT: ${{ needs.browser-shard.result }}

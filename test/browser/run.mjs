@@ -2,6 +2,12 @@
 //
 //   npm run verify              every suite
 //   npm run verify -- speech    just the ones matching
+//   node test/browser/run.mjs a b       exactly those suites, by file name
+//   node test/browser/run.mjs --not a b every suite except those
+//
+// The last two are for CI, which runs the suites in parallel jobs. Its last
+// shard says what the others are and takes the rest with `--not`, so a suite
+// added here lands in a shard without anyone having to remember to list it.
 //
 import { run } from "./harness.mjs"
 import * as study from "./study.mjs"
@@ -36,13 +42,24 @@ const suites = [
   ["tabs", tabs],
 ]
 
-const filter = process.argv[2]?.toLowerCase()
-const chosen = filter
-  ? suites.filter(([key, s]) => key.includes(filter) || s.name.toLowerCase().includes(filter))
+const args = process.argv.slice(2)
+const invert = args[0] === "--not"
+const filters = (invert ? args.slice(1) : args).map(f => f.toLowerCase())
+// One plain filter keeps the old loose match, by file or by title. Several, or
+// `--not`, are exact file names: "progress" is also in the title of the sync
+// suite, and a shard that quietly ran it twice would be the slow one.
+const loose = !invert && filters.length === 1
+const matches = ([key, s], f) =>
+  loose ? key.includes(f) || s.name.toLowerCase().includes(f) : key === f
+const chosen = filters.length
+  ? suites.filter(entry => filters.some(f => matches(entry, f)) !== invert)
   : suites
 
-if (!chosen.length) {
-  console.error(`No suite matching "${process.argv[2]}". Available:`)
+// Every filter has to find something, or a typo in a shard runs less than it
+// was meant to and says nothing.
+const unmatched = filters.filter(f => !suites.some(entry => matches(entry, f)))
+if (unmatched.length || !chosen.length) {
+  console.error(`No suite matching "${unmatched.join('", "') || args.join(" ")}". Available:`)
   for (const [key, s] of suites) console.error(`  ${key.padEnd(12)} ${s.name}`)
   process.exit(1)
 }
