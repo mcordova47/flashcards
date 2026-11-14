@@ -433,16 +433,72 @@ view state dispatch =
     ]
   , case state.shown of
       Nothing ->
-        H.div "done-body"
-        [ H.h1 "done-title" "Verbs"
-        , H.p "done-stats" $
-            if not state.loaded then ""
-            else if state.got + state.again == 0 then caughtUp
-            else tally
-        , movedLine
-        , nextLine
-        , anotherButton
-        ]
+        -- Everything the done screen works out is built here, and not in the
+        -- `where` below: those bindings are strict, so they ran on every render,
+        -- and `canStart` builds a whole session. Each key typed in the answer box
+        -- is a render. See #190.
+        let
+          waitFor = do
+            now <- state.at
+            Stats.describeDuration <$> Stats.nextDueIn now (map _.slug items) state.progress
+
+          -- Arrived with nothing to do. Either something is coming, or the drills
+          -- have never been opened and there is nothing scheduled at all.
+          caughtUp = case waitFor of
+            Just wait -> "Nothing due for another " <> wait <> "."
+            Nothing -> "Nothing left to drill."
+
+          -- As on the cards, and for their reason: announcing the next one while a
+          -- dozen are still waiting would be a lie of omission. After a session that
+          -- emptied the queue, only when nothing else is due yet.
+          nextLine = case waitFor, state.at of
+            Just wait, Just now
+              | state.got + state.again > 0
+              , dueNow now == 0
+              , not $ canStart now ->
+                  H.p "next-due" $ "Next review in " <> wait
+            _, _ -> H.empty
+
+          -- Offered whenever a session could be built, which is what pressing it
+          -- does: new items count as well as reviews, and `dueNow` counts only items
+          -- already seen, so it alone would hide the button from someone still
+          -- working through the bank. The count is of reviews, so is left out when
+          -- there are none rather than saying 0 due beside a button that works.
+          anotherButton = case state.at of
+            Just now | canStart now ->
+              H.div "controls"
+                [ H.button_ "grade got-it" { onClick: dispatch <| StartAnother } $
+                    "Start another" <> if dueNow now > 0 then " · " <> show (dueNow now) <> " due" else ""
+                ]
+            _ -> H.empty
+
+          -- What pressing the button would do, so that it is offered exactly when
+          -- there is something for it to start, and the line above is not.
+          canStart now = not $ Array.null $ Curriculum.session state.progress now
+
+          dueNow now = (Stats.overview now (map _.slug items) state.progress).dueNow
+
+          -- What the session did to the ladder, where it did anything. A count of
+          -- items and not a share of anything, for the reason the sheet gives.
+          movedLine = case Moved.describe (Moved.moved state.before state.progress) of
+            Just said | state.got + state.again > 0 -> H.p "moved" said
+            _ -> H.empty
+
+          tally =
+            Stats.plural (state.got + state.again) "exercise" <> " · "
+              <> show state.got <> " got it · "
+              <> show state.again <> " again"
+        in
+          H.div "done-body"
+          [ H.h1 "done-title" "Verbs"
+          , H.p "done-stats" $
+              if not state.loaded then ""
+              else if state.got + state.again == 0 then caughtUp
+              else tally
+          , movedLine
+          , nextLine
+          , anotherButton
+          ]
       Just exercise ->
         H.div "done-body" $ case exercise.answer of
           Checked { expected, frame, note } ->
@@ -576,57 +632,6 @@ view state dispatch =
     checkedKey = case state.phase of
       Compared _ -> "-checked"
       _ -> ""
-
-    waitFor = do
-      now <- state.at
-      Stats.describeDuration <$> Stats.nextDueIn now (map _.slug items) state.progress
-
-    -- Arrived with nothing to do. Either something is coming, or the drills
-    -- have never been opened and there is nothing scheduled at all.
-    caughtUp = case waitFor of
-      Just wait -> "Nothing due for another " <> wait <> "."
-      Nothing -> "Nothing left to drill."
-
-    -- As on the cards, and for their reason: announcing the next one while a
-    -- dozen are still waiting would be a lie of omission. After a session that
-    -- emptied the queue, only when nothing else is due yet.
-    nextLine = case waitFor, state.at of
-      Just wait, Just now
-        | state.got + state.again > 0
-        , dueNow now == 0
-        , not $ canStart now ->
-            H.p "next-due" $ "Next review in " <> wait
-      _, _ -> H.empty
-
-    -- Offered whenever a session could be built, which is what pressing it
-    -- does: new items count as well as reviews, and `dueNow` counts only items
-    -- already seen, so it alone would hide the button from someone still
-    -- working through the bank. The count is of reviews, so is left out when
-    -- there are none rather than saying 0 due beside a button that works.
-    anotherButton = case state.at of
-      Just now | canStart now ->
-        H.div "controls"
-          [ H.button_ "grade got-it" { onClick: dispatch <| StartAnother } $
-              "Start another" <> if dueNow now > 0 then " · " <> show (dueNow now) <> " due" else ""
-          ]
-      _ -> H.empty
-
-    -- What pressing the button would do, so that it is offered exactly when
-    -- there is something for it to start, and the line above is not.
-    canStart now = not $ Array.null $ Curriculum.session state.progress now
-
-    dueNow now = (Stats.overview now (map _.slug items) state.progress).dueNow
-
-    -- What the session did to the ladder, where it did anything. A count of
-    -- items and not a share of anything, for the reason the sheet gives.
-    movedLine = case Moved.describe (Moved.moved state.before state.progress) of
-      Just said | state.got + state.again > 0 -> H.p "moved" said
-      _ -> H.empty
-
-    tally =
-      Stats.plural (state.got + state.again) "exercise" <> " · "
-        <> show state.got <> " got it · "
-        <> show state.again <> " again"
 
     controls = case state.phase of
       Compared _ ->
