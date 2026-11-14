@@ -98,14 +98,22 @@ merged is not live, and moving it is the maintainer's, in batches
   reason. A bare "left undone" is a loose end nobody will pick up, because
   nothing happens after a merge unless someone coordinates it
 - **for each claim, how you checked it**
+- **the issue's *Done when* list, box by box:** each one the pull request meets,
+  with how you checked it, and each one it does not, with why (descoped,
+  superseded, or the wrong criterion). You **list** them and do not tick them: the
+  body is not yours to edit (*Before you write anything*), and the reviewer, who
+  confirms each one, ticks the ones it can and says on the issue why it left the
+  rest (`/review`, *Check what the pull request does to its issue*)
 
 **Say how the pull request stands to its issue.** If it finishes what the issue
 asks, the description says `Closes #n`. If it finishes only part, **it still
 closes the issue, and what is left becomes its own issue**, linked from the
 description, so that no issue holds both what is done and what is not. `Refs` is
 for an **umbrella** that still has open sub-issues. If an issue must stay open for
-some other reason, tick the boxes the pull request met and strike or reword the
-rest, so that nobody has to repeat the audit to learn what is left.
+some other reason, say in the description which boxes the pull request met and
+which it did not, and why, so that the reviewer can tick the first and say so on
+the issue for the rest. Nobody should have to repeat the audit to learn what is
+left.
 
 Tell the maintainer afterwards which issues you filed, with numbers and titles, in
 the one report *Have it reviewed* describes, not a message of its own.

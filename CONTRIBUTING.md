@@ -379,6 +379,13 @@ maintainer which issues it filed.
 **A pull request closes what it finishes.** One that finishes only part of an
 issue still says `Closes`, and files what is left as an issue of its own, so that
 no issue holds both what is done and what is not. `Refs` is for an umbrella with
-open sub-issues. An issue that stays open for any other reason has the boxes the
-pull request met ticked, so that the next reader does not have to repeat the audit
-to learn what remains.
+open sub-issues.
+
+**A pull request reconciles the issue's *Done when* list**, whether it closes
+the issue or not. The author lists each box it meets, with how it was checked, and
+each it does not, with why, in the description. The reviewer confirms each, ticks
+the ones it can, and says on the issue why it left any unticked. The author does
+not edit the issue body, and ticking is an edit, so it is the reviewer's.
+Otherwise a closed issue with empty boxes is indistinguishable from an abandoned
+one, and an open one cannot be read without repeating the audit to learn what
+remains.
