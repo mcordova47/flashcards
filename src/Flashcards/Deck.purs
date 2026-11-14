@@ -6,6 +6,8 @@ module Flashcards.Deck
   , answersFor
   , card
   , demoteIneligible
+  , gradeCard
+  , graduation
   , index
   , isCanonical
   , slugAt
@@ -20,7 +22,9 @@ import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Tuple (fst, snd)
 import Data.Tuple.Nested (type (/\), (/\))
-import Flashcards.Scheduler (graduationBox)
+import Data.DateTime.Instant (Instant)
+import Flashcards.Scheduler (Graduation(..), applyGrade, graduationBox)
+import Flashcards.Types.Grade (Grade)
 import Flashcards.Types.Card (Card, Rank, Slug)
 import Flashcards.Types.Direction (Direction(..))
 import Flashcards.Types.Progress (CardProgress, Progress)
@@ -66,6 +70,27 @@ answersFor english = fromMaybe [] <<< Map.lookup english <<< _.answers
 -- | `Flashcards.Scheduler.Graduation`.
 isCanonical :: Card -> Index -> Boolean
 isCanonical c = (_ == Just c.word) <<< Array.head <<< answersFor c.english
+
+-- | What a card is allowed to do when it is answered: graduate if it carries
+-- | the production question for its English side, stay a recognition card if
+-- | not. The one place the rule is applied, so that the cards page, the
+-- | progress page's forecast and `Flashcards.Core` cannot each have their own
+-- | (#173).
+graduation :: Card -> Index -> Graduation
+graduation c idx = if isCanonical c idx then MayGraduate else RecognitionOnly
+
+-- | One answer applied to the progress: `Scheduler.applyGrade` with the
+-- | card's own `graduation`. The grade-and-save step of the cards page
+-- | (`Study.purs`, `Answered`) and of `Flashcards.Core.grade` both. A slug the
+-- | deck does not have is recognition only; `Core` refuses one before it gets
+-- | here, and the page cannot be handed one.
+gradeCard :: Index -> Slug -> Grade -> Instant -> Progress -> Progress
+gradeCard idx slug grade now progress =
+  Progress.insert slug
+    (applyGrade slug grade now allowed (Progress.lookup slug progress))
+    progress
+  where
+  allowed = maybe RecognitionOnly (\c -> graduation c idx) (card slug idx)
 
 -- | The slug of the card standing at a rank, which is all that placing a
 -- | payload written before v5 needs from a deck. Handed to

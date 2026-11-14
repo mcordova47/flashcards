@@ -188,16 +188,9 @@ update state = case _ of
         let
           countOf g = if grade == g then 1 else 0
 
-          -- Only the card that carries the production question for its
-          -- English side may graduate; see `Deck.isCanonical`.
-          allowed = case DeckIndex.card slug state.index of
-            Just c | DeckIndex.isCanonical c state.index -> Scheduler.MayGraduate
-            _ -> Scheduler.RecognitionOnly
-
-          progress =
-            Progress.insert slug
-              (Scheduler.applyGrade slug grade now allowed $ Progress.lookup slug state.progress)
-              state.progress
+          -- The grade-and-save step is `Deck.gradeCard`, shared with
+          -- `Core.grade`; this page adds only the screen.
+          progress = DeckIndex.gradeCard state.index slug grade now state.progress
 
           -- Session-local either way: looping on the ones you keep missing is
           -- most of what a drill is for.
