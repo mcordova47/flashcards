@@ -121,6 +121,8 @@ view opened state dispatch =
 
     available = Accent.locales state.voices
 
+    voiceNames = Accent.voicesIn (fromMaybe "" state.accent) state.voices
+
     -- Nothing to choose between when the device speaks only one Spanish.
     accentPicker
       | Array.length available < 2 = H.empty
@@ -136,16 +138,16 @@ view opened state dispatch =
     -- With one voice there is nothing to cycle, but it is still worth saying
     -- which voice you are hearing: a listed voice can be a dud, and knowing
     -- its name is the first step to working that out.
-    voicePicker = case Accent.voicesIn (fromMaybe "" state.accent) state.voices of
+    voicePicker = case voiceNames of
       [] ->
         H.empty
       [ only ] ->
         H.div "panel-voice sole"
-        [ H.span "panel-voice-label" "Voice", H.span "panel-voice-name" $ Accent.displayName only ]
+        [ H.span "panel-voice-label" "Voice", H.span "panel-voice-name" $ Accent.displayName voiceNames only ]
       _ ->
         H.button_ "panel-voice" { onClick: dispatch <| CycleVoice }
         [ H.span "panel-voice-label" "Voice"
-        , H.span "panel-voice-name" $ maybe "—" Accent.displayName state.voice
+        , H.span "panel-voice-name" $ maybe "—" (Accent.displayName voiceNames) state.voice
         ]
 
 -- | How long ago something happened, in the units the panel wants.

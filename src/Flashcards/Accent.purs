@@ -21,7 +21,7 @@ import Prelude
 
 import Control.Alt ((<|>))
 import Data.Array as Array
-import Data.Maybe (Maybe(..))
+import Data.Maybe (Maybe(..), isJust)
 import Data.String (Pattern(..))
 import Data.String as String
 
@@ -89,13 +89,33 @@ nextLocale current available =
     Just i -> Array.index available $ (i + 1) `mod` Array.length available
     Nothing -> Array.head available
 
--- | A voice's name as shown: without the parenthesised region Apple appends,
--- | so "Eddy (Spanish (Mexico))" reads "Eddy". Display only: the stored name
--- | and the one handed to the engine stay whole, since that is the identifier.
-displayName :: String -> String
-displayName name = case String.indexOf (Pattern " (") name of
-  Just i | i > 0 -> String.take i name
+-- | A voice's name as shown. Display only: the stored name and the one handed
+-- | to the engine stay whole, since that is the identifier.
+-- |
+-- | The first argument is every name in the same locale, because a label that
+-- | is fine alone can collide with a sibling's: it cannot be judged from one
+-- | name. If stripping would make this voice read the same as another one, it
+-- | shows in full, so two voices are never given one label.
+displayName :: Array String -> String -> String
+displayName siblings name =
+  if Array.any (\other -> other /= name && stripRegion other == stripped) siblings
+    then name
+    else stripped
+  where
+    stripped = stripRegion name
+
+-- | Drops only the nested form Apple appends to its novelty voices, so
+-- | "Eddy (Spanish (Mexico))" reads "Eddy". A single-level suffix such as
+-- | "(Enhanced)" or "(Premium)" stays: on Apple platforms it is what tells
+-- | two voices with the same first name apart.
+stripRegion :: String -> String
+stripRegion name = case String.indexOf (Pattern " (") name of
+  Just i | i > 0, nested (String.drop (i + 2) name) -> String.take i name
   _ -> name
+  where
+    -- What follows the opening bracket: a second bracket inside, and the pair
+    -- closing together at the end.
+    nested rest = String.contains (Pattern "(") rest && isJust (String.stripSuffix (Pattern "))") rest)
 
 -- | Locales the deck is plausibly spoken in. Anything unrecognised shows its
 -- | raw tag, which is ugly but honest and beats hiding a real option.
