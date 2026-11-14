@@ -315,10 +315,10 @@ export default async ({ check, open, blobs }) => {
   check("nothing but pips and the dots in the top bar",
     await keys.$$eval(".topbar > *", es => es.map(e => e.className)), ["pips", "panel-toggle"])
   await keys.tap(".panel-toggle")
-  check("the menu goes back to the cards",
-    await keys.$eval("a.panel-item", e => [e.tagName, e.getAttribute("href")]), ["A", "/"])
-  check("and to where pairing is",
-    await keys.$$eval("a.panel-item", es => es.map(e => e.getAttribute("href"))), ["/", "/?sync"])
+  check("the menu points only to where pairing is, the way back being the tab bar",
+    await keys.$$eval("a.panel-item", es => es.map(e => e.getAttribute("href"))), ["/?sync"])
+  check("and the Vocab tab goes back to the cards",
+    await keys.$eval("a.tab", e => [e.tagName, e.getAttribute("href")]), ["A", "/"])
   // "Backed up", not "synced": a key is made on first run, so it never meant
   // that anything else shares this.
   check("saying what the server has, not who else has it",

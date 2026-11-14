@@ -48,12 +48,14 @@ export default async ({ check, open }) => {
   const page = await open({ seed: worked() })
   await page.waitForSelector(".prompt")
 
-  // The only way to find the drills. An anchor rather than a message: a page
-  // change is a page load here, so it needs no router.
+  // The way to the drills is the tab bar, not a row in the menu. An anchor
+  // rather than a message: a page change is a page load here, so it needs no
+  // router.
   await page.tap(".panel-toggle")
-  check("the menu offers the verb drills",
-    await page.$eval("a.panel-item", e => [e.tagName, e.getAttribute("href")]), ["A", "/verbs"])
+  check("the menu no longer carries a row for the drills", await page.$("a.panel-item"), null)
   await page.dismiss()
+  check("the Grammar tab is the way to the drills",
+    await page.$eval("a.tab", e => [e.tagName, e.getAttribute("href")]), ["A", "/verbs"])
 
   await openSheet(page)
 

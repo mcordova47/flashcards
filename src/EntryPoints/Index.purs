@@ -14,8 +14,9 @@ import Flashcards.Storage as Storage
 
 -- | Which page to mount, decided once and never again.
 -- |
--- | Nothing in the app links one page to the other, so nothing navigates
--- | between them and there is no router to hold: a page change is a page load.
+-- | The pages link to each other with plain anchors (the tab bar), so nothing
+-- | navigates in code and there is no router to hold: a page change is a page
+-- | load.
 -- | That keeps one bundle, one service worker and one installed app, and keeps
 -- | any notion of "which page" out of every component's state.
 main :: Effect Unit
