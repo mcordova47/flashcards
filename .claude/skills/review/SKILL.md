@@ -111,10 +111,44 @@ one of those was found by reading, and none by running anything.
 
 If the change touches a corpus, read the corpus. All of it.
 
+## Check a finding before you assert it
+
+The rule above is for the author's claims. It applies to yours. Honest mistakes
+are common in reviewers too, and a review's findings are the one output here that
+nothing else checks. Two have been wrong here, both in good faith, both from a
+reviewer skipping the rule it had just applied: a "wire in the fingerprint" that
+could not be wired because `byRank = const Nothing` meant it was unreachable, and
+a list of *por* / *para* senses reported as unpaired of which three of four were
+in the corpus.
+
+Before a finding goes in the review, **derive it a second way**: read the code
+path to its end, search the corpus for the thing you say is missing (a short
+fragment, since a quote can span a line break), or run the one test you planted
+against. Never `npm run verify`: this is the same budget as *Run only what you
+planted against*, and usually less.
+
+Then say which kind it is:
+
+- **Checked.** You reproduced it and say how, as an author must. These are the
+  fix, issue and ignore items.
+- **Suspected.** You could not check it, or only read it once. Say so plainly, as
+  a question to the author and not as a defect. It is not a fix item, because the
+  author would spend the same effort refuting a guess as fixing a bug, and it
+  never goes in a line thread: `required_conversation_resolution` is on, so an
+  unverified thread blocks the merge until someone disproves it. Put it in the
+  review comment, under its own heading, and let the author answer it.
+
+Both are worth reporting. Conflating them is what makes a review expensive.
+
+A suspicion is not yet a finding, so it is outside the three dispositions below:
+try to turn it into one first, and report it as suspected only when you cannot. It
+does not change the verdict, which is on what you checked. If the author's answer
+would change something you verified, say *Re-review after*.
+
 ## What to say
 
 Order by what matters, and separate **this is wrong** from **I checked this
-and it is fine**. The second is worth saying: it tells the author what was
+and it is fine**, and both from **I suspect this** (above). The second is worth saying: it tells the author what was
 looked at.
 
 Say what is good, and why, where the work beat what was asked of it. That has
