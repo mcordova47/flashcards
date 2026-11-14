@@ -148,8 +148,8 @@ would change something you verified, say *Re-review after*.
 ## What to say
 
 Order by what matters, and separate **this is wrong** from **I checked this
-and it is fine**, and both from **I suspect this** (above). The second is worth saying: it tells the author what was
-looked at.
+and it is fine**. The second is worth saying: it tells the author what was
+looked at. Keep **I suspect this** (above) apart from both.
 
 Say what is good, and why, where the work beat what was asked of it. That has
 happened more often than not, and an author who only hears about faults learns
