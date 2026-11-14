@@ -208,6 +208,8 @@ data Message
   | TogglePanel
   | OpenedPanel Instant
   | DismissNotice
+  -- | Grammar was tapped with a language it has nothing for.
+  | GrammarUnavailable
   | SpeakCurrent
   | ChooseAccent String
   | ChooseLanguage String
