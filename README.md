@@ -1216,7 +1216,7 @@ tenses it is not already in, so an item exists only if some sentence reaches
 it, and it needs two for a later sighting to ask a different one. The bank's
 sentences are over thirty-five verbs, so they give eighty-three items, each with at
 least two sentences: every verb's preterite and imperfect, and the present of
-the nine verbs (#41, #104) with sentences written in the imperfect too.
+the thirteen verbs (#41, #104, #231) with sentences written in the imperfect too.
 
 **A verb wants five sentences, one in each person.** A shift keeps its
 sentence's person, so a person no sentence is in has its preterite and
