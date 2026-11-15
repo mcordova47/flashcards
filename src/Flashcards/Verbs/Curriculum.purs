@@ -36,7 +36,7 @@ import Flashcards.Data.Deck.Spanish (deck)
 import Flashcards.Data.Paraphrase.Spanish (prompts)
 import Flashcards.Data.PorPara.Spanish (sentences) as PorPara
 import Flashcards.Data.Sentences.Spanish (sentences)
-import Flashcards.Data.Triggers.Spanish (triggers)
+import Flashcards.Data.Triggers.Spanish (sentences) as Triggers
 import Flashcards.Data.Verbs.Spanish (deviations, table)
 import Flashcards.Exercise (Exercise, Pool, pick)
 import Flashcards.Exercise as Exercise
@@ -97,14 +97,14 @@ produced =
   byFrequency (Shift.exercises table sentences)
     <> byFrequency (PersonShift.exercises table sentences)
 
--- | The trigger frames, for the verbs `moodVerbs` names: a mood decided by what
--- | comes before the gap, and the form typed. They produce a form, so `Reach`
+-- | The trigger sentences, for the verbs `moodVerbs` names: a whole sentence
+-- | whose mood is decided by what comes before the blank, and the form typed. They produce a form, so `Reach`
 -- | counts their cells with the shifts', but they are apart from `produced`
 -- | because their items are ordered by `Mood.verbs`, which is by frequency
 -- | already, and because the subjunctive cells they reach are the ones
 -- | `Reach` was built to leave out until something asked them. See #230.
 mooded :: Array Exercise
-mooded = Mood.exercises table triggers moodVerbs
+mooded = Mood.exercises table Triggers.sentences moodVerbs
 
 -- | The nine most common verbs whose whole subjunctive the coverage recommends
 -- | drilling, and not the 29 the coverage has for it (#28), so that the

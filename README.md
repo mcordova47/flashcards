@@ -43,8 +43,8 @@ npm start        # http://localhost:8000
 | `npm run check-sentences` | Prove every shift sentence against the table, in deck vocabulary |
 | `npm run sync-por-para` | Regenerate the por / para sentence module from `data/es-por-para.csv` |
 | `npm run check-por-para` | Prove every por / para contrast asks both sides and every sense only its own, in deck vocabulary |
-| `npm run sync-triggers` | Regenerate the trigger module from `data/es-triggers.csv` |
-| `npm run check-triggers` | Prove the triggers are in deck vocabulary, grouped, a quarter indicative, and the subjunctive never the present |
+| `npm run sync-triggers` | Regenerate the trigger sentence module from `data/es-triggers.csv` and `data/es-trigger-sentences.csv` |
+| `npm run check-triggers` | Prove the sentences are in deck vocabulary, agree with their person, are grouped, a quarter indicative, with real minimal pairs, and the subjunctive never the present |
 | `npm run preview` | Every milestone, without waiting a year for one — add `-- --watch` to see it move |
 | `npm run notes` | Every note the app has sent, oldest first — see [Reading them](#reading-them) |
 | `npm run collisions` | Glosses that share a content word without being the same string, for a person to rule on — a report, not a gate |
@@ -1227,7 +1227,7 @@ three give the persons they are in a pool of two (#118). The first seven verbs w
 left eight persons' preterite and imperfect unreached (`ir` missed two); a
 sentence in each of those persons (#104) closed the gap. `ver`, `venir`, `ser` and `saber` (#100), and `poner`, `caer`,
 `oír` and `traer`, and `valer` and `leer`, and `pedir`, `seguir` and `morir` (#104), have one in each. No shift reaches the subjunctive,
-so fifteen of a verb's twenty cells is the most a sentence can open. The trigger frames (#230) reach the subjunctive of nine verbs.
+so fifteen of a verb's twenty cells is the most a sentence can open. The trigger sentences (#230, #241) reach the subjunctive of nine verbs.
 
 **Except where *nosotros* does not change.** `empezar`, `jugar`, `dormir`, `sentir`,
 `pedir`, `seguir` and `morir` (#41, #104) have the same *nosotros* in the present and the preterite, so a
@@ -1470,46 +1470,68 @@ answer would be genuinely in doubt.
 
 Answered by typing for now. A two-way choice wants two buttons, and that is #38.
 
-## The trigger frames
+## The trigger sentences
 
-`data/es-triggers.csv` holds #230's triggers: the words before a gap, `mi madre
-quiere que`, and the verb typed in the form they call for, `tú` and `tener`
-making `tengas`. `sync-triggers` generates `Flashcards.Data.Triggers.Spanish`
-from it, and `Flashcards.Verbs.Mood` makes the exercises out of the triggers and
+Whole sentences, written by hand, with the verb as the blank: `mi madre quiere
+que tú ___ temprano`, hint `→ venir`. They replaced (#241) a first version that
+joined a trigger, a person and a verb mechanically and so asked things like `mi
+madre quiere que yo quiera`, which are grammatical and mean nothing.
+
+Two files. `data/es-triggers.csv` is the bank of *triggers* (#230): `querer que`,
+`no creer que`, `para que`, each with its mood, its group (the kind of meaning
+that demands the mood), the reason said after the answer, the forms it may take
+in a sentence and the trigger it is a minimal pair with.
+`data/es-trigger-sentences.csv` is the sentences: the trigger it uses, the verb
+in the blank, the person the blank is, the sentence with `___`, and the pair it
+belongs to. `sync-triggers` generates `Flashcards.Data.Triggers.Spanish` from
+both, and `Flashcards.Verbs.Mood` makes the exercises out of the sentences and
 the conjugation table.
 
+**The answer is never in the data.** A sentence names its verb and person and the
+expected form is the table's cell, the subjunctive after a subjunctive trigger
+and the present after an indicative one, read by `formOf` and never conjugated by
+the module or typed by a person. The mood, the group and the reason are the
+trigger's, not the sentence's, so a sentence cannot disagree with them either.
+What `check-triggers` holds is the blank: that the subject in front of it is the
+person the row says (so that the cell is the right one), that the verb is not
+already in the main clause, that the main clause has a subject of its own, and
+that an indicative trigger is not a negated one. `check-triggers -- --show`
+prints every sentence filled in, for reading.
+
 **The aim is the pattern, not the phrases.** What a learner has to recognise is
-the *kind of meaning* that demands the subjunctive, so the bank is wide and in
+the *kind of meaning* that demands the subjunctive, so the sentences are in
 groups: a wish or request, doubt or denial, emotion, an impersonal judgment, a
 purpose, condition or time still to come. Two more groups take the indicative
-(belief or certainty, a fact or a reason), a quarter or more of the bank, or
-always typing the subjunctive would win and the mood would be a given. And there
-are minimal pairs, where only the doubt differs (`cree que` against `no cree
-que`), which teach the rule better than a list. After the answer the page says
-why, in the exercise's `note`: the group, then the reason.
+(belief or certainty, a fact or a reason), a quarter of the sentences, or always
+typing the subjunctive would win and the mood would be a given. And there are
+minimal pairs, the same sentence with only the doubt changed (`cree que` against
+`no cree que`), which `check-triggers` verifies are exactly that. After the
+answer the page says why, in the exercise's `note`: the group, then the reason.
 
 **Typed, and the hint is the infinitive alone.** Naming the mood would make the
-decision for the learner. The expected form is a cell of the table, the
-subjunctive after a subjunctive trigger and the present after an indicative one,
-and is never conjugated by the module. The two are never the same word in the
-table, accents or not, so what is typed always says which mood was chosen;
+decision for the learner. The two forms are never the same word in the table,
+accents or not, so what is typed always says which mood was chosen;
 `check-triggers` holds that for every cell.
 
-**An item is a verb and a person**, `mood.tener.2s`, and its pool is the whole
-bank. `Exercise.pick` turns it, so the same verb and person meet a different
-trigger each time: the groups take turns, so that consecutive sightings are
-rarely the same kind of meaning, and every pool starts somewhere else. Nine
-verbs, the most common whose whole subjunctive the coverage says drill, so the
-schedule gains 45 items and not the 145 the coverage would allow. `Reach` counts
-the subjunctive of those nine in its denominator, and no other.
+**An item is a verb and a person**, `mood.tener.2s`, and its pool is the sentences
+written for it: four each, three subjunctive of three different kinds and one
+indicative, which is the doubt's counterpart where the cell has a doubt. The ids
+are the ones #230 made, so nothing a learner has done is lost.
+`Exercise.pick` turns a pool, so the same verb and person meet a different
+sentence each time. Nine verbs, the most common whose whole subjunctive the
+coverage says drill, so the schedule gains 45 items and not the 145 the coverage
+would allow. `Reach` counts the subjunctive of those nine in its denominator, and
+no other.
 
-**What a trigger has to be.** One mood only, so the answer is decidable from the
-table: nothing that takes both (`aunque`, `tal vez`, `dice que`, which is a
-report with the indicative and an order with the subjunctive). A main clause with
-a subject of its own, because with the same subject Spanish uses the infinitive.
-Words from the deck, as in the other banks, or named in the row's Notes. No tool
-can say a trigger reads as Mexican Spanish; that is for a reader, and the list is
-on #132.
+**What a sentence has to be.** One mood only, so the answer is decidable from the
+table: nothing that takes both (`aunque`, `tal vez`, `dice que`, and `cuando` or
+`hasta que` about a habit, which is why those two are only written with `voy a`
+and its kin). A main clause in the present or with `ir a`, since the other
+tenses want the imperfect subjunctive, which the table does not have. A subject
+of its own in the main clause, because with the same subject Spanish uses the
+infinitive. Words from the deck, as in the other banks, or named in a Notes
+column. No tool can say a sentence reads as Mexican Spanish or means something;
+that is for a reader, and the list is on #132.
 
 ## The study model
 

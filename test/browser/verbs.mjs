@@ -52,11 +52,17 @@ const otherWord = w => w === "por" ? "para" : "por"
 const errorSlugs = ["regularised", "strong-weak", "strong-imperfect", "boot", "orthographic", "stem-ir"]
   .map(k => `error.${k}`)
 
-// The trigger frames (#230), read from the CSV the generator reads. Their
-// items are a verb and a person, for the nine most common verbs whose whole
-// subjunctive the coverage says drill: worked out here from the coverage and
-// the deck's ranking, not restated, so the suite follows the bank.
-const triggers = rows("data/es-triggers.csv").map(([trigger, mood, group, reason]) => ({ trigger, mood, group, reason }))
+// The trigger sentences (#230, #241), read from the CSVs the generator reads:
+// the triggers, for their mood, group and reason, and the sentences, which
+// name a verb and a person but never the form. Their items are a verb and a
+// person, for the nine most common verbs whose whole subjunctive the coverage
+// says drill: worked out here from the coverage and the deck's ranking, not
+// restated, so the suite follows the bank.
+const triggerBank = new Map(rows("data/es-triggers.csv").map(([trigger, mood, group, reason]) => [trigger, { trigger, mood, group, reason }]))
+const triggers = rows("data/es-trigger-sentences.csv").map(([trigger, verb, person, text]) => {
+  const [before, after] = text.split("___")
+  return { ...triggerBank.get(trigger), verb, person, before, after, plain: before + after }
+})
 const GROUP_LABELS = {
   "wish": "wish or request", "doubt": "doubt or denial", "emotion": "emotion", "judgment": "impersonal judgment",
   "purpose-time": "purpose, condition or future time", "certainty": "belief or certainty", "fact": "a fact or a reason",
@@ -564,27 +570,29 @@ export default async ({ check, open, blobs }) => {
   await mood.waitForSelector(".verb-answer")
   await wait(400)
 
-  // What the page is asking: the frame is the trigger and a pronoun, the hint
+  // What the page is asking: the sentence either side of the blank, the hint
   // the infinitive alone, and the answer is the table's cell for the mood.
+  // The sentence is found by its words, and its verb and person are the
+  // sentence's own, so the page is checked against the data and not against
+  // itself.
   const moodAsked = async p => {
-    const before = (await p.text(".verb-before")).trim()
+    const before = await p.text(".verb-before"), after = await p.text(".verb-after")
     const infinitive = (await p.text(".verb-target")).replace(/^→ /, "")
-    const pronoun = before.split(" ").pop()
-    const person = PRONOUNS[pronoun]
-    const t = triggers.find(t => `${t.trigger} ${pronoun}` === before)
-    const form = table.get(`${infinitive}.${t.mood === "subjunctive" ? "subjunctive" : "present"}.${person}`)
-    return { before, infinitive, person, t, form, slug: `mood.${infinitive}.${person}` }
+    const t = triggers.find(t => t.before.trim() === before.trim() && t.after.trim() === (after ?? "").trim() && t.verb === infinitive)
+    const form = t && table.get(`${infinitive}.${t.mood === "subjunctive" ? "subjunctive" : "present"}.${t.person}`)
+    return { before, after, infinitive, person: t?.person, t, form, slug: `mood.${infinitive}.${t?.person}`,
+      full: t && `${t.before}${form}${t.after}` }
   }
 
   const q1 = await moodAsked(mood)
-  check("a frame is a trigger from the bank and a pronoun", q1.t !== undefined, true)
+  check("a sentence is one from the bank, its blank the verb it names", q1.t !== undefined, true)
   check("asks one of the nine verbs, its infinitive alone as the hint", moodVerbs().includes(q1.infinitive), true)
   check("the hint does not name the mood", (await mood.text(".verb-target")).includes("subjunctive"), false)
   check("the heading says nothing of the answer", await mood.text(".verb-sentence"), "Complete the sentence")
 
   // A right answer, whichever mood the trigger demands, says why.
   await answer(mood, q1.form)
-  check("a right answer shows the frame filled in", await mood.text(".milestone"), `✓ ${q1.before} ${q1.form}`)
+  check("a right answer shows the sentence filled in", await mood.text(".milestone"), `✓ ${q1.full}`)
   check("and says what kind of meaning it was",
     await mood.text(".verb-note"), `${GROUP_LABELS[q1.t.group]} · ${q1.t.reason}`)
   let stored2 = await mood.stored()
@@ -604,7 +612,7 @@ export default async ({ check, open, blobs }) => {
   check("whose present form is not its subjunctive", indicative !== wrongOne.form, true)
   await answer(mood, indicative)
   check("the indicative is marked wrong and the subjunctive shown",
-    await mood.text(".milestone"), `✗ ${wrongOne.before} ${wrongOne.form}`)
+    await mood.text(".milestone"), `✗ ${wrongOne.full}`)
   check("echoing what was typed", await mood.text(".verb-attempt"), `you wrote — ${indicative}`)
   check("with the reason", await mood.text(".verb-note"),
     `${GROUP_LABELS[wrongOne.t.group]} · ${wrongOne.t.reason}`)
@@ -620,7 +628,7 @@ export default async ({ check, open, blobs }) => {
     else await answer(mood, q.form)
   }
   check("the miss comes round again within the session", round?.slug, wrongOne.slug)
-  check("with another trigger", round && round.t.trigger !== wrongOne.t.trigger, true)
+  check("with another sentence", round && round.t.plain !== wrongOne.t.plain, true)
   check("no page errors", mood.errors, [])
   await mood.close()
 
