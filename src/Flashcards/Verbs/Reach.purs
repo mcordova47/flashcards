@@ -37,25 +37,32 @@ import Flashcards.Verbs.Table (Tense(..), pronoun)
 type Reach =
   { denominator :: Array Drilled
   , subjunctive :: Int
+  , moodVerbs :: Array String
   , later :: Array Drilled
   , produced :: Set Drilled
   , corrected :: Set Drilled
   }
 
--- | The denominator is every `Drill` cell outside the subjunctive: no shift
--- | reaches a subjunctive cell (#28, #59), so counting them would make the
--- | number a measure of something nobody has built yet. `Later` cells are not
--- | in it, as they are not in the figures this replaces, and are counted
--- | beside it.
-reach :: Array Verdict -> { produced :: Array Exercise, corrected :: Array Exercise } -> Reach
+-- | The denominator is every `Drill` cell outside the subjunctive, and the
+-- | subjunctive cells of the verbs the trigger frames cover. No shift reaches
+-- | a subjunctive cell (#28, #59), so the others stay out: counting them would
+-- | make the number a measure of something nobody has built yet. A verb is
+-- | covered when `mood` has an exercise for it (#230), and then every `Drill`
+-- | cell of its subjunctive is in, whether or not the bank reaches that
+-- | person: the number is meant to show a gap, not to hide one. `Later` cells
+-- | are not in it, as they are not in the figures this replaces, and are
+-- | counted beside it.
+reach :: Array Verdict -> { produced :: Array Exercise, mood :: Array Exercise, corrected :: Array Exercise } -> Reach
 reach verdicts banks =
-  { denominator: cells (\v -> v.recommend == Drill && v.tense /= Subjunctive)
-  , subjunctive: Array.length $ cells (\v -> v.recommend == Drill && v.tense == Subjunctive)
+  { denominator: cells (\v -> v.recommend == Drill && (v.tense /= Subjunctive || covered v.infinitive))
+  , subjunctive: Array.length $ cells (\v -> v.recommend == Drill && v.tense == Subjunctive && not (covered v.infinitive))
+  , moodVerbs: Array.nub $ map _.family banks.mood
   , later: cells (\v -> v.recommend == Later && v.tense /= Subjunctive)
-  , produced: named banks.produced
+  , produced: named (banks.produced <> banks.mood)
   , corrected: named banks.corrected
   }
   where
+    covered infinitive = Array.elem infinitive (map _.family banks.mood)
     cells keep = Array.filter keep verdicts <#> \v ->
       { infinitive: v.infinitive, tense: v.tense, person: v.person }
     named exercises = Set.fromFoldable $ Array.mapMaybe _.cell exercises
@@ -77,15 +84,16 @@ render :: Reach -> String
 render r = String.joinWith "\n" $
   [ "Cells the drills can ask, read off Curriculum.items through Exercise.cell."
   , ""
-  , "Denominator: " <> show (Array.length r.denominator) <> " cells the coverage recommends drilling, outside the subjunctive."
-  , "  Excluded: " <> show r.subjunctive <> " subjunctive drill cells, because no shift reaches them (#28, #59)."
+  , "Denominator: " <> show (Array.length r.denominator) <> " cells the coverage recommends drilling: every one outside the subjunctive,"
+  , "  and the subjunctive of the " <> show (Array.length r.moodVerbs) <> " verbs the trigger frames cover (#230): " <> String.joinWith ", " r.moodVerbs <> "."
+  , "  Excluded: " <> show r.subjunctive <> " subjunctive drill cells of other verbs, because nothing reaches them (#28, #59)."
   , "  Not counted: " <> show (Array.length r.later) <> " non-subjunctive `later` cells, of which "
       <> show (Array.length (Array.filter (\c -> Set.member c r.produced || Set.member c r.corrected) r.later))
       <> " are reached anyway."
   , ""
-  , "Reached by a drill that has you produce the form (the shifts): " <> show (Array.length (reachedBy { countCorrection: false } r))
-  , "Reached when error correction counts too:                      " <> show (Array.length (reachedBy { countCorrection: true } r))
-  , "Reached only by error correction:                              "
+  , "Reached by a drill that has you produce the form (shifts, trigger frames): " <> show (Array.length (reachedBy { countCorrection: false } r))
+  , "Reached when error correction counts too:                          " <> show (Array.length (reachedBy { countCorrection: true } r))
+  , "Reached only by error correction:                                  "
       <> show (Array.length (reachedBy { countCorrection: true } r) - Array.length (reachedBy { countCorrection: false } r))
   , ""
   , "Unreached with correction counted: " <> show (Array.length (unreached { countCorrection: true } r))

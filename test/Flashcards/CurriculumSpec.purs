@@ -208,7 +208,7 @@ mixing = describe "a session built when one kind is due far more than the rest" 
     kinds queue = Array.nub (map kind queue)
 
   it "tells the kinds apart by the slug" do
-    kinds (map _.slug items) `shouldEqual` [ "tense", "person", "porpara", "error", "paraphrase" ]
+    kinds (map _.slug items) `shouldEqual` [ "tense", "person", "porpara", "mood", "error", "paraphrase" ]
 
   it "takes the twenty from the most overdue block alone when asked for nothing else, which is the complaint" do
     kinds (Scheduler.buildSession (map _.slug items) crowded now Scheduler.sessionSize) `shouldEqual` [ "person" ]
@@ -242,10 +242,10 @@ introduction = describe "a session of items not yet met" do
     allOfKind k = Array.filter (\slug -> kind slug == k) (map _.slug items)
 
   it "holds every kind, and not the first one alone" do
-    Array.nub (map kind queue) `shouldEqual` [ "tense", "person", "porpara", "error", "paraphrase" ]
+    Array.nub (map kind queue) `shouldEqual` [ "tense", "person", "porpara", "mood", "error", "paraphrase" ]
 
   it "takes each kind's items in that kind's own order" do
-    for_ [ "tense", "person", "porpara", "error", "paraphrase" ] \k ->
+    for_ [ "tense", "person", "porpara", "mood", "error", "paraphrase" ] \k ->
       ofKind k `shouldEqual` Array.take (Array.length (ofKind k)) (allOfKind k)
 
 -- | What a prompt is confused between, and what the reader has to say: the
@@ -317,14 +317,14 @@ sessions = describe "a verb drill session" do
     (Array.length verbs > 1) `shouldEqual` true
 
   it "is first met as the whole curriculum, a session at a time" do
-    Array.length first.sessions `shouldEqual` 19
+    Array.length first.sessions `shouldEqual` 21
     Array.length (Array.concatMap _.queue first.sessions) `shouldEqual` Array.length items
 
   it "never asks two alike in a row more often than it must" do
     counted first.sessions `shouldEqual` fewest first.sessions
 
   it "and nor does a session of reviews" do
-    Array.length reviews.sessions `shouldEqual` 18
+    Array.length reviews.sessions `shouldEqual` 20
     counted reviews.sessions `shouldEqual` fewest reviews.sessions
 
   -- `Paraphrase.arranged` places the prompts of one family apart, so the

@@ -12,7 +12,7 @@ import Flashcards.Data.Coverage.Spanish (coverage)
 import Flashcards.Exercise (Answer(..), Drilled, Exercise)
 import Flashcards.Types.Card (Slug(..))
 import Flashcards.Verbs.Coverage (Recommend(..), Verdict)
-import Flashcards.Verbs.Curriculum (corrected, produced)
+import Flashcards.Verbs.Curriculum (corrected, mooded, produced)
 import Flashcards.Verbs.Reach (reach, reachedBy, render, unreached)
 import Flashcards.Verbs.Table (Person(..), Tense(..))
 import Test.Spec (Spec, describe, it)
@@ -45,6 +45,7 @@ spec = describe "Reach" do
   let
     r = reach verdicts
       { produced: [ ask (at "ser" Present Sg1), ask Nothing, ask (at "ser" Imperfect Sg1) ]
+      , mood: []
       , corrected: [ ask (at "ser" Present Sg2) ]
       }
 
@@ -62,6 +63,28 @@ spec = describe "Reach" do
     it "ignores an exercise with no cell" do
       Array.length (reachedBy { countCorrection: false } r) `shouldEqual` 1
 
+  -- #230. A verb the trigger frames cover has its subjunctive in the
+  -- denominator, and the frames' cells count as reached.
+  describe "a verb the trigger frames cover" do
+    let
+      covered = reach verdicts
+        { produced: [ ask (at "ser" Present Sg1) ]
+        , mood: [ (ask (at "ser" Subjunctive Sg1)) { family = "ser" } ]
+        , corrected: []
+        }
+
+    it "brings its subjunctive drill cells into the denominator" do
+      Array.length covered.denominator `shouldEqual` 4
+      covered.subjunctive `shouldEqual` 0
+
+    it "counts the cell a frame asks as reached, by a drill that has you produce it" do
+      Array.length (reachedBy { countCorrection: false } covered) `shouldEqual` 2
+
+    it "leaves another verb's subjunctive out" do
+      let other = reach (verdicts <> [ verdict "tener" Subjunctive Sg1 Drill ])
+            { produced: [], mood: [ (ask (at "ser" Subjunctive Sg1)) { family = "ser" } ], corrected: [] }
+      other.subjunctive `shouldEqual` 1
+
   describe "error correction" do
     it "counts only when asked to" do
       unreached { countCorrection: false } r `shouldEqual`
@@ -76,12 +99,13 @@ spec = describe "Reach" do
       let out = render r
       out `shouldSatisfy` String.contains (String.Pattern "Denominator: 3 cells")
       out `shouldSatisfy` String.contains (String.Pattern "Excluded: 1 subjunctive")
+      out `shouldSatisfy` String.contains (String.Pattern "trigger frames cover")
 
   describe "the real curriculum" do
-    let real = reach coverage { produced, corrected }
+    let real = reach coverage { produced, mood: mooded, corrected }
 
     it "has the denominator #114 counted" do
-      Array.length real.denominator `shouldEqual` 338
+      Array.length real.denominator `shouldEqual` 383
 
     -- A floor and not a figure: #104 adds sentences, and each one can only
     -- raise this. It falls when a sentence is dropped or a generator comes to
