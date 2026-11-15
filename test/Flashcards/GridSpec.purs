@@ -169,8 +169,8 @@ spec = describe "the conjugation grid" do
   describe "the real one" do
     let rows = Curriculum.grid Progress.empty
 
-    it "has all thirty-eight verbs, the most common first" do
-      Array.length rows `shouldEqual` 38
+    it "has all forty-four verbs, the most common first" do
+      Array.length rows `shouldEqual` 44
       map _.infinitive (Array.take 3 rows) `shouldEqual` [ "querer", "poder", "tener" ]
 
     -- The case `Grid.grid` notes and does not design for: a square only a

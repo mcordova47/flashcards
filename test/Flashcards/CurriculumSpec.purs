@@ -317,21 +317,27 @@ sessions = describe "a verb drill session" do
     (Array.length verbs > 1) `shouldEqual` true
 
   it "is first met as the whole curriculum, a session at a time" do
-    Array.length first.sessions `shouldEqual` 16
+    Array.length first.sessions `shouldEqual` 19
     Array.length (Array.concatMap _.queue first.sessions) `shouldEqual` Array.length items
 
   it "never asks two alike in a row more often than it must" do
     counted first.sessions `shouldEqual` fewest first.sessions
 
   it "and nor does a session of reviews" do
-    Array.length reviews.sessions `shouldEqual` 16
+    Array.length reviews.sessions `shouldEqual` 18
     counted reviews.sessions `shouldEqual` fewest reviews.sessions
 
   -- `Paraphrase.arranged` places the prompts of one family apart, so the
   -- thirteen ser / estar ones that opened the file and cost five pairs in one
   -- session no longer do. Not "only in the ser / estar block" any more: none.
+  --
+  -- Of the full sessions. The curriculum is not a multiple of twenty, so the
+  -- last session is the few items left over, and when those are one verb's
+  -- (the least common verb's come last) two alike are unavoidable there; the
+  -- test above is what says it is no more than that.
   it "puts no two alike together at all" do
-    pairedIn first.sessions `shouldEqual` Array.replicate 16 []
+    let full = Array.filter (\s -> Array.length s.queue == Scheduler.sessionSize) first.sessions
+    pairedIn full `shouldEqual` Array.replicate (Array.length full) []
 
   -- Met in their order, which is `arranged`'s and not the file's.
   it "meets no paraphrase trap's answers in a run of four, alike or alternating" do
@@ -446,7 +452,7 @@ order = describe "the order new items are met in" do
 
   it "meets the tense shifts a verb at a time, most common first" do
     Array.nub (map verbOf shifts)
-      `shouldEqual` [ "querer", "poder", "tener", "ver", "ir", "decir", "venir", "ser", "estar", "saber", "conocer", "hacer", "dar", "poner", "pedir", "seguir", "pensar", "salir", "volver", "sentir", "empezar", "leer", "caer", "oír", "traer", "morir", "jugar", "valer", "dormir" ]
+      `shouldEqual` [ "querer", "poder", "tener", "ver", "ir", "decir", "venir", "ser", "estar", "saber", "conocer", "hacer", "dar", "poner", "aprender", "pedir", "seguir", "pensar", "salir", "volver", "sentir", "empezar", "trabajar", "escribir", "leer", "caer", "oír", "traer", "morir", "jugar", "valer", "comprar", "sufrir", "dormir", "vender" ]
 
   it "finds ir, which the deck writes ir(se)" do
     map _.slug (byFrequency [ ask "hacer" "hacer", ask "ir" "ir" ])

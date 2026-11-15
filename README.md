@@ -1082,12 +1082,12 @@ between two words.
 
 ### The conjugation table
 
-`data/es-verbs.csv` holds 38 irregular verbs by present, preterite, imperfect
+`data/es-verbs.csv` holds 38 irregular verbs and 6 regular ones (below) by present, preterite, imperfect
 and present subjunctive, by five persons — no *vosotros*, since the deck
-prefers es-MX, and *usted* and *ustedes* ride on the third persons. 760 cells,
+prefers es-MX, and *usted* and *ustedes* ride on the third persons. 880 cells,
 generated into `Flashcards.Data.Verbs.Spanish` by `sync-verbs`.
 
-Nobody reads 760 cells, so `check-verbs` works out what the *regular* form
+Nobody reads 880 cells, so `check-verbs` works out what the *regular* form
 would be for each, and prints only the verb × tense paradigms where some cell
 differs. **That list is the review.** Every deviation in it should be an
 irregularity with a name — suppletion, a strong preterite, a stem change, a
@@ -1095,6 +1095,16 @@ irregularity with a name — suppletion, a strong preterite, a stem change, a
 the diacritic on `dé`. A deviation that
 is not one of those is an error in the table, and a verb with no deviations at
 all is a verb that should not be in the table.
+
+**Except the six that are there to have none** (#231): `trabajar`, `comprar`,
+`aprender`, `vender`, `escribir` and `sufrir`, two in each conjugation, a
+common one and a less common one. They are a control, so that a miss on a
+regular preterite can be told from a miss on an irregular one, and `check-verbs`
+warns that each "conjugates entirely regularly" on purpose. They are chosen so
+that `regular()` is right for every cell: no `-car`, `-gar` or `-zar`, no
+`-ir` stem changers, no `-er` stem ending in a vowel. The coverage says `skip`
+for all of their cells, so they are not in the reach denominator, and the
+grid shows them as left out on purpose while still showing progress on them.
 
 The regular form gets the 2010 monosyllable rule applied before it is
 compared, or `ver`'s entirely regular preterite would be reported for writing
@@ -1134,7 +1144,7 @@ drill and the review disagreeing about what a regularised form is.
 
 ### The grid
 
-The drills' progress sheet ends on the table: 38 verbs by four tenses, the
+The drills' progress sheet ends on the table: 44 verbs by four tenses, the
 most common verb first. Tap a square and its five forms open under its row,
 so it is a reference as well as a score.
 
@@ -1151,7 +1161,7 @@ A square is in one of seven states, and only the first five are about you:
 | **left out on purpose** | the coverage says skip for every person |
 
 Shaded *mastered or not*, the grid would read as almost entirely failure,
-because the sentence bank reaches 29 verbs of 38. The last two states are what
+because the sentence bank reaches 35 verbs of 44. The last two states are what
 keep it a map of what to author next rather than a list of what you have not
 done: a dashed outline is a gap someone could fill, a hatch is one left on
 purpose. The legend counts nothing, because seven counts adding up to the
@@ -1204,7 +1214,7 @@ same sentence at another time.
 **The bank decides which items exist.** Each sentence yields its verb in the
 tenses it is not already in, so an item exists only if some sentence reaches
 it, and it needs two for a later sighting to ask a different one. The bank's
-sentences are over twenty-nine verbs, so they give sixty-seven items, each with at
+sentences are over thirty-five verbs, so they give eighty-three items, each with at
 least two sentences: every verb's preterite and imperfect, and the present of
 the nine verbs (#41, #104) with sentences written in the imperfect too.
 
@@ -1577,7 +1587,7 @@ a backup file.
 
 ```
 data/es-1000.csv                     the Spanish deck, as edited
-data/es-verbs.csv                    38 irregular verbs, 760 conjugated cells
+data/es-verbs.csv                    44 verbs (6 of them regular), 880 conjugated cells
 data/es-paraphrase.csv               41 prompts for #10, each with one trap
 data/es-sentences.csv                the tense-shift sentences, verb in brackets
 tools/sync-deck.mjs                  CSV -> generated module
