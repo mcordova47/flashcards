@@ -248,3 +248,14 @@ spec = do
         )
         results
         `shouldEqual` true
+
+    it "puts a miss back clear of its own verb, as the drills page does, and not where Scheduler.requeue would" do
+      let
+        -- A relative of the missed drill sits just before the usual slot, so a
+        -- family-blind requeue lands beside it and a family-aware one moves on.
+        queue = map Slug [ "querer.imperfect", "poder.preterite", "tener.preterite", "poder.imperfect", "querer.preterite", "tener.imperfect" ]
+        family = Curriculum.family Progress.empty
+        got = map Slug (Core.drillRequeue "" "querer.imperfect" 0 (map slugToString queue)).slugs
+        blind = Scheduler.requeue (Slug "querer.imperfect") 0 queue
+        beside xs = Array.zipWith (\a b -> family a == family b) xs (Array.drop 1 xs)
+      [ got == blind, Array.elem true (beside blind), Array.elem true (beside got) ] `shouldEqual` [ false, true, false ]

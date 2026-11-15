@@ -701,6 +701,8 @@ core cannot judge: `expected` is then the model answer and `rubric` the reasons 
 judge it against, and the player decides what to pass to `drillGrade`. `expected`
 is only in `drillCheck`'s answer, so a client asks before it can know.
 
+Do not call `drillCheck` on an empty box: it answers `"wrong"`, and would record a miss for a question the player did not attempt. The page ignores Enter on an empty box, and a client should too.
+
 Which exercise a drill asks is a function of its progress, and it moves when a grade
 is recorded. Call `drillQuestion` and `drillCheck` with the progress as it stood
 **before** `drillGrade`, and keep the question across the grade, as the page does.
