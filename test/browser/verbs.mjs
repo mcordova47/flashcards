@@ -52,6 +52,25 @@ const otherWord = w => w === "por" ? "para" : "por"
 const errorSlugs = ["regularised", "strong-weak", "strong-imperfect", "boot", "orthographic", "stem-ir"]
   .map(k => `error.${k}`)
 
+// The trigger frames (#230), read from the CSV the generator reads. Their
+// items are a verb and a person, for the nine most common verbs whose whole
+// subjunctive the coverage says drill: worked out here from the coverage and
+// the deck's ranking, not restated, so the suite follows the bank.
+const triggers = rows("data/es-triggers.csv").map(([trigger, mood, group, reason]) => ({ trigger, mood, group, reason }))
+const GROUP_LABELS = {
+  "wish": "wish or request", "doubt": "doubt or denial", "emotion": "emotion", "judgment": "impersonal judgment",
+  "purpose-time": "purpose, condition or future time", "certainty": "belief or certainty", "fact": "a fact or a reason",
+}
+const moodVerbs = () => {
+  const cells = rows("data/es-verb-coverage.csv").filter(([, , tense]) => tense === "subjunctive")
+  const verbs = [...new Set(cells.map(([inf]) => inf))].filter(inf => {
+    const row = cells.filter(([i]) => i === inf)
+    return row.length === 5 && row.every(c => c[7] === "drill")
+  })
+  return verbs.sort((a, b) => (deckRank.get(a) ?? Infinity) - (deckRank.get(b) ?? Infinity)).slice(0, 9)
+}
+const moodSlugs = () => moodVerbs().flatMap(v => Object.values(PRONOUNS).map(p => `mood.${v}.${p}`))
+
 const bank = rows("data/es-sentences.csv").map(([text, infinitive, tense, person, personShift]) => {
   const [, before, form, after] = text.match(/^(.*)\[(.*)\](.*)$/)
   return { plain: before + form + after, before, after, infinitive, tense, person, personShift: personShift === "yes" }
@@ -78,7 +97,7 @@ const behind = slugs => ({
 // tense shifts is put behind us, so a first session is shifts alone, as it was
 // before the kinds were interleaved.
 const shiftsOnly = () => behind([
-  ...personSlugs(), ...porParaSlugs(), ...errorSlugs, ...corpus.map(c => `paraphrase.${c.id}`),
+  ...personSlugs(), ...porParaSlugs(), ...errorSlugs, ...moodSlugs(), ...corpus.map(c => `paraphrase.${c.id}`),
 ])
 
 // What the page is asking, and what the answer to it is. A pronoun is a
@@ -337,7 +356,7 @@ export default async ({ check, open, blobs }) => {
   // common verb's first sentence marked for a person shift, moved into the
   // first person it is not already in.
   const persons = await open({ path: "/verbs", key: VERBS, seed: behind([
-    ...shiftSlugs(), ...porParaSlugs(), ...errorSlugs, ...corpus.map(c => `paraphrase.${c.id}`),
+    ...shiftSlugs(), ...porParaSlugs(), ...errorSlugs, ...moodSlugs(), ...corpus.map(c => `paraphrase.${c.id}`),
   ]) })
   await persons.waitForSelector(".verb-sentence")
   await wait(400)
@@ -385,7 +404,7 @@ export default async ({ check, open, blobs }) => {
   // Everything else is put behind us, so the session is the por / para items
   // and nothing else, and a miss is requeued among them.
   const pp = await open({ path: "/verbs", key: VERBS,
-    seed: behind([...shiftSlugs(), ...personSlugs(), ...errorSlugs, ...corpus.map(c => `paraphrase.${c.id}`)]) })
+    seed: behind([...shiftSlugs(), ...personSlugs(), ...errorSlugs, ...moodSlugs(), ...corpus.map(c => `paraphrase.${c.id}`)]) })
   await pp.waitForSelector(".verb-sentence")
   await wait(400)
   const ppAsked = async () => {
@@ -448,7 +467,7 @@ export default async ({ check, open, blobs }) => {
   // where the spread finds a pair alike. Passed, a prompt moves on by itself.
   // The sentence on screen is not in the bank - its verb is broken - so it
   // is found by the words either side of the box.
-  const fixing = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs(), ...porParaSlugs()]) })
+  const fixing = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...moodSlugs()]) })
   await fixing.waitForSelector(".verb-sentence, .verb-prompt")
   await wait(400)
 
@@ -537,12 +556,80 @@ export default async ({ check, open, blobs }) => {
   check("no page errors", fixing.errors, [])
   await fixing.close()
 
+  // --- the trigger frames (#230): a mood decided by what comes before the gap ---
+  // Everything else is put behind us, so a session is the frames alone.
+  const mood = await open({ path: "/verbs", key: VERBS, seed: behind([
+    ...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs, ...corpus.map(c => `paraphrase.${c.id}`),
+  ]) })
+  await mood.waitForSelector(".verb-answer")
+  await wait(400)
+
+  // What the page is asking: the frame is the trigger and a pronoun, the hint
+  // the infinitive alone, and the answer is the table's cell for the mood.
+  const moodAsked = async p => {
+    const before = (await p.text(".verb-before")).trim()
+    const infinitive = (await p.text(".verb-target")).replace(/^→ /, "")
+    const pronoun = before.split(" ").pop()
+    const person = PRONOUNS[pronoun]
+    const t = triggers.find(t => `${t.trigger} ${pronoun}` === before)
+    const form = table.get(`${infinitive}.${t.mood === "subjunctive" ? "subjunctive" : "present"}.${person}`)
+    return { before, infinitive, person, t, form, slug: `mood.${infinitive}.${person}` }
+  }
+
+  const q1 = await moodAsked(mood)
+  check("a frame is a trigger from the bank and a pronoun", q1.t !== undefined, true)
+  check("asks one of the nine verbs, its infinitive alone as the hint", moodVerbs().includes(q1.infinitive), true)
+  check("the hint does not name the mood", (await mood.text(".verb-target")).includes("subjunctive"), false)
+  check("the heading says nothing of the answer", await mood.text(".verb-sentence"), "Complete the sentence")
+
+  // A right answer, whichever mood the trigger demands, says why.
+  await answer(mood, q1.form)
+  check("a right answer shows the frame filled in", await mood.text(".milestone"), `✓ ${q1.before} ${q1.form}`)
+  check("and says what kind of meaning it was",
+    await mood.text(".verb-note"), `${GROUP_LABELS[q1.t.group]} · ${q1.t.reason}`)
+  let stored2 = await mood.stored()
+  check("graded under the verb and person", stored2.cards.find(c => c.slug === q1.slug)?.missed, 0)
+
+  // Walk on until a subjunctive trigger turns up, and answer it with the
+  // indicative: `vienen` for `vengan`.
+  let wrongOne = null
+  for (let i = 0; i < 12 && !wrongOne; i++) {
+    await next(mood)
+    const q = await moodAsked(mood)
+    if (q.t.mood === "subjunctive") wrongOne = q
+    else await answer(mood, q.form)
+  }
+  check("a subjunctive trigger comes up within a dozen", wrongOne !== null, true)
+  const indicative = table.get(`${wrongOne.infinitive}.present.${wrongOne.person}`)
+  check("whose present form is not its subjunctive", indicative !== wrongOne.form, true)
+  await answer(mood, indicative)
+  check("the indicative is marked wrong and the subjunctive shown",
+    await mood.text(".milestone"), `✗ ${wrongOne.before} ${wrongOne.form}`)
+  check("echoing what was typed", await mood.text(".verb-attempt"), `you wrote — ${indicative}`)
+  check("with the reason", await mood.text(".verb-note"),
+    `${GROUP_LABELS[wrongOne.t.group]} · ${wrongOne.t.reason}`)
+  stored2 = await mood.stored()
+  check("graded Again", stored2.cards.find(c => c.slug === wrongOne.slug)?.missed, 1)
+
+  // Come round again, with a different trigger over the same cell.
+  let round = null
+  for (let i = 0; i < 12 && !round; i++) {
+    await next(mood)
+    const q = await moodAsked(mood)
+    if (q.slug === wrongOne.slug) round = q
+    else await answer(mood, q.form)
+  }
+  check("the miss comes round again within the session", round?.slug, wrongOne.slug)
+  check("with another trigger", round && round.t.trigger !== wrongOne.t.trigger, true)
+  check("no page errors", mood.errors, [])
+  await mood.close()
+
   // --- what a session moved (#146) ---
   // Every item far off at box 5 but one paraphrase at box 3 and due, so the
   // session is that one item and the done screen has a session to describe.
   const lone = await open({ path: "/verbs", key: VERBS, seed: {
     version: formatVersion(), language: "verbs", deck: "none",
-    cards: [...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs,
+    cards: [...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs, ...moodSlugs(),
             ...corpus.map(r => `paraphrase.${r.id}`)].map(slug => slug === `paraphrase.${corpus[0].id}`
       ? { slug, box: 3, seen: 2, missed: 0, lapses: 0, direction: "recognition", due: Date.now() - 86400000 }
       : { slug, box: 5, seen: 8, missed: 0, lapses: 0, direction: "recognition", due: Date.now() + 9 * 86400000 }),
@@ -563,7 +650,7 @@ export default async ({ check, open, blobs }) => {
   const far = Date.now() + 9 * 86400000
   const settled = await open({ path: "/verbs", key: VERBS, seed: {
     version: formatVersion(), language: "verbs", deck: "none",
-    cards: [...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs,
+    cards: [...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs, ...moodSlugs(),
             ...corpus.map(r => `paraphrase.${r.id}`)].map(slug =>
       ({ slug, box: 5, seen: 8, missed: 0, lapses: 0, direction: "recognition", due: far })),
   } })
@@ -595,7 +682,7 @@ export default async ({ check, open, blobs }) => {
   // --- after the cap, with more due ---
   // Only the tense shift left unseen, which is far more than twenty, so the
   // first session ends at its cap and the page has to offer the rest (#145).
-  const capped = await open({ path: "/verbs", key: VERBS, seed: behind([...personSlugs(), ...porParaSlugs(), ...errorSlugs, ...corpus.map(r => `paraphrase.${r.id}`)]) })
+  const capped = await open({ path: "/verbs", key: VERBS, seed: behind([...personSlugs(), ...porParaSlugs(), ...errorSlugs, ...moodSlugs(), ...corpus.map(r => `paraphrase.${r.id}`)]) })
   await capped.waitForSelector(".verb-sentence")
   await wait(400)
   for (let i = 0; i < 20; i++) {
@@ -630,7 +717,7 @@ export default async ({ check, open, blobs }) => {
   // The checked drills are put behind us so the session opens on the corpus;
   // every exercise type shares one queue, and the page tells them apart by
   // which `Answer` they carry rather than by which page they are on.
-  const done = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs]) })
+  const done = await open({ path: "/verbs", key: VERBS, seed: behind([...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs, ...moodSlugs()]) })
   await done.waitForSelector(".verb-prompt")
   await wait(400)
 
@@ -783,6 +870,10 @@ export default async ({ check, open, blobs }) => {
     slug === `${inf}.${tense}` || slug.startsWith(`person.${inf}.${tense}.`))
   const expectedState = (inf, tense) => {
     const items = onSquare(inf, tense)
+    // A trigger frame asks the subjunctive cells of its nine verbs (#230), but
+    // its pool spans a verb's present and subjunctive and so is wholly on no
+    // square: the square is asked, and shows no progress. See #238.
+    if (items.length === 0 && tense === "subjunctive" && moodVerbs().includes(inf)) return "not started"
     if (items.length === 0) {
       const verdicts = coverage.filter(r => r[0] === inf && r[2] === tense).map(r => r[7])
       return verdicts.every(v => v === "skip") ? "left out on purpose" : "nothing asks this yet"
@@ -851,7 +942,7 @@ export default async ({ check, open, blobs }) => {
   // While nothing is mastered the sheet says why that is, and when it ends.
   const waiting = await open({ path: "/verbs", key: VERBS, seed: {
     version: formatVersion(), language: "verbs", deck: "none",
-    cards: [...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs,
+    cards: [...shiftSlugs(), ...personSlugs(), ...porParaSlugs(), ...errorSlugs, ...moodSlugs(),
             ...corpus.map(r => `paraphrase.${r.id}`)].map(slug =>
       ({ slug, box: 4, seen: 8, missed: 0, lapses: 0, direction: "recognition", due: Date.now() + 5 * 86400000 })),
   } })

@@ -16,6 +16,7 @@ import Test.Flashcards.ExerciseSpec as ExerciseSpec
 import Test.Flashcards.GridSpec as GridSpec
 import Test.Flashcards.MilestoneSpec as MilestoneSpec
 import Test.Flashcards.MovedSpec as MovedSpec
+import Test.Flashcards.MoodSpec as MoodSpec
 import Test.Flashcards.NotesSpec as NotesSpec
 import Test.Flashcards.PayloadSpec as PayloadSpec
 import Test.Flashcards.ProgressSpec as ProgressSpec
@@ -52,6 +53,7 @@ main = runSpecAndExitProcess [ consoleReporter ] do
   ParaphraseSpec.spec
   PersonShiftSpec.spec
   PorParaSpec.spec
+  MoodSpec.spec
   PronunciationSpec.spec
   CorrectionSpec.spec
   CurriculumSpec.spec

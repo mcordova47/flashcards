@@ -8,6 +8,8 @@ module Flashcards.Verbs.Curriculum
   , produced
   , corrected
   , byFrequency
+  , mooded
+  , moodVerbs
   , family
   , fingerprint
   , gradeDrill
@@ -34,6 +36,7 @@ import Flashcards.Data.Deck.Spanish (deck)
 import Flashcards.Data.Paraphrase.Spanish (prompts)
 import Flashcards.Data.PorPara.Spanish (sentences) as PorPara
 import Flashcards.Data.Sentences.Spanish (sentences)
+import Flashcards.Data.Triggers.Spanish (triggers)
 import Flashcards.Data.Verbs.Spanish (deviations, table)
 import Flashcards.Exercise (Exercise, Pool, pick)
 import Flashcards.Exercise as Exercise
@@ -45,6 +48,7 @@ import Flashcards.Types.Progress as Progress
 import Flashcards.Verbs.Correction as Correction
 import Flashcards.Verbs.Grid (VerbRow)
 import Flashcards.Verbs.Grid as Grid
+import Flashcards.Verbs.Mood as Mood
 import Flashcards.Verbs.Paraphrase as Paraphrase
 import Flashcards.Verbs.PersonShift as PersonShift
 import Flashcards.Verbs.PorPara (exercises) as PorPara
@@ -53,7 +57,7 @@ import Flashcards.Verbs.Shift as Shift
 -- | Every item there is, in the order new ones are introduced. Static, so
 -- | built once for the life of the page.
 -- |
--- | Five exercise types, one list. The page does not know which is which — it
+-- | Six exercise types, one list. The page does not know which is which — it
 -- | reads `Answer`, and the checked drills and the paraphrase differ by which
 -- | constructor they produce. The checked ones come first because they are
 -- | the easier question, and among them the shifts and por / para come before
@@ -80,6 +84,7 @@ items :: Array Pool
 items = Exercise.pools $
   produced
     <> PorPara.exercises PorPara.sentences
+    <> mooded
     <> corrected
     <> Paraphrase.exercises (Paraphrase.arranged prompts)
 
@@ -91,6 +96,24 @@ produced :: Array Exercise
 produced =
   byFrequency (Shift.exercises table sentences)
     <> byFrequency (PersonShift.exercises table sentences)
+
+-- | The trigger frames, for the verbs `moodVerbs` names: a mood decided by what
+-- | comes before the gap, and the form typed. They produce a form, so `Reach`
+-- | counts their cells with the shifts', but they are apart from `produced`
+-- | because their items are ordered by `Mood.verbs`, which is by frequency
+-- | already, and because the subjunctive cells they reach are the ones
+-- | `Reach` was built to leave out until something asked them. See #230.
+mooded :: Array Exercise
+mooded = Mood.exercises table triggers moodVerbs
+
+-- | The nine most common verbs whose whole subjunctive the coverage recommends
+-- | drilling, and not the 29 the coverage has for it (#28), so that the
+-- | schedule gains 45 items and not 145. Nine and not ten because of what ten
+-- | does to `spread`: with a tenth verb a paraphrase prompt, which keeps its
+-- | slot, falls beside a person shift of the same verb in one session, which
+-- | `CurriculumSpec` refuses and `spread` cannot move. See #239.
+moodVerbs :: Array String
+moodVerbs = Mood.verbs 9 rank coverage
 
 -- | The error corrections, named for the same reason as `produced`.
 corrected :: Array Exercise
@@ -195,6 +218,7 @@ kind slug = case Array.find (\k -> String.take (String.length k.prefix) (slugToS
     named =
       [ { prefix: "person.", name: "person" }
       , { prefix: "porpara.", name: "porpara" }
+      , { prefix: Mood.prefix, name: "mood" }
       , { prefix: "error.", name: "error" }
       , { prefix: Paraphrase.prefix, name: "paraphrase" }
       ]

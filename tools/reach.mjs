@@ -18,5 +18,6 @@ import * as Coverage from "../output/Flashcards.Data.Coverage.Spanish/index.js"
 
 console.log(Reach.render(Reach.reach(Coverage.coverage)({
   produced: Curriculum.produced,
+  mood: Curriculum.mooded,
   corrected: Curriculum.corrected,
 })))
