@@ -100,6 +100,20 @@ senses with no opposite, three sentences all answered `por`.
 side, and any sense without two sentences of its own preposition or with one
 of the other.
 
+## `es-triggers.csv` — trigger frames for the subjunctive
+
+Written by hand for #230. Each row is the words before a gap, the mood they
+demand, the kind of meaning that demands it (a group, which fixes the mood), a
+reason shown after the answer, and the row it is a minimal pair with. The verb
+and the person are not in it: they come from `es-verbs.csv`.
+
+`npm run check-triggers` refuses any word outside `es-1000.csv` that the row's
+`Notes` does not explain, a group with fewer than three triggers, a bank less
+than a quarter indicative, fewer than two minimal pairs, a negation of another
+trigger that is not marked as its pair, and any cell of the table where the
+subjunctive is the present. Whether a trigger takes one mood only and reads as
+Mexican Spanish is a reader's call, and the list is on #132.
+
 ## `es-verb-coverage.csv` — a recommendation per cell
 
 **Derived, and an argument rather than a fact.** `npm run verb-coverage`
