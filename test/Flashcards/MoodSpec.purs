@@ -12,7 +12,7 @@ import Data.Maybe (Maybe(..), isNothing)
 import Data.Set as Set
 import Data.String as String
 import Flashcards.Data.Coverage.Spanish (coverage)
-import Flashcards.Data.Triggers.Spanish (triggers)
+import Flashcards.Data.Triggers.Spanish (sentences)
 import Flashcards.Data.Verbs.Spanish (table)
 import Flashcards.Exercise (Answer(..), Exercise, Verdict(..), matches, pick, pools)
 import Flashcards.Types.Card (Slug(..), slugToString)
@@ -22,22 +22,26 @@ import Partial.Unsafe (unsafePartial)
 import Partial (crashWith)
 import Flashcards.Verbs.Coverage (Recommend(..))
 import Flashcards.Verbs.Curriculum (kind, mooded, moodVerbs)
-import Flashcards.Verbs.Mood (Group(..), Mood(..), Trigger, exercise, exercises, interleave, tense)
+import Flashcards.Verbs.Mood (Group(..), Mood(..), Sentence, exercise, exercises, interleave, tense)
 import Flashcards.Verbs.Table (Person(..), formOf)
 import Flashcards.Verbs.Table as Table
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (fail, shouldEqual, shouldSatisfy)
 
-wants :: Trigger
+wants :: Sentence
 wants =
-  { trigger: "mi madre quiere que", mood: Subjunctive, group: Wish
+  { trigger: "querer que", mood: Subjunctive, group: Wish
   , reason: "wanting something of someone takes the subjunctive"
+  , verb: "tener", person: Sg2
+  , before: "mi madre quiere que tú ", after: " mucho cuidado"
   }
 
-believes :: Trigger
+believes :: Sentence
 believes =
-  { trigger: "mi madre cree que", mood: Indicative, group: Certainty
+  { trigger: "creer que", mood: Indicative, group: Certainty
   , reason: "believing something takes the indicative"
+  , verb: "tener", person: Sg2
+  , before: "mi madre cree que tú ", after: " mucho cuidado"
   }
 
 persons :: Array Person
@@ -46,8 +50,8 @@ persons = [ Sg1, Sg2, Sg3, Pl1, Pl3 ]
 spec :: Spec Unit
 spec = describe "the trigger frame" do
   describe "an exercise" do
-    it "puts the pronoun after the trigger and asks the infinitive alone" do
-      case exercise table "tener" Sg2 wants of
+    it "gives the sentence either side of the blank and asks the infinitive alone" do
+      case exercise table wants of
         Nothing -> fail "no exercise"
         Just e -> do
           e.slug `shouldEqual` Slug "mood.tener.2s"
@@ -55,7 +59,7 @@ spec = describe "the trigger frame" do
           e.family `shouldEqual` "tener"
           case e.answer of
             Checked { frame, note } -> do
-              frame `shouldEqual` { before: "mi madre quiere que tú ", after: "" }
+              frame `shouldEqual` { before: "mi madre quiere que tú ", after: " mucho cuidado" }
               note `shouldEqual` "wish or request · wanting something of someone takes the subjunctive"
             _ -> fail "not checked"
 
@@ -63,28 +67,28 @@ spec = describe "the trigger frame" do
     -- `tenga`, which is also what the table has, so the second half is the
     -- one that says anything: an irregular verb is where a rule would err.
     it "expects the table's subjunctive after a subjunctive trigger" do
-      expected (exercise table "tener" Sg2 wants) `shouldEqual` Just "tengas"
-      expected (exercise table "ir" Pl3 wants) `shouldEqual` Just "vayan"
-      expected (exercise table "ser" Sg1 wants) `shouldEqual` Just "sea"
+      expected (exercise table wants) `shouldEqual` Just "tengas"
+      expected (exercise table wants { verb = "ir", person = Pl3 }) `shouldEqual` Just "vayan"
+      expected (exercise table wants { verb = "ser", person = Sg1 }) `shouldEqual` Just "sea"
 
     it "and the table's present after an indicative one" do
-      expected (exercise table "tener" Sg2 believes) `shouldEqual` Just "tienes"
-      expected (exercise table "ir" Pl3 believes) `shouldEqual` Just "van"
+      expected (exercise table believes) `shouldEqual` Just "tienes"
+      expected (exercise table believes { verb = "ir", person = Pl3 }) `shouldEqual` Just "van"
 
     it "names the cell the form came from" do
-      (exercise table "tener" Sg2 wants <#> _.cell) `shouldEqual` Just (Just { infinitive: "tener", tense: Table.Subjunctive, person: Sg2 })
-      (exercise table "tener" Sg2 believes <#> _.cell) `shouldEqual` Just (Just { infinitive: "tener", tense: Table.Present, person: Sg2 })
+      (exercise table wants <#> _.cell) `shouldEqual` Just (Just { infinitive: "tener", tense: Table.Subjunctive, person: Sg2 })
+      (exercise table believes <#> _.cell) `shouldEqual` Just (Just { infinitive: "tener", tense: Table.Present, person: Sg2 })
 
     it "grades the wrong mood as wrong: `vienen` for `vengan`" do
       matches "vengan" "vienen" `shouldEqual` Wrong
       matches "vengan" "vengan" `shouldEqual` Exact
 
     it "asks nothing of a verb the table does not have" do
-      isNothing (exercise table "ennegrecer" Sg1 wants) `shouldEqual` true
+      isNothing (exercise table wants { verb = "ennegrecer" }) `shouldEqual` true
 
-    it "refuses a trigger with no reason" do
-      isNothing (exercise table "tener" Sg1 wants { reason = "" }) `shouldEqual` true
-      isNothing (exercise table "tener" Sg1 wants { reason = "  " }) `shouldEqual` true
+    it "refuses a sentence with no reason" do
+      isNothing (exercise table wants { reason = "" }) `shouldEqual` true
+      isNothing (exercise table wants { reason = "  " }) `shouldEqual` true
 
   -- The research found 0 of 190 subjunctive cells equal to the present, and
   -- the frame's whole premise is that the form typed shows the mood chosen.
@@ -119,35 +123,54 @@ spec = describe "the trigger frame" do
 
   describe "an item" do
     let pooled = pools mooded
+        sentencesOf verb person = Array.filter (\s -> s.verb == verb && s.person == person) sentences
 
-    it "is a verb and a person, with the whole bank as its pool" do
+    it "is a verb and a person, with the sentences written for it as its pool" do
       Array.length pooled `shouldEqual` (Array.length moodVerbs * 5)
-      for_ pooled \p -> NonEmpty.length p.exercises `shouldEqual` Array.length triggers
+      for_ moodVerbs \verb -> for_ persons \p ->
+        NonEmpty.length (pool' verb p).exercises `shouldEqual` Array.length (sentencesOf verb p)
+
+    -- #241 changed what an item asks and not what it is, so that what a
+    -- learner has done under these ids (their box, due date, misses) carries
+    -- over. The 45 are spelled out, as #230 made them.
+    it "keeps the 45 ids the trigger frames had" do
+      Array.sort (map (_.slug >>> slugToString) pooled) `shouldEqual` Array.sort
+        (Array.concatMap (\v -> map (\c -> "mood." <> v <> "." <> c) [ "1s", "2s", "3s", "1p", "3p" ])
+          [ "querer", "poder", "tener", "ver", "ir", "decir", "venir", "ser", "estar" ])
+
+    it "has several sentences for every verb and person it wires, so that a pool turns" do
+      for_ pooled \p -> (NonEmpty.length p.exercises >= 4) `shouldEqual` true
 
     it "is on one cell's subjunctive and its present, and no other person" do
       for_ pooled \p ->
         Set.size (Set.fromFoldable (map _.person (Array.mapMaybe _.cell (NonEmpty.toArray p.exercises)))) `shouldEqual` 1
 
-    it "turns through every trigger before it repeats one" do
-      let pool = pool' "tener" Sg2
-      let asked = map ask (Array.range 0 (Array.length triggers - 1))
-          ask n = frameBefore (pick (Just (seen n)) pool)
-      Array.length (Array.nub asked) `shouldEqual` Array.length triggers
+    it "has sentences only for the verbs it wires, so that none is written and never asked" do
+      for_ sentences \s -> Array.elem s.verb moodVerbs `shouldEqual` true
 
-    it "has the same verb and person met with different triggers" do
-      let a = frameBefore (pick Nothing (pool' "tener" Sg2))
-          b = frameBefore (pick (Just (seen 1)) (pool' "tener" Sg2))
+    it "turns through every sentence before it repeats one" do
+      let pool = pool' "tener" Sg2
+          n = NonEmpty.length pool.exercises
+          asked = map ask (Array.range 0 (n - 1))
+          ask k = sentenceOf (pick (Just (seen k)) pool)
+      Array.length (Array.nub asked) `shouldEqual` n
+
+    it "has the same verb and person met with different sentences" do
+      let a = sentenceOf (pick Nothing (pool' "tener" Sg2))
+          b = sentenceOf (pick (Just (seen 1)) (pool' "tener" Sg2))
       (a /= b) `shouldEqual` true
 
-    it "does not start every pool on the same trigger" do
-      let firsts = map (\p -> frameBefore (pick Nothing p)) pooled
-      (Array.length (Array.nub firsts) > 5) `shouldEqual` true
+    it "does not start every pool on the same sentence" do
+      let firsts = map (\p -> sentenceOf (pick Nothing p)) pooled
+      (Array.length (Array.nub firsts) > 20) `shouldEqual` true
 
-    it "has an indicative trigger among every ten sightings" do
+    it "has an indicative sentence among every pool's four sightings, and a subjunctive one" do
       for_ pooled \p ->
-        for_ (Array.range 0 (NonEmpty.length p.exercises - 10)) \start ->
-          let window = map (\n -> pick (Just (seen n)) p) (Array.range start (start + 9))
-          in Array.any (\e -> map _.tense e.cell == Just Table.Present) window `shouldEqual` true
+        for_ (Array.range 0 (NonEmpty.length p.exercises - 4)) \start ->
+          let window = map (\n -> pick (Just (seen n)) p) (Array.range start (start + 3))
+          in do
+            Array.any (\e -> map _.tense e.cell == Just Table.Present) window `shouldEqual` true
+            Array.any (\e -> map _.tense e.cell == Just Table.Subjunctive) window `shouldEqual` true
 
   describe "the curriculum" do
     it "knows an item of the bank as its own kind, so that a session takes it across kinds" do
@@ -155,19 +178,30 @@ spec = describe "the trigger frame" do
 
   describe "interleaving the groups" do
     it "takes one of each group in turn" do
-      map _.group (Array.take 7 (interleave triggers))
-        `shouldEqual` [ Wish, Doubt, Emotion, Judgment, PurposeTime, Certainty, Fact ]
+      map _.group (Array.take 4 (interleave
+        [ wants, wants { group = Doubt }, wants { group = Doubt }, believes ]))
+        `shouldEqual` [ Wish, Doubt, Certainty, Doubt ]
 
-    it "keeps every trigger and adds none" do
-      Array.sort (map _.trigger (interleave triggers)) `shouldEqual` Array.sort (map _.trigger triggers)
+    it "keeps every sentence and adds none" do
+      Array.sort (map _.before (interleave sentences)) `shouldEqual` Array.sort (map _.before sentences)
 
   describe "the bank" do
     it "asks the indicative a real share of the time, so that the subjunctive is not a given" do
-      let n = Array.length (Array.filter (\t -> t.mood == Indicative) triggers)
-      (4 * n >= Array.length triggers) `shouldEqual` true
+      let n = Array.length (Array.filter (\t -> t.mood == Indicative) sentences)
+      (4 * n >= Array.length sentences) `shouldEqual` true
 
-    it "answers each trigger by the mood its group has" do
-      for_ triggers \t -> tense t.mood `shouldEqual` (if t.mood == Indicative then Table.Present else Table.Subjunctive)
+    it "has every kind of meaning" do
+      for_ [ Wish, Doubt, Emotion, Judgment, PurposeTime, Certainty, Fact ] \g ->
+        Array.any (\s -> s.group == g) sentences `shouldEqual` true
+
+    it "answers each sentence by the mood its trigger has" do
+      for_ sentences \t -> tense t.mood `shouldEqual` (if t.mood == Indicative then Table.Present else Table.Subjunctive)
+
+    it "has no blank without a subject before it, and no blank at the start" do
+      for_ sentences \s -> (String.length s.before > 3 && String.take 1 s.before /= " ") `shouldEqual` true
+
+    it "has a table cell for every sentence, in the mood its trigger calls for" do
+      for_ sentences \s -> isNothing (exercise table s) `shouldEqual` false
   where
     expected = (_ >>= \e -> case e.answer of
       Checked { expected: x } -> Just x
@@ -175,8 +209,8 @@ spec = describe "the trigger frame" do
     pool' verb p = case Array.find (\q -> q.slug == Slug ("mood." <> verb <> "." <> code p)) (pools mooded) of
       Just q -> q
       Nothing -> unsafePartial (crashWith "no pool")
-    frameBefore e = case e.answer of
-      Checked { frame } -> frame.before
+    sentenceOf e = case e.answer of
+      Checked { frame } -> frame.before <> frame.after
       _ -> ""
     seen n = { box: 1, due: bottom, seen: n, lapses: 0, missed: 0, direction: Recognition } :: CardProgress
     code = case _ of

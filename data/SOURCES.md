@@ -100,19 +100,30 @@ senses with no opposite, three sentences all answered `por`.
 side, and any sense without two sentences of its own preposition or with one
 of the other.
 
-## `es-triggers.csv` — trigger frames for the subjunctive
+## `es-triggers.csv` and `es-trigger-sentences.csv` — the subjunctive's trigger sentences
 
-Written by hand for #230. Each row is the words before a gap, the mood they
-demand, the kind of meaning that demands it (a group, which fixes the mood), a
-reason shown after the answer, and the row it is a minimal pair with. The verb
-and the person are not in it: they come from `es-verbs.csv`.
+Written by hand for #230 and #241. `es-triggers.csv` is the bank of triggers:
+each is a kind of words that decides a mood (`querer que`, `no creer que`), the
+mood, the kind of meaning that demands it (a group, which fixes the mood), a
+reason shown after the answer, the forms it may take in a sentence (`quiero
+que/1s|quieres que/2s|...`, the person being the main clause's subject, and `*`
+any words) and the row it is a minimal pair with.
 
-`npm run check-triggers` refuses any word outside `es-1000.csv` that the row's
-`Notes` does not explain, a group with fewer than three triggers, a bank less
-than a quarter indicative, fewer than two minimal pairs, a negation of another
-trigger that is not marked as its pair, and any cell of the table where the
-subjunctive is the present. Whether a trigger takes one mood only and reads as
-Mexican Spanish is a reader's call, and the list is on #132.
+`es-trigger-sentences.csv` is the sentences: the trigger, the verb in the blank,
+the person of the blank, the sentence with `___`, and a pair id shared by the
+two sentences of a minimal pair. The expected form is not in it: it is
+`es-verbs.csv`'s cell, in the subjunctive or the present as the trigger's mood
+says.
+
+`npm run check-triggers` refuses any word outside `es-1000.csv` that a Notes
+column does not explain, a blank whose subject is not the row's person, the
+verb of the blank said again in the main clause, a main clause with the same
+subject as the blank, a negated indicative trigger, a minimal pair that is not
+the same sentence with only the `no` changed, a group with fewer than three
+triggers, banks less than a quarter indicative, a trigger more than a sixth of
+the sentences, a verb and person with fewer than four sentences, and any cell of
+the table where the subjunctive is the present. Whether a sentence is natural
+Mexican Spanish and means something is a reader's call, and the list is on #132.
 
 ## `es-verb-coverage.csv` — a recommendation per cell
 
