@@ -43,11 +43,9 @@ view opened state dispatch =
     , accentPicker
     , voicePicker
     , H.div "panel-rule" H.empty
-    , H.div "panel-group"
-      [ H.button_ "panel-item panel-split" { onClick: dispatch <| ShowStats }
-          [ H.span "panel-label" "See your progress"
-          , H.span "panel-seen" $ show (Progress.seenCount state.progress) <> " seen"
-          ]
+    , H.button_ "panel-item panel-split" { onClick: dispatch <| ShowStats }
+      [ H.span "panel-label" "See your progress"
+      , H.span "panel-seen" $ show (Progress.seenCount state.progress) <> " seen"
       ]
     , H.div "panel-group"
       [ H.button_ "panel-item" { onClick: dispatch <| ShowPairing } "Sync another device"
